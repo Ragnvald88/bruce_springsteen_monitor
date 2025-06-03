@@ -1,0 +1,187 @@
+# config/beast_mode_config.yaml
+# Optimized for SPEED and EFFICIENCY - Win tickets, not hide from detection
+
+app_settings:
+  # Core strategy
+  mode: "beast"  # "beast" or "stealth" 
+  
+  # Lightweight monitoring intervals (no browser automation)
+  lightweight_check_interval_s: 60  # Base: 1 minute
+  burst_mode_interval_s: 5  # When tickets detected: 5 seconds
+  burst_mode_duration_s: 300  # Stay in burst mode for 5 minutes after detection
+  
+  # Strike force settings
+  max_parallel_attempts: 3  # Launch 3 parallel purchases per opportunity
+  purchase_timeout_s: 30  # Give up after 30 seconds
+  
+  # Smart proxy usage
+  proxy_rotation_strategy: "time_based"  # Rotate every X minutes, not every request
+  proxy_rotation_minutes: 5
+  
+  # Profile strategy
+  profile_pool_size: 6  # Have 6 profiles ready
+  profiles_per_platform: 2  # 2 profiles logged into each platform
+  profile_cooldown_minutes: 10  # Rest profile for 10 minutes after use
+  
+  # Golden profiles (for purchases only, not monitoring)
+  purchase_profiles:
+    fansale:
+      - "P03_MacOS_Chrome136_M4Pro_NL"
+      - "P01_Win11_Chrome124_MidLaptop_IrisXe_USEast"
+    ticketmaster:
+      - "P03_MacOS_Chrome136_M4Pro_NL"
+      - "P01_Win11_Chrome124_MidLaptop_IrisXe_USEast"
+    vivaticket:
+      - "P03_MacOS_Chrome136_M4Pro_NL"
+      - "P01_Win11_Chrome124_MidLaptop_IrisXe_USEast"
+  
+  # Authentication strategy
+  auth_check_interval_minutes: 30  # Check auth every 30 minutes
+  pre_auth_all_profiles: true  # Log into all profiles at startup
+  
+  # Detection response
+  on_detection:
+    immediate_strike: true
+    notify_methods: ["console", "sound"]
+    pause_after_success: true  # Pause for manual checkout completion
+    
+  # Resource optimization
+  browser_pool:
+    min_size: 0  # Don't pre-launch browsers
+    max_size: 6  # Max 6 concurrent browsers
+    launch_on_demand: true  # Only launch when needed for purchase
+    close_after_attempt: false  # Keep logged in for next attempt
+    
+  # Monitoring optimization
+  use_lightweight_monitoring: true  # Use aiohttp instead of Playwright for checks
+  cache_responses: true
+  cache_ttl_seconds: 30  # Cache responses for 30 seconds
+  
+  # API discovery
+  api_discovery_enabled: true  # Try to find and use direct APIs
+  api_endpoints:
+    ticketmaster:
+      availability: "/api/event/{event_id}/availability"
+      add_to_cart: "/api/cart/add"
+    fansale:
+      search: "/api/search"
+      offer_details: "/api/offer/{offer_id}"
+      
+# Proxy configuration - optimize for efficiency
+proxy:
+  enabled: true
+  username_env: "IPROYAL_USERNAME"
+  password_env: "IPROYAL_PASSWORD"
+  server_template: "http://{user}:{proxy_pass}@geo.iproyal.com:{port}"
+  
+  # Use sticky sessions to reduce authentication overhead
+  sticky_sessions:
+    enabled: true
+    duration_minutes: 10
+    
+  # Smart rotation - different ports for different purposes
+  rotating_ports:
+    monitoring: [12321, 12322]  # For lightweight checks
+    purchasing: [12323, 12324, 12325]  # For browser automation
+    
+  # Rate limiting per proxy
+  max_requests_per_minute: 60  # Don't exceed this per port
+  
+# Browser launch settings - optimized for speed
+browser_launch_options:
+  browser_type: "chromium"
+  channel: "chrome"
+  headless: false  # Keep visible for manual intervention
+  
+  # Speed optimizations
+  args:
+    # Disable unnecessary features
+    - "--disable-gpu"
+    - "--disable-dev-shm-usage"
+    - "--disable-web-security"  # WARNING: Less secure but faster
+    - "--disable-features=IsolateOrigins,site-per-process"
+    - "--disable-blink-features=AutomationControlled"
+    
+    # Performance
+    - "--aggressive-cache-discard"
+    - "--disable-backgrounding-occluded-windows"
+    - "--disable-renderer-backgrounding"
+    - "--disable-background-timer-throttling"
+    - "--disable-features=TranslateUI"
+    - "--disable-ipc-flooding-protection"
+    
+    # Network optimizations
+    - "--aggressive"
+    - "--enable-tcp-fastopen"
+    - "--enable-quic"
+    
+  # Timeouts
+  launch_timeout_ms: 30000  # 30 seconds
+  navigation_timeout_ms: 20000  # 20 seconds - fail fast
+  default_timeout_ms: 15000  # 15 seconds
+  
+# Target configuration - what we're hunting
+targets:
+  - platform: "FanSale"
+    event_name: "Bruce Springsteen Milan"
+    enabled: true
+    
+    # Multiple URLs to check (increases chances)
+    urls:
+      - "https://www.fansale.it/fansale/tickets/rock-amp-pop/bruce-springsteen/29/"
+      - "https://www.fansale.it/fansale/tickets/hard-rock-metal/bruce-springsteen-tour-2025/30456/"
+      
+    # Monitoring strategy
+    monitoring_method: "lightweight"  # "lightweight" or "browser"
+    
+    # Purchase criteria
+    max_price_per_ticket: 500
+    preferred_sections: []  # Empty = any section
+    min_tickets: 1
+    max_tickets: 4
+    
+    # Platform-specific selectors (for speed)
+    quick_selectors:
+      ticket_card: "div.EventEntry[data-offer-id]"
+      price: "span.moneyValueFormat"
+      buy_button: "button[type='submit']:has-text('Acquista')"
+      
+  - platform: "Ticketmaster"
+    event_name: "Bruce Springsteen Milan July 3 2025"
+    enabled: true
+    
+    urls:
+      - "https://shop.ticketmaster.it/9670"  # Shorter URL
+      
+    # Use API if possible
+    api_event_id: "9670"
+    monitoring_method: "api"  # Try API first
+    
+    max_price_per_ticket: 600  # Typically more expensive
+    
+  - platform: "Vivaticket"  
+    event_name: "Bruce Springsteen Resale"
+    enabled: true
+    
+    urls:
+      - "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547"
+      
+    monitoring_method: "lightweight"
+    max_price_per_ticket: 450
+    
+# Logging - focus on what matters
+logging:
+  level: "INFO"
+  log_file_path: "logs/beast_mode.log"
+  
+  # Special loggers for critical events
+  detection_log: "logs/detections.log"  # Log all ticket detections
+  purchase_log: "logs/purchases.log"  # Log all purchase attempts
+  
+# Notifications - immediate alerts
+notifications:
+  console_alerts: true
+  sound_alerts: true  # Play sound on detection
+  sound_file: "alert.mp3"
+  
+  # Future: Email/SMS/Discord webhooks for remote notifications

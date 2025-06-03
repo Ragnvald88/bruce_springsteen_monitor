@@ -1,0 +1,2183 @@
+2025-06-01 19:02:45 | CRITICAL | __main__                       | initialize           | Failed to initialize: ProfileManagerConfig() takes no arguments
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1493, in initialize
+    self.profile_manager = create_profile_manager_from_config(str(CONFIG_FILE))
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_profiles.py", line 206, in create_profile_manager_from_config
+    pm_config = ProfileManagerConfig(
+        num_target_profiles=pm_settings.get('num_profiles', 10),
+    ...<4 lines>...
+        max_pool_size_multiplier=pm_settings.get('max_pool_multiplier', 1.5)
+    )
+TypeError: ProfileManagerConfig() takes no arguments
+2025-06-01 19:02:45 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-01 19:02:57 | CRITICAL | __main__                       | initialize           | Failed to initialize: ProfileManagerConfig() takes no arguments
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1493, in initialize
+    self.profile_manager = create_profile_manager_from_config(str(CONFIG_FILE))
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_profiles.py", line 206, in create_profile_manager_from_config
+    pm_config = ProfileManagerConfig(
+        num_target_profiles=pm_settings.get('num_profiles', 10),
+    ...<4 lines>...
+        max_pool_size_multiplier=pm_settings.get('max_pool_multiplier', 1.5)
+    )
+TypeError: ProfileManagerConfig() takes no arguments
+2025-06-01 19:02:57 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-01 20:16:12 | CRITICAL | __main__                       | initialize           | Failed to initialize: 'ProfileManager' object has no attribute 'initialize'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1494, in initialize
+    await self.profile_manager.initialize()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileManager' object has no attribute 'initialize'
+2025-06-01 20:16:12 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-01 20:16:12 | CRITICAL | __main__                       | main                 | Unhandled exception: 'ProfileManager' object has no attribute 'shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 2106, in main
+    asyncio.run(async_main(config, _stop_event))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1888, in async_main
+    await _orchestrator_instance.shutdown()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1822, in shutdown
+    await self.profile_manager.shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileManager' object has no attribute 'shutdown'
+2025-06-02 19:28:12 | CRITICAL | __main__                       | initialize           | Failed to initialize: create_profile_manager_from_config() got an unexpected keyword argument 'config_overrides'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1202, in initialize
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(CONFIG_FILE),
+        ^^^^^^^^^^^^^^^^^
+        config_overrides=self.config.get('profile_manager', {})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: create_profile_manager_from_config() got an unexpected keyword argument 'config_overrides'
+2025-06-02 19:28:12 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-02 19:28:25 | CRITICAL | __main__                       | initialize           | Failed to initialize: create_profile_manager_from_config() got an unexpected keyword argument 'config_overrides'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1202, in initialize
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(CONFIG_FILE),
+        ^^^^^^^^^^^^^^^^^
+        config_overrides=self.config.get('profile_manager', {})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: create_profile_manager_from_config() got an unexpected keyword argument 'config_overrides'
+2025-06-02 19:28:25 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-02 20:01:20 | CRITICAL | __main__                       | initialize           | Failed to initialize: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1202, in initialize
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(CONFIG_FILE),
+        ^^^^^^^^^^^^^^^^^
+        config_overrides=self.config.get('profile_manager', {})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+2025-06-02 20:01:20 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-02 20:01:40 | CRITICAL | __main__                       | initialize           | Failed to initialize: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 1202, in initialize
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(CONFIG_FILE),
+        ^^^^^^^^^^^^^^^^^
+        config_overrides=self.config.get('profile_manager', {})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+2025-06-02 20:01:40 | CRITICAL | __main__                       | run                  | Initialization failed, cannot proceed
+2025-06-02 22:43:37 | CRITICAL | __main__                            | async_main_logic          | Fatal error in async_main_logic: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 188, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(config, playwright, config_file_path)
+TypeError: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+2025-06-02 22:48:20 | CRITICAL | __main__                            | async_main_logic          | Fatal error in async_main_logic: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 188, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(config, playwright, config_file_path)
+TypeError: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+2025-06-02 22:48:25 | CRITICAL | __main__                            | async_main_logic          | Fatal error in async_main_logic: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 188, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(config, playwright, config_file_path)
+TypeError: UnifiedOrchestrator.__init__() takes 3 positional arguments but 4 were given
+2025-06-02 22:58:45 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+2025-06-02 22:58:45 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 22:58:52 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'encryption_key_file'
+2025-06-02 22:58:52 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:02:51 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+2025-06-02 23:02:51 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:02:59 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+2025-06-02 23:02:59 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:08:14 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+2025-06-02 23:08:14 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:08:34 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+2025-06-02 23:08:34 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:08:43 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'proxy_failure_threshold'
+2025-06-02 23:08:43 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:29:34 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+2025-06-02 23:29:34 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:41:31 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+2025-06-02 23:41:31 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:41:42 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'enable_profile_cloning'
+2025-06-02 23:41:42 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:45:00 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+2025-06-02 23:45:00 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:45:04 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+2025-06-02 23:45:04 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:45:13 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_duration_seconds'
+2025-06-02 23:45:13 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:46:56 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_actions'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_actions'
+2025-06-02 23:46:56 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:47:01 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_actions'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 100, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_manager_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 497, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 50, in parse_profile_manager_config
+    config = ProfileManagerConfig(
+        # Pool settings
+    ...<63 lines>...
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+    )
+TypeError: ProfileManagerConfig.__init__() got an unexpected keyword argument 'warmup_actions'
+2025-06-02 23:47:01 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-02 23:55:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:55:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:55:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:55:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:56:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-02 23:56:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:56:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:56:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:56:34 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:56:34 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:56:34 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:57:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-02 23:57:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:57:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:57:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:58:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:58:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-02 23:58:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:58:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:58:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:59:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-02 23:59:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:59:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:59:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-02 23:59:34 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:59:34 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-02 23:59:34 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:00:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:00:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:00:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:00:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:01:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_25017149: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:01:04 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:01:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_a1bd2062: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:01:04 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_c772b85d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:01:04 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:43:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:43:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:43:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:43:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:44:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:44:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:44:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:44:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:44:54 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:44:54 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:44:54 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:45:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:45:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:45:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:45:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:46:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:46:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:46:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:46:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:46:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:47:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:47:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:47:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:47:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:47:54 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:47:54 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:47:54 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:48:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:48:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:48:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:48:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:49:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Resale (VT) at https://shop.vivaticket.com/it/ricerca/bruce%20springsteen with profile vivaticket_fcf00cc4: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Resale (VT): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:49:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen San Siro 2025 (TM) at https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 with profile ticketmaster_bbab8e68: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen San Siro 2025 (TM): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:49:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:49:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:49:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 00:50:24 | ERROR    | src.core.orchestrator               | _metrics_reporter_loop    | Error in metrics reporter loop: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 417, in _metrics_reporter_loop
+    f"BG Tasks: Orch={len(self.background_tasks)}, PM={(len(self.profile_manager._evolution_task is not None) + len(self.profile_manager._session_validation_task is not None)) if self.profile_manager and hasattr(self.profile_manager, '_evolution_task') else 'N/A'}",
+                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-03 00:50:24 | ERROR    | src.core.managers                   | get_client                | Error creating httpx client for profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:50:24 | ERROR    | src.core.components                 | check_ultra_efficient     | Error during ultra-efficient check for Bruce Springsteen Milano 2025 (FS) at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 with profile fansale_10b72418: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-03 00:50:24 | ERROR    | src.core.orchestrator               | _monitor_single_target_loop | Error in monitoring target Bruce Springsteen Milano 2025 (FS): 'MutationStrategy' object has no attribute 'DetectionEvent'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 131, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(selected_profile, use_tls_fingerprint=True) # Conceptual TLS flag
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 84, in get_client
+    try:
+    
+    ...<7 lines>...
+            http2=True,
+            ^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 289, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(platform, url, event_name, priority)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 172, in check_ultra_efficient
+    event=self.profile_manager.mutation_strategy.DetectionEvent.HARD_BLOCK, # Generic failure
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MutationStrategy' object has no attribute 'DetectionEvent'
+2025-06-03 09:57:34 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: 'ProfileAwareLightweightMonitor' object has no attribute 'monitor_config'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 126, in initialize_subsystems
+    self.monitor = ProfileAwareLightweightMonitor(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.config, self.profile_manager, self.connection_pool,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.response_cache, self.data_tracker
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 46, in __init__
+    self.detection_patterns = self._compile_detection_patterns()
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 59, in _compile_detection_patterns
+    patterns_from_config = self.monitor_config.get('detection_patterns', {})
+                           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'monitor_config'
+2025-06-03 09:57:34 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.
+2025-06-03 17:42:23 | CRITICAL | src.core.orchestrator               | initialize_subsystems     | Orchestrator subsystem initialization failed: 'ProfileAwareLightweightMonitor' object has no attribute 'monitor_config'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 126, in initialize_subsystems
+    self.monitor = ProfileAwareLightweightMonitor(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.config, self.profile_manager, self.connection_pool,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.response_cache, self.data_tracker
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 46, in __init__
+    self.detection_patterns = self._compile_detection_patterns()
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 59, in _compile_detection_patterns
+    patterns_from_config = self.monitor_config.get('detection_patterns', {})
+                           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'monitor_config'
+2025-06-03 17:42:23 | CRITICAL | src.core.orchestrator               | run                       | Orchestrator initialization failed. Cannot run.

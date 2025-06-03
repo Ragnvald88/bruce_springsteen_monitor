@@ -1,0 +1,8 @@
+2025/05/29-23:32:15.477 871b4d Reusing MANIFEST /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast/Default/Local Storage/leveldb/MANIFEST-000001
+2025/05/29-23:32:15.479 871b4d Recovering log #3
+2025/05/29-23:32:15.480 871b4d Level-0 table #3: started
+2025/05/29-23:32:15.483 871b4d Level-0 table #3: 44186 bytes OK
+2025/05/29-23:32:15.483 871b4d Recovering log #4
+2025/05/29-23:32:15.483 871b4d Reusing old log /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast/Default/Local Storage/leveldb/000004.log 
+2025/05/29-23:32:15.485 871b4d Delete type=0 #3
+2025/05/29-23:32:15.485 871b4d Delete type=2 #5

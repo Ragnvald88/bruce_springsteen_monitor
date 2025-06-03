@@ -1,0 +1,239 @@
+#/config/config.yaml
+# -----------------------------------------------------------------------------
+# APPLICATION SETTINGS
+# -----------------------------------------------------------------------------
+app_settings:
+  mode: "adaptive" # Options: "stealth", "beast", "hybrid", "adaptive", "ultra_stealth"
+  version: "2.0.1"
+  dry_run: false
+
+  mode_configs:
+    stealth:
+      strike_settings:
+        max_parallel: 1
+      monitoring_settings:
+        base_target_interval_multiplier: 1.5
+      profile_manager:
+        selection_quality_min_tier: 4
+    beast:
+      strike_settings:
+        max_parallel: 5
+      monitoring_settings:
+        base_target_interval_multiplier: 0.5
+      profile_manager:
+        selection_quality_min_tier: 2
+    ultra_stealth:
+      strike_settings:
+        max_parallel: 1
+      monitoring_settings:
+        base_target_interval_multiplier: 2.0
+      profile_manager:
+        selection_quality_min_tier: 5
+    adaptive:
+      pass
+    hybrid: {}
+
+# -----------------------------------------------------------------------------
+# DATA USAGE LIMITS
+# -----------------------------------------------------------------------------
+data_limits:
+  global_limit_mb: 5000
+  session_limit_mb: 1000
+  optimization_thresholds:
+    aggressive_trigger_percent: 80
+    emergency_trigger_percent: 95
+
+# -----------------------------------------------------------------------------
+# MONITORING TARGETS
+# -----------------------------------------------------------------------------
+targets:
+  - platform: "fansale"
+    event_name: "Bruce Springsteen Milano 2025 (FS)"
+    url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+    enabled: true
+    priority: "CRITICAL" # CRITICAL, HIGH, NORMAL, LOW
+    interval_s: 30
+    human_behavior_intensity: "medium" # low, medium, high, none
+    desired_sections: ["PIT", "Parterre", "Primo Anello Rosso"]
+    max_price_per_ticket: 350.00
+    min_ticket_quantity: 1
+    max_ticket_quantity: 2
+    burst_mode:
+      enabled: true
+      min_interval_s: 3
+      duration_s: 300
+
+  - platform: "ticketmaster"
+    event_name: "Bruce Springsteen San Siro 2025 (TM)"
+    url: "https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27"
+    enabled: true
+    priority: "HIGH"
+    interval_s: 45
+    human_behavior_intensity: "low"
+    desired_sections: ["Parterre Posto Unico", "Standing", "Floor"]
+    max_price_per_ticket: 300.00
+    burst_mode:
+      enabled: true
+      min_interval_s: 5
+      duration_s: 240
+
+  - platform: "vivaticket"
+    event_name: "Bruce Springsteen Resale (VT)"
+    url: "https://shop.vivaticket.com/it/ricerca/bruce%20springsteen"
+    enabled: true
+    priority: "NORMAL"
+    interval_s: 90
+    human_behavior_intensity: "low"
+    desired_sections: ["POLTRONISSIMA PLATINUM"]
+    max_price_per_ticket: 400.00
+    burst_mode:
+      enabled: false
+
+# -----------------------------------------------------------------------------
+# NETWORK CONFIGURATION
+# -----------------------------------------------------------------------------
+network:
+  max_connections_per_host: 10
+  max_keepalive_connections: 5
+  connect_timeout_seconds: 15
+  read_timeout_seconds: 20
+  http2_enabled: true
+
+# -----------------------------------------------------------------------------
+# CACHE CONFIGURATION
+# -----------------------------------------------------------------------------
+cache:
+  max_size_mb: 50
+  default_ttl_seconds: 120
+
+# -----------------------------------------------------------------------------
+# BROWSER LAUNCH & CONTEXT DEFAULTS
+# -----------------------------------------------------------------------------
+browser_options:
+  headless: true
+  default_launch_args:
+    - "--disable-blink-features=AutomationControlled"
+  default_context_options:
+    java_script_enabled: true
+    accept_downloads: true
+  default_page_timeout_ms: 30000
+  default_navigation_timeout_ms: 45000
+
+browser_instance_pool:
+  target_size: 3
+  min_size: 1
+  max_size: 5
+  browser_max_age_seconds: 1800
+  browser_max_detections: 3
+  browser_health_threshold: 40.0
+  critical_health_threshold: 20.0
+  browser_quarantine_seconds: 300
+  maintenance_interval_s: 30
+  adaptive_pool_sizing: true
+
+# -----------------------------------------------------------------------------
+# STRIKE CONFIGURATION
+# -----------------------------------------------------------------------------
+strike_settings:
+  max_parallel: 3
+  timeout_s: 30
+
+# -----------------------------------------------------------------------------
+# PROFILE MANAGER CONFIGURATION (for ProfileManager in src/profiles/manager.py)
+# This should align with your ProfileManagerConfig dataclass
+# -----------------------------------------------------------------------------
+profile_manager:
+  num_target_profiles: 20 # Maps to ProfileManagerConfig in src/profiles/config.py
+  profiles_per_platform: 5
+  evolution_interval_seconds: 900
+  persistence_filepath: "profiles_backup.json" # Maps to ProfileManagerConfig
+  session_backup_dir: "session_backups"
+  enable_encrypted_storage: true
+  # compromise_threshold_pct, min_pool_size_for_replacement, etc. are in ProfileManagerConfig defaults
+
+  # scoring_config: # Fields for ProfileScoringConfig
+  #   base_score: 100.0
+  #   state_modifiers: { PRISTINE: 20.0, HEALTHY: 30.0, ... }
+
+  # cooldowns_seconds: # Fields for cooldowns
+  #   HARD_BLOCK: [14400, 0.3]
+
+  # --- Proxy settings (if ProfileManagerConfig expects proxy_configs list) ---
+  proxy_configs: # This list populates ProfileManagerConfig.proxy_configs
+    - proxy_type: "http" # Or https, socks5
+      host: "${IPROYAL_HOSTNAME}" # From .env
+      port: ${IPROYAL_PORT}       # From .env
+      username: "${IPROYAL_USERNAME}" # From .env
+      password: "${IPROYAL_PASSWORD}" # From .env
+      country_code: "IT" # Example
+      sticky_session: true
+      # rotation_endpoint: null # If applicable
+      # provider: "iproyal" # Optional metadata
+
+  # --- Flags that should be in ProfileManagerConfig in src/profiles/config.py ---
+  enable_tls_rotation: true
+  enable_behavioral_warmup: true
+  enable_session_preloading: true
+  warmup_sites:
+    - "https://www.google.it"
+    - "https://www.repubblica.it"
+    - "https://www.corriere.it"
+    - "https://www.amazon.it"
+
+# -----------------------------------------------------------------------------
+# BEHAVIORAL SIMULATION
+# -----------------------------------------------------------------------------
+behavioral_simulation:
+  enabled: true
+  defaults:
+    typing_speed_wpm_range: [40, 75]
+    mouse_acceleration_range: [1.0, 1.8]
+    scroll_velocity_preference_range: [300, 700]
+    click_dwell_time_ms_range: [70, 140]
+    movement_jitter_factor_range: [0.04, 0.12]
+    pause_between_actions_s_range: [0.4, 1.5]
+    reading_speed_wpm_range: [200, 320]
+    attention_span_seconds_range: [15, 40]
+    multitasking_tendency_range: [0.15, 0.55]
+  platform_intensity_hints:
+    fansale: "medium"
+    ticketmaster: "high"
+    vivaticket: "low"
+
+# -----------------------------------------------------------------------------
+# EVASION SETTINGS
+# -----------------------------------------------------------------------------
+evasion_settings:
+  webrtc:
+    mode: "default_public_interface_only"
+
+# -----------------------------------------------------------------------------
+# AUTHENTICATION
+# -----------------------------------------------------------------------------
+authentication:
+  enabled: false
+  platforms:
+    # ticketmaster_it:
+    #   username: "${TM_USERNAME}"
+    #   password: "${TM_PASSWORD}"
+    # vivaticket_it: # If Vivaticket has direct login you manage
+    #   username: "${VIVATICKET_USERNAME}" # Define in .env
+    #   password: "${VIVATICKET_PASSWORD}" # Define in .env
+    pass
+
+# -----------------------------------------------------------------------------
+# PATHS
+# -----------------------------------------------------------------------------
+paths:
+  stealth_script: "src/core/stealth_init.js"
+
+# -----------------------------------------------------------------------------
+# LOGGING (Separate from app_settings for clarity, used by main.py's setup_logging)
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO" # Root logger level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_directory: "logs" # Overrides app_settings.logging.log_directory if main.py prioritizes this
+  main_log_file: "ticket_system.log"
+  error_log_file: "errors.log"
+  # log_max_file_size_mb: 10 # These could be here too
+  # log_backup_count: 5

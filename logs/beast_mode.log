@@ -1,0 +1,1060 @@
+2025-05-29 22:00:51 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:00:51 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:00:51 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:00:51 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:00:51 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:00:51 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:00:51 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:00:51 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:00:51 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:00:51 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:00:51 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:00:51 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:00:51 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:00:51 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:00:53 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:00:55 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:00:55 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:00:55 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:00:55 [CRITICAL] AsyncMainOrchestrator          :: Unhandled CRITICAL error in Orchestrator: run_beast_mode() takes 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 663, in _async_main_refactored
+    await run_beast_mode(config_data, apa.browser_manager, stop_event, apa) # Pass APA for profile stat updates
+          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: run_beast_mode() takes 3 positional arguments but 4 were given
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: Orchestrator 'finally' block: Cleaning up resources...
+2025-05-29 22:00:55 [INFO   ] AdvancedPurchaseArch           :: APA Shutting down...
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Stopping StealthBrowserManager...
+2025-05-29 22:00:55 [INFO   ] core.browser_manager           :: Manager stopped
+2025-05-29 22:00:55 [INFO   ] AdvancedPurchaseArch           :: APA shutdown complete.
+2025-05-29 22:00:55 [INFO   ] AsyncMainOrchestrator          :: Orchestrator cleanup finished.
+2025-05-29 22:00:55 [INFO   ] root                           :: CLI Main 'finally': Restoring signals and ensuring shutdown.
+2025-05-29 22:00:55 [INFO   ] root                           :: CLI application shutdown process finished.
+2025-05-29 22:10:03 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:10:03 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:10:03 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:10:03 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:10:03 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:10:03 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:10:03 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:10:03 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:10:03 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:10:03 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:10:03 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:10:03 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:10:03 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:10:03 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:10:05 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:10:07 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:10:07 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:10:07 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:10:07 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:10:07 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:10:07 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:10:07 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:10:07 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:10:07 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:10:07 [ERROR  ] beast_mode                     :: Monitor error for fansale: 0
+2025-05-29 22:10:07 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:10:07 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:10:08 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:14:09 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:14:09 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:14:09 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:14:09 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:14:10 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:14:10 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:14:10 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:14:10 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:14:10 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:14:10 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:14:10 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:14:10 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:14:10 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:14:10 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:14:12 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:14:14 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:14:14 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:14:14 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:14:14 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:14:14 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:14:14 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:14:14 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:14:14 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:14:14 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:14:14 [ERROR  ] beast_mode                     :: Monitor error for fansale: 0
+2025-05-29 22:14:14 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:14:14 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:14:17 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:14:49 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:14:49 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:14:52 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:15:14 [ERROR  ] beast_mode                     :: Monitor error for fansale: 1
+2025-05-29 22:15:14 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:15:14 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 1.0m | Checks: 5 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:15:25 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:15:25 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:15:27 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:15:59 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:15:59 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:16:00 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:16:14 [ERROR  ] beast_mode                     :: Monitor error for fansale: 0
+2025-05-29 22:16:14 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:16:14 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 2.0m | Checks: 9 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:16:33 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:16:33 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:16:35 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:17:07 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:17:07 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:17:07 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:17:07 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:17:08 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:17:08 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:17:08 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:17:08 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:17:08 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:17:08 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:17:08 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:17:08 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:17:08 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:17:08 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:17:10 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:17:13 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:17:13 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:17:13 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:17:13 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:17:13 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:17:13 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:17:13 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:17:13 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:17:13 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:17:13 [ERROR  ] beast_mode                     :: Monitor error for fansale: 1
+2025-05-29 22:17:13 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:17:13 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:17:16 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:17:49 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:17:49 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:17:52 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:19:43 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:19:43 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:19:43 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:19:43 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:19:43 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:19:43 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:19:43 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:19:43 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:19:43 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:19:43 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:19:43 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:19:43 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:19:43 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:19:43 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:19:46 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:19:47 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:19:47 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:19:47 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:19:47 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:19:47 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 907, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 608, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:19:47 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:19:47 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:19:47 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:19:47 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:19:47 [ERROR  ] beast_mode                     :: Monitor error for fansale: 1
+2025-05-29 22:19:47 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:19:47 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:19:48 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:20:20 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:20:20 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:20:22 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:25:38 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:25:38 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:25:38 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:25:38 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:25:38 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:25:38 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:25:38 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:25:38 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:25:38 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:38 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:38 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:25:40 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:40 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:40 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:25:41 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:25:41 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:25:41 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:25:41 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:25:41 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:25:41 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:41 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:41 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:25:41 [ERROR  ] beast_mode                     :: Monitor error for fansale: 1
+2025-05-29 22:25:41 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:25:41 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:25:43 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:25:43 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:25:43 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:26:16 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:26:16 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:26:16 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:26:16 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:26:17 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:26:17 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:26:17 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:30:48 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:30:48 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:30:48 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:30:48 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:30:49 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:30:49 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:30:49 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:30:49 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:30:49 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:49 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:49 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:30:50 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:50 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:50 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:30:52 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:30:52 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:30:52 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:30:52 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:30:52 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:30:52 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:52 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:52 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:30:52 [ERROR  ] beast_mode                     :: Monitor error for fansale: 0
+2025-05-29 22:30:52 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:30:52 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:30:54 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:30:54 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:30:54 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:33:26 [INFO   ] root                           :: Logging initialized. Level: INFO. File: logs/beast_mode.log
+2025-05-29 22:33:26 [INFO   ] root                           :: Final configuration prepared. Operation mode: beast
+2025-05-29 22:33:26 [INFO   ] root                           :: Starting Ticket Monitor Bot in main operational mode (CLI)...
+2025-05-29 22:33:26 [INFO   ] AsyncMainOrchestrator          :: Orchestrator: Starting Playwright...
+2025-05-29 22:33:26 [INFO   ] AsyncMainOrchestrator          :: TLS fingerprint patch enabled for: 'mac_chrome136_nl_actual'.
+2025-05-29 22:33:26 [INFO   ] MainProfileLoader              :: Loaded 2 profiles from 'config/browser_profiles.yaml' for main app.
+2025-05-29 22:33:26 [INFO   ] AsyncMainOrchestrator          :: Initializing AdvancedPurchaseArchitecture (APA)...
+2025-05-29 22:33:26 [INFO   ] AdvancedPurchaseArch           :: Golden profile 'P03_MacOS_Chrome136_M4Pro_NL' identified.
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: Loaded 2 profiles from config/browser_profiles.yaml
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: StealthBrowserManager initialized: Pool size: 2, Profiles: 2, Stealth: STANDARD
+2025-05-29 22:33:26 [INFO   ] AdvancedPurchaseArch           :: Primary StealthBrowserManager (V2) instance created for APA.
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: Starting StealthBrowserManager...
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:26 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:26 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:33:28 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:28 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:28 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Manager started with 0 browsers
+2025-05-29 22:33:29 [INFO   ] AsyncMainOrchestrator          :: APA's StealthBrowserManager started (used by both modes).
+2025-05-29 22:33:29 [INFO   ] AsyncMainOrchestrator          :: 🔥 BEAST MODE ACTIVATED 🔥
+2025-05-29 22:33:29 [INFO   ] AsyncMainOrchestrator          :: Beast Mode will use APA's StealthBrowserManager for browser operations.
+2025-05-29 22:33:29 [INFO   ] AsyncMainOrchestrator          :: Beast Mode: Attempting pre-authentication...
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Starting pre-authentication for 6 profile-platform pairs...
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'fansale'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'fansale'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'fansale': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'ticketmaster'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'ticketmaster'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'ticketmaster': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P03_MacOS_Chrome136_M4Pro_NL' on platform 'vivaticket'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P03_MacOS_Chrome136_M4Pro_NL' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P03_MacOS_Chrome136_M4Pro_NL
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P03_MacOS_Chrome136_M4Pro_NL' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Attempting pre-authentication for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on platform 'vivaticket'.
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Creating persistent context for profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' at /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/storage/profiles/profile_P01_Win11_Chrome124_MidLaptop_IrisXe_USEast
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] PreAuth                        :: Unexpected error during pre-auth for 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast' on 'vivaticket': 0
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 756, in _pre_authenticate_profiles
+    context_for_auth = await apa.browser_manager.get_persistent_context_for_profile(profile_to_auth)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 909, in get_persistent_context_for_profile
+    launch_options = self._prepare_launch_options(profile, for_persistent_context=True)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 579, in _prepare_launch_options
+    proxy_options = self._get_proxy_options()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 610, in _get_proxy_options
+    port = ports[self._proxy_port_index % len(ports)]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 0
+2025-05-29 22:33:29 [INFO   ] PreAuth                        :: Pre-authentication attempts finished.
+2025-05-29 22:33:29 [INFO   ] beast_mode                     :: 🔥 ACTIVATING BEAST MODE 🔥
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Pool monitor started (interval: 30s)
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: Pool size 0/2, creating 2 browsers
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:29 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:29 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P01_Win11_Chrome124_MidLaptop_IrisXe_USEast': 0
+2025-05-29 22:33:29 [ERROR  ] beast_mode                     :: Monitor error for fansale: 1
+2025-05-29 22:33:29 [ERROR  ] beast_mode                     :: Monitor error for ticketmaster: expected string or bytes-like object, got 'NoneType'
+2025-05-29 22:33:29 [INFO   ] beast_mode                     :: BEAST MODE STATS - Runtime: 0.0m | Checks: 3 | Detections: 0 | Attempts: 0 | Successes: 0 | Success Rate: 0.0%
+2025-05-29 22:33:31 [INFO   ] core.browser_manager           :: PROXY_DEBUG: Type of 'ports': <class 'dict'>, Value of 'ports': {'monitoring': [12321, 12322], 'purchasing': [12323, 12324, 12325]}
+2025-05-29 22:33:31 [INFO   ] core.browser_manager           :: PROXY_DEBUG: len(ports): 2, self._proxy_port_index: 0, Calculated index: 0
+2025-05-29 22:33:31 [ERROR  ] core.browser_manager           :: Failed to create browser with profile 'P03_MacOS_Chrome136_M4Pro_NL': 0

@@ -1,0 +1,973 @@
+#config/config.yaml
+
+
+broprofiles:
+  - name: "P01_Win11_Chrome124_MidLaptop_IrisXe_USEast"
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    
+    # Sec-CH-UA Headers
+    sec_ch_ua: '"Google Chrome";v="124", "Chromium";v="124", "Not-A.Brand";v="99"'
+    sec_ch_ua_mobile: "?0"
+    sec_ch_ua_platform: '"Windows"'
+    sec_ch_ua_platform_version: '"15.0.0"'
+    sec_ch_ua_arch: '"x86"'
+    sec_ch_ua_bitness: '"64"'
+    sec_ch_ua_model: '""'
+    sec_ch_ua_wow64: "?0"
+    sec_ch_ua_full_version_list: '"Google Chrome";v="124.0.6367.201", "Chromium";v="124.0.6367.201", "Not-A.Brand";v="99.0.0.0"'
+    sec_ch_ua_form_factors: '"Desktop"'
+
+    # Viewport and Screen
+    viewport_width: 1707
+    viewport_height: 963
+    screen_width: 1920
+    screen_height: 1080
+    avail_width: 1920
+    avail_height: 1040
+    device_pixel_ratio: 1.0
+    color_depth: 24
+    pixel_depth: 24
+
+    # Core JS Navigator properties
+    js_platform: "Win32"
+    hardware_concurrency: 8
+    device_memory: 8
+    
+    # Localization
+    timezone: "America/New_York"
+    locale: "en-US"
+
+    # WebGL
+    webgl_vendor: "Google Inc. (Intel)"
+    webgl_renderer: "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x00009A49) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+
+    http_accept_language_override: "en-US,en;q=0.9"
+
+    extra_js_props:
+      navigator_languages_override: ["en-US", "en"]
+      navigator_appName: "Netscape"
+      navigator_vendor: "Google Inc."
+      navigator_product: "Gecko"
+      navigator_oscpu: "Windows NT 10.0; Win64; x64"
+      maxTouchPoints: 0
+      doNotTrack: null
+      pdfViewerEnabled: true
+
+      screen_taskbar_height: 40
+      screen_orientation_type: "landscape-primary"
+      screen_orientation_angle: 0
+      
+      window_chrome_width: 16
+      window_chrome_height: 77
+      window_screenX: 0
+      window_screenY: 0
+
+      chrome_runtime_id: "ffmpgngepebcjmkbidpmhfecbifmchp"
+      chrome_loadTimes_requestTime: 1733875200.123
+      chrome_loadTimes_startLoadTime: 1733875200.456
+      chrome_loadTimes_commitLoadTime: 1733875200.789
+      chrome_loadTimes_finishDocumentLoadTime: 1733875201.234
+      chrome_loadTimes_finishLoadTime: 1733875201.567
+      chrome_loadTimes_firstPaintTime: 1733875200.890
+      chrome_loadTimes_firstPaintAfterLoadTime: 0
+      chrome_loadTimes_navigationType: "Reload"
+      chrome_loadTimes_wasFetchedViaSpdy: false
+      chrome_loadTimes_wasNpnNegotiated: true
+      chrome_loadTimes_npnNegotiatedProtocol: "h2"
+      chrome_loadTimes_wasAlternateProtocolAvailable: false
+      chrome_loadTimes_connectionInfo: "h2"
+      
+      chrome_csi_onloadT: 567
+      chrome_csi_pageT: 1234
+      chrome_csi_startE: 1733875200123
+      chrome_csi_tran: 15
+
+      biometric_profile_config:
+        typing_speed_wpm: 62
+        mouse_acceleration: 1.1
+        scroll_velocity_preference: 550
+        click_dwell_time_ms: 100
+        movement_jitter_factor: 0.08
+        pause_between_actions: 1.5
+        reading_speed_wpm: 300
+        attention_span_seconds: 30
+        multitasking_tendency: 0.4
+        
+      plugins:
+        - name: "PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: "Portable Document Format"
+          mimeTypes:
+            - type: "application/pdf"
+              suffixes: "pdf"
+              description: "Portable Document Format"
+        - name: "Chrome PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: ""
+          mimeTypes:
+            - type: "application/pdf"
+              suffixes: "pdf"
+              description: ""
+
+      permissions:
+        notifications: "default"
+        geolocation: "prompt"
+        camera: "prompt"
+        microphone: "prompt"
+        persistent-storage: "default"
+
+      webgl_extensions: 
+        - "ANGLE_instanced_arrays"
+        - "EXT_blend_minmax"
+        - "EXT_color_buffer_float"
+        - "EXT_color_buffer_half_float"
+        - "EXT_disjoint_timer_query"
+        - "EXT_float_blend"
+        - "EXT_frag_depth"
+        - "EXT_shader_texture_lod"
+        - "EXT_texture_compression_bptc"
+        - "EXT_texture_compression_rgtc"
+        - "EXT_texture_filter_anisotropic"
+        - "OES_element_index_uint"
+        - "OES_fbo_render_mipmap"
+        - "OES_standard_derivatives"
+        - "OES_texture_float"
+        - "OES_texture_float_linear"
+        - "OES_texture_half_float"
+        - "OES_texture_half_float_linear"
+        - "OES_vertex_array_object"
+        - "WEBGL_color_buffer_float"
+        - "WEBGL_compressed_texture_s3tc"
+        - "WEBGL_compressed_texture_s3tc_srgb"
+        - "WEBGL_debug_renderer_info"
+        - "WEBGL_debug_shaders"
+        - "WEBGL_depth_texture"
+        - "WEBGL_draw_buffers"
+        - "WEBGL_lose_context"
+        - "WEBGL_multi_draw"
+        
+      webgl_parameters:
+        VERSION: "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+        SHADING_LANGUAGE_VERSION: "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)"
+        MAX_VERTEX_ATTRIBS: 16
+        MAX_VERTEX_UNIFORM_VECTORS: 1024
+        MAX_VERTEX_TEXTURE_IMAGE_UNITS: 16
+        MAX_VARYING_VECTORS: 30
+        MAX_FRAGMENT_UNIFORM_VECTORS: 1024
+        MAX_TEXTURE_IMAGE_UNITS: 16
+        MAX_TEXTURE_SIZE: 16384
+        MAX_CUBE_MAP_TEXTURE_SIZE: 16384
+        MAX_COMBINED_TEXTURE_IMAGE_UNITS: 32
+        MAX_RENDERBUFFER_SIZE: 16384
+        MAX_VIEWPORT_DIMS: [16384, 16384]
+        ALIASED_LINE_WIDTH_RANGE: [1, 1]
+        ALIASED_POINT_SIZE_RANGE: [1, 1024]
+        RED_BITS: 8
+        GREEN_BITS: 8
+        BLUE_BITS: 8
+        ALPHA_BITS: 8
+        DEPTH_BITS: 24
+        STENCIL_BITS: 8
+        MAX_TEXTURE_MAX_ANISOTROPY_EXT: 16
+
+      canvas_fp_noise:
+        intensity: 0.0004
+        rgbMaxShift: 1
+
+      battery:
+        charging: true
+        level: 0.85
+        chargingTime: 3600
+        dischargingTime: null  # Use null instead of .inf
+      
+      intl_calendar: "gregory"
+      intl_numberingSystem: "latn"
+      
+      media_devices:
+        - kind: "audioinput"
+          label: "Microphone Array (Realtek(R) Audio)"
+          deviceId: "default"
+          groupId: "{0.0.1.00000000}.{7d8f3c45-8b92-4f93-a3dc-79412ef21302}"
+        - kind: "videoinput"
+          label: "Integrated Camera"
+          deviceId: "\\\\?\\usb#vid_13d3&pid_5415&mi_00#6&10e7f36&0&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\\global"
+          groupId: "{0.0.0.00000000}.{9e3de0b8-6b2a-11ec-b909-806e6f6e6963}"
+        - kind: "audiooutput"
+          label: "Speakers (Realtek(R) Audio)"
+          deviceId: "default"
+          groupId: "{0.0.0.00000000}.{7d8f3c45-8b92-4f93-a3dc-79412ef21302}"
+      
+      match_media_spoof:
+        "(prefers-color-scheme: light)": true
+        "(prefers-reduced-motion: no-preference)": true
+        "(pointer: fine)": true
+        "(hover: hover)": true
+        "(display-mode: browser)": true
+      
+      speech_voices:
+        - name: "Microsoft David - English (United States)"
+          lang: "en-US"
+          localService: true
+          default: true
+          voiceURI: "Microsoft David - English (United States)"
+        - name: "Microsoft Mark - English (United States)"
+          lang: "en-US"
+          localService: true
+          default: false
+          voiceURI: "Microsoft Mark - English (United States)"
+        - name: "Microsoft Zira - English (United States)"
+          lang: "en-US"
+          localService: true
+          default: false
+          voiceURI: "Microsoft Zira - English (United States)"
+      
+      history_length: 5
+
+      system_fonts:
+        - "Arial"
+        - "Arial Black"
+        - "Calibri"
+        - "Cambria"
+        - "Cambria Math"
+        - "Comic Sans MS"
+        - "Consolas"
+        - "Courier"
+        - "Courier New"
+        - "Georgia"
+        - "Impact"
+        - "Lucida Console"
+        - "Lucida Sans Unicode"
+        - "Microsoft Sans Serif"
+        - "MS Gothic"
+        - "MS PGothic"
+        - "MS UI Gothic"
+        - "Palatino Linotype"
+        - "Segoe Print"
+        - "Segoe Script"
+        - "Segoe UI"
+        - "Segoe UI Emoji"
+        - "Segoe UI Symbol"
+        - "Tahoma"
+        - "Times"
+        - "Times New Roman"
+        - "Trebuchet MS"
+        - "Verdana"
+        - "Webdings"
+        - "Wingdings"
+
+  - name: "P03_MacOS_Chrome136_M4Pro_NL"
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+    
+    sec_ch_ua: '"Chromium";v="136", "Google Chrome";v="136", "Not)A;Brand";v="99"'
+    sec_ch_ua_mobile: "?0"
+    sec_ch_ua_platform: '"macOS"'
+    sec_ch_ua_platform_version: '"14.7.1"'  # Updated to more recent macOS version
+    sec_ch_ua_arch: '"arm"'
+    sec_ch_ua_bitness: '"64"'
+    sec_ch_ua_model: '""'
+    sec_ch_ua_full_version_list: '"Chromium";v="136.0.6478.114", "Google Chrome";v="136.0.6478.114", "Not)A;Brand";v="99.0.0.0"'
+    sec_ch_ua_form_factors: '"Desktop"'
+
+    viewport_width: 1481
+    viewport_height: 1061
+    screen_width: 2056
+    screen_height: 1329
+    avail_width: 2056
+    avail_height: 1257
+    device_pixel_ratio: 2.0
+    color_depth: 30
+    pixel_depth: 30
+
+    js_platform: "MacIntel"
+    hardware_concurrency: 14
+    device_memory: 8
+    
+    timezone: "Europe/Amsterdam"
+    locale: "nl-NL"
+
+    webgl_vendor: "Google Inc. (Apple)"
+    webgl_renderer: "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+
+    http_accept_document: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+    http_accept_language_override: "nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7"
+
+    extra_js_props:
+      navigator_languages_override: ["nl-NL", "nl", "en-US", "en"]
+      navigator_appName: "Netscape"
+      navigator_vendor: "Google Inc."
+      navigator_product: "Gecko"
+      navigator_oscpu: null
+      maxTouchPoints: 0
+      doNotTrack: null
+      pdfViewerEnabled: true
+
+      screen_taskbar_height: 72
+      screen_orientation_type: "landscape-primary"
+      screen_orientation_angle: 0
+
+      window_chrome_width: 0
+      window_chrome_height: 28
+      window_screenX: 0
+      window_screenY: 25
+
+      plugins:
+        - name: "PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: "Portable Document Format"
+          mimeTypes:
+            - type: "application/pdf"
+              suffixes: "pdf"
+              description: "Portable Document Format"
+        - name: "Chrome PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: ""
+          mimeTypes:
+            - type: "application/pdf"
+              suffixes: "pdf"
+              description: ""
+      
+      permissions:
+        notifications: "prompt"
+        geolocation: "prompt"
+        camera: "prompt"
+        microphone: "prompt"
+        persistent-storage: "default"
+
+      webgl_extensions:
+        - "EXT_clip_control"
+        - "WEBGL_stencil_texturing"
+        - "WEBGL_render_shared_exponent"
+        - "WEBGL_provoking_vertex"
+        - "WEBGL_polygon_mode"
+        - "WEBGL_multi_draw"
+        - "WEBGL_lose_context"
+        - "WEBGL_debug_shaders"
+        - "WEBGL_debug_renderer_info"
+        - "WEBGL_compressed_texture_s3tc_srgb"
+        - "WEBGL_compressed_texture_s3tc"
+        - "WEBGL_compressed_texture_pvrtc"
+        - "WEBGL_compressed_texture_etc1"
+        - "WEBGL_compressed_texture_etc"
+        - "WEBGL_compressed_texture_astc"
+        - "WEBGL_clip_cull_distance"
+        - "WEBGL_blend_func_extended"
+        - "OES_texture_float_linear"
+        - "OES_shader_multisample_interpolation"
+        - "OES_sample_variables"
+        - "OES_draw_buffers_indexed"
+        - "NV_shader_noperspective_interpolation"
+        - "KHR_parallel_shader_compile"
+        - "EXT_texture_norm16"
+        - "EXT_texture_mirror_clamp_to_edge"
+        - "EXT_texture_filter_anisotropic"
+        - "EXT_texture_compression_rgtc"
+        - "EXT_texture_compression_bptc"
+        - "EXT_render_snorm"
+        - "EXT_polygon_offset_clamp"
+        - "EXT_float_blend"
+        - "EXT_disjoint_timer_query_webgl2"
+        - "EXT_depth_clamp"
+        - "EXT_conservative_depth"
+        - "EXT_color_buffer_half_float"
+        - "EXT_color_buffer_float"
+        
+      webgl_parameters:
+        VERSION: "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+        SHADING_LANGUAGE_VERSION: "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)"
+        VENDOR: "Google Inc. (Apple)"
+        RENDERER: "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+        MAX_VERTEX_ATTRIBS: 16
+        MAX_VERTEX_UNIFORM_VECTORS: 1024
+        MAX_VERTEX_TEXTURE_IMAGE_UNITS: 16
+        MAX_VARYING_VECTORS: 30
+        MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: 128
+        MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: 4
+        MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: 4
+        ALIASED_LINE_WIDTH_RANGE: [1, 1]
+        ALIASED_POINT_SIZE_RANGE: [1, 511]
+        MAX_FRAGMENT_UNIFORM_VECTORS: 1024
+        MIN_PROGRAM_TEXEL_OFFSET: -8
+        MAX_PROGRAM_TEXEL_OFFSET: 7
+        MAX_DRAW_BUFFERS: 8
+        MAX_COLOR_ATTACHMENTS: 8
+        MAX_SAMPLES: 4
+        MAX_RENDERBUFFER_SIZE: 16384
+        MAX_VIEWPORT_DIMS: [16384, 16384]
+        RED_BITS: 8
+        GREEN_BITS: 8
+        BLUE_BITS: 8
+        ALPHA_BITS: 8
+        DEPTH_BITS: 24
+        STENCIL_BITS: 8
+        MAX_TEXTURE_SIZE: 16384
+        MAX_CUBE_MAP_TEXTURE_SIZE: 16384
+        MAX_COMBINED_TEXTURE_IMAGE_UNITS: 32
+        MAX_TEXTURE_MAX_ANISOTROPY_EXT: 16
+        MAX_3D_TEXTURE_SIZE: 2048
+        MAX_ARRAY_TEXTURE_LAYERS: 2048
+        MAX_TEXTURE_LOD_BIAS: 15.0
+        MAX_UNIFORM_BUFFER_BINDINGS: 24
+        MAX_UNIFORM_BLOCK_SIZE: 16384
+        UNIFORM_BUFFER_OFFSET_ALIGNMENT: 16
+        MAX_COMBINED_UNIFORM_BLOCKS: 24
+
+      canvas_fp_noise:
+        intensity: 0.00003
+        rgbMaxShift: 1
+
+      battery:
+        charging: false
+        level: 0.75
+        chargingTime: null  # null instead of .inf
+        dischargingTime: 7200
+
+      intl_calendar: "gregory"
+      intl_numberingSystem: "latn"
+
+      media_devices:
+        - kind: "audioinput"
+          label: "External Microphone"
+          deviceId: "e9b8e3f9a6c4d7b1e5f2a3c8d9b7e6f4a5c3d2b1"
+          groupId: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0"
+        - kind: "videoinput"
+          label: "FaceTime HD Camera"
+          deviceId: "a8c7e6f5d4b3a2c1e9f8d7c6b5a4e3d2c1b0a9f8"
+          groupId: "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1"
+        - kind: "audiooutput"
+          label: "MacBook Pro Speakers"
+          deviceId: "c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+          groupId: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0"
+      
+      match_media_spoof:
+        "(prefers-color-scheme: dark)": true
+        "(prefers-reduced-motion: no-preference)": true
+        "(pointer: fine)": true
+        "(hover: hover)": true
+        "(display-mode: browser)": true
+      
+      speech_voices:
+        - name: "Xander (Nederlands (Nederland))"
+          lang: "nl-NL"
+          localService: true
+          default: true
+          voiceURI: "Xander"
+        - name: "Claire (Nederlands (België))"
+          lang: "nl-BE"
+          localService: true
+          default: false
+          voiceURI: "Claire"
+        - name: "Daniel (English (United Kingdom))"
+          lang: "en-GB"
+          localService: true
+          default: false
+          voiceURI: "Daniel"
+        - name: "Samantha (English (United States))"
+          lang: "en-US"
+          localService: true
+          default: false
+          voiceURI: "Samantha"
+        
+      history_length: 3
+
+      system_fonts:
+        - "American Typewriter"
+        - "Andale Mono"
+        - "Apple Chancery"
+        - "Apple Color Emoji"
+        - "Apple SD Gothic Neo"
+        - "Apple Symbols"
+        - "Arial"
+        - "Arial Black"
+        - "Arial Hebrew"
+        - "Arial Narrow"
+        - "Arial Rounded MT Bold"
+        - "Arial Unicode MS"
+        - "Avenir"
+        - "Avenir Next"
+        - "Avenir Next Condensed"
+        - "Baskerville"
+        - "Big Caslon"
+        - "Bodoni 72"
+        - "Bodoni 72 Oldstyle"
+        - "Bodoni 72 Smallcaps"
+        - "Bradley Hand"
+        - "Brush Script MT"
+        - "Chalkboard"
+        - "Chalkboard SE"
+        - "Chalkduster"
+        - "Charter"
+        - "Cochin"
+        - "Comic Sans MS"
+        - "Copperplate"
+        - "Courier"
+        - "Courier New"
+        - "DIN Alternate"
+        - "DIN Condensed"
+        - "Didot"
+        - "Futura"
+        - "Geneva"
+        - "Georgia"
+        - "Gill Sans"
+        - "Helvetica"
+        - "Helvetica Neue"
+        - "Herculanum"
+        - "Hoefler Text"
+        - "Impact"
+        - "InaiMathi"
+        - "Iowan Old Style"
+        - "Kailasa"
+        - "Kefa"
+        - "Khmer Sangam MN"
+        - "Kohinoor Bangla"
+        - "Kohinoor Devanagari"
+        - "Kohinoor Telugu"
+        - "Lao Sangam MN"
+        - "Lucida Grande"
+        - "Luminari"
+        - "Marion"
+        - "Marker Felt"
+        - "Menlo"
+        - "Microsoft Sans Serif"
+        - "Monaco"
+        - "Noteworthy"
+        - "Optima"
+        - "Palatino"
+        - "Papyrus"
+        - "Phosphate"
+        - "Rockwell"
+        - "SF Pro Display"
+        - "SF Pro Rounded"
+        - "SF Pro Text"
+        - "Savoye LET"
+        - "SignPainter"
+        - "Silom"
+        - "Skia"
+        - "Snell Roundhand"
+        - "Tahoma"
+        - "Times"
+        - "Times New Roman"
+        - "Trattatello"
+        - "Trebuchet MS"
+        - "Verdana"
+        - "Zapfino"
+
+
+  - name: "P03_MacOS_Chrome136_M4Pro_NL"
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+    
+    sec_ch_ua: '"Chromium";v="136", "Google Chrome";v="136", "Not/A)Brand";v="99"'
+    sec_ch_ua_mobile: "?0" 
+    sec_ch_ua_platform: '"macOS"'
+    sec_ch_ua_platform_version: '"10.15.7"' 
+    sec_ch_ua_arch: '"arm"'
+    sec_ch_ua_bitness: '"64"'
+    sec_ch_ua_model: '""'
+    sec_ch_ua_full_version_list: '"Chromium";v="136.0.7103.114", "Google Chrome";v="136.0.7103.114", "Not/A)Brand";v="99.0.0.0"'
+    sec_ch_ua_form_factors: '["Desktop"]'
+
+    viewport_width: 1481
+    viewport_height: 1061
+    screen_width: 2056
+    screen_height: 1285
+    avail_width: 2056 
+    avail_height: 1257 
+    device_pixel_ratio: 2.0 # VUL_IN: Confirm with window.devicePixelRatio
+    color_depth: 30
+    pixel_depth: 30
+
+    js_platform: "MacIntel"
+    hardware_concurrency: 14
+    device_memory: 8       
+    
+    timezone: "Europe/Amsterdam"
+    locale: "nl,en-GB;q=0.9,en-US;q=0.8,en;q=0.7"
+
+    # WebGL details from your comprehensive text dump
+    webgl_vendor: "Google Inc. (Apple)" # From Unmasked Vendor
+    webgl_renderer: "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)" # From Unmasked Renderer
+
+    http_accept_document: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+    http_accept_language_override: "nl,en-GB;q=0.9,en-US;q=0.8,en;q=0.7"
+
+    extra_js_props:
+      navigator_languages_override: ["nl","en-GB","en-US","en"]
+      navigator_appName: "Netscape"
+      navigator_vendor: "Google Inc."
+      navigator_product: "Gecko"
+      navigator_oscpu: null 
+      maxTouchPoints: 0
+      doNotTrack: null
+      pdfViewerEnabled: true
+
+      screen_taskbar_height: 0 
+      screen_orientation: {type: "landscape-primary", angle: 0} # VUL_IN
+
+      window_chrome_width: 0 
+      window_chrome_height: 28 # VUL_IN
+      window_screenX: 0       # VUL_IN
+      window_screenY: 25      # VUL_IN
+
+      plugins: # VUL_IN (ensure Widevine version/filename is accurate for Chrome 136 on Mac)
+        - name: "PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: "Portable Document Format"
+          mimeTypes:
+            - {type: "application/pdf", suffixes: "pdf", description: "Portable Document Format"}
+        - name: "Chrome PDF Viewer"
+          filename: "internal-pdf-viewer"
+          description: ""
+          mimeTypes:
+            - {type: "application/pdf", suffixes: "pdf", description: ""}
+        - name: "Widevine Content Decryption Module"
+          filename: "VUL_IN_widevinecdm_filename.plugin" 
+          description: "Enables Widevine licenses. (Version: VUL_IN_WIDEVINE_CH136_MAC_VERSION)" 
+          mimeTypes:
+            - {type: "application/x-ppapi-widevine-cdm", suffixes: "", description: "Widevine Content Decryption Module"}
+      
+      permissions: # VUL_IN
+        notifications: "prompt" 
+        # ...
+
+      # WebGL Extensions from your text dump (should match image_61e357.jpg)
+      webgl_extensions: [
+        "EXT_clip_control", "WEBGL_stencil_texturing", "WEBGL_render_shared_exponent",
+        "WEBGL_provoking_vertex", "WEBGL_polygon_mode", "WEBGL_multi_draw", "WEBGL_lose_context",
+        "WEBGL_debug_shaders", "WEBGL_debug_renderer_info", "WEBGL_compressed_texture_s3tc_srgb",
+        "WEBGL_compressed_texture_s3tc", "WEBGL_compressed_texture_pvrtc", 
+        "WEBGL_compressed_texture_etc1", "WEBGL_compressed_texture_etc", 
+        "WEBGL_compressed_texture_astc", "WEBGL_clip_cull_distance", "WEBGL_blend_func_extended",
+        "OES_texture_float_linear", "OES_shader_multisample_interpolation", "OES_sample_variables",
+        "OES_draw_buffers_indexed", "NV_shader_noperspective_interpolation", 
+        "KHR_parallel_shader_compile", "EXT_texture_norm16", "EXT_texture_mirror_clamp_to_edge",
+        "EXT_texture_filter_anisotropic", "EXT_texture_compression_rgtc", 
+        "EXT_texture_compression_bptc", "EXT_render_snorm", "EXT_polygon_offset_clamp",
+        "EXT_float_blend", "EXT_disjoint_timer_query_webgl2", "EXT_depth_clamp",
+        "EXT_conservative_depth", "EXT_color_buffer_half_float", "EXT_color_buffer_float"
+        # VUL_IN: Ensure this is the complete list as reported by gl.getSupportedExtensions() in order.
+      ]
+      webgl_parameters: {
+        # Core Info
+        "VERSION": "WebGL 2.0 (OpenGL ES 3.0 Chromium)", 
+        "SHADING_LANGUAGE_VERSION": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+        "VENDOR": "Google Inc. (Apple)", # Unmasked Vendor
+        "RENDERER": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)", # Unmasked Renderer
+        
+        # Vertex Shader Params from text dump
+        "MAX_VERTEX_ATTRIBS": 16, 
+        "MAX_VERTEX_UNIFORM_VECTORS": 1024, 
+        "MAX_VERTEX_TEXTURE_IMAGE_UNITS": 16, 
+        "MAX_VARYING_VECTORS": 30,
+        # "MAX_VERTEX_UNIFORM_COMPONENTS": 4096, # Already maps to Max Vertex Uniform Vectors (1024 * vec4)
+        # "MAX_VERTEX_UNIFORM_BLOCKS": 12, # Already maps to Max Vertex Uniform Vectors
+        # "MAX_VERTEX_OUTPUT_COMPONENTS": 120, # Relates to varying vectors (30 * vec4)
+        # "MAX_VARYING_COMPONENTS": 120, # Relates to varying vectors (30 * vec4)
+
+        # Transform Feedback from text dump
+        "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS": 128,
+        "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS": 4,
+        "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS": 4,
+
+        # Rasterizer from text dump
+        "ALIASED_LINE_WIDTH_RANGE": [1,1],
+        "ALIASED_POINT_SIZE_RANGE": [1,511],
+
+        # Fragment Shader from text dump
+        "MAX_FRAGMENT_UNIFORM_VECTORS": 1024,
+        # "MAX_TEXTURE_IMAGE_UNITS": 16, # For fragment shader, often referred to by gl.MAX_TEXTURE_IMAGE_UNITS
+        # "MAX_FRAGMENT_UNIFORM_COMPONENTS": 4096, # Maps to Max Fragment Uniform Vectors
+        # "MAX_FRAGMENT_UNIFORM_BLOCKS": 12, # Maps to Max Fragment Uniform Vectors
+        # "MAX_FRAGMENT_INPUT_COMPONENTS": 120, # Relates to varying vectors
+        "MIN_PROGRAM_TEXEL_OFFSET": -8,
+        "MAX_PROGRAM_TEXEL_OFFSET": 7,
+
+        # Framebuffer from text dump
+        "MAX_DRAW_BUFFERS": 8,
+        "MAX_COLOR_ATTACHMENTS": 8,
+        "MAX_SAMPLES": 4,
+        "MAX_RENDERBUFFER_SIZE": 16384,
+        "MAX_VIEWPORT_DIMS": [16384,16384],
+        "RED_BITS": 8,
+        "GREEN_BITS": 8,
+        "BLUE_BITS": 8,
+        "ALPHA_BITS": 8,
+        "DEPTH_BITS": 24,
+        "STENCIL_BITS": 0,
+
+        # Textures from text dump
+        "MAX_TEXTURE_SIZE": 16384,
+        "MAX_CUBE_MAP_TEXTURE_SIZE": 16384,
+        "MAX_COMBINED_TEXTURE_IMAGE_UNITS": 32,
+        "MAX_TEXTURE_MAX_ANISOTROPY_EXT": 16, # For EXT_texture_filter_anisotropic
+        "MAX_3D_TEXTURE_SIZE": 2048,
+        "MAX_ARRAY_TEXTURE_LAYERS": 2048,
+        "MAX_TEXTURE_LOD_BIAS": 15.0, # Note: float
+
+        # Uniform Buffers from text dump
+        "MAX_UNIFORM_BUFFER_BINDINGS": 24,
+        "MAX_UNIFORM_BLOCK_SIZE": 16384,
+        "UNIFORM_BUFFER_OFFSET_ALIGNMENT": 16,
+        "MAX_COMBINED_UNIFORM_BLOCKS": 24
+        # MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS & MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS are high-level limits,
+        # not direct gl.getParameter results usually. Sticking to base parameters is safer.
+        
+        # VUL_IN: Add shader precision details if possible e.g. for highp/mediump float/int ranges & precision
+        # Example structure for SHADER_PRECISION_FORMAT:
+        # SHADER_PRECISION_FORMAT_VERTEX_HIGH_FLOAT: {rangeMin: 127, rangeMax: 127, precision: 23} # VUL_IN
+        # SHADER_PRECISION_FORMAT_FRAGMENT_HIGH_FLOAT: {rangeMin: 127, rangeMax: 127, precision: 23} # From "Best Float Precision"
+        # ... and for mediump, lowp, and int types if spoofing getShaderPrecisionFormat
+      }
+
+      canvas_fp_noise: {intensity: 0.00003, rgbShift: 1} # VUL_IN
+
+      battery: {charging: false, level: 0.75, chargingTime: .inf, dischargingTime: 7200 } # VUL_IN
+
+      intl_calendar: "gregory"
+      intl_numberingSystem: "latn"
+
+      media_devices: # VUL_IN
+        # ...
+      
+      match_media_spoof: # VUL_IN
+        # ...
+      
+      speech_voices: # VUL_IN
+        # ...
+        
+      history_length: 3 # VUL_IN
+
+      system_fonts: [ # From your previous text dump
+        "default, serif", "sans-serif, Helvetica", "monospace, Menlo", "cursive, Apple Chancery", 
+        "fantasy, Papyrus", "system-ui, BlinkMacSystemFont", "Academy Engraved LET", "Al Bayan", 
+        "Al Nile, Baghdad, Noto Sans Batak, Noto Sans Carian, Noto Sans Glagolitic, Noto Sans Imperial Aramaic, Noto Sans Lycian, Noto Sans Lydian, Noto Sans Old South Arabian, Noto Sans Osmanya, Noto Sans Phoenician, Noto Sans Samaritan", 
+        "Al Tarikh, Farah, Sana", "American Typewriter", "Andale Mono", 
+        "Apple Braille, Apple Braille Outline 6 Dot, Apple Braille Outline 8 Dot, Apple Braille Pinpoint 6 Dot, Apple Braille Pinpoint 8 Dot", 
+        "Apple Color Emoji", "AppleGothic", "AppleMyungjo", "Apple SD Gothic Neo", "Apple Symbols", 
+        "Arial", "Arial Hebrew, Arial Hebrew Scholar", "Arial Narrow", "Arial Rounded MT Bold", 
+        "Arial Unicode MS", "Athelas", "Avenir, Avenir Book", "Avenir Black, Avenir Black Oblique", 
+        "Avenir Heavy", "Avenir Light", "Avenir Medium", "Avenir Next", "Avenir Next Condensed", 
+        "Avenir Next Condensed Demi Bold", "Avenir Next Condensed Heavy", "Avenir Next Condensed Medium", 
+        "Avenir Next Condensed Ultra Light", "Avenir Next Demi Bold", "Avenir Next Heavy", 
+        "Avenir Next Medium", "Avenir Next Ultra Light", "Ayuthaya", "Bangla MN", 
+        "Bangla Sangam MN", "Baskerville", "Beirut", "Big Caslon", "Bodoni Ornaments", 
+        "Bradley Hand", "Brush Script MT", "Bungee, Bungee Hairline, Bungee Inline, Bungee Outline", 
+        "Bungee Shade", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charter", "Charter Black", 
+        "Cochin", "Comic Sans MS", "Copperplate", "Corsiva Hebrew", "Courier, Courier 10 Pitch", 
+        "Courier New", "Damascus", "DecoType Naskh", "Devanagari MT", "Devanagari Sangam MN", 
+        "Didot", "DIN Alternate", "DIN Condensed", "Diwan Kufi", "Diwan Thuluth", "Euphemia UCAS", 
+        "Farisi", "Futura", "Galvji", "GB18030 Bitmap", "Geeza Pro", "Geneva", "Georgia", 
+        "Gill Sans", "Gujarati MT", "Gujarati Sangam MN", "Gurmukhi MN", "Gurmukhi MT", 
+        "Gurmukhi Sangam MN", "Heiti SC, Heiti TC", "Helvetica Neue", "Herculanum", 
+        "Hiragino Kaku Gothic Pro, Hiragino Kaku Gothic ProN, Hiragino Kaku Gothic ProN W3, Hiragino Kaku Gothic Pro W3, Hiragino Sans GB, Hiragino Sans GB W3, Hiragino Sans W3", 
+        "Hiragino Kaku Gothic ProN W6, Hiragino Kaku Gothic Pro W6, Hiragino Sans GB W6, Hiragino Sans W6", 
+        "Hiragino Kaku Gothic Std, Hiragino Kaku Gothic StdN, Hiragino Kaku Gothic StdN W8, Hiragino Kaku Gothic Std W8, Hiragino Sans W8", 
+        "Hiragino Maru Gothic Pro, Hiragino Maru Gothic ProN, Hiragino Maru Gothic ProN W4, Hiragino Maru Gothic Pro W4, Hiragino Sans W0", 
+        "Hiragino Mincho Pro, Hiragino Mincho ProN, Hiragino Mincho ProN W3, Hiragino Mincho Pro W3", 
+        "Hiragino Mincho ProN W6, Hiragino Mincho Pro W6", "Hiragino Sans, Hiragino Sans W4", 
+        "Hiragino Sans W1", "Hiragino Sans W2", "Hiragino Sans W5", "Hiragino Sans W7", 
+        "Hiragino Sans W9", "Hoefler Text", "Hoefler Text Ornaments", "Impact", "InaiMathi", 
+        "Iowan Old Style", "Iowan Old Style Black", "ITF Devanagari, ITF Devanagari Marathi", 
+        "Kailasa", "Kannada MN, Oriya MN, Telugu MN", "Kannada Sangam MN", "Kefa", "Khmer MN", 
+        "Khmer Sangam MN", "Kohinoor Bangla, Kohinoor Devanagari", "Kohinoor Gujarati", 
+        "Kohinoor Telugu", "Kokonor", "Krungthep", "KufiStandardGK", "Lao MN", "Lao Sangam MN", 
+        "Lucida Grande", "Luminari", "Malayalam MN", "Malayalam Sangam MN", "Marion", 
+        "Marker Felt", "Microsoft Sans Serif", "Mishafi, Mishafi Gold", "Monaco", "Mshtakan", 
+        "Mukta Mahee", "Muna", "Myanmar MN", "Myanmar Sangam MN", "Nadeem", "New Peninim MT", 
+        "Noteworthy", "Noto Nastaliq Urdu", "Noto Sans Adlam", 
+        "Noto Sans Armenian, Noto Sans Avestan, Noto Sans Bamum, Noto Sans Bassa Vah, Noto Sans Buginese, Noto Sans Buhid, Noto Sans Canadian Aboriginal, Noto Sans Coptic, Noto Sans Cypriot, Noto Sans Duployan, Noto Sans Gothic, Noto Sans Hanifi Rohingya, Noto Sans Hanunoo, Noto Sans Hatran, Noto Sans Kayah Li, Noto Sans Limbu, Noto Sans Linear B, Noto Sans Lisu, Noto Sans Mro, Noto Sans Multani, Noto Sans Nabataean, Noto Sans New Tai Lue, Noto Sans NKo, Noto Sans Ol Chiki, Noto Sans Old Italic, Noto Sans Old North Arabian, Noto Sans Old Permic, Noto Sans Old Persian, Noto Sans Old Turkic, Noto Sans Osage, Noto Sans Pahawh Hmong, Noto Sans Palmyrene, Noto Sans Pau Cin Hau, Noto Sans PhagsPa, Noto Sans Rejang, Noto Sans Saurashtra, Noto Sans Sora Sompeng, Noto Sans Syloti Nagri, Noto Sans Tagalog, Noto Sans Tagbanwa, Noto Sans Tai Le, Noto Sans Tai Viet, Noto Sans Tifinagh, Noto Sans Vai", 
+        "Noto Sans Bhaiksuki, Noto Sans Inscriptional Pahlavi", 
+        "Noto Sans Brahmi, Noto Sans Inscriptional Parthian, Noto Sans Kharoshthi", 
+        "Noto Sans Caucasian Albanian", "Noto Sans Chakma", "Noto Sans Cham", "Noto Sans Cuneiform", 
+        "Noto Sans Egyptian Hieroglyphs", "Noto Sans Elbasan", "Noto Sans Gunjala Gondi", 
+        "Noto Sans Javanese", "Noto Sans Kaithi", "Noto Sans Kannada", "Noto Sans Khojki", 
+        "Noto Sans Khudawadi", "Noto Sans Lepcha", "Noto Sans Linear A", "Noto Sans Mahajani", 
+        "Noto Sans Mandaic, Noto Sans Warang Citi", "Noto Sans Manichaean", "Noto Sans Marchen", 
+        "Noto Sans Masaram Gondi", "Noto Sans Meetei Mayek", "Noto Sans Mende Kikakui", 
+        "Noto Sans Meroitic", "Noto Sans Miao", "Noto Sans Modi, Noto Serif Hmong Nyiakeng, Noto Serif Yezidi", 
+        "Noto Sans Mongolian", "Noto Sans Myanmar, Noto Sans Zawgyi", "Noto Sans Newa", 
+        "Noto Sans Old Hungarian", "Noto Sans Oriya", "Noto Sans Psalter Pahlavi", 
+        "Noto Sans Sharada", "Noto Sans Siddham", "Noto Sans Sundanese", "Noto Sans Syriac", 
+        "Noto Sans Tai Tham", "Noto Sans Takri", "Noto Sans Thaana", "Noto Sans Tirhuta", 
+        "Noto Sans Ugaritic", "Noto Sans Wancho", "Noto Sans Yi", "Noto Serif Ahom", 
+        "Noto Serif Balinese", "Noto Serif Myanmar", "Optima", "Oriya Sangam MN", "Palatino", 
+        "Party LET", "Phosphate", "PingFang HK, PingFang SC, PingFang TC", 
+        "Plantagenet Cherokee", "Poppins", "PT Mono", "PT Sans", "PT Sans Caption", 
+        "PT Sans Narrow", "PT Serif", "PT Serif Caption", "Raanana", "Rockwell", "Sathu", 
+        "Savoye LET, Savoye LET Plain:1.0, Savoye LET Plain CC.:1.0", "Seravek", 
+        "Seravek ExtraLight", "Seravek Light", "Seravek Medium", 
+        "SignPainter, SignPainter-HouseScript", "Silom", "Sinhala MN", "Sinhala Sangam MN", 
+        "Skia", "Snell Roundhand", "Songti SC, Songti TC", "STIXGeneral", 
+        "STIXIntegralsD, STIXIntegralsUpD", "STIXIntegralsSm, STIXIntegralsUp, STIXIntegralsUpSm", 
+        "STIXNonUnicode", "STIXSizeFiveSym", "STIXSizeFourSym, STIXSizeThreeSym", 
+        "STIXSizeOneSym", "STIXSizeTwoSym", "STIX Two Math, STIX Two Text", "STIXVariants", 
+        "STSong", "Sukhumvit Set", "Superclarendon", "Symbol", "Tahoma", "Tamil MN", 
+        "Tamil Sangam MN", "Telugu Sangam MN", "Thonburi", "Times New Roman", "Trattatello", 
+        "Trebuchet MS", "Verdana", "Waseem", "Webdings", "Wingdings, Wingdings 2, Wingdings 3", 
+        "Zapf Dingbats", "Zapfino"
+      ]
+  - name: "Win11_Chrome125_Desktop_FHD_IT_GenZ"
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+    sec_ch_ua: '"Chromium";v="125", "Google Chrome";v="125", "Not/A)Brand";v="24"'
+    sec_ch_ua_platform: '"Windows"'
+    js_platform: "Win32"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1920 
+    viewport_height: 969 
+    screen_width: 1920
+    screen_height: 1080
+    avail_width: 1920
+    avail_height: 1040 
+    device_pixel_ratio: 1.0
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 12 
+    device_memory: 16      
+    timezone: "Europe/Rome"
+    locale: "it-IT,it;q=0.9,en;q=0.8,de;q=0.7" 
+    common_fonts: ["Arial", "Verdana", "Tahoma", "Segoe UI", "Times New Roman", "Calibri", "Consolas", "Courier New", "Georgia"]
+
+  - name: "MacSonoma_Chrome124_MacBookPro14_DE_Dev" 
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" 
+    sec_ch_ua: '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+    sec_ch_ua_platform: '"macOS"'
+    js_platform: "MacIntel"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1512 
+    viewport_height: 880
+    screen_width: 3024 
+    screen_height: 1964
+    avail_width: 1512
+    avail_height: 949 
+    device_pixel_ratio: 2.0
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 10 
+    device_memory: 16
+    timezone: "Europe/Berlin"
+    locale: "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7"
+    common_fonts: ["San Francisco", "Helvetica Neue", "Lucida Grande", "Arial", "Times New Roman", "Menlo", "Courier", "Monaco"]
+
+  - name: "Win10_Edge125_Laptop_FHD_ES_Office" 
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.2535.51"
+    sec_ch_ua: '"Microsoft Edge";v="125", "Chromium";v="125", "Not?A_Brand";v="24"'
+    sec_ch_ua_platform: '"Windows"'
+    js_platform: "Win32"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1920
+    viewport_height: 975
+    screen_width: 1920
+    screen_height: 1080
+    avail_width: 1920
+    avail_height: 1040
+    device_pixel_ratio: 1.0
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 8 
+    device_memory: 16
+    timezone: "Europe/Madrid"
+    locale: "es-ES,es;q=0.9,en;q=0.7,ca;q=0.5" 
+    common_fonts: ["Segoe UI", "Calibri", "Arial", "Verdana", "Consolas", "Times New Roman", "MS Gothic"]
+
+  - name: "Win11_Chrome123_Older_Desktop_QHD_US_Gaming" 
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    sec_ch_ua: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+    sec_ch_ua_platform: '"Windows"'
+    js_platform: "Win32"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 2560
+    viewport_height: 1329
+    screen_width: 2560    
+    screen_height: 1440   
+    avail_width: 2560
+    avail_height: 1400
+    device_pixel_ratio: 1.0
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 20 
+    device_memory: 32
+    timezone: "America/New_York"
+    locale: "en-US,en;q=0.9"
+    common_fonts: ["Arial", "Helvetica", "Verdana", "Segoe UI Black", "Impact", "Bahnschrift", "Franklin Gothic Medium"]
+
+  - name: "MacMonterey_Chrome125_MacMini_UK_Home" 
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_7_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+    sec_ch_ua: '"Chromium";v="125", "Google Chrome";v="125", "Not/A)Brand";v="24"'
+    sec_ch_ua_platform: '"macOS"'
+    js_platform: "MacIntel"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1920 
+    viewport_height: 970
+    screen_width: 1920
+    screen_height: 1080
+    avail_width: 1920
+    avail_height: 1055 
+    device_pixel_ratio: 1.0 
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 8 
+    device_memory: 8
+    timezone: "Europe/London"
+    locale: "en-GB,en;q=0.9,ga;q=0.6" 
+    common_fonts: ["BlinkMacSystemFont", ".SF NS Text", "Helvetica Neue", "Arial", "Lucida Grande", "Roboto"]
+
+  - name: "Win10_Chrome124_Laptop_HD+_FR_Student"
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    sec_ch_ua: '"Chromium";v="124", "Google Chrome";v="124", "Not_A Brand";v="99"'
+    sec_ch_ua_platform: '"Windows"'
+    js_platform: "Win32"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1600
+    viewport_height: 790
+    screen_width: 1600   
+    screen_height: 900
+    avail_width: 1600
+    avail_height: 860
+    device_pixel_ratio: 1.0 # Kan ook 1.25 zijn, afhankelijk van laptop
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 6 
+    device_memory: 8
+    timezone: "Europe/Paris"
+    locale: "fr-FR,fr;q=0.9,en-US;q=0.6"
+    common_fonts: ["Arial", "Verdana", "Segoe UI", "Calibri Light", "Times New Roman", "Comic Sans MS"]
+
+  - name: "LinuxUbuntu22_Chrome125_Desktop_FHD_NL_Tech"
+    user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+    sec_ch_ua: '"Chromium";v="125", "Google Chrome";v="125", "Not/A)Brand";v="24"'
+    sec_ch_ua_platform: '"Linux"'
+    js_platform: "Linux x86_64"
+    sec_ch_ua_mobile: "?0"
+    viewport_width: 1920
+    viewport_height: 995
+    screen_width: 1920
+    screen_height: 1080
+    avail_width: 1920
+    avail_height: 1053 
+    device_pixel_ratio: 1.0
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 12
+    device_memory: 16
+    timezone: "Europe/Amsterdam"
+    locale: "nl-NL,nl;q=0.9,en;q=0.8"
+    common_fonts: ["Ubuntu", "Cantarell", "DejaVu Sans", "Arial", "Liberation Sans", "Noto Sans", "Droid Sans"]
+
+  - name: "Win11_Edge124_SurfacePro_Tablet_IT_Artist_Landscape" # Naam aangepast, viewport licht gewijzigd
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.2478.109"
+    sec_ch_ua: '"Microsoft Edge";v="124", "Chromium";v="124", "Not_A Brand";v="99"'
+    sec_ch_ua_platform: '"Windows"'
+    js_platform: "Win32"
+    sec_ch_ua_mobile: "?0" 
+    viewport_width: 1368 # Effectieve breedte (2736 / 2)
+    viewport_height: 800 # Aangepaste hoogte voor landschap tablet-gevoel
+    screen_width: 2736
+    screen_height: 1824
+    avail_width: 1368
+    avail_height: 880 # Aangepast, minder dan fysiek geschaald
+    device_pixel_ratio: 2.0 
+    color_depth: 24
+    pixel_depth: 24
+    hardware_concurrency: 8
+    device_memory: 16
+    timezone: "Europe/Rome"
+    locale: "it-IT,it;q=0.9,en-GB;q=0.6"
+    common_fonts: ["Segoe UI Variable Small", "Segoe UI", "Arial", "Calibri", "Verdana", "Gadugi"]

@@ -1,0 +1,12 @@
+customtkinter==5.2.2
+darkdetect==0.8.0
+fake-http-header==0.3.5
+greenlet==3.2.2
+packaging==25.0
+playwright==1.52.0
+pyee==13.0.0
+python-dotenv==1.1.0
+PyYAML==6.0.2
+setuptools==80.4.0
+tf-playwright-stealth==1.1.2
+typing_extensions==4.13.2

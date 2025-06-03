@@ -25,7 +25,8 @@ if TYPE_CHECKING:
 
 # Profile system imports
 from src.profiles.manager import ProfileManager
-from src.profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum, DetectionEvent
+from src.profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
+from src.core.advanced_profile_system import DetectionEvent
 from src.profiles.utils import create_profile_manager_from_config
 
 # Core module imports
@@ -34,6 +35,7 @@ from .models import EnhancedTicketOpportunity, DataUsageTracker
 from .managers import ConnectionPoolManager, ResponseCache, SmartBrowserContextManager
 from .components import ProfileAwareLightweightMonitor
 from .strike_force import ProfileIntegratedStrikeForce
+
 
 logger = logging.getLogger(__name__)
 
@@ -244,7 +246,7 @@ class UnifiedOrchestrator:
             
             # 2. Connection Pool with optimizations
             self.connection_pool = ConnectionPoolManager(self.config, self.profile_manager)
-            await self.connection_pool.pre_warm(count=min(5, profile_count))
+            # await self.connection_pool.pre_warm(count=min(5, profile_count)) 
             logger.info("✅ ConnectionPoolManager: Pre-warmed connections")
             
             # 3. Response Cache with size limits
@@ -275,7 +277,7 @@ class UnifiedOrchestrator:
             logger.info("✨ All subsystems initialized successfully")
             
             # Log initial system state
-            await self._log_system_state()
+            #await self._log_system_state()
             
             return True
             
@@ -984,6 +986,37 @@ class UnifiedOrchestrator:
         lines.append("="*70)
         
         return "\n".join(lines)
+    
+    async def graceful_shutdown(self) -> None:
+        logger.info("UnifiedOrchestrator graceful_shutdown called.")
+        await self.shutdown_tasks() # Call the existing task shutdown
+        if self.profile_manager and hasattr(self.profile_manager, 'stop_background_tasks'):
+            await self.profile_manager.stop_background_tasks()
+        if self.connection_pool and hasattr(self.connection_pool, 'close_all'):
+            await self.connection_pool.close_all()
+        if self.browser_manager and hasattr(self.browser_manager, 'close_all'):
+            await self.browser_manager.close_all()
+        if self.thread_pool:
+            self.thread_pool.shutdown(wait=True)
+        # Add any other component shutdowns here
+        logger.info("UnifiedOrchestrator graceful_shutdown completed.")
+
+    async def shutdown_tasks(self) -> None: # Ensure this method exists
+        """Gracefully shut down all background tasks."""
+        logger.info("Shutting down background tasks...")
+        if hasattr(self, 'background_tasks') and self.background_tasks:
+            for task in self.background_tasks:
+                if not task.done():
+                    task.cancel()
+            await asyncio.gather(*self.background_tasks, return_exceptions=True)
+            self.background_tasks.clear()
+        logger.info("Background tasks shutdown complete.")
+
+    # Add a placeholder for clear_sensitive_data if it's not defined yet
+    def clear_sensitive_data(self) -> None:
+        logger.info("clear_sensitive_data called (placeholder).")
+        # Implement actual sensitive data clearing logic here if needed
+        pass
     
     async def _adaptive_optimizer_loop(self, stop_event: asyncio.Event) -> None:
         """Dynamically optimize strategy based on performance"""

@@ -24,7 +24,7 @@ from .managers import ConnectionPoolManager, ResponseCache
 # Profile imports - Fixed import path
 from src.profiles.manager import ProfileManager
 from src.profiles.models import BrowserProfile
-from src.profiles.enums import DetectionEvent  # Import from profiles package
+from src.core.advanced_profile_system import DetectionEvent
 
 logger = logging.getLogger(__name__)
 
@@ -151,41 +151,42 @@ class StealthRequestBuilder:
         return ','.join(lang_parts)
 
 class ProfileAwareLightweightMonitor:
-    """Enhanced monitoring with advanced stealth and performance optimizations"""
-    
     def __init__(self,
                  config: Dict[str, Any],
                  profile_manager: ProfileManager,
                  connection_pool: ConnectionPoolManager,
                  response_cache: ResponseCache,
                  data_tracker: DataUsageTracker):
-        
-        self.config = config
+
+        self.config = config # This is the overall application config
         self.profile_manager = profile_manager
         self.connection_pool = connection_pool
         self.response_cache = response_cache
         self.data_tracker = data_tracker
-        
+
+        # Initialize monitor_config HERE, before it's used
+        self.monitor_config = self.config.get('monitoring_settings', {}) # <--- MOVED UP
+
         # Components
         self.request_builder = StealthRequestBuilder()
         self.metrics: Dict[str, MonitoringMetrics] = defaultdict(MonitoringMetrics)
-        
+
         # Detection patterns with fallbacks
-        self.detection_patterns = self._compile_detection_patterns()
-        
+        self.detection_patterns = self._compile_detection_patterns() # <--- Now self.monitor_config exists
+
         # Timing and rate limiting
-        self.last_check_times: Dict[str, datetime] = {}
-        self.request_timestamps: deque = deque(maxlen=1000)
-        
-        # Configuration
-        self.monitor_config = self.config.get('monitoring_settings', {})
-        self.default_check_interval = self.monitor_config.get('default_target_interval_s', 60)
-        self.cache_max_age_s = self.config.get('cache', {}).get('default_ttl_seconds', 30)
-        
+        # ... (rest of the __init__ method, ensure self.monitor_config is not assigned again later) ...
+
+        # Remove or ensure the original assignment of self.monitor_config is now above this point.
+        # The rest of the initializations like self.default_check_interval can remain where they are,
+        # as long as they use the self.monitor_config that is now set.
+        self.default_check_interval = self.monitor_config.get('default_target_interval_s', 60) # This should now work
+        self.cache_max_age_s = self.config.get('cache', {}).get('default_ttl_seconds', 30) # This uses self.config directly
+
         # Anti-detection features
-        self.jitter_range = (0.8, 1.2)  # 20% timing jitter
-        self.burst_detection_threshold = 10  # Max requests in 10 seconds
-        self.circuit_breaker_threshold = 5  # Consecutive failures before backing off
+        self.jitter_range = (0.8, 1.2)
+        self.burst_detection_threshold = 10
+        self.circuit_breaker_threshold = 5
         self.backoff_multiplier = 2.0
         
         logger.info(f"ProfileAwareLightweightMonitor initialized with {len(self.detection_patterns)} platform patterns")

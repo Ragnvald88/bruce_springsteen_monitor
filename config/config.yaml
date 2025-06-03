@@ -32,6 +32,10 @@ app_settings:
     adaptive:
       pass
     hybrid: {}
+  
+  monitoring_settings:
+    default_target_interval_s: 60
+    min_monitor_interval_s: 15 
 
 # -----------------------------------------------------------------------------
 # DATA USAGE LIMITS

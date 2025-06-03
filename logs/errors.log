@@ -293,3 +293,41 @@ Traceback (most recent call last):
     self.request_timestamps.append(now)
     ^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'request_timestamps'
+2025-06-03 22:40:53.329 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen San Siro 2025 (TM): 'ProfileAwareLightweightMonitor' object has no attribute 'request_timestamps'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 533, in check_ultra_efficient
+    await self._enforce_rate_limiting()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 653, in _enforce_rate_limiting
+    self.request_timestamps.append(now)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'request_timestamps'
+2025-06-03 22:41:01.835 | ERROR    | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter error: 'ResponseCache' object has no attribute 'current_size_mb'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 898, in _metrics_reporter_loop
+    report = self._generate_metrics_report()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 958, in _generate_metrics_report
+    f"Size={self.response_cache.current_size_mb if self.response_cache else 0:.1f}MB",
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ResponseCache' object has no attribute 'current_size_mb'. Did you mean: 'current_size_bytes'?
+2025-06-03 22:41:35.512 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'request_timestamps'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 533, in check_ultra_efficient
+    await self._enforce_rate_limiting()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 653, in _enforce_rate_limiting
+    self.request_timestamps.append(now)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'request_timestamps'

@@ -1,0 +1,1860 @@
+2025-05-19 16:33:01 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 16:33:01 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 16:33:01 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:33:01 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:33:01 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Mac_Chrome125_FHD
+2025-05-19 16:33:01 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:33:01 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 16:33:01 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 16:33:01 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 16:33:01 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 16:33:01 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:33:01 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:33:01 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:33:01 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 16:33:02 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:33:02 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:33:02 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:33:02 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:33:04 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:33:04 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:33:05 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:33:07 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:33:07 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:33:07 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:33:07 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:33:07 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:04 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:07 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:07 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:34:07 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:08 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:12 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:34:14 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:34:14 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:15 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:34:15 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:34:15 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:34:50 [INFO   ] root                      :: Starting WARMING MODE for profile: Win10_Chrome125_FHD
+2025-05-19 16:34:50 [INFO   ] root                      :: Starting profile warming session for: Win10_Chrome125_FHD
+2025-05-19 16:34:50 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:34:50 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:34:50 [INFO   ] root                      :: Warming up profile: Win10_Chrome125_FHD (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36)
+2025-05-19 16:34:50 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 16:34:50 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:34:50 [INFO   ] root                      :: Creating browser context for warming...
+2025-05-19 16:34:50 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:34:50 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0', '--no-sandbox', '--disable-setuid-sandbox'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:34:50 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:34:51 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:34:53 [ERROR  ] root                      :: Error during profile warming session: 'str' object is not callable
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 318, in async_warm_profile_session
+    logging.info(f"Navigated to: {page.url()}")
+                                  ~~~~~~~~^^
+TypeError: 'str' object is not callable
+2025-05-19 16:34:53 [INFO   ] root                      :: Saving context state for profile 'Win10_Chrome125_FHD' to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:34:54 [INFO   ] root                      :: State saved to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:34:54 [INFO   ] root                      :: Warming context closed.
+2025-05-19 16:34:54 [INFO   ] core.browser_manager      :: BrowserManager shutting down...
+2025-05-19 16:34:54 [INFO   ] core.browser_manager      :: Closing 0 contexts from pool...
+2025-05-19 16:34:54 [INFO   ] core.browser_manager      :: Closing owned browser...
+2025-05-19 16:34:54 [INFO   ] core.browser_manager      :: ⏹ Playwright stopping …
+2025-05-19 16:34:54 [INFO   ] root                      :: Profile warming session finished.
+2025-05-19 16:35:07 [INFO   ] root                      :: Starting WARMING MODE for profile: Win10_Chrome125_FHD
+2025-05-19 16:35:07 [INFO   ] root                      :: Starting profile warming session for: Win10_Chrome125_FHD
+2025-05-19 16:35:07 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:35:07 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:35:07 [INFO   ] root                      :: Warming up profile: Win10_Chrome125_FHD (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36)
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:07 [INFO   ] root                      :: Creating browser context for warming...
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0', '--no-sandbox', '--disable-setuid-sandbox'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:35:07 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:08 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:35:09 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:10 [ERROR  ] root                      :: Error during profile warming session: 'str' object is not callable
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 318, in async_warm_profile_session
+    logging.info(f"Navigated to: {page.url()}")
+                                  ~~~~~~~~^^
+TypeError: 'str' object is not callable
+2025-05-19 16:35:10 [INFO   ] root                      :: Saving context state for profile 'Win10_Chrome125_FHD' to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:10 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:35:10 [INFO   ] root                      :: State saved to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:10 [INFO   ] root                      :: Warming context closed.
+2025-05-19 16:35:10 [INFO   ] core.browser_manager      :: BrowserManager shutting down...
+2025-05-19 16:35:10 [INFO   ] core.browser_manager      :: Closing 0 contexts from pool...
+2025-05-19 16:35:10 [INFO   ] core.browser_manager      :: Closing owned browser...
+2025-05-19 16:35:10 [INFO   ] core.browser_manager      :: ⏹ Playwright stopping …
+2025-05-19 16:35:10 [INFO   ] root                      :: Profile warming session finished.
+2025-05-19 16:35:15 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:16 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:19 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:35:21 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:35:21 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:35:21 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:24 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:35:24 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:35:34 [INFO   ] root                      :: Starting WARMING MODE for profile: Win10_Chrome125_FHD
+2025-05-19 16:35:34 [INFO   ] root                      :: Starting profile warming session for: Win10_Chrome125_FHD
+2025-05-19 16:35:34 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:35:34 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:35:34 [INFO   ] root                      :: Warming up profile: Win10_Chrome125_FHD (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36)
+2025-05-19 16:35:34 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 16:35:34 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:35:34 [INFO   ] root                      :: Creating browser context for warming...
+2025-05-19 16:35:34 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:35:34 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0', '--no-sandbox', '--disable-setuid-sandbox'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:35:35 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:35 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:35:41 [ERROR  ] root                      :: Error during profile warming session: 'str' object is not callable
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 318, in async_warm_profile_session
+    logging.info(f"Navigated to: {page.url()}")
+                                  ~~~~~~~~^^
+TypeError: 'str' object is not callable
+2025-05-19 16:35:41 [INFO   ] root                      :: Saving context state for profile 'Win10_Chrome125_FHD' to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:41 [INFO   ] root                      :: State saved to storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:35:41 [INFO   ] root                      :: Warming context closed.
+2025-05-19 16:35:41 [INFO   ] core.browser_manager      :: BrowserManager shutting down...
+2025-05-19 16:35:41 [INFO   ] core.browser_manager      :: Closing 0 contexts from pool...
+2025-05-19 16:35:41 [INFO   ] core.browser_manager      :: Closing owned browser...
+2025-05-19 16:35:41 [INFO   ] core.browser_manager      :: ⏹ Playwright stopping …
+2025-05-19 16:35:41 [INFO   ] root                      :: Profile warming session finished.
+2025-05-19 16:36:10 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:36:12 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:36:13 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:36:21 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:36:24 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:36:32 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:36:33 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:36:33 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:36:46 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:36:46 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:36:46 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:37:13 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:37:15 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 16:37:16 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:40:58 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 16:40:58 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 16:40:58 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:40:58 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:40:58 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 16:40:58 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:40:59 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 16:40:59 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 16:40:59 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 16:40:59 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 16:40:59 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:40:59 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:40:59 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:40:59 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 16:40:59 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:40:59 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:40:59 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:41:00 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:41:02 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:41:02 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:41:06 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:41:07 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:41:07 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:41:11 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:41:11 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:41:11 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:41:54 [INFO   ] root                      :: Starting WARMING MODE for profile: Win10_Chrome125_FHD
+2025-05-19 16:41:54 [INFO   ] warmup.Win10_Chrome125_FHD :: Starting profile warming session for profile: Win10_Chrome125_FHD
+2025-05-19 16:41:54 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 16:41:54 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 16:41:54 [INFO   ] warmup.Win10_Chrome125_FHD :: Selected profile for warming: Win10_Chrome125_FHD (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36)
+2025-05-19 16:41:54 [INFO   ] warmup.Win10_Chrome125_FHD :: Initializing BrowserManager for warming...
+2025-05-19 16:41:54 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 16:41:54 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 16:41:54 [INFO   ] warmup.Win10_Chrome125_FHD :: BrowserManager entered.
+2025-05-19 16:41:54 [INFO   ] warmup.Win10_Chrome125_FHD :: Creating browser context for warming...
+2025-05-19 16:41:54 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 16:41:54 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0', '--no-sandbox', '--disable-setuid-sandbox'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 16:41:55 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:41:55 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 16:41:55 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser context created: <BrowserContext browser=<Browser type=<BrowserType name=chromium executable_path=/Users/macbookpro_ronald/Library/Caches/ms-playwright/chromium-1169/chrome-mac/Chromium.app/Contents/MacOS/Chromium> version=136.0.7103.25>>
+2025-05-19 16:41:55 [INFO   ] warmup.Win10_Chrome125_FHD :: Creating new page for warming...
+2025-05-19 16:41:55 [INFO   ] warmup.Win10_Chrome125_FHD :: New page created: <Page url='about:blank'>
+2025-05-19 16:41:55 [INFO   ] warmup.Win10_Chrome125_FHD :: Navigating to: https://www.ticketmaster.it...
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: Successfully navigated to: https://www.ticketmaster.it/
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser instance confirmed: <Browser type=<BrowserType name=chromium executable_path=/Users/macbookpro_ronald/Library/Caches/ms-playwright/chromium-1169/chrome-mac/Chromium.app/Contents/MacOS/Chromium> version=136.0.7103.25>
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: Attached 'disconnected' event listener to browser instance.
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser launched for warming profile 'Win10_Chrome125_FHD'.
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: Please interact with the browser: LOG IN to sites, accept cookies, solve CAPTCHAs.
+2025-05-19 16:41:57 [INFO   ] warmup.Win10_Chrome125_FHD :: >>>> IMPORTANT: When finished, CLOSE THE BROWSER WINDOW MANUALLY to save the state. <<<<
+2025-05-19 16:42:02 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:42:06 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:42:07 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:42:07 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:42:12 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:42:18 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 16:42:18 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:42:26 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 16:42:51 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 16:42:51 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 16:42:51 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:43:07 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:43:12 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 16:43:12 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 156, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 158, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 16:43:19 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:14 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 19:30:14 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 19:30:14 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 19:30:14 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 19:30:14 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 19:30:14 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 19:30:15 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 19:30:15 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 19:30:15 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 19:30:15 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 19:30:15 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 19:30:15 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 19:30:15 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 19:30:15 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 19:30:15 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:15 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:15 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:16 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 19:30:24 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:24 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:24 [ERROR  ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-05-19 19:30:24 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-05-19 19:30:24 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:30:25 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+  - navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+  - navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-05-19 19:31:13 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 19:31:13 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 19:31:13 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 19:31:13 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 19:31:13 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 19:31:13 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 19:31:13 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 19:31:13 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 19:31:13 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 19:31:13 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 19:31:13 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 19:31:13 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 19:31:13 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 19:31:13 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 19:31:14 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:14 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:14 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:14 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 19:31:22 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:22 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:23 [ERROR  ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-05-19 19:31:23 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-05-19 19:31:23 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 19:31:24 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: Page.goto: net::ERR_TIMED_OUT at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+  - navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_TIMED_OUT at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+  - navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-05-19 23:53:49 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 23:53:49 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 23:53:49 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 23:53:49 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 23:53:49 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Mac_Chrome125_FHD
+2025-05-19 23:53:49 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 23:53:49 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 23:53:49 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 23:53:49 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 23:53:49 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 23:53:49 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 23:53:49 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 23:53:49 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 23:53:49 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 23:53:50 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 23:53:50 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 23:53:50 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 23:53:51 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 23:53:55 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 23:53:55 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 23:53:56 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 149, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-19 23:53:57 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 23:53:57 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 23:53:57 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-19 23:54:16 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-19 23:54:16 [INFO   ] root                      :: Application core logic starting.
+2025-05-19 23:54:16 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-19 23:54:16 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-19 23:54:16 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-19 23:54:16 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-19 23:54:16 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-19 23:54:16 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-19 23:54:16 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 23:54:16 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:54:16 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:54:17 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-19 23:54:22 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:54:22 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 159, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 161, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 23:54:30 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 23:54:40 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 23:54:40 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:54:47 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 23:54:47 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 23:54:47 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:55:22 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:55:29 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:55:30 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 159, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 161, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 23:55:40 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:55:47 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:56:08 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-19 23:56:08 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 23:56:08 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:56:30 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:56:33 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:56:33 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 159, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 161, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 23:56:34 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-19 23:56:34 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-19 23:56:34 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:09 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:17 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 23:57:17 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:33 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:34 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:36 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:36 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Page.goto: net::ERR_ABORTED at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_ABORTED at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-05-19 23:57:36 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:57:37 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API returned non-JSON payload
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 159, in check_ticketmaster_event
+    data = json.loads(raw)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 161, in check_ticketmaster_event
+    raise BlockedError("TM API returned non-JSON payload")
+platforms.ticketmaster.BlockedError: TM API returned non-JSON payload
+2025-05-19 23:58:17 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:29 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-19 23:58:29 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:40 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:41 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:46 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:46 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 149, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-19 23:58:47 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-19 23:58:48 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 137, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 204, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-05-19 23:59:30 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 00:22:22 [INFO   ] root                      :: Starting WARMING MODE for profile: Win10_Chrome125_FHD
+2025-05-20 00:22:22 [INFO   ] warmup.Win10_Chrome125_FHD :: Starting profile warming session for profile: Win10_Chrome125_FHD
+2025-05-20 00:22:22 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 00:22:22 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 00:22:22 [INFO   ] warmup.Win10_Chrome125_FHD :: Selected profile for warming: Win10_Chrome125_FHD (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36)
+2025-05-20 00:22:22 [INFO   ] warmup.Win10_Chrome125_FHD :: Initializing BrowserManager for warming...
+2025-05-20 00:22:22 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-20 00:22:22 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-20 00:22:22 [INFO   ] warmup.Win10_Chrome125_FHD :: BrowserManager entered.
+2025-05-20 00:22:22 [INFO   ] warmup.Win10_Chrome125_FHD :: Creating browser context for warming...
+2025-05-20 00:22:22 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-20 00:22:22 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0', '--no-sandbox', '--disable-setuid-sandbox'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 00:22:23 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 00:22:23 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 00:22:23 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser context created: <BrowserContext browser=<Browser type=<BrowserType name=chromium executable_path=/Users/macbookpro_ronald/Library/Caches/ms-playwright/chromium-1169/chrome-mac/Chromium.app/Contents/MacOS/Chromium> version=136.0.7103.25>>
+2025-05-20 00:22:23 [INFO   ] warmup.Win10_Chrome125_FHD :: Creating new page for warming...
+2025-05-20 00:22:23 [INFO   ] warmup.Win10_Chrome125_FHD :: New page created: <Page url='about:blank'>
+2025-05-20 00:22:23 [INFO   ] warmup.Win10_Chrome125_FHD :: Navigating to: https://shop.ticketmaster.it...
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: Successfully navigated to: https://shop.ticketmaster.it/
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser instance confirmed: <Browser type=<BrowserType name=chromium executable_path=/Users/macbookpro_ronald/Library/Caches/ms-playwright/chromium-1169/chrome-mac/Chromium.app/Contents/MacOS/Chromium> version=136.0.7103.25>
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: Attached 'disconnected' event listener to browser instance.
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: Browser launched for warming profile 'Win10_Chrome125_FHD'.
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: Please interact with the browser: LOG IN to sites, accept cookies, solve CAPTCHAs.
+2025-05-20 00:22:27 [INFO   ] warmup.Win10_Chrome125_FHD :: >>>> IMPORTANT: When finished, CLOSE THE BROWSER WINDOW MANUALLY to save the state. <<<<
+2025-05-20 00:23:39 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 00:23:39 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 00:23:39 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 00:23:39 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Mac_Chrome125_FHD
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-20 00:23:39 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 00:23:39 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 00:23:39 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 00:23:39 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 00:23:39 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 00:23:39 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:23:39 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:23:40 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 00:23:43 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:23:43 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 00:23:45 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 00:23:48 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 00:23:48 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 00:23:48 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:23:49 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 00:23:49 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:43 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:46 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:46 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 00:24:48 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:49 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:52 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 00:24:55 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 00:24:55 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:24:56 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 00:24:56 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 00:24:56 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:25:46 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:25:48 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 00:25:48 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 140, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:01:00 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 01:01:00 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion patch
+2025-05-20 01:01:00 [INFO   ] tls_fingerprint           :: TLS fingerprint evasion patch applied
+2025-05-20 01:01:00 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 01:01:00 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 01:01:00 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 01:01:00 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Mac_Chrome125_FHD
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-20 01:01:00 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 01:01:00 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 01:01:00 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 01:01:00 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 01:01:00 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:01:00 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:01:00 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:01:01 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 01:01:06 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:01:07 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:01:07 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:01:08 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:01:08 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:01:09 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 01:01:09 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:01:09 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:05:18 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 01:05:18 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion patch
+2025-05-20 01:05:18 [INFO   ] tls_fingerprint           :: TLS fingerprint evasion patch applied
+2025-05-20 01:05:18 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 01:05:18 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 01:05:18 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 01:05:18 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 01:05:18 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-20 01:05:18 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-20 01:05:18 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 01:05:18 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 01:05:18 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 01:05:18 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 01:05:18 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-20 01:05:18 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 01:05:18 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:05:18 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 01:05:19 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:19 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:19 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:19 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 01:05:24 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:05:25 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 01:05:25 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:05:25 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:26 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:05:26 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:26 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:05:27 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:06:26 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:06:27 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:06:27 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:06:32 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:06:32 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:06:33 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:06:34 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 01:06:34 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:06:34 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:06:36 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:06:36 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:32 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:34 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:36 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:37 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:37 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:07:39 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:07:43 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 01:07:43 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:07:43 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:07:44 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:07:44 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:17 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 01:17:17 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion patch
+2025-05-20 01:17:17 [INFO   ] tls_fingerprint           :: TLS fingerprint evasion patch applied
+2025-05-20 01:17:17 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 01:17:17 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 01:17:17 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 01:17:17 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: 🔄 Selected new browser profile: Win10_Chrome125_FHD
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: ▶ Playwright starting …
+2025-05-20 01:17:17 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 01:17:17 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 01:17:17 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 01:17:17 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: 🧑‍💻 Using authenticated proxy: http://geo.iproyal.com:12321
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: 🚀 Launching new browser instance (chromium) with options: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 01:17:17 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:17:17 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:17 [INFO   ] core.browser_manager      :: Restoring context state from: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:18 [INFO   ] core.browser_manager      :: ✅ Stealth script loaded from: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 01:17:23 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:23 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:17:23 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:17:23 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:17:23 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:17:23 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:17:23 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:17:25 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:17:25 [INFO   ] core.browser_manager      :: Saving context state to: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 01:21:28 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 01:21:28 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion for chrome_117
+2025-05-20 01:21:28 [WARNING] tls_fingerprint           :: ja3transport not available, attempting to install...
+2025-05-20 01:21:28 [INFO   ] tls_fingerprint           :: Installing ja3transport for advanced TLS fingerprinting evasion...
+2025-05-20 01:21:28 [ERROR  ] tls_fingerprint           :: Failed to install ja3transport: Command '['/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/bin/python', '-m', 'pip', 'install', 'ja3transport']' returned non-zero exit status 1.
+2025-05-20 01:21:28 [WARNING] tls_fingerprint           :: Falling back to custom TLS fingerprint patching
+2025-05-20 01:21:28 [INFO   ] tls_fingerprint           :: Applying advanced TLS fingerprint patch to mimic chrome_117
+2025-05-20 01:21:28 [INFO   ] tls_fingerprint           :: Advanced TLS fingerprint patches applied for chrome_117
+2025-05-20 01:21:28 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 01:21:28 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 01:21:28 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 01:21:28 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 01:21:28 [INFO   ] core.browser_manager      :: 🔄 Nieuw browser profiel geselecteerd: Mac_Chrome125_FHD
+2025-05-20 01:21:28 [INFO   ] core.browser_manager      :: ▶ Playwright aan het starten …
+2025-05-20 01:21:28 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 01:21:28 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 01:21:28 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 01:21:28 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 01:21:28 [INFO   ] core.browser_manager      :: 🧑‍💻 Gebruik proxy met authenticatie: http://geo.iproyal.com:12321
+2025-05-20 01:21:28 [INFO   ] core.browser_manager      :: 🚀 Nieuwe browser instance (chromium) aan het starten met opties: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 01:21:28 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:21:28 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 01:21:29 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:21:29 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:21:29 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:21:30 [INFO   ] core.browser_manager      :: ✅ Stealth script geladen van: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 01:21:36 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:21:37 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:21:39 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:21:40 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 01:21:40 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:21:40 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:21:45 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:21:45 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:37 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:40 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:46 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:46 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:46 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:22:47 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:22:47 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:22:47 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:22:47 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:22:47 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:22:51 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:22:51 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:47 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:47 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:52 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:52 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:52 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:23:53 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:23:53 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:23:53 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:23:53 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:23:53 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:23:57 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:23:57 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:24:52 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:24:53 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:24:56 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:24:57 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Locator.count: Execution context was destroyed, most likely because of a navigation
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 165, in monitor_target
+    if await page.locator(selector).count() > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 16642, in count
+    return mapping.from_maybe_impl(await self._impl_obj.count())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 398, in count
+    return await self._frame._query_count(self._selector)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 128, in _query_count
+    return await self._channel.send("queryCount", {"selector": selector})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Locator.count: Execution context was destroyed, most likely because of a navigation
+2025-05-20 01:24:57 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:25:00 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:25:00 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:25:03 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:25:03 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:25:57 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:26:00 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:26:01 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:26:02 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:26:02 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:26:02 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:26:02 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:26:03 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:26:06 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:26:06 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:26:09 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:26:09 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:02 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:05 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:27:06 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:27:06 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:27:06 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:27:06 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:06 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:09 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:11 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:27:12 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:27:19 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:27:19 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:06 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:09 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:28:09 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:28:09 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:28:09 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:28:09 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:12 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:18 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:18 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:28:20 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:28:25 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:28:25 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:10 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:14 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 01:29:14 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 01:29:14 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 01:29:14 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 01:29:14 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:18 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:25 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:25 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 01:29:26 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 01:29:36 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 01:29:36 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:25 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 13:37:25 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion for chrome_117
+2025-05-20 13:37:25 [WARNING] tls_fingerprint           :: ja3transport not available, attempting to install...
+2025-05-20 13:37:25 [INFO   ] tls_fingerprint           :: Installing ja3transport for advanced TLS fingerprinting evasion...
+2025-05-20 13:37:25 [ERROR  ] tls_fingerprint           :: Failed to install ja3transport: Command '['/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/bin/python', '-m', 'pip', 'install', 'ja3transport']' returned non-zero exit status 1.
+2025-05-20 13:37:25 [WARNING] tls_fingerprint           :: Falling back to custom TLS fingerprint patching
+2025-05-20 13:37:25 [INFO   ] tls_fingerprint           :: Applying advanced TLS fingerprint patch to mimic chrome_117
+2025-05-20 13:37:25 [INFO   ] tls_fingerprint           :: Advanced TLS fingerprint patches applied for chrome_117
+2025-05-20 13:37:25 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 13:37:25 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 13:37:25 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 13:37:25 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 13:37:25 [INFO   ] core.browser_manager      :: 🔄 Nieuw browser profiel geselecteerd: Mac_Chrome125_FHD
+2025-05-20 13:37:25 [INFO   ] core.browser_manager      :: ▶ Playwright aan het starten …
+2025-05-20 13:37:25 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 13:37:25 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 13:37:25 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 13:37:25 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 13:37:25 [INFO   ] core.browser_manager      :: 🧑‍💻 Gebruik proxy met authenticatie: http://geo.iproyal.com:12321
+2025-05-20 13:37:25 [INFO   ] core.browser_manager      :: 🚀 Nieuwe browser instance (chromium) aan het starten met opties: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 13:37:25 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 13:37:25 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 13:37:26 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:26 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:26 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:27 [INFO   ] core.browser_manager      :: ✅ Stealth script geladen van: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 13:37:29 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 13:37:30 [ERROR  ] platforms.fansale         :: FanSale: Fout tijdens navigeren naar https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388: Page.goto: net::ERR_ABORTED at https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+  - navigating to "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-05-20 13:37:30 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 13:37:30 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:32 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:37:33 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 13:37:39 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 13:37:39 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:38:30 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:38:33 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:38:39 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:38:48 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 13:38:53 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 13:38:56 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:38:56 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 13:39:07 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 13:39:07 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 13:39:07 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:39:22 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 13:39:22 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:39:56 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:40:07 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:40:08 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 13:40:08 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:17:05 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 21:17:05 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion for chrome_117
+2025-05-20 21:17:05 [WARNING] tls_fingerprint           :: ja3transport not available, attempting to install...
+2025-05-20 21:17:05 [INFO   ] tls_fingerprint           :: Installing ja3transport for advanced TLS fingerprinting evasion...
+2025-05-20 21:17:05 [ERROR  ] tls_fingerprint           :: Failed to install ja3transport: Command '['/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/bin/python', '-m', 'pip', 'install', 'ja3transport']' returned non-zero exit status 1.
+2025-05-20 21:17:05 [WARNING] tls_fingerprint           :: Falling back to custom TLS fingerprint patching
+2025-05-20 21:17:05 [INFO   ] tls_fingerprint           :: Applying advanced TLS fingerprint patch to mimic chrome_117
+2025-05-20 21:17:05 [INFO   ] tls_fingerprint           :: Advanced TLS fingerprint patches applied for chrome_117
+2025-05-20 21:17:05 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 21:17:05 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 21:17:05 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 21:17:05 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 21:17:05 [INFO   ] core.browser_manager      :: 🔄 Nieuw browser profiel geselecteerd: Win10_Chrome125_FHD
+2025-05-20 21:17:05 [INFO   ] core.browser_manager      :: ▶ Playwright aan het starten …
+2025-05-20 21:17:06 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 21:17:06 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 21:17:06 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 21:17:06 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 21:17:06 [INFO   ] core.browser_manager      :: 🧑‍💻 Gebruik proxy met authenticatie: http://geo.iproyal.com:12321
+2025-05-20 21:17:06 [INFO   ] core.browser_manager      :: 🚀 Nieuwe browser instance (chromium) aan het starten met opties: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 21:17:06 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:17:06 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 21:17:06 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:17:06 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:17:06 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:17:07 [INFO   ] core.browser_manager      :: ✅ Stealth script geladen van: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 21:17:12 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:17:13 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:17:16 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:17:16 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 21:17:16 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 21:17:16 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:17:16 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:17:23 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:17:23 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:13 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:16 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:21 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:18:21 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:22 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:18:23 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 21:18:23 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:18:23 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:23 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:18:30 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:18:30 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:22 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:23 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:29 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:29 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:19:30 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:33 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:19:33 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 21:19:33 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 21:19:33 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:19:33 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:19:56 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:19:56 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:20:29 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:20:33 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:20:40 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:20:41 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:20:51 [ERROR  ] utils.human_behavior      :: Error during human behavior simulation: Page.wait_for_timeout: Target page, context or browser has been closed
+2025-05-20 21:20:51 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Win10_Chrome125_FHD/state.json
+2025-05-20 21:20:51 [ERROR  ] monitor.Bruce_Springsteen_FanSale :: Unexpected error: Locator.count: Target page, context or browser has been closed
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 165, in monitor_target
+    if await page.locator(selector).count() > 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 16642, in count
+    return mapping.from_maybe_impl(await self._impl_obj.count())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 398, in count
+    return await self._frame._query_count(self._selector)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 128, in _query_count
+    return await self._channel.send("queryCount", {"selector": selector})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Locator.count: Target page, context or browser has been closed
+2025-05-20 21:44:41 [INFO   ] root                      :: Starting MONITORING MODE (CLI)...
+2025-05-20 21:44:41 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion for chrome_117
+2025-05-20 21:44:41 [WARNING] tls_fingerprint           :: ja3transport not available, attempting to install...
+2025-05-20 21:44:41 [INFO   ] tls_fingerprint           :: Installing ja3transport for advanced TLS fingerprinting evasion...
+2025-05-20 21:44:42 [ERROR  ] tls_fingerprint           :: Failed to install ja3transport: Command '['/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/bin/python', '-m', 'pip', 'install', 'ja3transport']' returned non-zero exit status 1.
+2025-05-20 21:44:42 [WARNING] tls_fingerprint           :: Falling back to custom TLS fingerprint patching
+2025-05-20 21:44:42 [INFO   ] tls_fingerprint           :: Applying advanced TLS fingerprint patch to mimic chrome_117
+2025-05-20 21:44:42 [INFO   ] tls_fingerprint           :: Advanced TLS fingerprint patches applied for chrome_117
+2025-05-20 21:44:42 [INFO   ] root                      :: TLS fingerprint evasion enabled
+2025-05-20 21:44:42 [INFO   ] root                      :: Application core logic starting.
+2025-05-20 21:44:42 [WARNING] root                      :: Configuration file config/browser_profiles.yaml not found.
+2025-05-20 21:44:42 [WARNING] root                      :: No 'browser_profiles' list in config/browser_profiles.yaml or file empty/missing. Using default profiles.
+2025-05-20 21:44:42 [INFO   ] core.browser_manager      :: 🔄 Nieuw browser profiel geselecteerd: Mac_Chrome125_FHD
+2025-05-20 21:44:42 [INFO   ] core.browser_manager      :: ▶ Playwright aan het starten …
+2025-05-20 21:44:42 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Milan July 3 2025
+2025-05-20 21:44:42 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen FanSale
+2025-05-20 21:44:42 [INFO   ] root                      :: Creating monitor task for: Bruce Springsteen Vivaticket Resale
+2025-05-20 21:44:42 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Starting monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 21:44:42 [INFO   ] core.browser_manager      :: 🧑‍💻 Gebruik proxy met authenticatie: http://geo.iproyal.com:12321
+2025-05-20 21:44:42 [INFO   ] core.browser_manager      :: 🚀 Nieuwe browser instance (chromium) aan het starten met opties: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 21:44:42 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Starting monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:44:42 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Starting monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 21:44:43 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:44:43 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:44:43 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:44:44 [INFO   ] core.browser_manager      :: ✅ Stealth script geladen van: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 21:44:48 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:44:48 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:44:57 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:44:57 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:45:01 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:45:05 [INFO   ] platforms.fansale         :: FanSale: Geen tickets gevonden op https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388 volgens de huidige criteria.
+2025-05-20 21:45:05 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:45:05 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:45:48 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:45:55 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:45:55 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:45:58 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:46:05 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:46:05 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:46:05 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:46:09 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:46:09 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 21:46:09 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 21:46:09 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:46:09 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:46:55 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:47:03 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:47:03 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:47:05 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:47:08 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:47:08 [ERROR  ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Unexpected error: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 148, in monitor_target
+    async with bm.new_page(page_url_to_check) as page:
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/browser_manager.py", line 229, in new_page
+    await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 8991, in goto
+    await self._impl_obj.goto(
+        url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-05-20 21:47:10 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:47:12 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:47:12 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 21:47:12 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 21:47:12 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:47:12 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:03 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:08 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:08 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:09 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Unexpected error: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 194, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 21:48:12 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: No hits found on this check.
+2025-05-20 21:48:12 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:12 [INFO   ] core.browser_manager      :: Context state hersteld van: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 21:48:17 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 21:48:17 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 21:48:17 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 21:48:17 [INFO   ] monitor.Bruce_Springsteen_FanSale :: No hits found on this check.
+2025-05-20 21:48:17 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/Mac_Chrome125_FHD/state.json
+2025-05-20 22:05:29 [INFO   ] root                      :: Start MONITORINGMODUS (CLI)...
+2025-05-20 22:05:29 [INFO   ] tls_fingerprint           :: Applying TLS fingerprint evasion for chrome_117
+2025-05-20 22:05:29 [WARNING] tls_fingerprint           :: ja3transport not available, attempting to install...
+2025-05-20 22:05:29 [INFO   ] tls_fingerprint           :: Installing ja3transport for advanced TLS fingerprinting evasion...
+2025-05-20 22:05:30 [ERROR  ] tls_fingerprint           :: Failed to install ja3transport: Command '['/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/bin/python', '-m', 'pip', 'install', 'ja3transport']' returned non-zero exit status 1.
+2025-05-20 22:05:30 [WARNING] tls_fingerprint           :: Falling back to custom TLS fingerprint patching
+2025-05-20 22:05:30 [INFO   ] tls_fingerprint           :: Applying advanced TLS fingerprint patch to mimic chrome_117
+2025-05-20 22:05:30 [INFO   ] tls_fingerprint           :: Advanced TLS fingerprint patches applied for chrome_117
+2025-05-20 22:05:30 [INFO   ] root                      :: TLS fingerprint evasion ingeschakeld (profiel: chrome_117).
+2025-05-20 22:05:30 [INFO   ] root                      :: Applicatie kernlogica gestart.
+2025-05-20 22:05:30 [INFO   ] root                      :: Laden browserprofielen van: config/browser_profiles.yaml
+2025-05-20 22:05:30 [INFO   ] root                      :: 2 browserprofielen succesvol geladen van config/browser_profiles.yaml.
+2025-05-20 22:05:30 [INFO   ] root                      :: 2 aangepaste browserprofielen worden gebruikt.
+2025-05-20 22:05:30 [INFO   ] core.browser_manager      :: 🔄 Nieuw browser profiel geselecteerd: MacCatalina_Chrome124_Retina_US_1
+2025-05-20 22:05:30 [INFO   ] core.browser_manager      :: ▶ Playwright aan het starten …
+2025-05-20 22:05:30 [INFO   ] root                      :: 3 actieve targets worden gemonitord.
+2025-05-20 22:05:30 [INFO   ] root                      :: Maak monitor taak voor: Bruce Springsteen Milan July 3 2025 (URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html)
+2025-05-20 22:05:30 [INFO   ] root                      :: Maak monitor taak voor: Bruce Springsteen FanSale (URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388)
+2025-05-20 22:05:30 [INFO   ] root                      :: Maak monitor taak voor: Bruce Springsteen Vivaticket Resale (URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+)
+2025-05-20 22:05:30 [INFO   ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: Start monitoring: URL: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+2025-05-20 22:05:30 [INFO   ] core.browser_manager      :: 🧑‍💻 Gebruik proxy met authenticatie: http://geo.iproyal.com:12321
+2025-05-20 22:05:30 [INFO   ] core.browser_manager      :: 🚀 Nieuwe browser instance (chromium) aan het starten met opties: {'headless': False, 'args': ['--disable-blink-features=AutomationControlled', '--disable-infobars', '--window-position=0,0'], 'proxy': {'server': 'http://geo.iproyal.com:12321', 'username': 'Doqe2Sm9Yjl1MrZd', 'password': 'Xqw3HOkEcUw7Vv3i_country-it_city-corato'}}
+2025-05-20 22:05:30 [INFO   ] monitor.Bruce_Springsteen_FanSale :: Start monitoring: URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 22:05:30 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: Start monitoring: URL: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+
+2025-05-20 22:05:31 [INFO   ] core.browser_manager      :: ✅ Stealth script geladen van: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/stealth_init.js
+2025-05-20 22:05:39 [INFO   ] monitor.Bruce_Springsteen_Vivaticket_Resale :: [Bruce Springsteen Vivaticket Resale] Geen tickets gevonden bij deze controle.
+2025-05-20 22:05:39 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/MacCatalina_Chrome124_Retina_US_1/state.json
+2025-05-20 22:05:39 [INFO   ] platforms.fansale         :: FanSale: Bezig met controleren van https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+2025-05-20 22:05:39 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/MacCatalina_Chrome124_Retina_US_1/state.json
+2025-05-20 22:05:39 [ERROR  ] monitor.Bruce_Springsteen_Milan_July_3_2025 :: [Bruce Springsteen Milan July 3 2025] Onverwachte fout: TM API 403
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 169, in monitor_target
+    hits = await checker(
+           ^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/ticketmaster.py", line 137, in check_ticketmaster_event
+    raise BlockedError(f"TM API {resp.status}")
+platforms.ticketmaster.BlockedError: TM API 403
+2025-05-20 22:05:39 [WARNING] platforms.fansale         :: FS console error: Failed to load resource: the server responded with a status of 403 ()
+2025-05-20 22:05:39 [WARNING] platforms.fansale         :: FanSale: Slechte statuscode 403 voor https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388. Inhoud: <HTML><HEAD>
+<TITLE>Access Denied</TITLE>
+</HEAD><BODY>
+<H1>Access Denied</H1>
+ 
+You don't have permission to access "http&#58;&#47;&#47;www&#46;fansale&#46;it&#47;tickets&#47;all&#47;bruce&#45;spring
+2025-05-20 22:05:39 [INFO   ] monitor.Bruce_Springsteen_FanSale :: [Bruce Springsteen FanSale] Geen tickets gevonden bij deze controle.
+2025-05-20 22:05:39 [INFO   ] core.browser_manager      :: Context state aan het opslaan naar: storage/profiles/MacCatalina_Chrome124_Retina_US_1/state.json

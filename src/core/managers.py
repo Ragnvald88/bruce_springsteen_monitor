@@ -124,88 +124,105 @@ class ResponseCache:
         """Get current cache size in MB"""
         return self.current_size_bytes / (1024 * 1024)
     
-    async def clear_old_entries(self, max_age_seconds: int) -> int:
-        """Clear entries older than max_age_seconds"""
-        async with self._lock:
-            now = datetime.now()
-            old_keys = []
-            
-            for key, entry in self.cache.items():
-                age = (now - entry.timestamp).total_seconds()
-                if age > max_age_seconds:
-                    old_keys.append(key)
-            
-            cleared = 0
-            for key in old_keys:
-                entry = self.cache.pop(key, None)
-                if entry:
-                    self.current_size_bytes -= len(entry.data)
-                    cleared += 1
-            
-            return cleared
-
-    def _generate_key(self, url: str, headers: Optional[Dict[str, str]] = None) -> str:
-        key_parts = [url]
-        if headers:
-            for header_name in ['Accept', 'Accept-Language', 'X-Platform-Specific-Cache-Key']:
-                if header_name in headers:
-                    key_parts.append(f"{header_name}:{headers[header_name]}")
-        return hashlib.sha256("|".join(key_parts).encode()).hexdigest()
-
-    async def get(self, url: str, headers: Optional[Dict[str, str]] = None,
-                  max_age_seconds: int = 300) -> Optional[bytes]:
-        async with self._lock:
-            key = self._generate_key(url, headers)
-            cached_item = self.cache.get(key)
-            if cached_item:
-                content, timestamp, response_headers = cached_item
-                age = (datetime.now() - timestamp).total_seconds()
-                if age <= max_age_seconds:
-                    self.hit_count += 1
-                    logger.debug(f"Cache hit for {url} (age: {age:.1f}s)")
-                    return content
+async def clear_old_entries(self, max_age_seconds: int) -> int:
+    async with self._lock:  # Assuming you have self._lock = asyncio.Lock() in __init__
+        now = datetime.now()
+        keys_to_delete = []
+        for key, cached_item_tuple in list(self.cache.items()):  # Use list(self.cache.items()) for safe iteration
+            # Ensure cached_item_tuple has at least 2 elements (content_bytes, timestamp, ...)
+            if len(cached_item_tuple) >= 2:
+                timestamp = cached_item_tuple[1]
+                if isinstance(timestamp, datetime):  # Check if timestamp is already datetime object
+                    age = (now - timestamp).total_seconds()
+                    if age > max_age_seconds:
+                        keys_to_delete.append(key)
                 else:
-                    logger.debug(f"Cache stale for {url} (age: {age:.1f}s > {max_age_seconds}s). Evicting.")
-                    if content is not None: self.current_size_bytes -= len(content)
-                    del self.cache[key]
-            self.miss_count += 1
-            logger.debug(f"Cache miss for {url}")
-            return None
-
-    async def put(self, url: str, content: bytes,
-                  headers: Optional[Dict[str, str]] = None,
-                  response_headers: Optional[Dict[str, str]] = None):
-        async with self._lock:
-            key = self._generate_key(url, headers)
-            if content is None:
-                logger.debug(f"Not caching None content for {url}")
-                return
-            content_size = len(content)
-            while (self.current_size_bytes + content_size > self.max_size_bytes) and self.cache:
-                try: oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k][1])
-                except ValueError: break
-                old_content_bytes, _, _ = self.cache.pop(oldest_key)
-                if old_content_bytes is not None: self.current_size_bytes -= len(old_content_bytes)
-                logger.debug(f"Cache eviction: Removed {oldest_key} to free space.")
-            if self.current_size_bytes + content_size <= self.max_size_bytes:
-                self.cache[key] = (content, datetime.now(), response_headers or {})
-                self.current_size_bytes += content_size
-                logger.debug(f"Cached {url} ({content_size / 1024:.2f} KB). Cache: {self.current_size_bytes / (1024*1024):.2f} MB")
+                    # Handle case where timestamp might be stored differently, or log an error
+                    logger.warning(f"Cache item {key} has unexpected timestamp format: {timestamp}")
             else:
-                logger.warning(f"Could not cache {url} ({content_size / 1024:.2f} KB). Cache full.")
+                logger.warning(f"Cache item {key} has unexpected structure: {cached_item_tuple}")
 
-    @property
-    def hit_rate(self) -> float:
-        total_requests = self.hit_count + self.miss_count
-        return self.hit_count / max(1, total_requests)
+        cleared_count = 0
+        for key in keys_to_delete:
+            if key in self.cache:
+                cached_item_to_pop = self.cache.pop(key)
+                # Ensure cached_item_to_pop is not None and is a tuple/list with content at index 0
+                if cached_item_to_pop and isinstance(cached_item_to_pop, (tuple, list)) and len(cached_item_to_pop) > 0:
+                    content_bytes = cached_item_to_pop[0]
+                    if content_bytes is not None and isinstance(content_bytes, bytes):
+                        self.current_size_bytes -= len(content_bytes)
+                cleared_count += 1
 
-    async def clear_cache(self):
-        async with self._lock:
-            self.cache.clear()
-            self.current_size_bytes = 0
-            self.hit_count = 0
-            self.miss_count = 0
-            logger.info("ResponseCache cleared.")
+        if cleared_count > 0:
+            logger.debug(f"Cache maintenance: Cleared {cleared_count} old entries older than {max_age_seconds}s.")
+        return cleared_count
+
+def _generate_key(self, url: str, headers: Optional[Dict[str, str]] = None) -> str:
+    key_parts = [url]
+    if headers:
+        for header_name in ['Accept', 'Accept-Language', 'X-Platform-Specific-Cache-Key']:
+            if header_name in headers:
+                key_parts.append(f"{header_name}:{headers[header_name]}")
+    return hashlib.sha256("|".join(key_parts).encode()).hexdigest()
+
+async def get(self, url: str, headers: Optional[Dict[str, str]] = None,
+              max_age_seconds: int = 300) -> Optional[bytes]:
+    async with self._lock:
+        key = self._generate_key(url, headers)
+        cached_item = self.cache.get(key)
+        if cached_item:
+            content, timestamp, response_headers = cached_item
+            age = (datetime.now() - timestamp).total_seconds()
+            if age <= max_age_seconds:
+                self.hit_count += 1
+                logger.debug(f"Cache hit for {url} (age: {age:.1f}s)")
+                return content
+            else:
+                logger.debug(f"Cache stale for {url} (age: {age:.1f}s > {max_age_seconds}s). Evicting.")
+                if content is not None:
+                    self.current_size_bytes -= len(content)
+                del self.cache[key]
+        self.miss_count += 1
+        logger.debug(f"Cache miss for {url}")
+        return None
+
+async def put(self, url: str, content: bytes,
+              headers: Optional[Dict[str, str]] = None,
+              response_headers: Optional[Dict[str, str]] = None):
+    async with self._lock:
+        key = self._generate_key(url, headers)
+        if content is None:
+            logger.debug(f"Not caching None content for {url}")
+            return
+        content_size = len(content)
+        while (self.current_size_bytes + content_size > self.max_size_bytes) and self.cache:
+            try:
+                oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k][1])
+            except ValueError:
+                break
+            old_content_bytes, _, _ = self.cache.pop(oldest_key)
+            if old_content_bytes is not None:
+                self.current_size_bytes -= len(old_content_bytes)
+            logger.debug(f"Cache eviction: Removed {oldest_key} to free space.")
+        if self.current_size_bytes + content_size <= self.max_size_bytes:
+            self.cache[key] = (content, datetime.now(), response_headers or {})
+            self.current_size_bytes += content_size
+            logger.debug(f"Cached {url} ({content_size / 1024:.2f} KB). Cache: {self.current_size_bytes / (1024*1024):.2f} MB")
+        else:
+            logger.warning(f"Could not cache {url} ({content_size / 1024:.2f} KB). Cache full.")
+
+@property
+def hit_rate(self) -> float:
+    total_requests = self.hit_count + self.miss_count
+    return self.hit_count / max(1, total_requests)
+
+async def clear_cache(self):
+    async with self._lock:
+        self.cache.clear()
+        self.current_size_bytes = 0
+        self.hit_count = 0
+        self.miss_count = 0
+        logger.info("ResponseCache cleared.")
 
 
 class SmartBrowserContextManager:

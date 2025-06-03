@@ -837,50 +837,41 @@ class UnifiedOrchestrator:
                 await asyncio.sleep(30)
         
         logger.info("Health monitor finished")
-    
-    async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
-        """Maintain caches and cleanup old data"""
-        
-        logger.info("Cache maintenance started")
-        
-        while not stop_event.is_set():
-            try:
-                # Clear old cache entries
-                if self.response_cache:
-                    cleared = await self.response_cache.clear_old_entries(max_age_seconds=300)
-                    if cleared > 0:
-                        logger.debug(f"Cleared {cleared} old cache entries")
-                
-                # Trim processed fingerprints
-                if len(self.processed_opportunity_fingerprints) > 50000:
-                    # Keep only recent half
-                    self.processed_opportunity_fingerprints = set(
-                        list(self.processed_opportunity_fingerprints)[-25000:]
-                    )
-                    logger.info("Trimmed processed opportunity fingerprints")
-                
-                # Clear old opportunity cache
-                now = datetime.now()
-                old_ids = []
-                for opp_id, opp in self.opportunity_cache.items():
-                    if (now - opp.detected_at).total_seconds() > 3600:  # 1 hour
-                        old_ids.append(opp_id)
-                
-                for opp_id in old_ids:
-                    del self.opportunity_cache[opp_id]
-                
-                if old_ids:
-                    logger.debug(f"Removed {len(old_ids)} old opportunities from cache")
-                
-                await asyncio.sleep(60)  # Maintenance interval
-                
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Cache maintenance error: {e}", exc_info=True)
-                await asyncio.sleep(120)
-        
-        logger.info("Cache maintenance finished")
+
+        async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
+            """Maintain caches and cleanup old data"""
+            logger.info("Cache maintenance started")
+            
+            while not stop_event.is_set():
+                try:
+                    # Clear old cache entries - check if method exists
+                    if self.response_cache and hasattr(self.response_cache, 'clear_old_entries'):
+                        cleared = await self.response_cache.clear_old_entries(max_age_seconds=300)
+                        if cleared > 0:
+                            logger.debug(f"Cleared {cleared} old cache entries")
+                    else:
+                        # Manual cleanup if method doesn't exist
+                        if self.response_cache and hasattr(self.response_cache, 'cache'):
+                            now = datetime.now()
+                            old_keys = []
+                            
+                            # Assuming cache is a dict with entries that have timestamps
+                            cache_dict = getattr(self.response_cache, 'cache', {})
+                            for key, entry in cache_dict.items():
+                                if hasattr(entry, 'timestamp'):
+                                    age = (now - entry.timestamp).total_seconds()
+                                    if age > 300:  # 5 minutes
+                                        old_keys.append(key)
+                            
+                            for key in old_keys[:100]:  # Limit to prevent blocking
+                                cache_dict.pop(key, None)
+                            
+                            if old_keys:
+                                logger.debug(f"Manually cleared {len(old_keys)} old cache entries")
+                    await asyncio.sleep(60)  # Sleep between maintenance cycles
+                except Exception as e:
+                    logger.error(f"Cache maintenance error: {e}", exc_info=True)
+                    await asyncio.sleep(60)
     
     async def _metrics_reporter_loop(self, stop_event: asyncio.Event) -> None:
         """Enhanced metrics reporting with performance insights"""
@@ -955,7 +946,7 @@ class UnifiedOrchestrator:
             f"Queue: {self.opportunity_queue.qsize()} | "
             f"Active Strikes: {len(self.active_strikes)}",
             f"Cache: Hits={self.metrics['cache_hits']} ({cache_hit_rate:.1f}%) | "
-            f"Size={self.response_cache.current_size_mb if self.response_cache else 0:.1f}MB",
+            f"Size={self.response_cache.current_size_bytes / (1024*1024) if self.response_cache else 0:.1f}MB",
             f"",
             f"👤 PROFILES",
             f"Active: {active_profiles} | Total: {total_profiles} | "

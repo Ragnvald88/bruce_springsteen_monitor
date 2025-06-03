@@ -114,13 +114,35 @@ class ResponseCache:
     """Intelligent response caching to minimize data usage"""
 
     def __init__(self, max_size_mb: float = 50):
-        self.cache: Dict[str, Tuple[bytes, datetime, Dict[str, str]]] = {}
         self.max_size_bytes = max_size_mb * 1024 * 1024
         self.current_size_bytes = 0
-        self.hit_count = 0
-        self.miss_count = 0
+        self.cache: Dict[str, Tuple[bytes, datetime, Optional[Dict[str, str]]]] = {}
         self._lock = asyncio.Lock()
-        logger.info(f"ResponseCache initialized with max_size: {max_size_mb} MB")
+    
+    @property
+    def current_size_mb(self) -> float:
+        """Get current cache size in MB"""
+        return self.current_size_bytes / (1024 * 1024)
+    
+    async def clear_old_entries(self, max_age_seconds: int) -> int:
+        """Clear entries older than max_age_seconds"""
+        async with self._lock:
+            now = datetime.now()
+            old_keys = []
+            
+            for key, entry in self.cache.items():
+                age = (now - entry.timestamp).total_seconds()
+                if age > max_age_seconds:
+                    old_keys.append(key)
+            
+            cleared = 0
+            for key in old_keys:
+                entry = self.cache.pop(key, None)
+                if entry:
+                    self.current_size_bytes -= len(entry.data)
+                    cleared += 1
+            
+            return cleared
 
     def _generate_key(self, url: str, headers: Optional[Dict[str, str]] = None) -> str:
         key_parts = [url]

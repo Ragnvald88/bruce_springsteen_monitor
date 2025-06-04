@@ -1001,3 +1001,720 @@ Traceback (most recent call last):
     ...<2 lines>...
     ) from None
 ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.836 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_47799daf: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.837 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.852 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_4da8da0c: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.852 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.867 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_b6d559c3: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.867 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:58.755 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2c37b2c2: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:58.756 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:17.645 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_f958f0ed: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:17.646 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.804 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2b1b33b0: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.806 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.820 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_818385ae: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.821 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.833 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_3f213374: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.834 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:10.999 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_622fc7b4: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:11.001 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:29.021 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_457a64ee: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:29.022 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:38.055 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_dffab8c7: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:38.055 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:08.355 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_39219b7f: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:08.355 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:10.309 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_5b7c10e6: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:10.309 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:15.044 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_45406f99: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:15.045 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:41.258 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_b39fafc5: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:41.258 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:51.962 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_1990b4c9: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:51.963 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:10.683 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_346dbb12: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:10.684 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:34.352 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:54:38.150 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:13.444 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:13.457 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:13.469 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:41.351 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:01.919 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:09.505 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:39.256 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:45.128 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:46.837 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?

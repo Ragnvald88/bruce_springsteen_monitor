@@ -1441,3 +1441,1535 @@ Traceback (most recent call last):
     ...<2 lines>...
     ) from None
 ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:29.295 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 08:50:29.295 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:50:29.295 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 08:50:29.295 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 08:50:29.295 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 08:50:29.295 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 08:50:29.296 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 08:50:29.296 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:50:29.296 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 08:50:29.296 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 08:50:29.597 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 08:50:29.597 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 08:50:29.602 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 08:50:29.610 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-03T16:12:23.401583
+2025-06-04 08:50:29.612 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 20 profiles from disk
+2025-06-04 08:50:29.612 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 08:50:29.612 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 08:50:29.612 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 08:50:29.612 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 20 profiles loaded
+2025-06-04 08:50:29.612 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 08:50:29.613 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 08:50:29.613 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 08:50:29.613 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 08:50:29.664 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 08:50:29.664 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 08:50:29.664 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 08:50:29.664 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 08:50:29.664 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 08:50:29.770 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 08:50:29.770 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 08:50:29.770 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Milano 2025 (FS) on fansale (Priority: CRITICAL)
+2025-06-04 08:50:29.770 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:50:30.836 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_47799daf: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.837 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.838 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen San Siro 2025 (TM) on ticketmaster (Priority: HIGH)
+2025-06-04 08:50:30.838 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:50:30.852 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_4da8da0c: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.852 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.853 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Resale (VT) on vivaticket (Priority: NORMAL)
+2025-06-04 08:50:30.854 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:50:30.867 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_b6d559c3: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:30.867 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:58.726 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:50:58.755 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2c37b2c2: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:50:58.756 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:17.619 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:51:17.645 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_f958f0ed: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:17.646 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.469 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 08:51:43.470 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 08:51:43.639 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 08:51:43.639 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 08:51:43.644 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 08:51:43.647 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-03T16:12:23.401583
+2025-06-04 08:51:43.649 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 20 profiles from disk
+2025-06-04 08:51:43.649 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 08:51:43.649 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 08:51:43.649 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 08:51:43.649 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 20 profiles loaded
+2025-06-04 08:51:43.649 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 08:51:43.649 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 08:51:43.649 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 08:51:43.649 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 08:51:43.649 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 08:51:43.650 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 08:51:43.650 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 08:51:43.650 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 08:51:43.650 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 08:51:43.650 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 08:51:43.650 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 08:51:43.659 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 08:51:43.659 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 08:51:43.659 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 08:51:43.659 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 08:51:43.659 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 08:51:43.762 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 08:51:43.762 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 08:51:43.762 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Milano 2025 (FS) on fansale (Priority: CRITICAL)
+2025-06-04 08:51:43.763 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:51:43.804 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2b1b33b0: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.806 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.808 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen San Siro 2025 (TM) on ticketmaster (Priority: HIGH)
+2025-06-04 08:51:43.808 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:51:43.820 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_818385ae: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.821 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.822 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Resale (VT) on vivaticket (Priority: NORMAL)
+2025-06-04 08:51:43.822 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:51:43.833 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_3f213374: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:51:43.834 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:10.972 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:52:10.999 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_622fc7b4: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:11.001 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:28.993 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:52:29.021 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_457a64ee: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:29.022 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:38.026 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:52:38.055 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_dffab8c7: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:38.055 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:52:43.661 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 6 | Total: 26 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 08:53:08.335 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:53:08.355 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_39219b7f: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:08.355 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:10.281 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:53:10.309 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_5b7c10e6: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:10.309 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:15.020 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:53:15.044 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_45406f99: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:15.045 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:41.231 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:53:41.258 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_b39fafc5: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:41.258 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:43.663 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 2.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 10 | Total: 30 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 08:53:51.935 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:53:51.962 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_1990b4c9: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:53:51.963 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:10.655 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:54:10.683 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_346dbb12: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:10.684 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 08:54:34.334 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:54:34.352 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_83ff5342. Proxy: No
+2025-06-04 08:54:34.352 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:54:38.125 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:54:38.150 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_bd3944da. Proxy: No
+2025-06-04 08:54:38.150 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:54:43.664 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 3.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 14 | Total: 34 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 08:54:52.845 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:54:52.871 | INFO     | src.core.managers              | get_client           | Created httpx client for profile vivaticket_8247641e. Proxy: No
+2025-06-04 08:55:13.106 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 08:55:13.106 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:55:13.106 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 08:55:13.106 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 08:55:13.106 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 08:55:13.106 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 08:55:13.107 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 08:55:13.107 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 08:55:13.107 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 08:55:13.107 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 08:55:13.272 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 08:55:13.272 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 08:55:13.278 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 08:55:13.280 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-03T16:12:23.401583
+2025-06-04 08:55:13.282 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 20 profiles from disk
+2025-06-04 08:55:13.282 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 08:55:13.282 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 08:55:13.282 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 08:55:13.282 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 20 profiles loaded
+2025-06-04 08:55:13.282 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 08:55:13.282 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 08:55:13.282 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 08:55:13.282 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 08:55:13.282 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 08:55:13.283 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 08:55:13.283 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 08:55:13.283 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 08:55:13.283 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 08:55:13.283 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 08:55:13.283 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 08:55:13.292 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 08:55:13.292 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 08:55:13.292 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 08:55:13.292 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 08:55:13.292 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 08:55:13.398 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 08:55:13.398 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 08:55:13.398 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Milano 2025 (FS) on fansale (Priority: CRITICAL)
+2025-06-04 08:55:13.398 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:55:13.444 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_bf98b9be. Proxy: No
+2025-06-04 08:55:13.444 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:13.445 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen San Siro 2025 (TM) on ticketmaster (Priority: HIGH)
+2025-06-04 08:55:13.445 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:55:13.456 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_273a67a1. Proxy: No
+2025-06-04 08:55:13.457 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:13.457 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Resale (VT) on vivaticket (Priority: NORMAL)
+2025-06-04 08:55:13.457 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:55:13.469 | INFO     | src.core.managers              | get_client           | Created httpx client for profile vivaticket_5b739853. Proxy: No
+2025-06-04 08:55:13.469 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:55:41.321 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:55:41.351 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_b2f1f3f1. Proxy: No
+2025-06-04 08:55:41.351 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:01.890 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:56:01.919 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_17ef886b. Proxy: No
+2025-06-04 08:56:01.919 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:09.476 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:56:09.504 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_fdd8931d. Proxy: No
+2025-06-04 08:56:09.505 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:13.294 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 6 | Total: 26 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 08:56:39.233 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 08:56:39.256 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_d4a57c24. Proxy: No
+2025-06-04 08:56:39.256 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:45.100 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 08:56:45.127 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_bcae5525. Proxy: No
+2025-06-04 08:56:45.128 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 08:56:46.819 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 08:56:46.837 | INFO     | src.core.managers              | get_client           | Created httpx client for profile vivaticket_d07dd2d3. Proxy: No
+2025-06-04 08:56:46.837 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'BrowserProfile' object has no attribute 'platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 570, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 98, in build_headers
+    'sec-ch-ua-platform': f'"{profile.platform}"',
+                              ^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mean: 'js_platform'?
+2025-06-04 09:01:47.207 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 09:01:47.208 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 09:01:47.472 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 09:01:47.473 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 09:01:47.478 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 09:01:47.487 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-03T16:12:23.401583
+2025-06-04 09:01:47.489 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 20 profiles from disk
+2025-06-04 09:01:47.489 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 09:01:47.489 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 09:01:47.489 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 09:01:47.489 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 20 profiles loaded
+2025-06-04 09:01:47.489 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 09:01:47.489 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 09:01:47.489 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 09:01:47.489 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 09:01:47.489 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 09:01:47.490 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 09:01:47.490 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 09:01:47.490 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 09:01:47.490 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 09:01:47.490 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 09:01:47.490 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 09:01:47.508 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 09:01:47.508 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 09:01:47.508 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 09:01:47.508 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 09:01:47.508 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 09:01:47.614 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 09:01:47.614 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 09:01:47.614 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Milano 2025 (FS) on fansale (Priority: CRITICAL)
+2025-06-04 09:01:47.614 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 09:01:47.662 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_25f3657d. Proxy: No
+2025-06-04 09:01:47.662 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen San Siro 2025 (TM) on ticketmaster (Priority: HIGH)
+2025-06-04 09:01:47.663 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 09:01:47.674 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_a829858f. Proxy: No
+2025-06-04 09:01:47.674 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Resale (VT) on vivaticket (Priority: NORMAL)
+2025-06-04 09:01:47.674 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 09:01:47.688 | INFO     | src.core.managers              | get_client           | Created httpx client for profile vivaticket_c4d971b2. Proxy: No
+2025-06-04 09:02:39.987 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:03:03.462 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:03:03.462 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:03:19.576 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:03:30.989 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:03:54.287 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:04:03.464 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 2.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:04:26.914 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:04:50.115 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:04:50.116 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:05:03.466 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 3.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:05:18.920 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:05:42.183 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:06:03.468 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 4.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.2% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:06:09.200 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:06:32.518 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:06:32.521 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:07:03.470 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 5.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:07:03.794 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_25f3657d for fansale (score: 100.82, has_session: False)
+2025-06-04 09:07:27.676 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_a829858f for ticketmaster (score: 73.32, has_session: False)
+2025-06-04 09:07:56.423 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:08:19.882 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_c4d971b2 for vivaticket (score: 178.77, has_session: False)
+2025-06-04 09:08:19.885 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 6.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:08:19.885 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:08:51.815 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:09:15.208 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:09:19.886 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 7.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:09:46.633 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:10:10.066 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:10:10.066 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:10:19.888 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 8.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:10:37.199 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:11:00.739 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:11:19.890 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 9.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:11:35.554 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:11:58.892 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:11:58.892 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:12:19.892 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 10.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=24 (80.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:12:35.597 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_25f3657d for fansale (score: 101.81, has_session: False)
+2025-06-04 09:13:00.287 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_a829858f for ticketmaster (score: 74.31, has_session: False)
+2025-06-04 09:13:19.895 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 11.5 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=24 (80.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.4MB | Saved: 0.0MB | Remaining: 998.6MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:13:25.658 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_c4d971b2 for vivaticket (score: 180.82, has_session: False)
+2025-06-04 09:13:42.062 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:14:05.736 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:15:10.294 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 09:15:10.294 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 09:15:10.552 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 09:15:10.552 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 09:15:10.558 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 09:15:10.564 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-03T16:12:23.401583
+2025-06-04 09:15:10.567 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 20 profiles from disk
+2025-06-04 09:15:10.567 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 09:15:10.567 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 09:15:10.567 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 09:15:10.567 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 20 profiles loaded
+2025-06-04 09:15:10.567 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 09:15:10.567 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 09:15:10.567 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 09:15:10.567 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 09:15:10.567 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 09:15:10.568 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 09:15:10.568 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 09:15:10.568 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 09:15:10.568 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 09:15:10.568 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 09:15:10.568 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 09:15:10.587 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 09:15:10.587 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 09:15:10.588 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 09:15:10.588 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 09:15:10.588 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 09:15:10.690 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 09:15:10.690 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 09:15:10.690 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Milano 2025 (FS) on fansale (Priority: CRITICAL)
+2025-06-04 09:15:10.690 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 09:15:10.748 | INFO     | src.core.managers              | get_client           | Created httpx client for profile fansale_961a86e1. Proxy: No
+2025-06-04 09:15:10.749 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen San Siro 2025 (TM) on ticketmaster (Priority: HIGH)
+2025-06-04 09:15:10.749 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 09:15:10.760 | INFO     | src.core.managers              | get_client           | Created httpx client for profile ticketmaster_4071a49d. Proxy: No
+2025-06-04 09:15:10.760 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | Monitoring: Bruce Springsteen Resale (VT) on vivaticket (Priority: NORMAL)
+2025-06-04 09:15:10.760 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-04 09:15:10.772 | INFO     | src.core.managers              | get_client           | Created httpx client for profile vivaticket_67254a2f. Proxy: No
+2025-06-04 09:16:04.231 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:16:27.745 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.0% | Memory=0.3% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:16:27.746 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:16:35.036 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:17:00.188 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:17:23.544 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:17:27.747 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 2.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.0% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:17:55.331 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:18:18.694 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:18:18.906 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:18:27.749 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 3.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:18:51.687 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:19:14.991 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:19:27.752 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 4.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.1% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:19:43.628 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:20:07.069 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:20:07.070 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:20:27.754 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 5.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.1% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.5MB | Saved: 0.0MB | Remaining: 999.5MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:20:34.538 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_961a86e1 for fansale (score: 176.81, has_session: False)
+2025-06-04 09:20:58.917 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4071a49d for ticketmaster (score: 120.41, has_session: False)
+2025-06-04 09:21:27.755 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 6.3 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:21:30.949 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:21:54.320 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_67254a2f for vivaticket (score: 178.77, has_session: False)
+2025-06-04 09:21:54.321 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:22:21.512 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:22:45.036 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 7.6 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.0% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:22:45.037 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:22:45.045 | INFO     | src.profiles.persistence       | save_profiles        | Saved 23 profiles to disk
+2025-06-04 09:23:15.606 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:23:38.909 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:23:38.909 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:23:45.038 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 8.6 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:24:09.324 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:24:32.715 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:24:45.040 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 9.6 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=13 (81.2%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 09:25:04.508 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-04 09:25:27.707 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-04 09:25:27.813 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27 (Bruce Springsteen San Siro 2025 (TM))
+2025-06-04 09:25:45.042 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 10.6 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=24 (80.0%) | Size=0.5MB
+
+👤 PROFILES
+Active: 3 | Total: 23 | Rotations: 0
+
+💾 DATA USAGE
+Used: 1.0MB | Saved: 0.0MB | Remaining: 999.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================

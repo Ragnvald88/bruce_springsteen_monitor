@@ -59,9 +59,9 @@ targets:
     interval_s: 30
     human_behavior_intensity: "medium" # low, medium, high, none
     desired_sections: ["PIT", "Parterre", "Primo Anello Rosso"]
-    max_price_per_ticket: 350.00
+    max_price_per_ticket: 600
     min_ticket_quantity: 1
-    max_ticket_quantity: 2
+    max_ticket_quantity: 4
     burst_mode:
       enabled: true
       min_interval_s: 3
@@ -163,16 +163,15 @@ profile_manager:
   #   HARD_BLOCK: [14400, 0.3]
 
   # --- Proxy settings (if ProfileManagerConfig expects proxy_configs list) ---
-  proxy_configs: # This list populates ProfileManagerConfig.proxy_configs
-    - proxy_type: "http" # Or https, socks5
-      host: "${IPROYAL_HOSTNAME}" # From .env
-      port: ${IPROYAL_PORT}       # From .env
-      username: "${IPROYAL_USERNAME}" # From .env
-      password: "${IPROYAL_PASSWORD}" # From .env
-      country_code: "IT" # Example
-      sticky_session: true
-      # rotation_endpoint: null # If applicable
-      # provider: "iproyal" # Optional metadata
+  proxies: # <--- THIS is the key the parser looks for
+  - proxy_type: "http"
+    host: "${IPROYAL_HOSTNAME}"
+    port: ${IPROYAL_PORT}
+    username: "${IPROYAL_USERNAME}"
+    password: "${IPROYAL_PASSWORD}"
+    country_code: "IT"
+    sticky_session: true
+    provider: "iproyal"
 
   # --- Flags that should be in ProfileManagerConfig in src/profiles/config.py ---
   enable_tls_rotation: true

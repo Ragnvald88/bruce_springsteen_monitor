@@ -92,16 +92,27 @@ class StealthRequestBuilder:
         
         # Browser-specific headers
         if browser_type == 'chrome':
-            headers.update({
-                'sec-ch-ua': self._generate_sec_ch_ua(profile),
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': f'"{profile.platform}"',
+            # Base headers to update
+            chrome_headers = {
+                'sec-ch-ua': self._generate_sec_ch_ua(profile), # Assuming this method returns the correct Sec-CH-UA
+                'sec-ch-ua-mobile': '?0', # This might need to be dynamic based on profile.device_class
+                # 'sec-ch-ua-platform': f'"{profile.platform}"', # OLD LINE
                 'sec-fetch-site': 'same-origin',
                 'sec-fetch-mode': 'navigate',
                 'sec-fetch-user': '?1',
                 'sec-fetch-dest': 'document',
                 'upgrade-insecure-requests': '1',
-            })
+            }
+            
+            # Correctly add sec-ch-ua-platform
+            if profile.sec_ch_ua_platform: # Check if the attribute exists and has a value
+                chrome_headers['sec-ch-ua-platform'] = profile.sec_ch_ua_platform
+            # else:
+                # Optionally, handle the case where it might be None,
+                # though your profile generation should provide it.
+                # chrome_headers['sec-ch-ua-platform'] = '"Unknown"' 
+
+            headers.update(chrome_headers)
         
         # Add referer if not first request
         if hasattr(profile, '_last_url') and profile._last_url:

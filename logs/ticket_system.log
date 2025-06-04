@@ -11008,3 +11008,35 @@ AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor
 2025-06-04 18:51:58.404 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
 2025-06-04 18:52:23.407 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
 2025-06-04 18:52:23.408 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:52:48.411 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:52:48.412 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:53:13.416 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:53:13.417 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:53:38.420 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:53:38.421 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:54:03.424 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:54:03.426 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:56:50.551 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:56:50.553 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:57:15.549 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:57:15.551 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:57:40.551 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:57:40.553 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:58:05.556 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:58:05.557 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:58:30.560 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:58:30.562 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:58:55.564 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:58:55.566 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:59:20.569 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:59:20.571 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:59:45.573 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:59:45.575 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 19:00:10.579 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 19:00:10.581 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 19:00:35.584 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 19:00:35.586 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 19:01:00.588 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 19:01:00.589 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 19:01:25.594 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 19:01:25.595 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented

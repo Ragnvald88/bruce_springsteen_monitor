@@ -1,7 +1,8 @@
 # src/__init__.py
-"""
-Main source package for the Ticket Automation System.
 
-This package contains the core logic, platform-specific interactions,
-utilities, the main application orchestrator, and the GUI.
-"""
+"""Source package root"""
+# src/core/__init__.py
+"""Core automation components"""
+
+# src/profiles/__init__.py
+"""Profile management system"""

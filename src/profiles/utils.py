@@ -3,6 +3,7 @@
 import yaml
 import logging
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple, Callable
@@ -16,73 +17,94 @@ from .manager import ProfileManager
 
 logger = logging.getLogger(__name__)
 
+def parse_proxy_configs(proxy_data: List[Dict[str, Any]]) -> List[ProxyConfig]:
+    """Parse list of ProxyConfig from data, resolving environment variables."""
+    configs = []
+    
+    for proxy_dict in proxy_data:
+        try:
+            # Resolve environment variables
+            host_str = os.path.expandvars(proxy_dict.get('host', ''))
+            port_str = os.path.expandvars(str(proxy_dict.get('port', 0)))
+            username_str = os.path.expandvars(proxy_dict.get('username', ''))
+            password_str = os.path.expandvars(proxy_dict.get('password', ''))
 
-def create_profile_manager_from_config(config_path: str) -> ProfileManager:
-    """Create ProfileManager from YAML config file"""
-    config_path = Path(config_path)
-    if not config_path.exists():
-        raise FileNotFoundError(f"Config file not found: {config_path}")
+            config = ProxyConfig(
+                proxy_type=proxy_dict.get('type', 'http'),
+                host=host_str,
+                port=int(port_str) if port_str.isdigit() else 0,
+                username=username_str if username_str else None,
+                password=password_str if password_str else None,
+                rotation_endpoint=proxy_dict.get('rotation_endpoint'),
+                sticky_session=proxy_dict.get('sticky_session', True),
+                country_code=proxy_dict.get('country_code'),
+                # THIS IS THE CORRECTED LINE:
+                # It should be proxy_provider (field in dataclass) = proxy_dict.get('provider') (key in YAML)
+                proxy_provider=proxy_dict.get('provider') 
+            )
+            
+            if config.host and config.port > 0:
+                configs.append(config)
+                logger.debug(f"Successfully parsed and expanded proxy: host='{config.host}', port={config.port}, provider='{config.proxy_provider}'")
+            else:
+                logger.warning(f"Invalid proxy config after env var expansion: missing host or port. Original: {proxy_dict}, Expanded: host='{host_str}', port_str='{port_str}'")
+                
+        except TypeError as te: # Catch the specific TypeError
+            logger.error(f"TypeError parsing proxy config: {proxy_dict}. Error: {te}. This usually means a mismatch between YAML keys and ProxyConfig dataclass fields.")
+        except Exception as e:
+            logger.error(f"Failed to parse proxy config: {proxy_dict}. Error: {e}")
     
-    with open(config_path, 'r') as f:
-        config_data = yaml.safe_load(f)
-    
-    # Parse configuration
-    pm_config = parse_profile_manager_config(config_data)
-    
-    # Parse base template if provided
-    base_template = config_data.get('base_profile_template')
-    
-    # Create and return manager
-    return ProfileManager(config=pm_config, base_profile_template=base_template)
-
+    return configs
 
 def parse_profile_manager_config(config_data: Dict[str, Any]) -> ProfileManagerConfig:
     """Parse ProfileManagerConfig from dict"""
     pm_settings = config_data.get('profile_manager', {})
-    
+
     # Create scoring config
     scoring_config = parse_scoring_config(pm_settings.get('scoring', {}))
-    
+
     # Parse proxy configs
-    proxy_configs = parse_proxy_configs(config_data.get('proxies', []))
-    
+    # Corrected line: Read 'proxies' from pm_settings (the 'profile_manager' section)
+    pm_settings = config_data.get('profile_manager', {})
+    proxy_configs = parse_proxy_configs(pm_settings.get('proxies', []))
+
     # Create main config
     config = ProfileManagerConfig(
         # Pool settings
-        num_target_profiles=pm_settings.get('num_profiles', 20),
+        num_target_profiles=pm_settings.get('num_target_profiles', 20), # Updated to use num_target_profiles
         profiles_per_platform=pm_settings.get('profiles_per_platform', 5),
-        
+
         # Evolution settings
-        evolution_interval_seconds=pm_settings.get('evolution_interval', 900),
+        evolution_interval_seconds=pm_settings.get('evolution_interval_seconds', 900), # Updated key
         evolution_max_retries=pm_settings.get('evolution_max_retries', 3),
-        evolution_retry_backoff_base_seconds=pm_settings.get('evolution_retry_backoff', 60),
-        evolution_interval_jitter_factor=pm_settings.get('evolution_jitter', 0.2),
-        
+        evolution_retry_backoff_base_seconds=pm_settings.get('evolution_retry_backoff_base_seconds', 60), # Updated key
+        evolution_interval_jitter_factor=pm_settings.get('evolution_interval_jitter_factor', 0.2), # Updated key
+
         # Persistence settings
-        persistence_filepath=pm_settings.get('persistence_file', 'profiles_backup.json'),
+        persistence_filepath=pm_settings.get('persistence_filepath', 'profiles_backup.json'), # Updated key
         session_backup_dir=pm_settings.get('session_backup_dir', 'session_backups'),
         enable_encrypted_storage=bool(pm_settings.get('enable_encrypted_storage', True)),
-        
+
         # Session settings
-        session_validation_interval_seconds=pm_settings.get('session_validation_interval', 1800),
+        session_validation_interval_seconds=pm_settings.get('session_validation_interval_seconds', 1800), # Updated key
         max_session_age_hours=pm_settings.get('max_session_age_hours', 24),
         auto_login_retry_limit=pm_settings.get('auto_login_retry_limit', 3),
-        
+
         # Pool management
-        compromise_threshold_pct=pm_settings.get('compromise_threshold', 0.20),
-        min_pool_size_for_replacement=pm_settings.get('min_pool_size', 10),
-        max_pool_size_multiplier=pm_settings.get('max_pool_multiplier', 1.5),
-        
+        compromise_threshold_pct=pm_settings.get('compromise_threshold_pct', 0.20), # Updated key
+        min_pool_size_for_replacement=pm_settings.get('min_pool_size_for_replacement', 10), # Updated key
+        max_pool_size_multiplier=pm_settings.get('max_pool_size_multiplier', 1.5), # Updated key
+
         # Proxy settings
         proxy_failure_threshold=pm_settings.get('proxy_failure_threshold', 5),
-        proxy_configs=proxy_configs,
-        
+        proxy_configs=proxy_configs, # This is now correctly populated
+
         # Feature flags
         enable_tls_rotation=pm_settings.get('enable_tls_rotation', True),
         enable_behavioral_warmup=pm_settings.get('enable_behavioral_warmup', True),
         enable_session_preloading=pm_settings.get('enable_session_preloading', True),
         enable_profile_cloning=pm_settings.get('enable_profile_cloning', True),
-        
+
         # Warmup settings
         warmup_sites=pm_settings.get('warmup_sites', [
             "https://www.google.it",
@@ -90,31 +112,31 @@ def parse_profile_manager_config(config_data: Dict[str, Any]) -> ProfileManagerC
             "https://www.corriere.it",
             "https://www.amazon.it"
         ]),
-        warmup_duration_seconds=pm_settings.get('warmup_duration', (60, 180)),
+        warmup_duration_seconds=pm_settings.get('warmup_duration_seconds', (60, 180)), # Updated key
         warmup_actions=pm_settings.get('warmup_actions', ['scroll', 'click', 'hover', 'wait']),
-        
+
         # Platform settings
         platform_priorities=pm_settings.get('platform_priorities', {
             'ticketmaster': 1.0,
             'fansale': 0.8,
             'vivaticket': 0.7
         }),
-        platform_distribution=pm_settings.get('platform_distribution', {
+        platform_distribution=pm_settings.get('platform_distribution', { # Ensure this is used if needed by ProfileManager
             'ticketmaster': 0.4,
             'fansale': 0.3,
             'vivaticket': 0.3
         }),
-        
+
         # Metrics
         metrics_export_path=pm_settings.get('metrics_export_path', 'metrics'),
-        
+
         # Scoring config
         scoring_config=scoring_config,
-        
+
         # Cooldowns
-        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns', {}))
+        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns_seconds', {})) # Updated key
     )
-    
+
     return config
 
 

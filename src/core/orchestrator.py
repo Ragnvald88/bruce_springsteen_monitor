@@ -1,5 +1,5 @@
 # src/core/orchestrator.py - FIXED VERSION
-# Key fixes: Complete _strike_processor_loop, proper async handling, enhanced error recovery
+from __future__ import annotations
 
 import asyncio
 import logging
@@ -21,21 +21,32 @@ import threading
 import queue
 
 if TYPE_CHECKING:
-    from playwright.async_api import Playwright
+    from playwright.async_api import Playwright, Browser, BrowserContext, Page
+else:
+    # Runtime fallback for type annotations
+    Playwright = Any
+    Browser = Any
+    BrowserContext = Any
+    Page = Any
+
 
 # Profile system imports
-from src.profiles.manager import ProfileManager
-from src.profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
-from src.core.advanced_profile_system import DetectionEvent
-from src.profiles.utils import create_profile_manager_from_config
-from src.profiles.manager import BrowserProfile
+from ..profiles.manager import ProfileManager, BrowserProfile
+from ..profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
+from ..profiles.utils import create_profile_manager_from_config
 
-# Core module imports
+# FIXED: Correct import for advanced_profile_system (it's in core, not profiles)
+from .advanced_profile_system import DetectionEvent
+
+# Core module imports (these are already correct as relative imports)
 from .enums import OperationMode, PlatformType, PriorityLevel
 from .models import EnhancedTicketOpportunity, DataUsageTracker
 from .managers import ConnectionPoolManager, ResponseCache, SmartBrowserContextManager
 from .components import ProfileAwareLightweightMonitor
 from .strike_force import ProfileIntegratedStrikeForce
+
+logger = logging.getLogger(__name__)
+
 
 logger = logging.getLogger(__name__)
 
@@ -423,7 +434,7 @@ class UnifiedOrchestrator:
         platform_str = target_config.get('platform', '').lower()
         event_name = target_config.get('event_name', 'Unknown Event')
         url = target_config.get('url', '')
-        priority = PriorityLevel(target_config.get('priority', 'normal').upper())
+        priority = PriorityLevel[target_config.get('priority', 'normal').upper()]
         
         if not url:
             logger.error(f"No URL for target {event_name}")
@@ -657,7 +668,43 @@ class UnifiedOrchestrator:
             await asyncio.gather(*self.active_strikes.values(), return_exceptions=True)
         
         logger.info("Strike processor finished")
-    
+    async def pre_warm_connections(self):
+        """Pre-warm HTTP connections for faster initial requests"""
+
+        if not self.connection_pool or not self.profile_manager:
+            return
+
+        logger.info("Pre-warming connections...")
+
+        # Get target URLs
+        target_urls = []
+        for target in self.config.get('targets', []):
+            if target.get('enabled') and target.get('url'):
+                target_urls.append(target['url'])
+
+        # Pre-warm connections for each platform
+        pre_warm_tasks = []
+        for url in target_urls[:5]:  # Limit pre-warming
+            task = asyncio.create_task(self._pre_warm_single_connection(url))
+            pre_warm_tasks.append(task)
+
+        if pre_warm_tasks:
+            await asyncio.gather(*pre_warm_tasks, return_exceptions=True)
+
+    async def _pre_warm_single_connection(self, url: str):
+        """Pre-warm a single connection"""
+        try:
+            profile = await self.profile_manager.get_profile_for_platform(
+                platform=CorePlatformEnum.GENERIC,  # Assuming CorePlatformEnum is accessible
+                require_session=False
+            )
+            if profile:
+                client = await self.connection_pool.get_client(profile)
+                # Just establish connection, don't fetch content
+                await client.options(url, timeout=5.0)
+        except Exception as e:
+            logger.debug(f"Pre-warm failed for {url}: {e}")
+        
     async def _clear_related_opportunities(self, successful_opp: EnhancedTicketOpportunity):
         """Clear related opportunities after success"""
         cleared_count = 0

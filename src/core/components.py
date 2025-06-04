@@ -1,4 +1,5 @@
 # src/core/components.py - v4.0 - Ultra-Stealth Enhanced
+
 from __future__ import annotations
 
 import asyncio
@@ -9,22 +10,30 @@ import time
 import json
 import hashlib
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Set, Tuple, Pattern
+from typing import Dict, List, Optional, Any, Set, Tuple, Pattern, TYPE_CHECKING
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
 import httpx
 from urllib.parse import urlparse, urljoin
 
-# Core imports
+if TYPE_CHECKING:
+    from playwright.async_api import (
+        BrowserContext as PlaywrightContext,
+        Page as PlaywrightPage,
+        Route,
+        Request
+    )
+
+# Core imports (already correct)
 from .models import EnhancedTicketOpportunity, DataUsageTracker
 from .enums import PlatformType, PriorityLevel
 from .managers import ConnectionPoolManager, ResponseCache
 
-# Profile imports - Fixed import path
-from src.profiles.manager import ProfileManager
-from src.profiles.models import BrowserProfile
-from src.core.advanced_profile_system import DetectionEvent
+# FIXED: Profile imports with correct relative paths
+from ..profiles.manager import ProfileManager
+from ..profiles.models import BrowserProfile
+from .advanced_profile_system import DetectionEvent  # This is in core, not profiles
 
 logger = logging.getLogger(__name__)
 
@@ -713,7 +722,7 @@ class ProfileAwareLightweightMonitor:
     def _get_adaptive_timeout(self, platform: PlatformType) -> float:
         """Get platform-specific timeout with adaptation"""
         
-        base_timeout = 20.0
+        base_timeout = 45.0
         
         # Adjust based on platform
         platform_multipliers = {

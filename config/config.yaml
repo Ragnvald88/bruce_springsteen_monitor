@@ -18,8 +18,7 @@ app_settings:
     beast:
       strike_settings:
         max_parallel: 5
-      monitoring_settings:
-        base_target_interval_multiplier: 0.5
+
       profile_manager:
         selection_quality_min_tier: 2
     ultra_stealth:
@@ -33,9 +32,20 @@ app_settings:
       pass
     hybrid: {}
   
-  monitoring_settings:
-    default_target_interval_s: 60
-    min_monitor_interval_s: 15 
+# -----------------------------------------------------------------------------
+# MONITORING SETTINGS (MOVED TO TOP LEVEL)
+# This section is read by ProfileAwareLightweightMonitor and main.py's config loader
+# -----------------------------------------------------------------------------
+monitoring_settings:
+  default_interval_s: 60       # Renamed from default_target_interval_s to match ProfileAwareLightweightMonitor's direct expectation
+  min_monitor_interval_s: 15
+  cache_max_age_s: 300         # Example: How long monitor considers cached items fresh (default in code is 300)
+  # detection_patterns:        # You can define platform-specific regex patterns here if needed
+  #   fansale:
+  #     offers: "your_regex_here" 
+  #   ticketmaster:
+  #     offers: "your_regex_here"
+
 
 # -----------------------------------------------------------------------------
 # DATA USAGE LIMITS
@@ -58,7 +68,7 @@ targets:
     priority: "CRITICAL" # CRITICAL, HIGH, NORMAL, LOW
     interval_s: 30
     human_behavior_intensity: "medium" # low, medium, high, none
-    desired_sections: ["PIT", "Parterre", "Primo Anello Rosso"]
+    desired_sections: []
     max_price_per_ticket: 600
     min_ticket_quantity: 1
     max_ticket_quantity: 4
@@ -69,12 +79,12 @@ targets:
 
   - platform: "ticketmaster"
     event_name: "Bruce Springsteen San Siro 2025 (TM)"
-    url: "https://www.ticketmaster.it/artist/bruce-springsteen-and-the-e-street-band-biglietti/27"
+    url: "https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html"
     enabled: true
     priority: "HIGH"
     interval_s: 45
     human_behavior_intensity: "low"
-    desired_sections: ["Parterre Posto Unico", "Standing", "Floor"]
+    desired_sections: []
     max_price_per_ticket: 300.00
     burst_mode:
       enabled: true
@@ -88,7 +98,7 @@ targets:
     priority: "NORMAL"
     interval_s: 90
     human_behavior_intensity: "low"
-    desired_sections: ["POLTRONISSIMA PLATINUM"]
+    desired_sections: []
     max_price_per_ticket: 400.00
     burst_mode:
       enabled: false

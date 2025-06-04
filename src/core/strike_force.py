@@ -14,13 +14,15 @@ if TYPE_CHECKING:
     from playwright.async_api import Page as PlaywrightPage
     from .managers import SmartBrowserContextManager
 
-# Imports from your project's packages
-from src.profiles import (
+# FIXED: Imports from profiles package
+from ..profiles import (
     ProfileManager,
     BrowserProfile,
     DataOptimizationLevel,
     ProfileQuality
 )
+
+# Core imports (already correct)
 from .enums import OperationMode, PlatformType, PriorityLevel
 from .models import EnhancedTicketOpportunity, DataUsageTracker
 

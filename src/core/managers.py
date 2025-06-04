@@ -7,24 +7,27 @@ import logging
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Optional, Tuple, Any, List
+from typing import Dict, Optional, Tuple, Any, List, TYPE_CHECKING
 
-import httpx # For ConnectionPoolManager
+import httpx
 
-from playwright.async_api import (
-    Playwright,
-    BrowserContext as PlaywrightContext,
-    Page as PlaywrightPage,
-    Route,
-    Request
-)
+if TYPE_CHECKING:
+    from playwright.async_api import (
+        Playwright,
+        Browser,
+        BrowserContext as PlaywrightContext,
+        Page as PlaywrightPage,
+        Route,
+        Request,
+        Response
+    )
 
-# Project-specific imports
-from src.profiles.manager import ProfileManager
-from src.profiles.models import BrowserProfile
-from src.profiles.enums import DataOptimizationLevel
+# FIXED: Project-specific imports with correct paths
+from ..profiles.manager import ProfileManager
+from ..profiles.models import BrowserProfile
+from ..profiles.enums import DataOptimizationLevel
 
-from .models import DataUsageTracker # For SmartBrowserContextManager
+from .models import DataUsageTracker
 
 logger = logging.getLogger(__name__)
 

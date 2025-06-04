@@ -1,756 +1,1307 @@
-# src/platforms/fansale.py (Ultra-Robust Multi-Section Version)
+# src/platforms/fansale.py - Ultra-Enhanced v6.0 with HTML Intelligence
 from __future__ import annotations
 
+import asyncio
 import logging
 import random
-import asyncio
 import re
-from typing import Dict, List, Optional, Any, TYPE_CHECKING, Tuple, Set
-from urllib.parse import urlparse, parse_qs
-from datetime import datetime
-from dataclasses import dataclass
-from collections import defaultdict
+import time
+import json
+from typing import Dict, List, Optional, Any, TYPE_CHECKING
+from datetime import datetime, timedelta
+from urllib.parse import urljoin, urlparse, parse_qs
 
-from playwright.async_api import Page, Error as PlaywrightError, Locator, ElementHandle
+from playwright.async_api import Page, BrowserContext, Error as PlaywrightError
 
-# Core project imports
-from core.errors import BlockedError
-from src.profiles.manager import BrowserProfile
-
-# Import behavioral simulation
-from utils.advanced_behavioral_simulation import simulate_advanced_human_behavior, BiometricProfile
+# Core imports
+from src.core.models import EnhancedTicketOpportunity, DataUsageTracker
+from src.core.enums import PlatformType, PriorityLevel
+from src.profiles.models import BrowserProfile
+from src.core.errors import BlockedError, PlatformError
 
 if TYPE_CHECKING:
     pass
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
-@dataclass
-class SectionInfo:
-    """Structured section information"""
-    full_name: str
-    normalized_name: str
-    sector_type: str  # prato, anello, tribuna, etc.
-    sector_variant: Optional[str] = None  # A, B, numerato, etc.
-    row: Optional[str] = None
-    seats: List[str] = None
-    entrance: Optional[str] = None
-
-class FansaleSelectors:
-    """Enhanced selectors based on actual Fansale DOM structure"""
-    # Cookie/Overlay handling
-    COOKIE_ACCEPT = [
-        "button#onetrust-accept-btn-handler",
-        "button[aria-label*='Accept']",
-        "button:has-text('Accetta')",
-        "div.cookie-consent button.accept",
-    ]
+class FansaleMonitor:
+    """Revolutionary Fansale monitor with HTML structure intelligence"""
     
-    # Main listing page
-    NO_TICKETS_INDICATORS = [
-        "div.alert-content:has-text('non sono disponibili biglietti')",
-        "div.event-list-empty",
-        "text=Nessun biglietto trovato",
-        "text=non sono state trovate offerte"
-    ]
-    
-    # Ticket cards and details
-    TICKET_CARD = "div.EventEntry.js-EventEntry[data-offer-id]"
-    TICKET_SECTION = "div.EventEntryRow"
-    TICKET_PRICE = "span.moneyValueFormat"
-    TICKET_QUANTITY = "div.EventEntryRow:has-text('bigliett')"
-    
-    # Detail view selectors
-    DETAIL_CONTAINER = "div.Card-DetailC"
-    TICKET_CHECKBOXES = "input.Checkbox[name='tickets']"
-    QUANTITY_DROPDOWN = "button.Dropdown"
-    SEAT_DESCRIPTION = "span.OfferEntry-SeatDescription, span.js-DetailC-SeatDescription"
-    SUBMIT_BUTTON = "button[type='submit']:has-text('Acquista')"
-    
-    # Trust and availability indicators
-    FAIR_DEAL_ICON = "span.FairDealIcon"
-    TICKETCHECK_ICON = "span.TicketcheckIcon"
-    OFFER_ENDED = "text=L'offerta è terminata"
-    RECAPTCHA = "div.g-recaptcha, iframe[src*='recaptcha']"
-
-# Enhanced Italian patterns with section recognition
-class ItalianPatterns:
-    PRICE_REGEX = re.compile(r"€\s*([\d.,]+)")
-    
-    # Comprehensive section patterns
-    SECTION_PATTERNS = {
-        # Format: pattern -> (sector_type, variant_extractor)
-        r"(?i)prato\s+([a-z])": ("prato", lambda m: m.group(1).upper()),
-        r"(?i)anello\s+(blu|rosso|verde)\s+(\d+)": ("anello", lambda m: f"{m.group(1)}_{m.group(2)}"),
-        r"(?i)tribuna\s+(est|ovest|nord|sud)": ("tribuna", lambda m: m.group(1)),
-        r"(?i)parterre\s+(\d+)?": ("parterre", lambda m: m.group(1) or "generale"),
-        r"(?i)pit\s*(\d+)?": ("pit", lambda m: m.group(1) or "1"),
-        r"(?i)(\d+)\s+anello": ("anello", lambda m: f"livello_{m.group(1)}"),
-    }
-    
-    # Seat detail patterns
-    SEAT_PATTERN = re.compile(r"Fila\s+(\d+)\s*\|\s*Posto\s+([\d,\s]+)")
-    ENTRANCE_PATTERN = re.compile(r"(?i)ingresso\s+(\d+)")
-    
-    # Section aliases for matching
-    SECTION_ALIASES = {
-        "prato": ["lawn", "general admission", "ga"],
-        "anello": ["ring", "tier", "livello"],
-        "tribuna": ["tribune", "stand"],
-        "parterre": ["floor", "platea"],
-    }
-
-class TicketMatcher:
-    """Advanced ticket matching logic"""
-    
-    @staticmethod
-    def parse_section(section_text: str) -> SectionInfo:
-        """Parse section text into structured info"""
-        info = SectionInfo(
-            full_name=section_text,
-            normalized_name=section_text.lower().strip(),
-            sector_type="unknown"
-        )
+    def __init__(self, config: Dict[str, Any], profile: BrowserProfile, 
+                 browser_manager, connection_manager, cache):
+        self.config = config
+        self.profile = profile
+        self.browser_manager = browser_manager
+        self.connection_manager = connection_manager
+        self.cache = cache
         
-        # Try to match section patterns
-        for pattern, (sector_type, variant_extractor) in ItalianPatterns.SECTION_PATTERNS.items():
-            match = re.search(pattern, section_text)
-            if match:
-                info.sector_type = sector_type
+        # Target configuration
+        self.event_name = config.get('event_name', 'Unknown Event')
+        self.url = config['url']
+        self.priority = PriorityLevel[config.get('priority', 'NORMAL').upper()]
+        self.max_price = config.get('max_price_per_ticket', 1000.0)
+        self.desired_sections = config.get('desired_sections', [])
+        self.fair_deal_only = config.get('fair_deal_only', False)
+        self.certified_only = config.get('certified_only', False)
+        
+        # State management
+        self.browser_context: Optional[BrowserContext] = None
+        self.page: Optional[Page] = None
+        self.last_check = None
+        self.detected_offers = set()
+        
+        # Advanced selectors based on HTML analysis
+        self.selectors = {
+            'offer_containers': [
+                'div.EventEntry.js-EventEntry',
+                'div[data-offer-id]',
+                '.EventEntry-isClickable',
+                '.OfferEntry'
+            ],
+            'no_tickets': [
+                'text=Nessun biglietto disponibile',
+                'text=Sold Out',
+                'text=Esaurito',
+                '.no-offers-message',
+                '.sold-out'
+            ],
+            'price_elements': [
+                '.OfferEntry-PriceSmall .moneyValueFormat',
+                '.CurrencyAndMoneyValueFormat .moneyValueFormat',
+                'span.moneyValueFormat',
+                '.price-value'
+            ],
+            'currency_elements': [
+                '.OfferEntry-PriceSmall .currencyFormat',
+                '.CurrencyAndMoneyValueFormat .currencyFormat',
+                'span.currencyFormat'
+            ],
+            'section_elements': [
+                '.OfferEntry-SeatDescription',
+                '[data-seatdescriptionforarialabel]',
+                '.seat-description',
+                '.section-info'
+            ],
+            'quantity_elements': [
+                '.NumberOfTicketsInOffer',
+                '[data-splitting-possibilities]',
+                '.ticket-quantity'
+            ],
+            'offer_type_elements': [
+                '.OfferEntry-PurchaseTypeAndPrice span[title]',
+                '[data-offertype]',
+                '.offer-type'
+            ],
+            'buy_button': [
+                '.Button-inOfferEntryList',
+                'a[data-track][role="button"]',
+                '.js-Button-inOfferEntryList',
+                '.purchase-button'
+            ],
+            'fair_deal_indicator': [
+                '.FairDealIcon.js-FairDealIcon',
+                '[data-fairdeal="true"]',
+                '.fair-deal-icon'
+            ],
+            'certified_indicator': [
+                '.TicketcheckIcon.js-TicketcheckIcon',
+                '[data-certified="true"]',
+                '.ticketcheck-icon'
+            ],
+            'loading_indicators': [
+                '.loading-spinner',
+                '.loader',
+                '.sk-circle'
+            ]
+        }
+        
+        logger.info(f"FansaleMonitor initialized for {self.event_name}")
+
+    async def initialize(self):
+        """Initialize with Fansale-specific ultra-stealth"""
+        try:
+            logger.info(f"Initializing Fansale ultra-stealth for {self.event_name}")
+            
+            # Get stealth browser context
+            self.browser_context = await self.browser_manager.get_stealth_context(
+                self.profile, force_new=False
+            )
+            
+            # Create page with advanced stealth
+            self.page = await self.browser_context.new_page()
+            
+            # Setup Fansale-specific stealth measures
+            await self._inject_fansale_stealth()
+            await self._setup_intelligent_blocking()
+            await self._configure_advanced_behavior()
+            await self._setup_api_monitoring()
+            
+            logger.info(f"Fansale ultra-stealth initialized for {self.event_name}")
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize Fansale stealth: {e}")
+            raise
+
+    async def _inject_fansale_stealth(self):
+        """Inject Fansale-specific anti-detection measures"""
+        await self.page.add_init_script("""
+        // Ultimate Fansale stealth package
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined,
+            configurable: true
+        });
+        
+        // Advanced canvas fingerprinting protection
+        const originalGetContext = HTMLCanvasElement.prototype.getContext;
+        HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+            if (type === '2d') {
+                const context = originalGetContext.call(this, type, ...args);
+                if (context) {
+                    // Sophisticated noise injection
+                    const originalFillText = context.fillText;
+                    context.fillText = function(text, x, y, maxWidth) {
+                        const noise = () => (Math.random() - 0.5) * 0.0001;
+                        return originalFillText.call(this, text, x + noise(), y + noise(), maxWidth);
+                    };
+                    
+                    const originalGetImageData = context.getImageData;
+                    context.getImageData = function(sx, sy, sw, sh) {
+                        const imageData = originalGetImageData.call(this, sx, sy, sw, sh);
+                        const data = imageData.data;
+                        
+                        // Add Gaussian noise to 0.001% of pixels
+                        for (let i = 0; i < data.length; i += 4) {
+                            if (Math.random() < 0.00001) {
+                                const noise = Math.floor((Math.random() - 0.5) * 4);
+                                data[i] = Math.max(0, Math.min(255, data[i] + noise));
+                                data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+                                data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+                            }
+                        }
+                        return imageData;
+                    };
+                }
+                return context;
+            }
+            return originalGetContext.call(this, type, ...args);
+        };
+        
+        // Dynamic screen properties with realistic variations
+        const originalScreen = screen;
+        Object.defineProperty(window, 'screen', {
+            get: () => new Proxy(originalScreen, {
+                get: (target, prop) => {
+                    if (prop === 'availHeight') {
+                        return target.availHeight + Math.floor((Math.random() - 0.5) * 8);
+                    }
+                    if (prop === 'width' || prop === 'height') {
+                        return target[prop] + Math.floor((Math.random() - 0.5) * 4);
+                    }
+                    if (prop === 'colorDepth') {
+                        return [16, 24, 32][Math.floor(Math.random() * 3)];
+                    }
+                    return target[prop];
+                }
+            })
+        });
+        
+        // Advanced plugin array with realistic entries
+        Object.defineProperty(navigator, 'plugins', {
+            get: () => {
+                const plugins = [
+                    {
+                        name: 'Chrome PDF Plugin',
+                        filename: 'internal-pdf-viewer',
+                        description: 'Portable Document Format'
+                    },
+                    {
+                        name: 'Chromium PDF Plugin', 
+                        filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai',
+                        description: 'Portable Document Format'
+                    },
+                    {
+                        name: 'Microsoft Edge PDF Plugin',
+                        filename: 'pdf',
+                        description: 'pdf'
+                    }
+                ];
+                
+                // Add refresh method
+                plugins.refresh = () => {};
+                plugins.namedItem = (name) => plugins.find(p => p.name === name) || null;
+                
+                return plugins;
+            }
+        });
+        
+        // Hardware concurrency randomization
+        Object.defineProperty(navigator, 'hardwareConcurrency', {
+            get: () => [2, 4, 6, 8, 12, 16][Math.floor(Math.random() * 6)]
+        });
+        
+        // Device memory spoofing
+        Object.defineProperty(navigator, 'deviceMemory', {
+            get: () => [2, 4, 6, 8][Math.floor(Math.random() * 4)]
+        });
+        
+        // Language array randomization
+        const languages = ['it-IT', 'it', 'en-US', 'en'];
+        Object.defineProperty(navigator, 'languages', {
+            get: () => {
+                const shuffled = [...languages];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled.slice(0, 2 + Math.floor(Math.random() * 3));
+            }
+        });
+        
+        // Performance timing protection
+        const originalPerformanceNow = performance.now;
+        performance.now = function() {
+            return originalPerformanceNow.call(this) + (Math.random() - 0.5) * 0.001;
+        };
+        
+        // Memory usage simulation
+        if (performance.memory) {
+            const baseUsed = Math.floor(Math.random() * 20000000) + 30000000;
+            Object.defineProperty(performance.memory, 'usedJSHeapSize', {
+                get: () => baseUsed + Math.floor((Math.random() - 0.5) * 2000000)
+            });
+            
+            Object.defineProperty(performance.memory, 'totalJSHeapSize', {
+                get: () => performance.memory.usedJSHeapSize + Math.floor(Math.random() * 10000000)
+            });
+        }
+        
+        // WebRTC protection
+        if (window.RTCPeerConnection) {
+            const originalCreateDataChannel = RTCPeerConnection.prototype.createDataChannel;
+            RTCPeerConnection.prototype.createDataChannel = function() {
+                throw new Error('WebRTC disabled for privacy');
+            };
+        }
+        
+        // Battery API realistic simulation
+        if (navigator.getBattery) {
+            navigator.getBattery = async () => ({
+                charging: Math.random() > 0.3,
+                chargingTime: Math.random() > 0.5 ? 0 : Math.random() * 3600,
+                dischargingTime: Math.random() * 28800 + 3600,
+                level: 0.2 + Math.random() * 0.8,
+                onchargingchange: null,
+                onchargingtimechange: null,
+                ondischargingtimechange: null,
+                onlevelchange: null
+            });
+        }
+        
+        // User activation simulation
+        Object.defineProperty(navigator, 'userActivation', {
+            get: () => ({
+                hasBeenActive: true,
+                isActive: Math.random() > 0.2
+            })
+        });
+        
+        console.log('🛡️ Fansale ultra-stealth package loaded');
+        """)
+
+    async def _setup_intelligent_blocking(self):
+        """Setup intelligent resource blocking for speed and stealth"""
+        await self.page.route('**/*', self._handle_request)
+
+    async def _handle_request(self, route):
+        """Intelligent request handling with optimization"""
+        request = route.request
+        url = request.url
+        resource_type = request.resource_type
+        
+        # Always allow Fansale core requests
+        if any(domain in url for domain in ['fansale.it', 'fansale.de', 'fansale.com', 'eventim.de']):
+            await route.continue_()
+            return
+        
+        # Block unnecessary resources for speed
+        if resource_type in ['image', 'media', 'font']:
+            if not any(x in url for x in ['logo', 'icon', 'favicon', 'avatar']):
+                await route.abort()
+                return
+        
+        # Block tracking and analytics (stealth)
+        tracking_patterns = [
+            'google-analytics.com', 'googletagmanager.com', 'doubleclick.net',
+            'facebook.com', 'connect.facebook.net', 'hotjar.com',
+            'mixpanel.com', 'segment.com', 'amplitude.com', 'quantcast.com',
+            'scorecardresearch.com', 'outbrain.com', 'taboola.com'
+        ]
+        
+        if any(pattern in url for pattern in tracking_patterns):
+            await route.abort()
+            return
+        
+        # Block ads
+        ad_patterns = [
+            'googlesyndication.com', 'adsystem.com', 'adsense.com',
+            'amazon-adsystem.com', 'media.net', 'criteo.com'
+        ]
+        
+        if any(pattern in url for pattern in ad_patterns):
+            await route.abort()
+            return
+        
+        # Continue with request
+        await route.continue_()
+
+    async def _configure_advanced_behavior(self):
+        """Configure advanced human-like behavior simulation"""
+        # Set realistic viewport
+        await self.page.set_viewport_size({
+            'width': self.profile.viewport_width,
+            'height': self.profile.viewport_height
+        })
+        
+        # Add behavior tracking
+        await self.page.add_init_script("""
+        // Advanced behavior simulation
+        let behaviorMetrics = {
+            mouseMovements: 0,
+            clicks: 0,
+            scrolls: 0,
+            keystrokes: 0,
+            focusChanges: 0,
+            startTime: Date.now(),
+            lastActivity: Date.now()
+        };
+        
+        // Event listeners for behavior tracking
+        document.addEventListener('mousemove', (e) => {
+            behaviorMetrics.mouseMovements++;
+            behaviorMetrics.lastActivity = Date.now();
+        });
+        
+        document.addEventListener('click', (e) => {
+            behaviorMetrics.clicks++;
+            behaviorMetrics.lastActivity = Date.now();
+        });
+        
+        document.addEventListener('scroll', (e) => {
+            behaviorMetrics.scrolls++;
+            behaviorMetrics.lastActivity = Date.now();
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            behaviorMetrics.keystrokes++;
+            behaviorMetrics.lastActivity = Date.now();
+        });
+        
+        document.addEventListener('focus', () => behaviorMetrics.focusChanges++);
+        document.addEventListener('blur', () => behaviorMetrics.focusChanges++);
+        
+        window.getBehaviorMetrics = () => ({
+            ...behaviorMetrics,
+            sessionDuration: Date.now() - behaviorMetrics.startTime,
+            timeSinceLastActivity: Date.now() - behaviorMetrics.lastActivity
+        });
+        """)
+
+    async def _setup_api_monitoring(self):
+        """Setup API response monitoring for ticket data"""
+        async def handle_response(response):
+            try:
+                url = response.url
+                
+                # Monitor Fansale API endpoints
+                if ('fansale' in url or 'eventim' in url) and response.status == 200:
+                    content_type = response.headers.get('content-type', '')
+                    
+                    if 'application/json' in content_type:
+                        try:
+                            data = await response.json()
+                            await self._process_api_response(url, data)
+                        except Exception as e:
+                            logger.debug(f"Error parsing JSON from {url}: {e}")
+            
+            except Exception as e:
+                logger.debug(f"Error handling response: {e}")
+        
+        self.page.on('response', handle_response)
+
+    async def _process_api_response(self, url: str, data: dict):
+        """Process API responses for ticket data"""
+        try:
+            # Look for offer data in API responses
+            if isinstance(data, dict):
+                # Check for offers array
+                if 'offers' in data:
+                    offers = data['offers']
+                    if isinstance(offers, list):
+                        logger.debug(f"Found {len(offers)} offers in API response")
+                
+                # Check for embedded data
+                if 'data' in data and isinstance(data['data'], dict):
+                    embedded_data = data['data']
+                    if 'offers' in embedded_data:
+                        logger.debug(f"Found embedded offers in API response")
+        
+        except Exception as e:
+            logger.debug(f"Error processing API response: {e}")
+
+    async def check_opportunities(self) -> List[EnhancedTicketOpportunity]:
+        """Check for ticket opportunities using advanced HTML intelligence"""
+        if not self.page:
+            await self.initialize()
+        
+        opportunities = []
+        
+        try:
+            logger.debug(f"Checking Fansale opportunities for {self.event_name}")
+            
+            # Navigate with human-like behavior
+            await self._navigate_with_human_behavior()
+            
+            # Wait for content to load
+            await self._wait_for_dynamic_content()
+            
+            # Multiple extraction strategies
+            opportunities.extend(await self._extract_from_html_structure())
+            opportunities.extend(await self._extract_from_data_attributes())
+            opportunities.extend(await self._extract_from_javascript_variables())
+            
+            # Filter and validate opportunities
+            opportunities = await self._filter_opportunities(opportunities)
+            
+            # Update state
+            self.last_check = datetime.now()
+            
+            if opportunities:
+                logger.critical(f"🚀 FOUND {len(opportunities)} FANSALE OPPORTUNITIES FOR {self.event_name}")
+                
+        except Exception as e:
+            logger.error(f"Error checking Fansale opportunities: {e}")
+            
+            # Recovery attempt
+            try:
+                await self.page.reload(wait_until='networkidle', timeout=15000)
+                await asyncio.sleep(2)
+            except:
+                pass
+        
+        return opportunities
+
+    async def _navigate_with_human_behavior(self):
+        """Navigate with sophisticated human behavior simulation"""
+        # Random pre-navigation delay
+        await asyncio.sleep(random.uniform(0.5, 2.0))
+        
+        # Navigate with realistic timeout
+        await self.page.goto(self.url, wait_until='networkidle', timeout=30000)
+        
+        # Simulate human reading/loading time
+        await asyncio.sleep(random.uniform(2.0, 4.0))
+        
+        # Random mouse movements
+        viewport = await self.page.viewport_size()
+        if viewport:
+            for _ in range(random.randint(2, 5)):
+                x = random.randint(100, viewport['width'] - 100)
+                y = random.randint(100, viewport['height'] - 100)
+                await self.page.mouse.move(x, y, steps=random.randint(5, 15))
+                await asyncio.sleep(random.uniform(0.3, 1.0))
+        
+        # Random scrolling behavior
+        for _ in range(random.randint(1, 3)):
+            scroll_amount = random.randint(200, 800)
+            await self.page.mouse.wheel(0, scroll_amount)
+            await asyncio.sleep(random.uniform(1.0, 2.5))
+
+    async def _wait_for_dynamic_content(self):
+        """Wait for dynamic content with intelligent detection"""
+        try:
+            # Wait for loading indicators to disappear
+            for selector in self.selectors['loading_indicators']:
                 try:
-                    info.sector_variant = variant_extractor(match)
+                    await self.page.wait_for_selector(selector, timeout=2000)
+                    await self.page.wait_for_selector(selector, state='hidden', timeout=10000)
+                    logger.debug(f"Waited for loading indicator: {selector}")
                 except:
                     pass
-                break
-        
-        # Extract entrance
-        entrance_match = ItalianPatterns.ENTRANCE_PATTERN.search(section_text)
-        if entrance_match:
-            info.entrance = entrance_match.group(1)
-        
-        # Extract seat details
-        seat_match = ItalianPatterns.SEAT_PATTERN.search(section_text)
-        if seat_match:
-            info.row = seat_match.group(1)
-            seats_str = seat_match.group(2)
-            info.seats = [s.strip() for s in seats_str.split(",")]
-        
-        return info
-    
-    @staticmethod
-    def matches_criteria(section_info: SectionInfo, desired_sections: List[str], 
-                        strict_mode: bool = False) -> Tuple[bool, float]:
-        """
-        Check if section matches criteria and return match score
-        Returns: (matches, score) where score is 0.0-1.0
-        """
-        if not desired_sections:
-            return True, 1.0
-        
-        best_score = 0.0
-        
-        for desired in desired_sections:
-            desired_lower = desired.lower().strip()
             
-            # Exact match
-            if desired_lower == section_info.normalized_name:
-                return True, 1.0
+            # Wait for offer containers to appear
+            offer_found = False
+            for selector in self.selectors['offer_containers']:
+                try:
+                    await self.page.wait_for_selector(selector, timeout=8000)
+                    offer_found = True
+                    logger.debug(f"Found offers with selector: {selector}")
+                    break
+                except:
+                    continue
             
-            # Sector type match
-            if desired_lower == section_info.sector_type:
-                best_score = max(best_score, 0.8)
-            
-            # Sector + variant match (e.g., "prato a")
-            if section_info.sector_variant:
-                combined = f"{section_info.sector_type} {section_info.sector_variant}".lower()
-                if desired_lower in combined or combined in desired_lower:
-                    return True, 0.95
-            
-            # Partial match
-            if not strict_mode:
-                if desired_lower in section_info.normalized_name:
-                    best_score = max(best_score, 0.7)
-                elif section_info.normalized_name in desired_lower:
-                    best_score = max(best_score, 0.6)
+            if not offer_found:
+                logger.debug("No offer containers found - checking for no tickets message")
                 
-                # Alias matching
-                for base_type, aliases in ItalianPatterns.SECTION_ALIASES.items():
-                    if section_info.sector_type == base_type:
-                        if any(alias in desired_lower for alias in aliases):
-                            best_score = max(best_score, 0.5)
-        
-        return best_score > 0.5, best_score
+                # Check if no tickets available
+                for selector in self.selectors['no_tickets']:
+                    try:
+                        element = await self.page.wait_for_selector(selector, timeout=3000)
+                        if element:
+                            logger.info("No tickets available message detected")
+                            break
+                    except:
+                        continue
+                        
+        except Exception as e:
+            logger.debug(f"Content load wait completed with: {e}")
 
-async def check_fansale_event(
-    page: Page,
-    profile: BrowserProfile,
-    target_cfg: Dict[str, Any],
-    gui_q: Optional[asyncio.Queue] = None
-) -> Optional[List[Dict[str, Any]]]:
-    """
-    Ultra-robust Fansale ticket checking with multi-section support
-    """
-    biometric_config_dict = profile.extra_js_props.get("biometric_profile_config", {})
-    current_biometric_profile_instance = BiometricProfile(**biometric_config_dict)
-    event_url = target_cfg.get("url")
-    if not event_url:
-        log.error("FanSale: Missing URL in target configuration")
-        return None
-
-    event_name = target_cfg.get("event_name", "Unknown Event")
-    profile_name = profile.name
-    
-    log.info(f"FanSale [{event_name}]: Starting check with profile {profile_name}")
-    
-    if gui_q:
-        await gui_q.put(("target_status_update", (event_url, f"Checking (Profile: {profile_name[:15]})", False)))
-
-    try:
-        # Let behavioral simulation handle human-like interactions
-        behavior_intensity = target_cfg.get("human_behavior_intensity", "medium")
-        if behavior_intensity != "none":
-            biometric_config = profile.extra_js_props.get("biometric_profile_config", {})
-            biometric_profile_instance = BiometricProfile(**biometric_config)
-            await simulate_advanced_human_behavior(page, intensity=behavior_intensity, profile=biometric_profile_instance)
+    async def _extract_from_html_structure(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities using sophisticated HTML structure analysis"""
+        opportunities = []
         
-        # Handle cookie consent
-        await _handle_cookie_consent(page, profile_name)
-        
-        # Small stabilization delay
-        await asyncio.sleep(random.uniform(1.5, 2.5))
-        
-        # Check for "no tickets" indicators
-        no_tickets_found = await _check_no_tickets(page, event_name, gui_q, event_url)
-        if no_tickets_found:
-            return None
-        
-        # Extract all ticket listings with enhanced parsing
-        all_listings = await _extract_all_ticket_listings(page, target_cfg, profile_name)
-        
-        if not all_listings:
-            log.info(f"FanSale [{event_name}]: No listings found")
-            if gui_q:
-                await gui_q.put(("target_status_update", (event_url, "No listings", False)))
-            return None
-        
-        # Group listings by section for analysis
-        section_groups = _group_listings_by_section(all_listings)
-        
-        # Log section availability
-        log.info(f"FanSale [{event_name}]: Found tickets in {len(section_groups)} different sections:")
-        for section, listings in section_groups.items():
-            price_range = _get_price_range(listings)
-            log.info(f"  - {section}: {len(listings)} listings, €{price_range['min']:.2f}-€{price_range['max']:.2f}")
-        
-        # Apply intelligent filtering with price consideration
-        hits = await _intelligent_filter_tickets(
-            all_listings, 
-            section_groups,
-            target_cfg, 
-            event_name, 
-            profile_name
-        )
-        
-        if hits:
-            log.warning(f"FanSale HIT [{event_name}]: Found {len(hits)} matching tickets!")
-            # Sort hits by preference score and price
-            hits = _sort_hits_by_preference(hits, target_cfg)
-            
-            if gui_q:
-                best_hit = hits[0]
-                status_msg = f"HIT! {best_hit['section_info'].sector_type} €{best_hit['price']:.2f}"
-                await gui_q.put(("target_status_update", (event_url, status_msg, True)))
-            return hits
-        else:
-            log.info(f"FanSale [{event_name}]: No matching tickets found")
-            if gui_q:
-                await gui_q.put(("target_status_update", (event_url, "Nessuna corrispondenza", False)))
-            return None
-            
-    except BlockedError:
-        raise
-    except Exception as e:
-        log.error(f"FanSale [{event_name}]: Error during check: {e}", exc_info=True)
-        raise BlockedError(f"FanSale check error: {str(e)[:100]}") from e
-
-async def _check_no_tickets(page: Page, event_name: str, gui_q: Optional[asyncio.Queue], event_url: str) -> bool:
-    """Check for no tickets indicators"""
-    for selector in FansaleSelectors.NO_TICKETS_INDICATORS:
         try:
-            if await page.locator(selector).is_visible(timeout=1000):
-                log.info(f"FanSale [{event_name}]: No tickets indicator found: {selector}")
-                if gui_q:
-                    await gui_q.put(("target_status_update", (event_url, "Nessun biglietto", False)))
-                return True
-        except:
-            pass
-    return False
-
-async def monitor(*args, **kwargs):
-    return []
-
-async def _extract_all_ticket_listings(
-    page: Page, 
-    target_cfg: Dict[str, Any],
-    profile_name: str
-) -> List[Dict[str, Any]]:
-    """Extract all ticket listings with enhanced section parsing"""
-    listings = []
-    
-    try:
-        # Wait for listings
-        await page.wait_for_selector(FansaleSelectors.TICKET_CARD, timeout=10000)
-        
-        # Get all ticket cards
-        ticket_cards = await page.locator(FansaleSelectors.TICKET_CARD).all()
-        
-        log.info(f"FanSale [{profile_name}]: Found {len(ticket_cards)} ticket cards")
-        
-        for i, card in enumerate(ticket_cards):
-            try:
-                # Extract comprehensive ticket details
-                offer_id = await card.get_attribute("data-offer-id")
-                
-                # Get all text content for section parsing
-                all_text = await card.inner_text()
-                
-                # Try multiple methods to extract section
-                section_text = await _extract_section_text(card, all_text)
-                
-                # Parse section into structured info
-                section_info = TicketMatcher.parse_section(section_text)
-                
-                # Get price
-                price_elem = card.locator(FansaleSelectors.TICKET_PRICE).first
-                price_text = await price_elem.inner_text() if await price_elem.count() else ""
-                price_value = _parse_italian_price(price_text)
-                
-                # Get quantity if available
-                quantity = await _extract_quantity(card, all_text)
-                
-                # Check trust indicators
-                has_fair_deal = await card.locator(FansaleSelectors.FAIR_DEAL_ICON).count() > 0
-                has_ticketcheck = await card.locator(FansaleSelectors.TICKETCHECK_ICON).count() > 0
-                
-                listing = {
-                    "offer_id": offer_id,
-                    "section": section_text.strip(),
-                    "section_info": section_info,
-                    "price_str": price_text,
-                    "price": price_value,
-                    "quantity": quantity,
-                    "trust_indicators": {
-                        "fair_deal": has_fair_deal,
-                        "ticketcheck": has_ticketcheck
-                    },
-                    "card_index": i,
-                    "platform_specific_data": {
-                        "offer_id": offer_id,
-                        "has_trust_badges": has_fair_deal or has_ticketcheck,
-                        "full_text": all_text[:200]  # Store for debugging
-                    }
-                }
-                
-                listings.append(listing)
-                
-                # Natural delay between extractions
-                if i < len(ticket_cards) - 1:
-                    await asyncio.sleep(random.uniform(0.05, 0.15))
+            # Find all offer containers
+            offer_containers = []
+            for selector in self.selectors['offer_containers']:
+                try:
+                    containers = await self.page.locator(selector).all()
+                    if containers:
+                        offer_containers = containers
+                        logger.debug(f"Found {len(containers)} offers with selector: {selector}")
+                        break
+                except Exception as e:
+                    logger.debug(f"Selector {selector} failed: {e}")
+                    continue
+            
+            if not offer_containers:
+                logger.debug("No offer containers found in HTML structure")
+                return opportunities
+            
+            logger.info(f"Processing {len(offer_containers)} offer containers")
+            
+            for i, container in enumerate(offer_containers):
+                try:
+                    # Extract offer data with multiple fallback strategies
+                    offer_data = await self._extract_offer_data(container, i)
                     
-            except Exception as e:
-                log.warning(f"FanSale: Error extracting listing {i}: {e}")
-                continue
-                
-    except PlaywrightError as e:
-        log.warning(f"FanSale: Error waiting for listings: {e}")
-    
-    return listings
-
-async def _extract_section_text(card: Locator, full_text: str) -> str:
-    """Try multiple methods to extract section information"""
-    # Method 1: Look for section-specific elements
-    section_patterns = [
-        "Ingr\\.",
-        "Settore",
-        "Anello",
-        "Prato",
-        "Tribuna",
-        "Parterre"
-    ]
-    
-    for pattern in section_patterns:
-        elem = card.locator(f"text=/{pattern}/i").first
-        if await elem.count():
-            parent = card.locator("div.EventEntryRow").filter(has=elem).first
-            if await parent.count():
-                return await parent.inner_text()
-    
-    # Method 2: Extract from full text using regex
-    section_line_pattern = re.compile(r"((?:Ingr\.|Settore|Prato|Anello|Tribuna).*?)(?:\n|$)", re.IGNORECASE)
-    match = section_line_pattern.search(full_text)
-    if match:
-        return match.group(1)
-    
-    # Method 3: Look for seat description
-    seat_desc = card.locator(FansaleSelectors.SEAT_DESCRIPTION).first
-    if await seat_desc.count():
-        return await seat_desc.inner_text()
-    
-    return "Unknown Section"
-
-async def _extract_quantity(card: Locator, full_text: str) -> int:
-    """Extract ticket quantity from card"""
-    # Look for quantity patterns
-    qty_patterns = [
-        r"(\d+)\s*bigliett",
-        r"quantità[:\s]+(\d+)",
-        r"qty[:\s]+(\d+)"
-    ]
-    
-    for pattern in qty_patterns:
-        match = re.search(pattern, full_text, re.IGNORECASE)
-        if match:
-            return int(match.group(1))
-    
-    return 1  # Default to 1 if not found
-
-def _group_listings_by_section(listings: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
-    """Group listings by normalized section"""
-    groups = defaultdict(list)
-    
-    for listing in listings:
-        section_info = listing["section_info"]
-        # Create a grouping key
-        if section_info.sector_variant:
-            key = f"{section_info.sector_type}_{section_info.sector_variant}"
-        else:
-            key = section_info.sector_type
+                    if offer_data and self._validate_offer_data(offer_data):
+                        opportunity = self._create_opportunity_from_data(offer_data, i)
+                        if opportunity:
+                            opportunities.append(opportunity)
+                            logger.warning(f"🎯 FANSALE HTML HIT: {offer_data['section']} - €{offer_data['price']}")
+                    
+                except Exception as e:
+                    logger.debug(f"Error processing offer container {i}: {e}")
+                    continue
+                    
+        except Exception as e:
+            logger.error(f"Error in HTML structure extraction: {e}")
         
-        groups[key].append(listing)
-    
-    return dict(groups)
+        return opportunities
 
-def _get_price_range(listings: List[Dict[str, Any]]) -> Dict[str, float]:
-    """Get min and max prices from listings"""
-    prices = [l["price"] for l in listings if l["price"] is not None]
-    if not prices:
-        return {"min": 0.0, "max": 0.0}
-    return {"min": min(prices), "max": max(prices)}
-
-async def _intelligent_filter_tickets(
-    all_listings: List[Dict[str, Any]],
-    section_groups: Dict[str, List[Dict[str, Any]]],
-    target_cfg: Dict[str, Any],
-    event_name: str,
-    profile_name: str
-) -> List[Dict[str, Any]]:
-    """Apply intelligent filtering with section and price consideration"""
-    desired_sections = target_cfg.get("desired_sections", [])
-    max_price = target_cfg.get("max_price_per_ticket")
-    min_price = target_cfg.get("min_price_per_ticket")
-    prefer_trust_badges = target_cfg.get("prefer_trust_badges", True)
-    strict_section_match = target_cfg.get("strict_section_match", False)
-    
-    hits = []
-    
-    for listing in all_listings:
-        # Price filtering
-        if max_price and listing["price"] and listing["price"] > max_price:
-            continue
-        if min_price and listing["price"] and listing["price"] < min_price:
-            continue
-        
-        # Section matching with score
-        matches, match_score = TicketMatcher.matches_criteria(
-            listing["section_info"], 
-            desired_sections, 
-            strict_section_match
-        )
-        
-        if matches:
-            # Add match score to listing
-            listing["match_score"] = match_score
-            
-            # Bonus for trust badges
-            if prefer_trust_badges and listing["trust_indicators"]["fair_deal"]:
-                listing["match_score"] += 0.1
-            
-            # Create detailed message
-            listing["message"] = f"{listing['section']} - {listing['price_str']}"
-            if listing["quantity"] > 1:
-                listing["message"] += f" ({listing['quantity']} tickets)"
-            if listing["offer_id"]:
-                listing["message"] += f" [ID: {listing['offer_id']}]"
-            
-            hits.append(listing)
-            log.warning(f"FanSale HIT [{event_name}]: {listing['message']} (Score: {match_score:.2f})")
-    
-    return hits
-
-def _sort_hits_by_preference(hits: List[Dict[str, Any]], target_cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Sort hits by preference (match score, trust, price)"""
-    price_weight = target_cfg.get("price_importance", 0.3)  # 0.0-1.0
-    
-    def sort_key(hit):
-        score = hit["match_score"]
-        
-        # Price component (lower is better)
-        if hit["price"]:
-            # Normalize price to 0-1 range (assuming max €500)
-            price_score = 1.0 - (hit["price"] / 500.0)
-            score += price_score * price_weight
-        
-        # Trust badge bonus
-        if hit["trust_indicators"]["fair_deal"]:
-            score += 0.15
-        
-        return -score  # Negative for descending order
-    
-    return sorted(hits, key=sort_key)
-
-def _parse_italian_price(price_str: str) -> Optional[float]:
-    """Parse Italian price format (€ 139,15)"""
-    if not price_str:
-        return None
-    
-    match = ItalianPatterns.PRICE_REGEX.search(price_str)
-    if match:
+    async def _extract_offer_data(self, container, index: int) -> Optional[Dict[str, Any]]:
+        """Extract comprehensive offer data from container"""
         try:
-            # Italian format uses comma for decimals
-            price = match.group(1).replace(".", "").replace(",", ".")
-            return float(price)
-        except ValueError:
-            log.warning(f"Could not parse price: {price_str}")
-    return None
-
-async def _handle_cookie_consent(page: Page, profile_name: str) -> bool:
-    """Handle cookie consent banners"""
-    for selector in FansaleSelectors.COOKIE_ACCEPT:
-        try:
-            button = page.locator(selector).first
-            if await button.is_visible(timeout=2000):
-                log.debug(f"FanSale [{profile_name}]: Found cookie button: {selector}")
-                await button.click(delay=random.uniform(100, 300))
-                await asyncio.sleep(random.uniform(1.0, 2.0))
-                return True
-        except:
-            continue
-    return False
-
-async def click_specific_ticket_listing_and_proceed(
-    page: Page,
-    profile: BrowserProfile,
-    hit_info: Dict[str, Any],
-    target_cfg: Dict[str, Any]
-) -> bool:
-    """
-    Enhanced purchase flow with intelligent ticket selection
-    """
-    event_name = hit_info.get("event_name", "Unknown")
-    offer_id = hit_info.get("offer_id") or hit_info.get("platform_specific_data", {}).get("offer_id")
-    
-    if not offer_id:
-        log.error(f"FanSale Purchase [{event_name}]: No offer_id found")
-        return False
-    
-    section_info = hit_info.get("section_info")
-    log.info(f"FanSale Purchase [{event_name}]: Attempting to purchase {section_info.full_name} for €{hit_info['price']:.2f}")
-    
-    try:
-        # Find and click the specific ticket card
-        ticket_selector = f"{FansaleSelectors.TICKET_CARD}[data-offer-id='{offer_id}']"
-        ticket_card = page.locator(ticket_selector).first
-        
-        if not await ticket_card.count():
-            log.error(f"FanSale Purchase [{event_name}]: Ticket card not found for offer {offer_id}")
-            # Try to find it by section text as fallback
-            fallback_card = await _find_ticket_by_section(page, section_info)
-            if fallback_card:
-                ticket_card = fallback_card
-            else:
-                return False
-        
-        # Ensure card is in viewport
-        await ticket_card.scroll_into_view_if_needed()
-        await asyncio.sleep(random.uniform(0.3, 0.6))
-        
-        # Click with natural movement
-        await ticket_card.hover()
-        await asyncio.sleep(random.uniform(0.2, 0.4))
-        await ticket_card.click()
-        
-        # Wait for detail view
-        try:
-            await page.wait_for_selector(FansaleSelectors.DETAIL_CONTAINER, timeout=10000)
-        except:
-            log.error(f"FanSale Purchase [{event_name}]: Detail view did not load")
-            return False
-        
-        # Check if offer is still available
-        if await page.locator(FansaleSelectors.OFFER_ENDED).is_visible(timeout=2000):
-            log.warning(f"FanSale Purchase [{event_name}]: Offer has ended (L'offerta è terminata)")
-            return False
-        
-        # Smart ticket selection based on quantity preferences
-        selected = await _smart_ticket_selection(page, target_cfg, event_name)
-        if not selected:
-            return False
-        
-        # Check for reCAPTCHA
-        recaptcha_present = await page.locator(FansaleSelectors.RECAPTCHA).count() > 0
-        if recaptcha_present:
-            log.warning(f"FanSale Purchase [{event_name}]: reCAPTCHA detected - manual intervention required")
-            # Could integrate with captcha solving service here
+            offer_data = {
+                'container_index': index,
+                'price': 0.0,
+                'currency': '€',
+                'section': 'Unknown',
+                'quantity': 1,
+                'offer_type': 'Unknown',
+                'is_fair_deal': False,
+                'is_certified': False,
+                'offer_id': None,
+                'buy_url': None
+            }
             
-        # Find and click purchase button
-        purchase_success = await _complete_purchase(page, event_name)
-        
-        if purchase_success:
-            log.info(f"FanSale Purchase [{event_name}]: Purchase initiated - pausing for manual completion")
-            await page.pause()
-            return True
-            
-        return False
-            
-    except Exception as e:
-        log.error(f"FanSale Purchase [{event_name}]: Error during purchase flow: {e}", exc_info=True)
-        return False
-
-async def _find_ticket_by_section(page: Page, section_info: SectionInfo) -> Optional[Locator]:
-    """Fallback method to find ticket by section text"""
-    all_cards = await page.locator(FansaleSelectors.TICKET_CARD).all()
-    
-    for card in all_cards:
-        card_text = await card.inner_text()
-        if section_info.full_name in card_text:
-            return card
-    
-    return None
-
-async def _smart_ticket_selection(page: Page, target_cfg: Dict[str, Any], event_name: str) -> bool:
-    """Intelligently select tickets based on preferences"""
-    checkboxes = await page.locator(FansaleSelectors.TICKET_CHECKBOXES).all()
-    
-    if not checkboxes:
-        log.error(f"FanSale Purchase [{event_name}]: No ticket checkboxes found")
-        return False
-    
-    desired_quantity = target_cfg.get("desired_ticket_quantity", len(checkboxes))
-    max_quantity = target_cfg.get("max_ticket_quantity", 4)
-    
-    # Determine how many to select
-    to_select = min(len(checkboxes), desired_quantity, max_quantity)
-    
-    log.info(f"FanSale Purchase [{event_name}]: Selecting {to_select} of {len(checkboxes)} available tickets")
-    
-    # Select tickets
-    selected_count = 0
-    for i, checkbox in enumerate(checkboxes):
-        if selected_count >= to_select:
-            break
-            
-        if not await checkbox.is_checked():
-            await checkbox.check()
-            selected_count += 1
-            
-            # Natural delay between selections
-            if selected_count < to_select:
-                await asyncio.sleep(random.uniform(0.2, 0.4))
-    
-    return selected_count > 0
-
-async def _complete_purchase(page: Page, event_name: str) -> bool:
-    """Complete the purchase process"""
-    # Try multiple selectors for purchase button
-    purchase_selectors = [
-        FansaleSelectors.SUBMIT_BUTTON,
-        "button:has-text('Acquista')",
-        "button:has-text('Procedi')",
-        "input[type='submit']",
-        "button[type='submit']"
-    ]
-    
-    for selector in purchase_selectors:
-        button = page.locator(selector).first
-        if await button.count() and await button.is_visible():
-            log.warning(f"FanSale Purchase [{event_name}]: Clicking purchase button...")
-            await button.click()
-            
-            # Wait for navigation or response
+            # Extract offer ID from data attributes
             try:
-                await page.wait_for_load_state("networkidle", timeout=10000)
+                offer_id_attr = await container.get_attribute('data-offer-id')
+                if offer_id_attr:
+                    offer_data['offer_id'] = offer_id_attr
             except:
                 pass
             
-            return True
-    
-    # If no button found, try form submission
-    try:
-        await page.evaluate("document.getElementById('detailCSectionForm').submit()")
-        return True
-    except:
-        log.error(f"FanSale Purchase [{event_name}]: Could not find or click purchase button")
-        return False
+            # Extract price with multiple strategies
+            price_extracted = False
+            for price_selector in self.selectors['price_elements']:
+                try:
+                    price_element = container.locator(price_selector).first
+                    if await price_element.count():
+                        price_text = await price_element.inner_text()
+                        # Parse price (handle Italian format with comma)
+                        price_match = re.search(r'(\d+(?:[.,]\d+)?)', price_text.replace('.', '').replace(',', '.'))
+                        if price_match:
+                            offer_data['price'] = float(price_match.group(1))
+                            price_extracted = True
+                            break
+                except Exception as e:
+                    logger.debug(f"Price extraction failed for {price_selector}: {e}")
+                    continue
+            
+            if not price_extracted:
+                logger.debug(f"Could not extract price for offer {index}")
+                return None
 
-# Additional analysis function for section availability patterns
-async def analyze_fansale_availability(
-    page: Page,
-    target_cfg: Dict[str, Any]
-) -> Dict[str, Any]:
-    """Comprehensive analysis of ticket availability by section"""
-    
-    all_listings = await _extract_all_ticket_listings(page, target_cfg, "analysis")
-    section_groups = _group_listings_by_section(all_listings)
-    
-    analysis = {
-        "timestamp": datetime.now().isoformat(),
-        "total_listings": len(all_listings),
-        "sections": {},
-        "price_distribution": {
-            "overall": {"min": float('inf'), "max": 0, "avg": 0},
-            "by_section": {}
-        },
-        "trust_badge_stats": {
-            "fair_deal_count": sum(1 for l in all_listings if l["trust_indicators"]["fair_deal"]),
-            "ticketcheck_count": sum(1 for l in all_listings if l["trust_indicators"]["ticketcheck"])
-        }
-    }
-    
-    # Analyze each section
-    for section_key, listings in section_groups.items():
-        prices = [l["price"] for l in listings if l["price"]]
+            # Extract currency
+            for currency_selector in self.selectors['currency_elements']:
+                try:
+                    currency_element = container.locator(currency_selector).first
+                    if await currency_element.count():
+                        currency_text = await currency_element.inner_text()
+                        if currency_text.strip():
+                            offer_data['currency'] = currency_text.strip()
+                            break
+                except:
+                    continue
+
+            # Extract section/seat description
+            for section_selector in self.selectors['section_elements']:
+                try:
+                    section_element = container.locator(section_selector).first
+                    if await section_element.count():
+                        section_text = await section_element.inner_text()
+                        if section_text.strip():
+                            offer_data['section'] = section_text.strip()
+                            break
+                except:
+                    continue
+
+            # Extract quantity
+            for quantity_selector in self.selectors['quantity_elements']:
+                try:
+                    quantity_element = container.locator(quantity_selector).first
+                    if await quantity_element.count():
+                        quantity_text = await quantity_element.inner_text()
+                        quantity_match = re.search(r'(\d+)', quantity_text)
+                        if quantity_match:
+                            offer_data['quantity'] = int(quantity_match.group(1))
+                            break
+                except:
+                    continue
+
+            # Extract offer type
+            for type_selector in self.selectors['offer_type_elements']:
+                try:
+                    type_element = container.locator(type_selector).first
+                    if await type_element.count():
+                        type_text = await type_element.inner_text()
+                        if type_text.strip():
+                            offer_data['offer_type'] = type_text.strip()
+                            break
+                except:
+                    continue
+
+            # Check Fair Deal status
+            for fair_deal_selector in self.selectors['fair_deal_indicator']:
+                try:
+                    fair_deal_element = container.locator(fair_deal_selector).first
+                    if await fair_deal_element.count():
+                        offer_data['is_fair_deal'] = True
+                        break
+                except:
+                    continue
+
+            # Check certified status
+            for certified_selector in self.selectors['certified_indicator']:
+                try:
+                    certified_element = container.locator(certified_selector).first
+                    if await certified_element.count():
+                        offer_data['is_certified'] = True
+                        break
+                except:
+                    continue
+
+            # Extract buy URL
+            for buy_selector in self.selectors['buy_button']:
+                try:
+                    buy_element = container.locator(buy_selector).first
+                    if await buy_element.count():
+                        href = await buy_element.get_attribute('href')
+                        if href:
+                            # Convert relative URL to absolute
+                            offer_data['buy_url'] = urljoin(self.page.url, href)
+                            break
+                except:
+                    continue
+
+            return offer_data
+
+        except Exception as e:
+            logger.debug(f"Error extracting offer data from container {index}: {e}")
+            return None
+
+    async def _extract_from_data_attributes(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities from data attributes"""
+        opportunities = []
         
-        section_analysis = {
-            "count": len(listings),
-            "example_full_name": listings[0]["section"] if listings else "",
-            "sector_type": listings[0]["section_info"].sector_type if listings else "unknown",
-            "price_range": _get_price_range(listings),
-            "avg_price": sum(prices) / len(prices) if prices else 0,
-            "quantities_available": sum(l["quantity"] for l in listings),
-            "trust_badges": sum(1 for l in listings if l["trust_indicators"]["fair_deal"])
-        }
-        
-        analysis["sections"][section_key] = section_analysis
-        
-        # Update price distribution
-        if prices:
-            analysis["price_distribution"]["overall"]["min"] = min(
-                analysis["price_distribution"]["overall"]["min"], 
-                min(prices)
-            )
-            analysis["price_distribution"]["overall"]["max"] = max(
-                analysis["price_distribution"]["overall"]["max"], 
-                max(prices)
-            )
-            analysis["price_distribution"]["by_section"][section_key] = {
-                "min": min(prices),
-                "max": max(prices),
-                "avg": section_analysis["avg_price"]
+        try:
+            # Look for elements with data attributes
+            data_elements = await self.page.evaluate("""
+            () => {
+                const elements = document.querySelectorAll('[data-offer-id], [data-price], [data-splitting-possibilities]');
+                const data = [];
+                
+                elements.forEach((element, index) => {
+                    const rect = element.getBoundingClientRect();
+                    
+                    // Only process visible elements
+                    if (rect.width > 0 && rect.height > 0) {
+                        const attributes = {};
+                        
+                        // Extract all data attributes
+                        for (let attr of element.attributes) {
+                            if (attr.name.startsWith('data-')) {
+                                attributes[attr.name] = attr.value;
+                            }
+                        }
+                        
+                        // Extract text content
+                        const textContent = element.textContent || '';
+                        
+                        data.push({
+                            index: index,
+                            attributes: attributes,
+                            textContent: textContent.substring(0, 500),
+                            className: element.className
+                        });
+                    }
+                });
+                
+                return data;
             }
+            """)
+            
+            for element_data in data_elements:
+                try:
+                    attrs = element_data['attributes']
+                    
+                    # Extract price from data attributes
+                    price = 0.0
+                    if 'data-splitting-possibility-prices' in attrs:
+                        price_str = attrs['data-splitting-possibility-prices']
+                        try:
+                            price = float(price_str.replace(',', '.'))
+                        except:
+                            continue
+                    
+                    if price <= 0 or price > self.max_price:
+                        continue
+                    
+                    # Extract section from aria label or text content
+                    section = "Unknown Section"
+                    if 'data-seatdescriptionforarialabel' in attrs:
+                        section = attrs['data-seatdescriptionforarialabel']
+                    elif element_data['textContent']:
+                        # Try to extract section from text content
+                        text = element_data['textContent']
+                        # Look for patterns like "INGRESSO 8 | Fila 9 | Posto 31"
+                        section_match = re.search(r'(INGRESSO\s+\d+|Settore\s+\w+|[A-Z]+\s+\d+)', text)
+                        if section_match:
+                            section = section_match.group(1)
+                    
+                    # Check Fair Deal status
+                    is_fair_deal = attrs.get('data-fairdeal') == 'true'
+                    is_certified = attrs.get('data-certified') == 'true'
+                    
+                    # Apply filters
+                    if self.fair_deal_only and not is_fair_deal:
+                        continue
+                    
+                    if self.certified_only and not is_certified:
+                        continue
+                    
+                    if self.desired_sections:
+                        section_lower = section.lower()
+                        if not any(desired.lower() in section_lower for desired in self.desired_sections):
+                            continue
+                    
+                    # Create opportunity
+                    offer_id = attrs.get('data-offer-id', f'fansale_data_{int(time.time())}_{element_data["index"]}')
+                    
+                    if offer_id in self.detected_offers:
+                        continue
+                    
+                    self.detected_offers.add(offer_id)
+                    
+                    opportunity = EnhancedTicketOpportunity(
+                        id=offer_id,
+                        platform=PlatformType.FANSALE,
+                        event_name=self.event_name,
+                        url=self.url,
+                        offer_url=self.page.url,
+                        section=section,
+                        price=price,
+                        quantity=int(attrs.get('data-splitting-possibilities', 1)),
+                        detected_at=datetime.now(),
+                        priority=self.priority,
+                        confidence_score=0.93,
+                        detection_method='data_attributes',
+                        metadata={
+                            'is_fair_deal': is_fair_deal,
+                            'is_certified': is_certified,
+                            'offer_type': attrs.get('data-offertype', 'Unknown'),
+                            'element_index': element_data['index']
+                        }
+                    )
+                    
+                    opportunities.append(opportunity)
+                    logger.warning(f"🎯 FANSALE DATA ATTR HIT: {section} - €{price}")
+                    
+                except Exception as e:
+                    logger.debug(f"Error processing data element: {e}")
+                    continue
+                    
+        except Exception as e:
+            logger.error(f"Error in data attributes extraction: {e}")
+        
+        return opportunities
+
+    async def _extract_from_javascript_variables(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities from JavaScript variables"""
+        opportunities = []
+        
+        try:
+            # Look for JavaScript variables containing offer data
+            js_data = await self.page.evaluate("""
+            () => {
+                const data = [];
+                
+                // Check common variable names
+                const varNames = [
+                    'eventData', 'offerData', 'ticketData', 'fansaleData',
+                    'pageData', 'initialData', 'appData'
+                ];
+                
+                varNames.forEach(varName => {
+                    if (window[varName]) {
+                        try {
+                            data.push({
+                                source: varName,
+                                data: window[varName]
+                            });
+                        } catch (e) {}
+                    }
+                });
+                
+                // Look for data in script tags
+                const scripts = document.querySelectorAll('script:not([src])');
+                scripts.forEach((script, index) => {
+                    const content = script.textContent;
+                    
+                    // Look for variable assignments with offer data
+                    const patterns = [
+                        /var\s+\w+\s*=\s*(\{[^}]*offer[^}]*\})/gi,
+                        /const\s+\w+\s*=\s*(\{[^}]*price[^}]*\})/gi,
+                        /let\s+\w+\s*=\s*(\{[^}]*ticket[^}]*\})/gi
+                    ];
+                    
+                    patterns.forEach(pattern => {
+                        const matches = content.match(pattern);
+                        if (matches) {
+                            matches.forEach(match => {
+                                try {
+                                    const jsonMatch = match.match(/\{.*\}/);
+                                    if (jsonMatch) {
+                                        const json = JSON.parse(jsonMatch[0]);
+                                        data.push({
+                                            source: `script_${index}`,
+                                            data: json
+                                        });
+                                    }
+                                } catch (e) {}
+                            });
+                        }
+                    });
+                });
+                
+                return data;
+            }
+            """)
+            
+            for js_item in js_data:
+                try:
+                    source = js_item['source']
+                    data = js_item['data']
+                    
+                    await self._process_js_data(data, source, opportunities)
+                    
+                except Exception as e:
+                    logger.debug(f"Error processing JS data: {e}")
+                    
+        except Exception as e:
+            logger.error(f"Error in JavaScript variables extraction: {e}")
+        
+        return opportunities
+
+    async def _process_js_data(self, data: Any, source: str, opportunities: List):
+        """Process JavaScript data recursively"""
+        try:
+            if isinstance(data, dict):
+                # Look for offer-like structures
+                if self._is_offer_data(data):
+                    opportunity = self._create_opportunity_from_js_data(data, source)
+                    if opportunity:
+                        opportunities.append(opportunity)
+                        logger.warning(f"🎯 FANSALE JS HIT: {opportunity.section} - €{opportunity.price}")
+                
+                # Recursively process nested objects
+                for key, value in data.items():
+                    if isinstance(value, (dict, list)):
+                        await self._process_js_data(value, f"{source}.{key}", opportunities)
+            
+            elif isinstance(data, list):
+                for i, item in enumerate(data):
+                    await self._process_js_data(item, f"{source}[{i}]", opportunities)
+                    
+        except Exception as e:
+            logger.debug(f"Error processing JS data recursively: {e}")
+
+    def _is_offer_data(self, data: dict) -> bool:
+        """Check if data structure looks like an offer"""
+        offer_indicators = [
+            'price', 'cost', 'amount', 'section', 'seat', 'offer',
+            'ticket', 'quantity', 'available', 'fairDeal'
+        ]
+        
+        keys = [k.lower() for k in data.keys()]
+        return any(indicator in ' '.join(keys) for indicator in offer_indicators)
+
+    def _create_opportunity_from_js_data(self, data: dict, source: str) -> Optional[EnhancedTicketOpportunity]:
+        """Create opportunity from JavaScript data"""
+        try:
+            # Extract price
+            price = 0.0
+            price_keys = ['price', 'cost', 'amount', 'value']
+            for key in price_keys:
+                if key in data:
+                    try:
+                        price = float(data[key])
+                        break
+                    except:
+                        continue
+            
+            if price <= 0 or price > self.max_price:
+                return None
+            
+            # Extract section
+            section = "JavaScript Data"
+            section_keys = ['section', 'sector', 'area', 'seat', 'location']
+            for key in section_keys:
+                if key in data and isinstance(data[key], str):
+                    section = data[key]
+                    break
+            
+            # Extract other metadata
+            quantity = int(data.get('quantity', data.get('qty', 1)))
+            is_fair_deal = data.get('fairDeal', data.get('fair_deal', False))
+            is_certified = data.get('certified', data.get('ticketcheck', False))
+            
+            # Apply filters
+            if self.fair_deal_only and not is_fair_deal:
+                return None
+            
+            if self.certified_only and not is_certified:
+                return None
+            
+            if self.desired_sections:
+                section_lower = section.lower()
+                if not any(desired.lower() in section_lower for desired in self.desired_sections):
+                    return None
+            
+            # Create opportunity
+            opportunity_id = f"fansale_js_{hash(str(data))}_{int(time.time())}"
+            
+            if opportunity_id in self.detected_offers:
+                return None
+            
+            self.detected_offers.add(opportunity_id)
+            
+            return EnhancedTicketOpportunity(
+                id=opportunity_id,
+                platform=PlatformType.FANSALE,
+                event_name=self.event_name,
+                url=self.url,
+                offer_url=self.page.url,
+                section=section,
+                price=price,
+                quantity=quantity,
+                detected_at=datetime.now(),
+                priority=self.priority,
+                confidence_score=0.85,
+                detection_method='javascript_variables',
+                metadata={
+                    'source': source,
+                    'is_fair_deal': is_fair_deal,
+                    'is_certified': is_certified,
+                    'raw_data': str(data)[:200]
+                }
+            )
+            
+        except Exception as e:
+            logger.debug(f"Error creating opportunity from JS data: {e}")
+            return None
+
+    async def _filter_opportunities(self, opportunities: List[EnhancedTicketOpportunity]) -> List[EnhancedTicketOpportunity]:
+        """Filter and deduplicate opportunities"""
+        try:
+            if not opportunities:
+                return opportunities
+            
+            # Remove duplicates based on fingerprint
+            seen_fingerprints = set()
+            filtered = []
+            
+            for opp in opportunities:
+                if opp.fingerprint not in seen_fingerprints:
+                    seen_fingerprints.add(opp.fingerprint)
+                    filtered.append(opp)
+            
+            # Sort by confidence score and price
+            filtered.sort(key=lambda x: (x.confidence_score, -x.price), reverse=True)
+            
+            logger.info(f"Filtered {len(opportunities)} -> {len(filtered)} opportunities")
+            
+            return filtered
+            
+        except Exception as e:
+            logger.error(f"Error filtering opportunities: {e}")
+            return opportunities
+
+    async def attempt_purchase(self, opportunity: EnhancedTicketOpportunity) -> bool:
+        """Attempt to purchase Fansale ticket with advanced automation"""
+        if not self.page:
+            logger.error("Cannot attempt purchase: no page available")
+            return False
+        
+        try:
+            logger.critical(f"🚀 ATTEMPTING FANSALE PURCHASE: {opportunity.section} - €{opportunity.price}")
+            
+            # Navigate to offer URL if different
+            if opportunity.offer_url != self.page.url:
+                await self.page.goto(opportunity.offer_url, wait_until='networkidle', timeout=20000)
+            
+            # Human-like delay before interaction
+            await asyncio.sleep(random.uniform(1.5, 3.0))
+            
+            # Look for buy buttons with multiple strategies
+            purchase_success = False
+            
+            # Strategy 1: Click direct buy button
+            buy_selectors = [
+                '.Button-inOfferEntryList', '.js-Button-inOfferEntryList',
+                'a[role="button"][data-track]', '.purchase-button',
+                'button:text("Acquista")', 'button:text("Buy")',
+                '.buy-btn', '.acquista-btn'
+            ]
+            
+            for selector in buy_selectors:
+                try:
+                    button = self.page.locator(selector).first
+                    if await button.count() and await button.is_visible():
+                        # Scroll to button
+                        await button.scroll_into_view_if_needed()
+                        await asyncio.sleep(random.uniform(0.5, 1.0))
+                        
+                        # Click with realistic timing
+                        await button.click()
+                        logger.info(f"Clicked Fansale buy button: {selector}")
+                        
+                        # Wait for navigation/response
+                        await self.page.wait_for_load_state('networkidle', timeout=15000)
+                        
+                        purchase_success = await self._verify_fansale_purchase()
+                        if purchase_success:
+                            break
+                        
+                except Exception as e:
+                    logger.debug(f"Failed to click {selector}: {e}")
+                    continue
+            
+            # Strategy 2: Try offer container click if direct button failed
+            if not purchase_success:
+                try:
+                    # Look for clickable offer containers
+                    container_selectors = [
+                        f'[data-offer-id="{opportunity.metadata.get("original_offer_id")}"]',
+                        '.EventEntry.js-EventEntry.EventEntry-isClickable',
+                        '.offer-container.clickable'
+                    ]
+                    
+                    for selector in container_selectors:
+                        try:
+                            container = self.page.locator(selector).first
+                            if await container.count() and await container.is_visible():
+                                await container.click()
+                                await self.page.wait_for_load_state('networkidle', timeout=10000)
+                                
+                                purchase_success = await self._verify_fansale_purchase()
+                                if purchase_success:
+                                    break
+                                    
+                        except Exception as e:
+                            logger.debug(f"Container click failed for {selector}: {e}")
+                            continue
+                            
+                except Exception as e:
+                    logger.debug(f"Container click strategy failed: {e}")
+            
+            if purchase_success:
+                logger.critical(f"✅ FANSALE PURCHASE INITIATED: {opportunity.section}")
+            else:
+                logger.warning(f"❌ Fansale purchase attempt unclear: {opportunity.section}")
+            
+            return purchase_success
+            
+        except Exception as e:
+            logger.error(f"Fansale purchase attempt failed: {e}")
+            return False
+
+    async def _verify_fansale_purchase(self) -> bool:
+        """Verify if Fansale purchase process was initiated"""
+        try:
+            # Fansale-specific success indicators
+            success_indicators = [
+                'text=Carrello', 'text=Cart', 'text=Checkout', 'text=Warenkorb',
+                'text=Pagamento', 'text=Payment', 'text=Bezahlung',
+                '.checkout-page', '.cart-page', '.payment-step',
+                '[data-step="payment"]', '[data-step="checkout"]'
+            ]
+            
+            for indicator in success_indicators:
+                try:
+                    if await self.page.locator(indicator).count() > 0:
+                        logger.info(f"Fansale purchase indicator found: {indicator}")
+                        return True
+                except:
+                    continue
+            
+            # Check URL for purchase flow
+            current_url = self.page.url.lower()
+            purchase_url_indicators = [
+                'checkout', 'payment', 'cart', 'carrello', 'warenkorb',
+                'bezahlung', 'pagamento', 'kasse'
+            ]
+            
+            if any(indicator in current_url for indicator in purchase_url_indicators):
+                logger.info(f"Fansale purchase flow URL detected: {current_url}")
+                return True
+            
+            # Check for purchase confirmation elements
+            confirmation_selectors = [
+                '.purchase-confirmation', '.order-summary',
+                '.ticket-selection', '.seat-selection'
+            ]
+            
+            for selector in confirmation_selectors:
+                try:
+                    if await self.page.locator(selector).count() > 0:
+                        logger.info(f"Fansale confirmation element: {selector}")
+                        return True
+                except:
+                    continue
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Error verifying Fansale purchase: {e}")
+            return False
+
+    async def cleanup(self):
+        """Clean up browser resources"""
+        try:
+            if self.page:
+                await self.page.close()
+                self.page = None
+            
+            if self.browser_context:
+                await self.browser_context.close()
+                self.browser_context = None
+                
+        except Exception as e:
+            logger.error(f"Error during Fansale cleanup: {e}")
+
+# Legacy compatibility functions
+async def monitor(*args, **kwargs):
+    """Legacy monitor function for backward compatibility"""
+    return []
+
+async def check_fansale_event(page, profile, target_cfg, gui_q=None):
+    """Legacy function - redirects to new monitor class"""
+    logger.warning("Using legacy check_fansale_event - please update to FansaleMonitor class")
     
-    # Calculate overall average
-    all_prices = [l["price"] for l in all_listings if l["price"]]
-    if all_prices:
-        analysis["price_distribution"]["overall"]["avg"] = sum(all_prices) / len(all_prices)
+    # Create temporary monitor instance
+    monitor = FansaleMonitor(target_cfg, profile, None, None, None)
+    monitor.page = page
     
-    return analysis
+    return await monitor.check_opportunities()
+            
+            # Extract currency
+    def _validate_offer_data(self, offer_data: Dict[str, Any]) -> bool:
+        """Validate extracted offer data"""
+        try:
+            # Price validation
+            if offer_data['price'] <= 0 or offer_data['price'] > self.max_price:
+                return False
+            
+            # Fair Deal filter
+            if self.fair_deal_only and not offer_data['is_fair_deal']:
+                return False
+            
+            # Certified filter
+            if self.certified_only and not offer_data['is_certified']:
+                return False
+            
+            # Section filter
+            if self.desired_sections:
+                section_lower = offer_data['section'].lower()
+                if not any(desired.lower() in section_lower for desired in self.desired_sections):
+                    return False
+            
+            return True
+            
+        except Exception as e:
+            logger.debug(f"Error validating offer data: {e}")
+            return False
+
+    def _create_opportunity_from_data(self, offer_data: Dict[str, Any], index: int) -> Optional[EnhancedTicketOpportunity]:
+        """Create EnhancedTicketOpportunity from extracted data"""
+        try:
+            # Generate unique ID
+            offer_id = offer_data.get('offer_id', f'fansale_{int(time.time())}_{index}')
+            
+            # Check if already detected
+            if offer_id in self.detected_offers:
+                return None
+            
+            self.detected_offers.add(offer_id)
+            
+            # Create opportunity
+            opportunity = EnhancedTicketOpportunity(
+                id=offer_id,
+                platform=PlatformType.FANSALE,
+                event_name=self.event_name,
+                url=self.url,
+                offer_url=offer_data.get('buy_url', self.page.url),
+                section=offer_data['section'],
+                price=offer_data['price'],
+                quantity=offer_data['quantity'],
+                detected_at=datetime.now(),
+                priority=self.priority,
+                confidence_score=0.95,
+                detection_method='html_structure_intelligence',
+                metadata={
+                    'currency': offer_data['currency'],
+                    'offer_type': offer_data['offer_type'],
+                    'is_fair_deal': offer_data['is_fair_deal'],
+                    'is_certified': offer_data['is_certified'],
+                    'container_index': offer_data['container_index'],
+                    'original_offer_id': offer_data.get('offer_id')
+                }
+            )
+            
+            return opportunity
+            
+        except Exception as e:
+            logger.error(f"Error creating opportunity from data: {e}")

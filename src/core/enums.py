@@ -30,12 +30,19 @@ class PlatformType(Enum):
 
     def to_core_platform(self) -> CorePlatformEnum:
         """Convert to core Platform enum from src.profiles.enums"""
-        try:
-            return CorePlatformEnum(self.value)
-        except ValueError:
-            # Handle cases where the value might not directly map,
-            # though in this setup, they are expected to.
-            raise ValueError(f"Cannot convert PlatformType '{self.value}' to CorePlatformEnum. Ensure values match.")
+        from src.profiles.enums import Platform as CorePlatformEnum
+        mapping = {
+            PlatformType.FANSALE: CorePlatformEnum.FANSALE,
+            PlatformType.TICKETMASTER: CorePlatformEnum.TICKETMASTER,
+            PlatformType.VIVATICKET: CorePlatformEnum.VIVATICKET
+        }
+        result = mapping.get(self)
+        if result is None:
+            # Fallback to GENERIC if mapping not found
+            result = CorePlatformEnum.GENERIC
+
+        return result
+        
 
 
 class PriorityLevel(Enum):

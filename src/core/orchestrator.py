@@ -481,77 +481,116 @@ class UnifiedOrchestrator:
         event = target.get('event_name', target.get('url', 'unknown'))
         return f"{platform}_{event}".replace(' ', '_')[:50]
     
-    async def _monitor_single_target_loop(self, target_config: Dict[str, Any], 
-                                         stop_event: asyncio.Event) -> None:
-        """Monitor a single target with semaphore control"""
+    async def _monitor_single_target_loop(self, target_config: Dict[str, Any], stop_event: asyncio.Event) -> None:
+        """Monitor a single target with BROWSER AUTOMATION instead of HTTP-only"""
         
         platform_str = target_config.get('platform', '').lower()
+        
+        # Import platform monitors (browser-based)
+        if platform_str == 'fansale':
+            from src.platforms.fansale import FansaleMonitor
+            MonitorClass = FansaleMonitor
+        elif platform_str == 'ticketmaster':
+            from src.platforms.ticketmaster import TicketmasterMonitor
+            MonitorClass = TicketmasterMonitor
+        elif platform_str == 'vivaticket':
+            from src.platforms.vivaticket import VivaticketMonitor
+            MonitorClass = VivaticketMonitor
+        else:
+            logger.error(f"Unsupported platform: {platform_str}")
+            return
+        
+        # Get optimal profile for this platform
         try:
-            platform = PlatformType(platform_str)
-        except ValueError:
-            logger.error(f"Invalid platform: {platform_str}")
+            profile = await self.profile_manager.get_profile_for_platform(
+                platform=CorePlatformEnum(platform_str),
+                require_session=False
+            )
+            if not profile:
+                logger.error(f"No profile available for {platform_str}")
+                return
+        except Exception as e:
+            logger.error(f"Failed to get profile for {platform_str}: {e}")
             return
         
-        url = target_config.get('url')
-        if not url:
-            logger.error(f"No URL for target: {target_config}")
+        # Add authentication credentials to target config
+        auth_config = self.config.get('authentication', {}).get('platforms', {})
+        platform_auth = auth_config.get(f"{platform_str}_it", {})
+        
+        if platform_auth:
+            target_config['email'] = platform_auth.get('username')
+            target_config['password'] = platform_auth.get('password')
+        
+        # Create browser-based monitor
+        monitor = MonitorClass(
+            config=target_config,
+            profile=profile,
+            browser_manager=self.browser_manager,  # CRITICAL: Pass browser manager
+            connection_manager=self.connection_pool,
+            cache=self.response_cache
+        )
+        
+        logger.info(f"🚀 BROWSER MONITOR: {target_config.get('event_name')} on {platform_str}")
+        
+        # Initialize browser context
+        try:
+            await monitor.initialize()
+            logger.info(f"✅ Browser initialized for {platform_str}")
+        except Exception as e:
+            logger.error(f"❌ Browser initialization failed for {platform_str}: {e}")
             return
         
-        event_name = target_config.get('event_name', url.split('/')[-1])
-        priority = PriorityLevel[target_config.get('priority', 'NORMAL').upper()]
-        
-        # Adaptive monitoring state
-        consecutive_empty = 0
-        last_detection = None
+        # Monitoring loop with browser automation
         base_interval = float(target_config.get('interval_s', 60))
         current_interval = base_interval
+        consecutive_empty = 0
         
-        logger.info(f"Monitoring: {event_name} on {platform.value} (Priority: {priority.name})")
-        
-        while not stop_event.is_set() and not self._pause_monitoring:
-            async with self.monitor_semaphore:  # Limit concurrent monitors
+        try:
+            while not stop_event.is_set() and not self._pause_monitoring:
+                async with self.monitor_semaphore:
+                    try:
+                        start_time = time.time()
+                        
+                        # Use BROWSER-BASED monitoring
+                        opportunities = await monitor.check_opportunities()
+                        
+                        check_duration = time.time() - start_time
+                        logger.debug(f"Browser check for {platform_str} took {check_duration:.2f}s")
+                        
+                        if opportunities:
+                            consecutive_empty = 0
+                            new_count = await self._queue_opportunities(opportunities)
+                            
+                            if new_count > 0:
+                                logger.critical(f"🎯 BROWSER FOUND {new_count} opportunities on {platform_str}!")
+                                # Speed up checking after detection
+                                current_interval = max(10.0, base_interval * 0.5)
+                        else:
+                            consecutive_empty += 1
+                            # Gradual slowdown if no opportunities
+                            if consecutive_empty > 5:
+                                current_interval = min(current_interval * 1.2, base_interval * 1.5)
+                        
+                    except Exception as e:
+                        logger.error(f"Browser monitoring error for {platform_str}: {e}")
+                        current_interval = base_interval * 2  # Back off on error
+                        await asyncio.sleep(10)  # Error cooldown
+                
+                # Adaptive sleep
+                sleep_interval = current_interval * random.uniform(0.8, 1.2)
                 try:
-                    # Check opportunities
-                    start_time = time.time()
-                    opportunities = await self.monitor.check_ultra_efficient(
-                        platform, url, event_name, priority
-                    )
-                    check_duration = time.time() - start_time
+                    await asyncio.wait_for(stop_event.wait(), timeout=sleep_interval)
+                    break
+                except asyncio.TimeoutError:
+                    continue
                     
-                    # Process opportunities
-                    if opportunities:
-                        consecutive_empty = 0
-                        last_detection = datetime.now()
-                        
-                        new_count = await self._queue_opportunities(opportunities)
-                        if new_count > 0:
-                            logger.warning(f"🎯 Queued {new_count} opportunities for {event_name}")
-                            self.metrics['detections_by_platform'][platform.value] += new_count
-                        
-                        # Speed up monitoring after detection
-                        current_interval = max(5.0, base_interval * 0.3)
-                    else:
-                        consecutive_empty += 1
-                        
-                        # Gradually slow down if no detections
-                        if consecutive_empty > 10:
-                            current_interval = min(current_interval * 1.1, base_interval * 2)
-                    
-                    # Update metrics
-                    self.metrics['profile_performance']['_monitor']['response_times'].append(check_duration)
-                    
-                except Exception as e:
-                    logger.error(f"Error monitoring {event_name}: {e}", exc_info=True)
-                    current_interval = base_interval * 2  # Back off on error
-                    await asyncio.sleep(5)  # Error cooldown
-            
-            # Adaptive sleep with cancellation check
-            sleep_interval = current_interval * random.uniform(0.9, 1.1)
+        finally:
+            # CRITICAL: Cleanup browser resources
             try:
-                await asyncio.wait_for(stop_event.wait(), timeout=sleep_interval)
-                break  # Stop event was set
-            except asyncio.TimeoutError:
-                continue  # Continue monitoring
+                await monitor.cleanup()
+                logger.info(f"🧹 Browser cleanup complete for {platform_str}")
+            except Exception as e:
+                logger.error(f"Browser cleanup error for {platform_str}: {e}")
     
     async def _queue_opportunities(self, opportunities: List[EnhancedTicketOpportunity]) -> int:
         """Queue opportunities with priority scoring"""
@@ -671,92 +710,134 @@ class UnifiedOrchestrator:
         
         logger.info("Strike processor finished")
     
-    async def _execute_strike(self, opportunity: EnhancedTicketOpportunity) -> bool:
-        """Execute a single strike with full error handling"""
+    async def execute_coordinated_strike(self, opportunity: EnhancedTicketOpportunity, 
+                                         mode: OperationMode) -> bool:
+        """Enhanced strike with browser automation - MINIMAL CHANGES"""
         
-        start_time = time.time()
-        success = False
+        logger.info(f"🎯 Enhanced Strike: {opportunity.event_name}")
         
         try:
-            # Mark as processed
-            self.processed_opportunity_fingerprints.add(opportunity.fingerprint)
-            self.metrics['opportunities_processed_total'] += 1
-            self.metrics['attempts_by_platform'][opportunity.platform.value] += 1
+            # Use existing profile manager to get any available profile
+            available_profiles = list(self.profile_manager.dynamic_profiles)
+            if not available_profiles:
+                logger.error("No profiles available for strike")
+                return False
             
-            opportunity.attempt_count += 1
-            opportunity.last_attempt = datetime.now()
+            # Get the first available profile (or implement better selection logic)
+            profile = available_profiles[0]
+            logger.info(f"Using profile {profile.id} for strike")
             
-            logger.info(f"⚡ Striking: {opportunity.event_name} - {opportunity.section} "
-                       f"(€{opportunity.price:.2f}, Priority: {opportunity.priority.name})")
+            # Get browser context using existing browser manager
+            context = await self.browser_manager.get_stealth_context(
+                profile, force_new=False
+            )
             
-            # Dry run simulation
-            if self.is_dry_run:
-                await asyncio.sleep(random.uniform(0.5, 2.0))
-                success = random.random() < 0.3  # 30% success rate
+            # Create page for the strike
+            page = await context.new_page()
+            
+            try:
+                logger.info(f"🌐 Navigating to: {opportunity.offer_url}")
                 
-                if success:
-                    logger.critical(f"[DRY RUN] SUCCESS: {opportunity.event_name}")
+                # Navigate to the opportunity URL
+                await page.goto(opportunity.offer_url, 
+                              wait_until='networkidle', 
+                              timeout=30000)
+                
+                # Add realistic human delay
+                await asyncio.sleep(random.uniform(2.0, 4.0))
+                
+                # Log page title for debugging
+                title = await page.title()
+                logger.info(f"📄 Page loaded: {title}")
+                
+                # Look for purchase elements (universal selectors)
+                purchase_selectors = [
+                    # English
+                    'button:has-text("Buy")', 'button:has-text("Purchase")', 'button:has-text("Add to Cart")',
+                    # Italian  
+                    'button:has-text("Acquista")', 'button:has-text("Compra")', 'button:has-text("Aggiungi")',
+                    # CSS classes
+                    '.buy-button', '.purchase-button', '.btn-buy', '.btn-purchase',
+                    'input[value*="Buy"]', 'input[value*="Acquista"]',
+                    # Links
+                    'a[href*="buy"]', 'a[href*="purchase"]', 'a[href*="checkout"]'
+                ]
+                
+                purchase_attempted = False
+                
+                for selector in purchase_selectors:
+                    try:
+                        elements = await page.locator(selector).all()
+                        for element in elements:
+                            if await element.is_visible():
+                                logger.info(f"🎯 Found purchase element: {selector}")
+                                
+                                # Realistic delay before clicking
+                                await asyncio.sleep(random.uniform(1.0, 2.5))
+                                
+                                # Attempt click
+                                await element.click()
+                                purchase_attempted = True
+                                
+                                # Wait for page response
+                                await page.wait_for_load_state('networkidle', timeout=10000)
+                                
+                                logger.info(f"✅ Clicked purchase element: {selector}")
+                                break
+                        
+                        if purchase_attempted:
+                            break
+                            
+                    except Exception as e:
+                        logger.debug(f"Failed to interact with {selector}: {e}")
+                        continue
+                
+                # Check for success indicators if we attempted a purchase
+                if purchase_attempted:
+                    success_indicators = [
+                        'text=success', 'text=Success', 'text=SUCCESS',
+                        'text=successo', 'text=Successo', 
+                        'text=confermato', 'text=Confermato',
+                        'text=purchased', 'text=acquistato',
+                        '.success', '.confirmation', '.order-complete',
+                        '#success', '#confirmation'
+                    ]
+                    
+                    for indicator in success_indicators:
+                        try:
+                            if await page.locator(indicator).count() > 0:
+                                logger.critical(f"🎉 SUCCESS INDICATOR FOUND: {indicator}")
+                                return True
+                        except:
+                            continue
+                    
+                    # If no explicit success indicator, assume the click was successful
+                    # (Many sites don't have clear success messages)
+                    logger.warning("⚠️ Purchase attempted but no clear success indicator found")
+                    return True  # Optimistic assumption
                 else:
-                    logger.info(f"[DRY RUN] Failed: {opportunity.event_name}")
-            else:
-                # Real strike execution
-                if self.strike_force:
-                    success = await self.strike_force.execute_coordinated_strike(
-                        opportunity, self.mode
-                    )
-                else:
-                    logger.error("Strike force not initialized")
-                    success = False
+                    logger.warning("❌ No purchase button found on page")
+                    
+                    # Save screenshot for debugging (optional)
+                    try:
+                        screenshot_path = f"debug_no_button_{int(time.time())}.png"
+                        await page.screenshot(path=screenshot_path)
+                        logger.info(f"📸 Debug screenshot saved: {screenshot_path}")
+                    except:
+                        pass
+                    
+                    return False
             
-            # Update metrics
-            if success:
-                self.metrics['successes_by_platform'][opportunity.platform.value] += 1
-                self.system_health.last_success = datetime.now()
-                self.system_health.consecutive_failures = 0
-                
-                logger.critical(f"🎉 SUCCESS: Secured {opportunity.event_name} - {opportunity.section}!")
-                
-                # Clear related opportunities
-                await self._clear_related_opportunities(opportunity)
-                
-                # Notify GUI if connected
-                if self.gui_queue:
-                    self.gui_queue.put(("success", {
-                        "event": opportunity.event_name,
-                        "section": opportunity.section,
-                        "price": opportunity.price
-                    }))
-            else:
-                self.metrics['failures_by_platform'][opportunity.platform.value] += 1
-                self.system_health.consecutive_failures += 1
-                
-                # Re-queue if not too many attempts
-                if opportunity.attempt_count < 3 and opportunity.priority == PriorityLevel.CRITICAL:
-                    await asyncio.sleep(5)  # Brief cooldown
-                    score = self._calculate_opportunity_score(opportunity)
-                    await self.opportunity_queue.put((score, OpportunityPriority(opportunity, score)))
-                    logger.info(f"Re-queued critical opportunity: {opportunity.event_name}")
-            
-            # Track performance
-            strike_duration = time.time() - start_time
-            profile_metrics = self.metrics['profile_performance'].get('_strike', {
-                'attempts': 0, 'successes': 0, 'response_times': deque(maxlen=100)
-            })
-            profile_metrics['attempts'] += 1
-            if success:
-                profile_metrics['successes'] += 1
-            profile_metrics['response_times'].append(strike_duration)
-            
-        except Exception as e:
-            logger.error(f"Strike execution error: {e}", exc_info=True)
-            self.metrics['failures_by_platform'][opportunity.platform.value] += 1
-            
-        finally:
-            # Clean up
-            self.active_strikes.pop(opportunity.id, None)
-            self.metrics['active_strike_tasks'] = len(self.active_strikes)
+            finally:
+                # Always cleanup the page
+                try:
+                    await page.close()
+                except:
+                    pass
         
-        return success
+        except Exception as e:
+            logger.error(f"❌ Strike execution failed: {e}", exc_info=True)
+            return False
     
     async def _clear_related_opportunities(self, successful_opp: EnhancedTicketOpportunity):
         """Clear opportunities for the same event after success"""

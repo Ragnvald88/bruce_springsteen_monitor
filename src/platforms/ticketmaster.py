@@ -1,311 +1,742 @@
-# src/platforms/ticketmaster.py (Corrected with API Interception)
+# src/platforms/ticketmaster.py - Ultra-Stealth v5.0
 from __future__ import annotations
 
-import json
-import logging
-import re
 import asyncio
-from typing import Dict, List, Optional, TYPE_CHECKING, Tuple, Any
-from urllib.parse import urlparse # Import urlparse
+import logging
+import random
+import re
+import time
+import json
+from typing import Dict, List, Optional, Any, TYPE_CHECKING
+from datetime import datetime, timedelta
+from urllib.parse import urljoin, urlparse
 
-from playwright.async_api import Page, BrowserContext, Response, Error as PlaywrightError
+from playwright.async_api import Page, BrowserContext, Error as PlaywrightError
 
-from src.profiles.manager import BrowserProfile
-from core.errors import BlockedError
-from utils.advanced_behavioral_simulation import simulate_advanced_human_behavior, BiometricProfile
+# Core imports
+from src.core.models import EnhancedTicketOpportunity, DataUsageTracker
+from src.core.enums import PlatformType, PriorityLevel
+from src.profiles.models import BrowserProfile
+from src.core.errors import BlockedError, PlatformError
 
 if TYPE_CHECKING:
     pass
 
-log = logging.getLogger(__name__)
-dbg_exc_info_platform = False
+logger = logging.getLogger(__name__)
 
-# Regex to extract Product ID (PID) from Ticketmaster URL
-_PID_RE = re.compile(r"-([0-9a-fA-F]{4,})\.html(?:$|\?)", re.IGNORECASE)
+class TicketmasterMonitor:
+    """Revolutionary Ticketmaster monitor with adaptive anti-detection"""
+    
+    def __init__(self, config: Dict[str, Any], profile: BrowserProfile, 
+                 browser_manager, connection_manager, cache):
+        self.config = config
+        self.profile = profile
+        self.browser_manager = browser_manager
+        self.connection_manager = connection_manager
+        self.cache = cache
+        
+        # Target configuration
+        self.event_name = config.get('event_name', 'Unknown Event')
+        self.url = config['url']
+        self.priority = PriorityLevel[config.get('priority', 'NORMAL').upper()]
+        self.max_price = config.get('max_price_per_ticket', 1000.0)
+        self.desired_sections = config.get('desired_sections', [])
+        
+        # State management
+        self.browser_context: Optional[BrowserContext] = None
+        self.page: Optional[Page] = None
+        self.last_check = None
+        self.api_headers = {}
+        
+        # Advanced detection patterns
+        self.api_patterns = {
+            'inventory': r'/api/v\d+/inventory',
+            'events': r'/api/v\d+/events/[^/]+/offers',
+            'discovery': r'/discovery/v\d+/events',
+            'graphql': r'/graphql'
+        }
+        
+        # Adaptive selectors with fallbacks
+        self.selectors = {
+            'loading': [
+                '.loading-indicator', '.spinner', '[data-testid="loading"]'
+            ],
+            'no_tickets': [
+                'text=No tickets available',
+                'text=Sold Out',
+                '.sold-out-message',
+                '[data-testid="sold-out"]'
+            ],
+            'ticket_cards': [
+                '[data-testid="ticket-card"]',
+                '.ticket-listing',
+                '.offer-card',
+                '.tm-offer'
+            ],
+            'price': [
+                '[data-testid="price"]',
+                '.price-display',
+                '.cost',
+                '.ticket-price'
+            ],
+            'section': [
+                '[data-testid="section"]',
+                '.section-name',
+                '.seating-info'
+            ],
+            'buy_button': [
+                'button:text("Buy")',
+                'button:text("Select")',
+                '[data-testid="buy-button"]',
+                '.purchase-btn'
+            ]
+        }
+        
+        logger.info(f"TicketmasterMonitor initialized for {self.event_name}")
 
-# Template for the products API URL
-PRODUCT_API_BASE_URL = "https://shop.ticketmaster.it/api/products/"
-
-
-def _extract_pid_from_url(url: str) -> Optional[str]:
-    """Extracts the Product ID (PID) from a Ticketmaster event URL."""
-    match = _PID_RE.search(url)
-    if match:
-        return match.group(1)
-    log.warning(f"Ticketmaster: Kon PID niet extraheren uit URL: {url}")
-    return None
-
-async def _get_csrf_token(context: BrowserContext) -> Optional[str]:
-    """Retrieves the _csrf cookie value from the browser context."""
-    try:
-        cookies = await context.cookies()
-        for cookie in cookies:
-            if cookie["name"] == "_csrf":
-                return cookie["value"]
-    except PlaywrightError as e:
-        log.warning(f"Ticketmaster: Playwright fout bij ophalen cookies voor CSRF token: {e}")
-    except Exception as e_gen:
-        log.error(f"Ticketmaster: Algemene fout bij ophalen CSRF token: {e_gen}", exc_info=dbg_exc_info_platform)
-    log.warning("Ticketmaster: CSRF token cookie ('_csrf') niet gevonden in context.")
-    return None
-
-
-async def add_to_basket(
-    context: BrowserContext,
-    offer_id: str,
-    event_page_url: str, # URL of the event page to use as referer
-    basket_id: Optional[str] = None,
-    quantity: int = 1
-) -> Tuple[bool, Optional[str]]:
-    """
-    Adds an offer to the Ticketmaster basket using API calls,
-    but attempts to do so with more context from the browser.
-    """
-    csrf_token = await _get_csrf_token(context)
-    if not csrf_token:
-        log.error("Ticketmaster API (add_to_basket): Geen CSRF token. Actie afgebroken.")
-        return False, None
-
-    current_basket_id = basket_id
-    api_base_url = "https://shop.ticketmaster.it/api"
-
-    # Parse the event_page_url to get the origin
-    parsed_event_url = urlparse(event_page_url)
-    origin = f"{parsed_event_url.scheme}://{parsed_event_url.netloc}"
-
-    # Define common headers for API requests to look more like XHR
-    api_headers = {
-        "X-CSRF-Token": csrf_token,
-        "Accept": "application/json, text/plain, */*",
-        "X-Requested-With": "XMLHttpRequest",
-        "Origin": origin, # Set Origin based on the event page
-        "Referer": event_page_url, # Set Referer to the event page URL
-    }
-
-    try:
-        if not current_basket_id:
-            log.debug(f"Ticketmaster API: Aanmaken nieuwe winkelwagen (OfferID: {offer_id})...")
-            create_headers = api_headers.copy()
-            # Basket creation might not need Content-Type if no body, or might need different one.
-            resp_basket_create = await context.request.post(
-                f"{api_base_url}/baskets",
-                headers=create_headers,
-                timeout=15_000
-            )
-            if resp_basket_create.status not in [200, 201]: # 200 if existing reused, 201 if new
-                log.error(f"Ticketmaster API: Aanmaken/ophalen winkelwagen mislukt (Status: {resp_basket_create.status}). Response: {await resp_basket_create.text(timeout=5000)[:250]}")
-                return False, None
-
-            basket_data = await resp_basket_create.json(timeout=5000)
-            current_basket_id = basket_data.get("id")
-            if not current_basket_id:
-                log.error(f"Ticketmaster API: 'id' niet gevonden in winkelwagen response. Data: {basket_data}")
-                return False, None
-            log.info(f"Ticketmaster API: Winkelwagen ID verkregen/aangemaakt: {current_basket_id}")
-
-        log.info(f"Ticketmaster API: Toevoegen offer_id '{offer_id}' (qty: {quantity}) aan winkelwagen '{current_basket_id}'...")
-        add_entry_headers = api_headers.copy()
-        add_entry_headers["Content-Type"] = "application/json;charset=UTF-8"
-
-        resp_add_entry = await context.request.post(
-            f"{api_base_url}/baskets/{current_basket_id}/entries",
-            headers=add_entry_headers,
-            data=json.dumps({"offerId": str(offer_id), "quantity": quantity}),
-            timeout=20_000
-        )
-
-        if resp_add_entry.status == 201:
-            log.warning(f"Ticketmaster API: ✅ Ticket (offer_id: {offer_id}) succesvol toegevoegd aan winkelwagen {current_basket_id}!")
-            return True, current_basket_id
-        else:
-            response_text = await resp_add_entry.text(timeout=5000)
-            log.error(f"Ticketmaster API: Toevoegen aan winkelwagen mislukt (Status: {resp_add_entry.status}). OfferID: {offer_id}. BasketID: {current_basket_id}. Response: {response_text[:300]}")
-            if "TOTAL_ITEM_LIMIT_EXCEEDED" in response_text:
-                log.error("Ticketmaster API: Limiet per klant overschreden voor dit item.")
-            elif "OFFER_NOT_AVAILABLE" in response_text:
-                log.error("Ticketmaster API: Offer is niet langer beschikbaar.")
-            return False, current_basket_id
-
-    except PlaywrightError as e_pw_basket:
-        log.error(f"Ticketmaster API: Playwright netwerk/timeout fout tijdens add_to_basket: {e_pw_basket}", exc_info=dbg_exc_info_platform)
-    except json.JSONDecodeError as e_json_basket:
-        log.error(f"Ticketmaster API: JSON decodeerfout tijdens add_to_basket: {e_json_basket}.", exc_info=dbg_exc_info_platform)
-    except Exception as e_basket:
-        log.error(f"Ticketmaster API: Onverwachte fout tijdens add_to_basket: {e_basket}", exc_info=True)
-    return False, current_basket_id
-
-async def monitor(*args, **kwargs):
-    return []
-async def check_ticketmaster_event(
-    page: Page,
-    profile: BrowserProfile,
-    target_cfg: Dict[str, Any],
-    gui_q: Optional[asyncio.Queue] = None,
-) -> Optional[List[Dict[str, Any]]]:
-    event_url = target_cfg.get("url")
-    if not event_url:
-        log.error("Ticketmaster: URL ontbreekt in target_cfg.")
-        return None
-
-    pid = _extract_pid_from_url(event_url)
-    if not pid:
-        # PID extraction failure already logged by _extract_pid_from_url
-        return None
-
-    expected_api_url_pattern = f"{PRODUCT_API_BASE_URL}{pid}"
-    event_name = target_cfg.get("event_name", event_url)
-
-    log.info(f"Ticketmaster [{event_name}]: Navigating to event page to capture API data: {event_url} (Profile: {profile.name})")
-    if gui_q: await gui_q.put(("target_status_update", (event_url, f"Navigating (Prof: {profile.name[:10]})", False)))
-
-    raw_response_body = ""
-    response_status = -1
-    event_data = None
-    api_response_object: Optional[Response] = None
-
-
-    try:
-        navigation_timeout = target_cfg.get("navigation_timeout_ms", 30000)  # Default to 30 seconds if not set
-        api_capture_timeout = navigation_timeout / 2 # Timeout for waiting for the specific API response
-
-        log.debug(f"Ticketmaster [{event_name}]: Navigating to {event_url} (Timeout: {navigation_timeout}ms). Expecting API call to pattern '*{expected_api_url_pattern}*' (Timeout: {api_capture_timeout}ms).")
-
-        async with page.expect_response(lambda resp: expected_api_url_pattern in resp.url and "products" in resp.url, timeout=api_capture_timeout) as response_info:
-            await page.goto(event_url, wait_until="domcontentloaded", timeout=navigation_timeout)
-            log.info(f"Ticketmaster [{event_name}]: Page navigation to {page.url} complete.")
-
-            human_intensity_tm = target_cfg.get("human_behavior_intensity", "low") # Or "medium" as a default for the new script
-            biometric_params_from_config_tm = {}
-            # 'profile' here is the BrowserProfile instance passed to check_ticketmaster_event
-            if hasattr(profile, 'extra_js_props') and isinstance(profile.extra_js_props, dict):
-                biometric_params_from_config_tm = profile.extra_js_props.get("biometric_profile_config", {})
-
-            current_biometric_profile_tm = BiometricProfile(**biometric_params_from_config_tm)
-            log.debug(f"Ticketmaster [{event_name}]: Applying advanced human behavior (Intensity: {human_intensity_tm})") # Adjusted log prefix
-            await simulate_advanced_human_behavior(page, intensity=human_intensity_tm, profile=current_biometric_profile_tm)
-
-
-
-            log.debug(f"Ticketmaster [{event_name}]: Waiting for API response matching pattern: *{expected_api_url_pattern}*")
-            api_response_object = await response_info.value
-
-        response_status = api_response_object.status
-        raw_response_body = await api_response_object.text()
-        log.info(f"Ticketmaster [{event_name}]: Intercepted API call to {api_response_object.url} (Status: {response_status})")
-
-        if response_status != 200:
-            page_content_lower = (await page.content(timeout=5000)).lower()
-            if response_status == 403 or \
-               ("access denied" in page_content_lower or "blocked" in page_content_lower or "pardon our interruption" in page_content_lower or "robot check" in page_content_lower):
-                log.warning(f"Ticketmaster [{event_name}]: WAF Block suspected. Main page content or API status indicates block (API Status {response_status}). API URL: {api_response_object.url}. Response: {raw_response_body[:200]}")
-                raise BlockedError(f"Ticketmaster: WAF Block (API Status {response_status}, Profile: {profile.name})")
-            log.warning(f"Ticketmaster API: Intercepted non-200 status {response_status} (Profile: {profile.name}) from {api_response_object.url}. Resp: {raw_response_body[:300]}")
-            # Consider if other non-200 statuses should also raise BlockedError or just return None
-            return None
-
-        if not raw_response_body.strip():
-            log.warning(f"Ticketmaster API: Intercepted empty response (Profile: {profile.name}, Status: {response_status}) from {api_response_object.url}.")
-            return None
-
-        event_data = json.loads(raw_response_body)
-
-    except PlaywrightError as e_pw:
-        log_warning_detail = f"Ticketmaster [{event_name}]: Playwright error during page navigation or API interception (Profile: {profile.name}): {type(e_pw).__name__} - {str(e_pw)[:150]}"
-        log.warning(log_warning_detail)
-        page_blocked = False
+    async def initialize(self):
+        """Initialize with Ticketmaster-specific stealth"""
         try:
-            if page and not page.is_closed():
-                page_content_lower = (await page.content()).lower()
-                if ("access denied" in page_content_lower or "blocked" in page_content_lower or "pardon our interruption" in page_content_lower or "robot check" in page_content_lower):
-                    log.error(f"Ticketmaster [{event_name}]: Playwright error likely due to WAF block on main page. Content indicates block.")
-                    page_blocked = True
-        except Exception as content_err:
-            log.warning(f"Ticketmaster [{event_name}]: Could not get page content after Playwright error: {content_err}")
-        
-        if page_blocked:
-            raise BlockedError(f"Ticketmaster: WAF Block on main page (Profile: {profile.name}, PlaywrightError {type(e_pw).__name__})") from e_pw
-        else:
-            raise BlockedError(f"Ticketmaster: Playwright Error (Profile: {profile.name}, {type(e_pw).__name__}, {str(e_pw)[:50]})") from e_pw
-
-    except json.JSONDecodeError:
-        log.error(f"Ticketmaster API: JSON parse error from intercepted response (Profile: {profile.name}, Status: {response_status}). Resp: {raw_response_body[:500]}")
-        raise BlockedError(f"Ticketmaster: Invalid JSON from API (Profile: {profile.name})")
-    except BlockedError:
-        raise
-    except Exception as e_gen:
-        log.error(f"Ticketmaster [{event_name}]: Unexpected error during page navigation or API interception (Profile: {profile.name}): {e_gen}", exc_info=True)
-        raise BlockedError(f"Ticketmaster: General check error (Profile: {profile.name}, {str(e_gen)[:50]})") from e_gen
-
-
-    if not event_data:
-        log.info(f"Ticketmaster [{event_name}]: No event_data obtained after interception (Profile: {profile.name}).")
-        return None
-
-    available_offers = event_data.get("offers", [])
-    if not available_offers:
-        log.info(f"Ticketmaster [{event_name}]: No 'offers' in API data (Profile: {profile.name}).")
-        if gui_q: await gui_q.put(("target_status_update", (event_url, "No offers (API)", False)))
-        return None
-
-    desired_sections_raw = target_cfg.get("desired_sections", [])
-    desired_sections_lower = [str(s).lower().strip() for s in desired_sections_raw if isinstance(s, str) and s.strip()]
-    hits_found: List[Dict[str, Any]] = []
-
-    for offer in available_offers:
-        offer_name_original = offer.get("name", "N/A")
-        offer_name_lower = offer_name_original.lower()
-        offer_availability = str(offer.get("availability", "UNAVAILABLE")).upper()
-        offer_status_field = str(offer.get("status", "")).upper() # Explicitly get the "status" field
-
-        if offer_availability == "UNAVAILABLE":
-            log.debug(f"Ticketmaster [{event_name}]: Offer '{offer_name_original}' is UNAVAILABLE (via availability field).")
-            continue
-        
-        # Also check the 'status' field for more definitive unavailability cues
-        if offer_status_field in ["SOLD_OUT", "NOT_AVAILABLE_YET", "OFF_SALE", "ITEM_LIMIT_EXCEEDED_FOR_CUSTOMER"]:
-            log.debug(f"Ticketmaster [{event_name}]: Offer '{offer_name_original}' status is '{offer_status_field}'.")
-            continue
-        
-        # If availability is not UNAVAILABLE and status is not a known unavailable one, consider it potentially available
-        # (or at least not explicitly unavailable from the common fields)
-
-        is_desired_section = not desired_sections_lower
-        if not is_desired_section:
-            for desired_term in desired_sections_lower:
-                if desired_term in offer_name_lower:
-                    is_desired_section = True; break
-        
-        if is_desired_section:
-            offer_id = offer.get("id")
-            if not offer_id:
-                log.warning(f"Ticketmaster [{event_name}]: Valid offer has no 'id' (Profile: {profile.name}): {offer_name_original}. Skipped.")
-                continue
-
-            price_info = offer.get("price", {})
-            price_value = price_info.get("value", "N/A")
-            price_currency = price_info.get("currency", "")
+            logger.info(f"Initializing Ticketmaster stealth for {self.event_name}")
             
-            hit_message = f"TM: {offer_name_original} - {price_value}{price_currency} (API Avail: {offer_availability}, API Stat: {offer_status_field or 'N/A'})"
+            # Get stealth browser context
+            self.browser_context = await self.browser_manager.get_stealth_context(
+                self.profile, force_new=False
+            )
+            
+            # Create page with advanced stealth
+            self.page = await self.browser_context.new_page()
+            
+            # Setup Ticketmaster-specific stealth
+            await self._inject_ticketmaster_stealth()
+            await self._setup_api_interception()
+            await self._configure_human_behavior()
+            
+            logger.info(f"Ticketmaster stealth initialized for {self.event_name}")
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize Ticketmaster stealth: {e}")
+            raise
 
-            hits_found.append({
-                "message": hit_message,
-                "offer_id": str(offer_id),
-                "offer_url": event_url,
-                "platform_specific_data": {
-                    "id": str(offer_id),
-                    "name": offer_name_original,
-                    "price_details": price_info,
-                    "availability_status": offer_availability, # From 'availability' field
-                    "api_status_field": offer_status_field,    # From 'status' field
-                    "raw_offer_object": dict(offer)
-                }
-            })
-            log.warning(f"Ticketmaster HIT [{event_name}] (Profile: {profile.name}): GEVONDEN! {hit_message}")
+    async def _inject_ticketmaster_stealth(self):
+        """Inject Ticketmaster-specific anti-detection measures"""
+        await self.page.add_init_script("""
+        // Ticketmaster bot detection bypass
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined,
+            configurable: true
+        });
+        
+        // Override fetch to add realistic headers
+        const originalFetch = window.fetch;
+        window.fetch = function(url, options = {}) {
+            const headers = {
+                'Accept': 'application/json, text/plain, */*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'X-Requested-With': 'XMLHttpRequest',
+                ...options.headers
+            };
+            
+            return originalFetch(url, { ...options, headers });
+        };
+        
+        // Ticketmaster API response interception
+        const originalXHROpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function(method, url, ...args) {
+            this.__url = url;
+            return originalXHROpen.call(this, method, url, ...args);
+        };
+        
+        const originalXHRSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(data) {
+            // Add realistic timing
+            const delay = Math.random() * 100 + 50;
+            setTimeout(() => {
+                originalXHRSend.call(this, data);
+            }, delay);
+        };
+        
+        // Device properties spoofing
+        Object.defineProperty(navigator, 'hardwareConcurrency', {
+            get: () => 4 + Math.floor(Math.random() * 4)
+        });
+        
+        Object.defineProperty(navigator, 'deviceMemory', {
+            get: () => 4 + Math.random() * 4
+        });
+        
+        // Advanced canvas protection
+        const canvas2DContext = CanvasRenderingContext2D.prototype;
+        const originalFillText = canvas2DContext.fillText;
+        canvas2DContext.fillText = function(text, x, y, maxWidth) {
+            const noise = () => (Math.random() - 0.5) * 0.001;
+            return originalFillText.call(this, text, x + noise(), y + noise(), maxWidth);
+        };
+        
+        // WebRTC leak protection
+        if (window.RTCPeerConnection) {
+            const originalCreateDataChannel = RTCPeerConnection.prototype.createDataChannel;
+            RTCPeerConnection.prototype.createDataChannel = function(label, options) {
+                console.debug('WebRTC data channel creation blocked for stealth');
+                throw new Error('WebRTC disabled for privacy');
+            };
+        }
+        
+        // Battery API spoofing
+        if (navigator.getBattery) {
+            navigator.getBattery = async () => ({
+                charging: true,
+                chargingTime: 0,
+                dischargingTime: Infinity,
+                level: 0.8 + Math.random() * 0.2,
+                onchargingchange: null,
+                onchargingtimechange: null,
+                ondischargingtimechange: null,
+                onlevelchange: null
+            });
+        }
+        """)
 
-    if hits_found:
-        if gui_q: await gui_q.put(("target_status_update", (event_url, f"HIT! ({len(hits_found)})", True)))
-        return hits_found
-    else:
-        log.info(f"Ticketmaster [{event_name}]: No matching/available tickets after processing API data (Profile: {profile.name}).")
-        if gui_q: await gui_q.put(("target_status_update", (event_url, "No match/avail (API)", False)))
-        return None
+    async def _setup_api_interception(self):
+        """Setup intelligent API request monitoring"""
+        async def handle_response(response):
+            url = response.url
+            
+            # Capture Ticketmaster API responses
+            if 'ticketmaster.com' in url or 'ticketmaster.it' in url:
+                try:
+                    # Check for inventory APIs
+                    if any(re.search(pattern, url) for pattern in self.api_patterns.values()):
+                        content_type = response.headers.get('content-type', '')
+                        
+                        if 'application/json' in content_type:
+                            try:
+                                data = await response.json()
+                                await self._process_api_response(url, data)
+                            except:
+                                pass
+                
+                    # Extract headers for future requests
+                    if '/api/' in url:
+                        for header, value in response.headers.items():
+                            if header.lower() in ['x-tm-api-key', 'authorization', 'x-csrf-token']:
+                                self.api_headers[header] = value
+                                
+                except Exception as e:
+                    logger.debug(f"Error processing response from {url}: {e}")
+        
+        self.page.on('response', handle_response)
+
+    async def _process_api_response(self, url: str, data: dict):
+        """Process API responses for ticket opportunities"""
+        try:
+            # Check for offers/inventory data
+            if '_embedded' in data:
+                events = data['_embedded'].get('events', [])
+                for event in events:
+                    if 'priceRanges' in event:
+                        await self._extract_from_price_ranges(event)
+            
+            # Check for direct inventory
+            if 'offers' in data:
+                await self._extract_from_offers(data['offers'])
+                
+            # Check for GraphQL responses
+            if 'data' in data and 'event' in data['data']:
+                await self._extract_from_graphql(data['data']['event'])
+                
+        except Exception as e:
+            logger.debug(f"Error processing API data: {e}")
+
+    async def _extract_from_price_ranges(self, event_data: dict):
+        """Extract opportunities from price range data"""
+        try:
+            price_ranges = event_data.get('priceRanges', [])
+            for price_range in price_ranges:
+                min_price = price_range.get('min', 0)
+                max_price = price_range.get('max', 0)
+                currency = price_range.get('currency', 'EUR')
+                
+                if min_price <= self.max_price:
+                    logger.info(f"🎯 TICKETMASTER API HIT: {event_data.get('name')} - €{min_price}-€{max_price}")
+                    
+        except Exception as e:
+            logger.debug(f"Error extracting from price ranges: {e}")
+
+    async def _configure_human_behavior(self):
+        """Configure realistic human browsing behavior"""
+        # Set realistic viewport
+        await self.page.set_viewport_size({
+            'width': self.profile.viewport_width,
+            'height': self.profile.viewport_height
+        })
+        
+        # Setup request interception for optimization
+        await self.page.route('**/*', self._handle_request)
+        
+        # Add realistic user behavior tracking
+        await self.page.add_init_script("""
+        let mouseMovements = 0;
+        let keystrokes = 0;
+        let scrolls = 0;
+        let focusChanges = 0;
+        
+        document.addEventListener('mousemove', () => mouseMovements++);
+        document.addEventListener('keydown', () => keystrokes++);
+        document.addEventListener('scroll', () => scrolls++);
+        document.addEventListener('focus', () => focusChanges++);
+        document.addEventListener('blur', () => focusChanges++);
+        
+        window.getBehaviorMetrics = () => ({
+            mouseMovements, keystrokes, scrolls, focusChanges,
+            uptime: Date.now() - window.__stealth_initialized__.timestamp
+        });
+        """)
+
+    async def _handle_request(self, route):
+        """Intelligent request handling with blocking and optimization"""
+        request = route.request
+        url = request.url
+        
+        # Allow Ticketmaster core requests
+        if any(domain in url for domain in ['ticketmaster.com', 'ticketmaster.it', 'livenation.com']):
+            await route.continue_()
+            return
+        
+        # Block unnecessary resources for speed
+        if request.resource_type in ['image', 'media', 'font']:
+            if not any(x in url for x in ['logo', 'icon', 'avatar']):
+                await route.abort()
+                return
+        
+        # Block tracking and analytics
+        tracking_domains = [
+            'google-analytics.com', 'googletagmanager.com', 'doubleclick.net',
+            'facebook.com', 'connect.facebook.net', 'hotjar.com',
+            'mixpanel.com', 'segment.com', 'amplitude.com'
+        ]
+        
+        if any(domain in url for domain in tracking_domains):
+            await route.abort()
+            return
+        
+        # Continue with request
+        await route.continue_()
+
+    async def check_opportunities(self) -> List[EnhancedTicketOpportunity]:
+        """Check for ticket opportunities with advanced strategies"""
+        if not self.page:
+            await self.initialize()
+        
+        opportunities = []
+        
+        try:
+            logger.debug(f"Checking Ticketmaster opportunities for {self.event_name}")
+            
+            # Navigate with human-like behavior
+            await self._navigate_humanlike()
+            
+            # Wait for dynamic content
+            await self._wait_for_content_load()
+            
+            # Try multiple detection strategies
+            opportunities.extend(await self._check_dom_listings())
+            opportunities.extend(await self._check_api_data())
+            opportunities.extend(await self._check_json_ld())
+            
+            # Update last check time
+            self.last_check = datetime.now()
+            
+            if opportunities:
+                logger.critical(f"🚀 FOUND {len(opportunities)} OPPORTUNITIES FOR {self.event_name}")
+                
+        except Exception as e:
+            logger.error(f"Error checking Ticketmaster opportunities: {e}")
+            
+            # Recovery attempt
+            try:
+                await self.page.reload(wait_until='networkidle', timeout=15000)
+            except:
+                pass
+        
+        return opportunities
+
+    async def _navigate_humanlike(self):
+        """Navigate to target URL with human-like behavior"""
+        # Add random delay before navigation
+        await asyncio.sleep(random.uniform(1.0, 3.0))
+        
+        # Navigate with realistic wait
+        await self.page.goto(self.url, wait_until='networkidle', timeout=30000)
+        
+        # Simulate human reading time
+        await asyncio.sleep(random.uniform(2.0, 5.0))
+        
+        # Random mouse movement
+        viewport = await self.page.viewport_size()
+        if viewport:
+            for _ in range(random.randint(2, 4)):
+                x = random.randint(100, viewport['width'] - 100)
+                y = random.randint(100, viewport['height'] - 100)
+                await self.page.mouse.move(x, y)
+                await asyncio.sleep(random.uniform(0.5, 1.5))
+        
+        # Random scrolling
+        for _ in range(random.randint(1, 3)):
+            scroll_amount = random.randint(200, 600)
+            await self.page.mouse.wheel(0, scroll_amount)
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+
+    async def _wait_for_content_load(self):
+        """Wait for dynamic content to load"""
+        try:
+            # Wait for loading indicators to disappear
+            for selector in self.selectors['loading']:
+                try:
+                    await self.page.wait_for_selector(selector, timeout=2000)
+                    await self.page.wait_for_selector(selector, state='hidden', timeout=10000)
+                except:
+                    pass
+            
+            # Wait for ticket content
+            ticket_selectors = self.selectors['ticket_cards']
+            for selector in ticket_selectors:
+                try:
+                    await self.page.wait_for_selector(selector, timeout=5000)
+                    break
+                except:
+                    continue
+                    
+        except Exception as e:
+            logger.debug(f"Content load wait timeout: {e}")
+
+    async def _check_dom_listings(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities from DOM"""
+        opportunities = []
+        
+        try:
+            # Find ticket cards
+            ticket_cards = []
+            for selector in self.selectors['ticket_cards']:
+                try:
+                    cards = await self.page.locator(selector).all()
+                    if cards:
+                        ticket_cards = cards
+                        break
+                except:
+                    continue
+            
+            if not ticket_cards:
+                logger.debug("No ticket cards found in DOM")
+                return opportunities
+            
+            logger.debug(f"Found {len(ticket_cards)} ticket cards")
+            
+            for i, card in enumerate(ticket_cards):
+                try:
+                    # Extract price
+                    price = 0.0
+                    price_text = "N/A"
+                    
+                    for price_selector in self.selectors['price']:
+                        try:
+                            price_element = card.locator(price_selector).first
+                            if await price_element.count():
+                                price_text = await price_element.inner_text()
+                                # Extract numeric price
+                                price_match = re.search(r'(\d+[.,]\d+|\d+)', price_text.replace(',', '.'))
+                                if price_match:
+                                    price = float(price_match.group(1))
+                                break
+                        except:
+                            continue
+                    
+                    if price == 0 or price > self.max_price:
+                        continue
+                    
+                    # Extract section
+                    section = "General Admission"
+                    for section_selector in self.selectors['section']:
+                        try:
+                            section_element = card.locator(section_selector).first
+                            if await section_element.count():
+                                section = await section_element.inner_text()
+                                break
+                        except:
+                            continue
+                    
+                    # Check if section matches desired sections
+                    if self.desired_sections:
+                        section_lower = section.lower()
+                        if not any(desired.lower() in section_lower for desired in self.desired_sections):
+                            continue
+                    
+                    # Create opportunity
+                    opportunity = EnhancedTicketOpportunity(
+                        id=f"tm_{int(time.time())}_{i}",
+                        platform=PlatformType.TICKETMASTER,
+                        event_name=self.event_name,
+                        url=self.url,
+                        offer_url=self.page.url,
+                        section=section,
+                        price=price,
+                        quantity=1,
+                        detected_at=datetime.now(),
+                        priority=self.priority,
+                        confidence_score=0.9,
+                        detection_method='dom_scraping',
+                        metadata={
+                            'price_text': price_text,
+                            'card_index': i
+                        }
+                    )
+                    
+                    opportunities.append(opportunity)
+                    logger.warning(f"🎯 TICKETMASTER DOM HIT: {section} - €{price}")
+                    
+                except Exception as e:
+                    logger.debug(f"Error processing ticket card {i}: {e}")
+                    
+        except Exception as e:
+            logger.error(f"Error in DOM listings check: {e}")
+        
+        return opportunities
+
+    async def _check_api_data(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities from API data in page"""
+        opportunities = []
+        
+        try:
+            # Look for embedded JSON data
+            api_data = await self.page.evaluate("""
+            () => {
+                const data = [];
+                
+                // Check for embedded API responses
+                const scripts = document.querySelectorAll('script[type="application/json"]');
+                scripts.forEach(script => {
+                    try {
+                        const json = JSON.parse(script.textContent);
+                        data.push(json);
+                    } catch (e) {}
+                });
+                
+                // Check for window data
+                if (window.__INITIAL_STATE__) data.push(window.__INITIAL_STATE__);
+                if (window.__PRELOADED_STATE__) data.push(window.__PRELOADED_STATE__);
+                if (window.TM) data.push(window.TM);
+                
+                return data;
+            }
+            """)
+            
+            for data in api_data:
+                await self._extract_from_nested_data(data, opportunities)
+                
+        except Exception as e:
+            logger.debug(f"Error checking API data: {e}")
+        
+        return opportunities
+
+    async def _extract_from_nested_data(self, data: Any, opportunities: List):
+        """Recursively extract opportunities from nested data"""
+        if isinstance(data, dict):
+            try:
+                # Look for price information
+                if 'price' in data or 'cost' in data:
+                    price_val = data.get('price') or data.get('cost')
+                    if isinstance(price_val, (int, float)) and price_val <= self.max_price:
+                        section = data.get('section', data.get('sectionName', 'Unknown'))
+
+                        opportunity = EnhancedTicketOpportunity(
+                            id=f"tm_api_{int(time.time())}_{hash(str(data))}",
+                            platform=PlatformType.TICKETMASTER,
+                            event_name=self.event_name,
+                            url=self.url,
+                            offer_url=self.page.url,
+                            section=section,
+                            price=price_val,
+                            quantity=1,
+                            detected_at=datetime.now(),
+                            priority=self.priority,
+                            confidence_score=0.95,
+                            detection_method='api_extraction',
+                            metadata={
+                                'api_source': 'unknown',
+                                'raw_data': str(data)[:200]
+                            }
+                        )
+
+                        opportunities.append(opportunity)
+            except Exception as e:
+                logger.debug(f"Error processing nested data: {e}")
+
+    async def _check_json_ld(self) -> List[EnhancedTicketOpportunity]:
+        """Extract opportunities from JSON-LD structured data"""
+        opportunities = []
+        
+        try:
+            json_ld_data = await self.page.evaluate("""
+            () => {
+                const scripts = document.querySelectorAll('script[type="application/ld+json"]');
+                const data = [];
+                scripts.forEach(script => {
+                    try {
+                        const json = JSON.parse(script.textContent);
+                        data.push(json);
+                    } catch (e) {}
+                });
+                return data;
+            }
+            """)
+            
+            for data in json_ld_data:
+                if isinstance(data, dict) and data.get('@type') == 'Event':
+                    # Extract offers from structured data
+                    offers = data.get('offers', [])
+                    if not isinstance(offers, list):
+                        offers = [offers]
+                    
+                    for offer in offers:
+                        if isinstance(offer, dict) and 'price' in offer:
+                            price = float(offer['price'])
+                            if price <= self.max_price:
+                                logger.info(f"🎯 TICKETMASTER JSON-LD HIT: €{price}")
+                                
+        except Exception as e:
+            logger.debug(f"Error checking JSON-LD: {e}")
+        
+        return opportunities
+
+    async def attempt_purchase(self, opportunity: EnhancedTicketOpportunity) -> bool:
+        """Attempt to purchase a ticket with advanced automation"""
+        if not self.page:
+            logger.error("Cannot attempt purchase: no page available")
+            return False
+        
+        try:
+            logger.critical(f"🚀 ATTEMPTING TICKETMASTER PURCHASE: {opportunity.section} - €{opportunity.price}")
+            
+            # Navigate to offer URL if different
+            if opportunity.offer_url != self.page.url:
+                await self.page.goto(opportunity.offer_url, wait_until='networkidle', timeout=20000)
+            
+            # Human-like delay before interaction
+            await asyncio.sleep(random.uniform(1.5, 3.0))
+            
+            # Look for buy/select buttons
+            buy_selectors = [
+                'button:text("Buy Now")', 'button:text("Select")', 'button:text("Buy")',
+                '[data-testid="buy-button"]', '[data-testid="select-button"]',
+                '.purchase-btn', '.select-btn', '.buy-now-btn'
+            ]
+            
+            button_clicked = False
+            for selector in buy_selectors:
+                try:
+                    button = self.page.locator(selector).first
+                    if await button.count() and await button.is_visible():
+                        # Realistic interaction delay
+                        await asyncio.sleep(random.uniform(0.8, 1.5))
+                        
+                        # Scroll to button if needed
+                        await button.scroll_into_view_if_needed()
+                        await asyncio.sleep(random.uniform(0.3, 0.7))
+                        
+                        # Click with human-like behavior
+                        await button.click()
+                        logger.info(f"Clicked buy button: {selector}")
+                        button_clicked = True
+                        break
+                        
+                except Exception as e:
+                    logger.debug(f"Failed to click {selector}: {e}")
+                    continue
+            
+            if not button_clicked:
+                logger.warning("No buy button found or clickable")
+                return False
+            
+            # Wait for response/navigation
+            await self.page.wait_for_load_state('networkidle', timeout=15000)
+            
+            # Check for success indicators
+            success = await self._verify_purchase_progress()
+            
+            if success:
+                logger.critical(f"✅ PURCHASE INITIATED SUCCESSFULLY: {opportunity.section}")
+            else:
+                logger.warning(f"❌ Purchase attempt unclear: {opportunity.section}")
+            
+            return success
+            
+        except Exception as e:
+            logger.error(f"Purchase attempt failed: {e}")
+            return False
+
+    async def _verify_purchase_progress(self) -> bool:
+        """Verify if purchase process was initiated"""
+        try:
+            # Look for purchase flow indicators
+            progress_indicators = [
+                'text=Checkout', 'text=Payment', 'text=Review Order',
+                'text=Confirm Purchase', 'text=Cart', 'text=Basket',
+                '[data-testid="checkout"]', '[data-testid="cart"]',
+                '.checkout-page', '.payment-page', '.cart-page'
+            ]
+            
+            for indicator in progress_indicators:
+                try:
+                    if await self.page.locator(indicator).count() > 0:
+                        logger.info(f"Purchase progress indicator found: {indicator}")
+                        return True
+                except:
+                    continue
+            
+            # Check URL for purchase flow
+            current_url = self.page.url.lower()
+            purchase_url_indicators = ['checkout', 'payment', 'cart', 'basket', 'order']
+            
+            if any(indicator in current_url for indicator in purchase_url_indicators):
+                logger.info(f"Purchase flow URL detected: {current_url}")
+                return True
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Error verifying purchase progress: {e}")
+            return False
+
+    async def cleanup(self):
+        """Clean up browser resources"""
+        try:
+            if self.page:
+                await self.page.close()
+                self.page = None
+            
+            if self.browser_context:
+                await self.browser_context.close()
+                self.browser_context = None
+                
+        except Exception as e:
+            logger.error(f"Error during cleanup: {e}")
+
+# Legacy compatibility functions
+async def monitor(*args, **kwargs):
+    """Legacy monitor function for backward compatibility"""
+    return []
+
+async def check_ticketmaster_event(page, profile, target_cfg, gui_q=None):
+    """Legacy function - redirects to new monitor class"""
+    logger.warning("Using legacy check_ticketmaster_event - please update to TicketmasterMonitor class")
+    
+    # Create temporary monitor instance
+    monitor = TicketmasterMonitor(target_cfg, profile, None, None, None)
+    monitor.page = page
+    
+    return await monitor.check_opportunities()

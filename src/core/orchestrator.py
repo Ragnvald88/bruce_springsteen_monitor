@@ -838,40 +838,108 @@ class UnifiedOrchestrator:
         
         logger.info("Health monitor finished")
 
-        async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
-            """Maintain caches and cleanup old data"""
-            logger.info("Cache maintenance started")
-            
-            while not stop_event.is_set():
-                try:
-                    # Clear old cache entries - check if method exists
-                    if self.response_cache and hasattr(self.response_cache, 'clear_old_entries'):
-                        cleared = await self.response_cache.clear_old_entries(max_age_seconds=300)
-                        if cleared > 0:
-                            logger.debug(f"Cleared {cleared} old cache entries")
-                    else:
-                        # Manual cleanup if method doesn't exist
-                        if self.response_cache and hasattr(self.response_cache, 'cache'):
-                            now = datetime.now()
-                            old_keys = []
-                            
-                            # Assuming cache is a dict with entries that have timestamps
-                            cache_dict = getattr(self.response_cache, 'cache', {})
-                            for key, entry in cache_dict.items():
-                                if hasattr(entry, 'timestamp'):
-                                    age = (now - entry.timestamp).total_seconds()
-                                    if age > 300:  # 5 minutes
-                                        old_keys.append(key)
-                            
-                            for key in old_keys[:100]:  # Limit to prevent blocking
-                                cache_dict.pop(key, None)
-                            
-                            if old_keys:
-                                logger.debug(f"Manually cleared {len(old_keys)} old cache entries")
-                    await asyncio.sleep(60)  # Sleep between maintenance cycles
-                except Exception as e:
-                    logger.error(f"Cache maintenance error: {e}", exc_info=True)
-                    await asyncio.sleep(60)
+    async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
+        """
+        Periodically cleans up old entries in the response cache and updates cache metrics.
+        """
+        logger.info("Cache maintenance loop started.")
+        
+        # Get settings from config, with defaults
+        cache_settings = self.config.get('cache_settings', {})
+        cleanup_interval_s = int(cache_settings.get('cleanup_interval_s', 300))  # e.g., 5 minutes
+        max_entry_age_s = int(cache_settings.get('max_entry_age_s', 1800))    # e.g., 30 minutes
+
+        logger.info(f"Cache maintenance: Cleanup interval {cleanup_interval_s}s, Max entry age {max_entry_age_s}s.")
+
+        while not stop_event.is_set():
+            try:
+                await asyncio.sleep(cleanup_interval_s) # Wait for the configured interval
+                
+                if stop_event.is_set(): # Check again after sleep
+                    break
+
+                if self.response_cache:
+                    logger.debug("Cache maintenance: Running cleanup cycle.")
+                    cleared_count = 0
+                    
+                    # Primary method: Use clear_old_entries if available
+                    if hasattr(self.response_cache, 'clear_old_entries'):
+                        # The clear_old_entries method in your ResponseCache (from managers.py)
+                        # already handles the logic of finding and removing old entries.
+                        cleared_count = await self.response_cache.clear_old_entries(max_age_seconds=max_entry_age_s)
+                        if cleared_count > 0:
+                            logger.info(f"Cache Maintenance: Cleared {cleared_count} old entries older than {max_entry_age_s}s using clear_old_entries.")
+                    
+                    # Fallback: Manual cleanup (should not be needed if ResponseCache is correctly implemented)
+                    # This part is more for a scenario where clear_old_entries might not exist or if you want a different logic.
+                    # Given your ResponseCache structure, this fallback is less likely to be hit if the primary method works.
+                    elif hasattr(self.response_cache, 'cache') and isinstance(self.response_cache.cache, dict):
+                        logger.warning("Cache maintenance: Falling back to manual cleanup (clear_old_entries not found or preferred).")
+                        now = datetime.now()
+                        keys_to_delete = []
+                        
+                        # Your ResponseCache stores items as tuples: (content, timestamp, response_headers)
+                        # Or if using IntelligentResponseCache, it uses CacheEntry objects.
+                        # Let's assume CacheEntry objects as per IntelligentResponseCache in components.py/managers.py
+                        
+                        cache_dict_view = list(self.response_cache.cache.items()) # Iterate over a copy
+
+                        for key, entry_item in cache_dict_view:
+                            entry_timestamp = None
+                            if hasattr(entry_item, 'timestamp') and isinstance(entry_item.timestamp, datetime): # For CacheEntry objects
+                                entry_timestamp = entry_item.timestamp
+                            elif isinstance(entry_item, tuple) and len(entry_item) > 1 and isinstance(entry_item[1], datetime): # For (content, timestamp, ...) tuples
+                                entry_timestamp = entry_item[1]
+
+                            if entry_timestamp:
+                                age_seconds = (now - entry_timestamp).total_seconds()
+                                if age_seconds > max_entry_age_s:
+                                    keys_to_delete.append(key)
+                            else:
+                                logger.debug(f"Cache maintenance: Skipping entry {key} due to missing or invalid timestamp.")
+                        
+                        if keys_to_delete:
+                            logger.info(f"Cache maintenance: Manually identified {len(keys_to_delete)} entries to clear.")
+                            for key_to_delete in keys_to_delete:
+                                # Need a method to remove from cache and update size, or do it directly
+                                if hasattr(self.response_cache, '_remove_entry'): # If using IntelligentResponseCache
+                                    await self.response_cache._remove_entry(key_to_delete)
+                                    cleared_count +=1
+                                elif key_to_delete in self.response_cache.cache: # Basic cache
+                                    entry_to_remove = self.response_cache.cache.pop(key_to_delete)
+                                    if hasattr(self.response_cache, 'current_size_bytes') and entry_to_remove:
+                                        content_bytes = None
+                                        if hasattr(entry_to_remove, 'data'): # CacheEntry
+                                            content_bytes = entry_to_remove.data
+                                        elif isinstance(entry_to_remove, tuple) and entry_to_remove[0]: # (content, ...)
+                                            content_bytes = entry_to_remove[0]
+                                        if content_bytes:
+                                            self.response_cache.current_size_bytes -= len(content_bytes)
+                                    cleared_count += 1
+                            logger.info(f"Cache Maintenance: Manually cleared {cleared_count} entries older than {max_entry_age_s}s.")
+                    
+                    # Update orchestrator metrics from cache stats if ResponseCache has hit_count/miss_count
+                    if self.response_cache:
+                        if hasattr(self.response_cache, 'hit_count'):
+                            self.metrics['cache_hits'] = self.response_cache.hit_count
+                        if hasattr(self.response_cache, 'miss_count'):
+                            self.metrics['cache_misses'] = self.response_cache.miss_count
+                        if hasattr(self.response_cache, 'current_size_mb'):
+                            logger.debug(f"Cache size after maintenance: {self.response_cache.current_size_mb:.2f} MB")
+
+                else:
+                    logger.debug("Cache maintenance: Response cache not initialized.")
+
+            except asyncio.CancelledError:
+                logger.info("Cache maintenance loop cancelled.")
+                break
+            except Exception as e:
+                logger.error(f"Error in cache maintenance loop: {e}", exc_info=True)
+                # Prevent rapid error looping if something is persistently wrong
+                await asyncio.sleep(cleanup_interval_s / 2 if cleanup_interval_s > 20 else 10) 
+                
+        logger.info("Cache maintenance loop finished.")
+
     
     async def _metrics_reporter_loop(self, stop_event: asyncio.Event) -> None:
         """Enhanced metrics reporting with performance insights"""

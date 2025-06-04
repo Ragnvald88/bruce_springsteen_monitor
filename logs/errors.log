@@ -729,3 +729,275 @@ Traceback (most recent call last):
     cleared = await self.response_cache.clear_old_entries(max_age_seconds=300)
                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'ResponseCache' object has no attribute 'clear_old_entries'
+2025-06-04 00:29:09.144 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'ProfileAwareLightweightMonitor' object has no attribute 'default_check_interval'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 336, in run
+    await self._apply_mode_specific_settings()
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 410, in _apply_mode_specific_settings
+    self.monitor.default_check_interval *= settings['min_interval_multiplier']
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'default_check_interval'
+2025-06-04 00:31:55.039 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:31:55.042 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen San Siro 2025 (TM): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:31:55.042 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Resale (VT): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:31:55.045 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_cache_maintenance_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 345, in run
+    asyncio.create_task(self._cache_maintenance_loop(stop_event), name="cache_maintenance"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_cache_maintenance_loop'
+2025-06-04 00:32:55.558 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:33:23.898 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen San Siro 2025 (TM): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:34:04.291 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:34:54.386 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen San Siro 2025 (TM): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:35:00.147 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Resale (VT): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:35:13.013 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:36:12.039 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen Milano 2025 (FS): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:36:21.641 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Error monitoring Bruce Springsteen San Siro 2025 (TM): 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 516, in _monitor_single_target_loop
+    opportunities = await self.monitor.check_ultra_efficient(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        platform, url, event_name, priority
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 545, in check_ultra_efficient
+    cached_content = await self.response_cache.get(url, max_age_seconds=self.cache_max_age_s)
+                                                                        ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileAwareLightweightMonitor' object has no attribute 'cache_max_age_s'
+2025-06-04 00:41:36.338 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_62ba7da7: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 00:41:36.340 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 00:41:36.353 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_2708f713: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 00:41:36.354 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 00:41:36.367 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_869307af: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+2025-06-04 00:41:36.367 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 567, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 85, in get_client
+    self.pools[client_key] = httpx.AsyncClient(
+                             ~~~~~~~~~~~~~~~~~^
+        limits=limits,
+        ^^^^^^^^^^^^^^
+    ...<5 lines>...
+        http2=True,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1394, in __init__
+    raise ImportError(
+    ...<2 lines>...
+    ) from None
+ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.

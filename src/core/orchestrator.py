@@ -28,6 +28,7 @@ from src.profiles.manager import ProfileManager
 from src.profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
 from src.core.advanced_profile_system import DetectionEvent
 from src.profiles.utils import create_profile_manager_from_config
+from src.profiles.manager import BrowserProfile
 
 # Core module imports
 from .enums import OperationMode, PlatformType, PriorityLevel
@@ -214,6 +215,163 @@ class UnifiedOrchestrator:
             'total_data_saved_mb': 0.0,
         }
     
+    async def _get_profile_for_platform(self, platform_str: str) -> Optional[BrowserProfile]:
+        """Get a suitable profile for the platform with proper error handling"""
+        try:
+            # Convert platform string to enum
+            platform_enum_map = {
+                'fansale': CorePlatformEnum.FANSALE if hasattr(CorePlatformEnum, 'FANSALE') else CorePlatformEnum.GENERIC,
+                'ticketmaster': CorePlatformEnum.TICKETMASTER if hasattr(CorePlatformEnum, 'TICKETMASTER') else CorePlatformEnum.GENERIC,
+                'vivaticket': CorePlatformEnum.VIVATICKET if hasattr(CorePlatformEnum, 'VIVATICKET') else CorePlatformEnum.GENERIC,
+            }
+            core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                
+            logger.debug(f"Requesting profile for platform: {platform_str} -> {core_platform}")
+            
+            # If we have static profiles already, try to get one for this platform
+            if self.profile_manager.static_profiles:
+                # Check platform pools first
+                platform_pools = getattr(self.profile_manager, 'platform_pools', {})
+                platform_profile_ids = platform_pools.get(platform_str, [])
+                
+                if platform_profile_ids:
+                    for profile_id in platform_profile_ids:
+                        profile = self.profile_manager.static_profiles.get(profile_id)
+                        if profile:
+                            logger.debug(f"Found existing profile {profile_id} for {platform_str}")
+                            return profile
+                
+                # No platform-specific profile, get any available
+                for profile_id, profile in self.profile_manager.static_profiles.items():
+                    logger.debug(f"Using generic profile {profile_id} for {platform_str}")
+                    return profile
+            
+            # No static profiles exist, try to get from ProfileManager method
+            result = await self.profile_manager.get_profile_for_platform(
+                platform=core_platform,
+                require_session=False
+            )
+            
+            # Handle different return types
+            if result is None:
+                logger.warning(f"ProfileManager returned None for {platform_str}")
+                return None
+                
+            # If it's already a BrowserProfile object, return it
+            if hasattr(result, 'profile_id') and hasattr(result, 'user_agent'):
+                logger.debug(f"Got BrowserProfile object: {result.profile_id}")
+                return result
+                
+            # If it's a string (profile ID), look it up
+            if isinstance(result, str):
+                logger.debug(f"Got profile ID string: {result}, looking up in static_profiles")
+                profile = self.profile_manager.static_profiles.get(result)
+                if profile:
+                    logger.debug(f"Found profile in static_profiles: {profile.profile_id}")
+                    return profile
+                    
+            # If it's a DynamicProfile, get or create static version
+            if hasattr(result, 'id') and hasattr(result, 'get_fingerprint_snapshot'):
+                logger.debug(f"Got DynamicProfile {result.id}, getting static version")
+                static_profile = self.profile_manager.static_profiles.get(result.id)
+                if static_profile:
+                    return static_profile
+                else:
+                    # Create static profile from dynamic
+                    logger.info(f"Creating static profile from dynamic profile {result.id}")
+                    if hasattr(self.profile_manager, '_adapt_dynamic_to_static'):
+                        static_profile = self.profile_manager._adapt_dynamic_to_static(result)
+                        self.profile_manager.static_profiles[result.id] = static_profile
+                        return static_profile
+                        
+            logger.error(f"Unknown profile type returned: {type(result)}")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error getting profile for {platform_str}: {e}", exc_info=True)
+            
+            # Fallback: try to create a new profile
+            try:
+                logger.warning(f"Attempting to create new profile for {platform_str}")
+                if hasattr(self.profile_manager, '_create_platform_optimized_profile'):
+                    new_profile_data = await self.profile_manager._create_platform_optimized_profile(
+                        CorePlatformEnum(platform_str)
+                    )
+                    if new_profile_data and 'static' in new_profile_data:
+                        return new_profile_data['static']
+            except Exception as create_error:
+                logger.error(f"Failed to create fallback profile: {create_error}")
+                
+        return None
+    
+    async def _validate_profile_manager(self) -> bool:
+        """Validate that ProfileManager is properly initialized with profiles"""
+        try:
+            if not self.profile_manager:
+                logger.error("ProfileManager is None!")
+                return False
+
+            # Check dynamic profiles
+            dynamic_count = len(getattr(self.profile_manager, 'dynamic_profiles', []))
+            static_count = len(getattr(self.profile_manager, 'static_profiles', {}))
+
+            logger.info(f"Profile inventory: {dynamic_count} dynamic, {static_count} static profiles")
+
+            # Initialize static profiles from dynamic if needed
+            if dynamic_count > 0 and static_count == 0:
+                logger.warning("No static profiles but have dynamic profiles, creating static versions")
+                
+                if not hasattr(self.profile_manager, 'static_profiles'):
+                    self.profile_manager.static_profiles = {}
+                
+                # Convert each dynamic profile to static
+                for dynamic_profile in self.profile_manager.dynamic_profiles:
+                    if hasattr(self.profile_manager, '_adapt_dynamic_to_static'):
+                        static_profile = self.profile_manager._adapt_dynamic_to_static(dynamic_profile)
+                        self.profile_manager.static_profiles[dynamic_profile.id] = static_profile
+                    else:
+                        # Manual conversion if method doesn't exist
+                        snapshot = dynamic_profile.get_fingerprint_snapshot()
+                        static_profile = BrowserProfile(
+                            profile_id=dynamic_profile.id,
+                            platform=dynamic_profile.platform,
+                            user_agent=snapshot['user_agent'],
+                            # Add other required fields from snapshot
+                        )
+                        self.profile_manager.static_profiles[dynamic_profile.id] = static_profile
+                
+                static_count = len(self.profile_manager.static_profiles)
+                logger.info(f"Created {static_count} static profiles from dynamic profiles")
+
+            # Initialize platform pools if not exists
+            if not hasattr(self.profile_manager, 'platform_pools'):
+                self.profile_manager.platform_pools = defaultdict(list)
+                
+            platform_pools = self.profile_manager.platform_pools
+
+            # Ensure each platform has at least one profile
+            for platform in ['fansale', 'ticketmaster', 'vivaticket']:
+                if platform not in platform_pools or not platform_pools[platform]:
+                    logger.warning(f"No profiles assigned to {platform}, creating one")
+                    try:
+                        if hasattr(self.profile_manager, '_create_platform_optimized_profile'):
+                            new_profile = await self.profile_manager._create_platform_optimized_profile(
+                                CorePlatformEnum(platform.upper())
+                            )
+                            if new_profile:
+                                self.profile_manager.dynamic_profiles.append(new_profile['dynamic'])
+                                self.profile_manager.static_profiles[new_profile['dynamic'].id] = new_profile['static']
+                                platform_pools[platform].append(new_profile['dynamic'].id)
+                                logger.info(f"Created profile {new_profile['dynamic'].id} for {platform}")
+                    except Exception as e:
+                        logger.error(f"Failed to create profile for {platform}: {e}")
+
+            return True  # Don't fail if we at least have some profiles
+
+        except Exception as e:
+            logger.error(f"Profile manager validation failed: {e}", exc_info=True)
+            return False
+    
     async def initialize_subsystems(self) -> bool:
         """Initialize all subsystems with performance optimizations"""
         
@@ -239,8 +397,13 @@ class UnifiedOrchestrator:
                 str(self.config_file_path),
                 config_overrides=profile_settings
             )
-            await self.profile_manager.initialize()
-            
+            if hasattr(self.profile_manager, 'initialize'):
+                await self.profile_manager.initialize()
+            else:
+                logger.warning("ProfileManager doesn't have initialize method")
+            if not await self._validate_profile_manager():
+                logger.error("ProfileManager validation failed - no profiles available!")
+
             profile_count = len(self.profile_manager.dynamic_profiles)
             logger.info(f"✅ ProfileManager: {profile_count} profiles loaded")
             
@@ -276,9 +439,6 @@ class UnifiedOrchestrator:
             self.is_initialized = True
             logger.info("✨ All subsystems initialized successfully")
             
-            # Log initial system state
-            #await self._log_system_state()
-            
             return True
             
         except Exception as e:
@@ -312,10 +472,7 @@ class UnifiedOrchestrator:
     async def _pre_warm_single_connection(self, url: str):
         """Pre-warm a single connection"""
         try:
-            profile = await self.profile_manager.get_profile_for_platform(
-                platform=CorePlatformEnum.GENERIC,
-                require_session=False
-            )
+            profile = await self._get_profile_for_platform('generic')
             if profile:
                 client = await self.connection_pool.get_client(profile)
                 # Just establish connection, don't fetch content
@@ -410,12 +567,11 @@ class UnifiedOrchestrator:
             self.monitor.default_check_interval *= settings['min_interval_multiplier']
         
         # Apply data optimization to profiles
-        if self.profile_manager:
+        if self.profile_manager and hasattr(self.profile_manager, 'static_profiles'):
             optimization_level = settings['data_optimization']
-            for profile in self.profile_manager.dynamic_profiles:
-                static = self.profile_manager.static_profiles.get(profile.id)
-                if static:
-                    static.data_optimization_level = optimization_level
+            for profile in self.profile_manager.static_profiles.values():
+                if hasattr(profile, 'data_optimization_level'):
+                    profile.data_optimization_level = optimization_level
         
         logger.info(f"Applied {self.mode.value} mode settings: "
                    f"Strikes={self.max_concurrent_strikes}, "
@@ -487,6 +643,7 @@ class UnifiedOrchestrator:
         platform_str = target_config.get('platform', '').lower()
         
         # Import platform monitors (browser-based)
+        MonitorClass = None
         if platform_str == 'fansale':
             from src.platforms.fansale import FansaleMonitor
             MonitorClass = FansaleMonitor
@@ -494,655 +651,219 @@ class UnifiedOrchestrator:
             from src.platforms.ticketmaster import TicketmasterMonitor
             MonitorClass = TicketmasterMonitor
         elif platform_str == 'vivaticket':
-            from src.platforms.vivaticket import VivaticketMonitor
-            MonitorClass = VivaticketMonitor
-        else:
-            logger.error(f"Unsupported platform: {platform_str}")
-            return
-        
-        # Get optimal profile for this platform
-        try:
-            profile = await self.profile_manager.get_profile_for_platform(
-                platform=CorePlatformEnum(platform_str),
-                require_session=False
-            )
-            if not profile:
-                logger.error(f"No profile available for {platform_str}")
+            # Try to import, but handle if it doesn't exist
+            try:
+                from src.platforms.vivaticket import VivaticketMonitor
+                MonitorClass = VivaticketMonitor
+            except ImportError:
+                logger.error(f"VivaticketMonitor not implemented yet, using base monitor")
+                # Fall back to a generic monitor or skip
+                logger.warning(f"Skipping monitoring for {platform_str} - monitor not implemented")
                 return
-        except Exception as e:
-            logger.error(f"Failed to get profile for {platform_str}: {e}")
-            return
-        
-        # Add authentication credentials to target config
-        auth_config = self.config.get('authentication', {}).get('platforms', {})
-        platform_auth = auth_config.get(f"{platform_str}_it", {})
-        
-        if platform_auth:
-            target_config['email'] = platform_auth.get('username')
-            target_config['password'] = platform_auth.get('password')
-        
-        # Create browser-based monitor
-        monitor = MonitorClass(
-            config=target_config,
-            profile=profile,
-            browser_manager=self.browser_manager,  # CRITICAL: Pass browser manager
-            connection_manager=self.connection_pool,
-            cache=self.response_cache
-        )
-        
-        logger.info(f"🚀 BROWSER MONITOR: {target_config.get('event_name')} on {platform_str}")
-        
-        # Initialize browser context
-        try:
-            await monitor.initialize()
-            logger.info(f"✅ Browser initialized for {platform_str}")
-        except Exception as e:
-            logger.error(f"❌ Browser initialization failed for {platform_str}: {e}")
-            return
-        
-        # Monitoring loop with browser automation
-        base_interval = float(target_config.get('interval_s', 60))
-        current_interval = base_interval
-        consecutive_empty = 0
-        
-        try:
-            while not stop_event.is_set() and not self._pause_monitoring:
-                async with self.monitor_semaphore:
-                    try:
-                        start_time = time.time()
-                        
-                        # Use BROWSER-BASED monitoring
-                        opportunities = await monitor.check_opportunities()
-                        
-                        check_duration = time.time() - start_time
-                        logger.debug(f"Browser check for {platform_str} took {check_duration:.2f}s")
-                        
-                        if opportunities:
-                            consecutive_empty = 0
-                            new_count = await self._queue_opportunities(opportunities)
-                            
-                            if new_count > 0:
-                                logger.critical(f"🎯 BROWSER FOUND {new_count} opportunities on {platform_str}!")
-                                # Speed up checking after detection
-                                current_interval = max(10.0, base_interval * 0.5)
-                        else:
-                            consecutive_empty += 1
-                            # Gradual slowdown if no opportunities
-                            if consecutive_empty > 5:
-                                current_interval = min(current_interval * 1.2, base_interval * 1.5)
-                        
-                    except Exception as e:
-                        logger.error(f"Browser monitoring error for {platform_str}: {e}")
-                        current_interval = base_interval * 2  # Back off on error
-                        await asyncio.sleep(10)  # Error cooldown
-                
-                # Adaptive sleep
-                sleep_interval = current_interval * random.uniform(0.8, 1.2)
+            else:
+                logger.error(f"Unsupported platform: {platform_str}")
+                return
+    
+        async def _strike_processor_loop(self, stop_event: asyncio.Event) -> None:
+            """Process queued opportunities with concurrent strikes"""
+            logger.info("Strike processor started")
+            while not stop_event.is_set():
                 try:
-                    await asyncio.wait_for(stop_event.wait(), timeout=sleep_interval)
-                    break
-                except asyncio.TimeoutError:
-                    continue
-                    
-        finally:
-            # CRITICAL: Cleanup browser resources
-            try:
-                await monitor.cleanup()
-                logger.info(f"🧹 Browser cleanup complete for {platform_str}")
-            except Exception as e:
-                logger.error(f"Browser cleanup error for {platform_str}: {e}")
+                    # Get highest priority opportunity (negative score for min-heap behavior)
+                    neg_score, priority_opp = await asyncio.wait_for(self.opportunity_queue.get(), timeout=1.0)
+                    opportunity = priority_opp.opportunity
     
-    async def _queue_opportunities(self, opportunities: List[EnhancedTicketOpportunity]) -> int:
-        """Queue opportunities with priority scoring"""
-        
-        new_count = 0
-        
-        for opp in opportunities:
-            # Skip if already processed
-            if opp.fingerprint in self.processed_opportunity_fingerprints:
-                continue
-            
-            # Calculate priority score
-            score = self._calculate_opportunity_score(opp)
-            
-            # Create priority wrapper
-            priority_opp = OpportunityPriority(opportunity=opp, score=score)
-            
-            # Add to queue
-            try:
-                await self.opportunity_queue.put((score, priority_opp))
-                self.opportunity_cache[opp.id] = opp
-                new_count += 1
-                self.metrics['opportunities_queued_total'] += 1
-            except asyncio.QueueFull:
-                logger.warning(f"Opportunity queue full, dropping {opp.event_name}")
-                break
-        
-        return new_count
-    
-    def _calculate_opportunity_score(self, opp: EnhancedTicketOpportunity) -> float:
-        """Calculate priority score for opportunity"""
-        
-        score = 0.0
-        
-        # Base priority
-        priority_scores = {
-            PriorityLevel.CRITICAL: 1000,
-            PriorityLevel.HIGH: 500,
-            PriorityLevel.NORMAL: 100,
-            PriorityLevel.LOW: 10
-        }
-        score += priority_scores.get(opp.priority, 100)
-        
-        # Price factor (prefer reasonably priced tickets)
-        if opp.price < 100:
-            score += 200
-        elif opp.price < 200:
-            score += 100
-        elif opp.price > 500:
-            score -= 100
-        
-        # Section quality (if available)
-        premium_sections = ['floor', 'pit', 'vip', 'gold', 'platinum']
-        if any(section in opp.section.lower() for section in premium_sections):
-            score += 300
-        
-        # Quantity bonus
-        if opp.quantity > 1:
-            score += 50 * min(opp.quantity, 4)
-        
-        # Freshness bonus (newer = better)
-        age_seconds = (datetime.now() - opp.detected_at).total_seconds()
-        score -= age_seconds * 0.1  # Lose 0.1 points per second
-        
-        # Previous attempt penalty
-        score -= opp.attempt_count * 100
-        
-        return max(0, score)
-    
-    async def _strike_processor_loop(self, stop_event: asyncio.Event) -> None:
-        """Process queued opportunities with concurrent strikes"""
-        
-        logger.info("Strike processor started")
-        
-        while not stop_event.is_set():
-            try:
-                # Get highest priority opportunity
-                score, priority_opp = await asyncio.wait_for(
-                    self.opportunity_queue.get(), 
-                    timeout=1.0
-                )
-                
-                opportunity = priority_opp.opportunity
-                
-                # Skip if already being processed
-                if opportunity.id in self.active_strikes:
-                    self.opportunity_queue.task_done()
-                    continue
-                
-                # Skip if already attempted
-                if opportunity.fingerprint in self.processed_opportunity_fingerprints:
-                    self.opportunity_queue.task_done()
-                    continue
-                
-                # Launch strike with semaphore
-                async with self.strike_semaphore:
-                    strike_task = asyncio.create_task(
-                        self._execute_strike(opportunity),
-                        name=f"strike_{opportunity.id[:8]}"
-                    )
-                    self.active_strikes[opportunity.id] = strike_task
-                
-                self.opportunity_queue.task_done()
-                
-            except asyncio.TimeoutError:
-                continue
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Strike processor error: {e}", exc_info=True)
-                await asyncio.sleep(1)
-        
-        # Wait for active strikes to complete
-        if self.active_strikes:
-            logger.info(f"Waiting for {len(self.active_strikes)} active strikes...")
-            await asyncio.gather(*self.active_strikes.values(), return_exceptions=True)
-        
-        logger.info("Strike processor finished")
-    
-    async def execute_coordinated_strike(self, opportunity: EnhancedTicketOpportunity, 
-                                         mode: OperationMode) -> bool:
-        """Enhanced strike with browser automation - MINIMAL CHANGES"""
-        
-        logger.info(f"🎯 Enhanced Strike: {opportunity.event_name}")
-        
-        try:
-            # Use existing profile manager to get any available profile
-            available_profiles = list(self.profile_manager.dynamic_profiles)
-            if not available_profiles:
-                logger.error("No profiles available for strike")
-                return False
-            
-            # Get the first available profile (or implement better selection logic)
-            profile = available_profiles[0]
-            logger.info(f"Using profile {profile.id} for strike")
-            
-            # Get browser context using existing browser manager
-            context = await self.browser_manager.get_stealth_context(
-                profile, force_new=False
-            )
-            
-            # Create page for the strike
-            page = await context.new_page()
-            
-            try:
-                logger.info(f"🌐 Navigating to: {opportunity.offer_url}")
-                
-                # Navigate to the opportunity URL
-                await page.goto(opportunity.offer_url, 
-                              wait_until='networkidle', 
-                              timeout=30000)
-                
-                # Add realistic human delay
-                await asyncio.sleep(random.uniform(2.0, 4.0))
-                
-                # Log page title for debugging
-                title = await page.title()
-                logger.info(f"📄 Page loaded: {title}")
-                
-                # Look for purchase elements (universal selectors)
-                purchase_selectors = [
-                    # English
-                    'button:has-text("Buy")', 'button:has-text("Purchase")', 'button:has-text("Add to Cart")',
-                    # Italian  
-                    'button:has-text("Acquista")', 'button:has-text("Compra")', 'button:has-text("Aggiungi")',
-                    # CSS classes
-                    '.buy-button', '.purchase-button', '.btn-buy', '.btn-purchase',
-                    'input[value*="Buy"]', 'input[value*="Acquista"]',
-                    # Links
-                    'a[href*="buy"]', 'a[href*="purchase"]', 'a[href*="checkout"]'
-                ]
-                
-                purchase_attempted = False
-                
-                for selector in purchase_selectors:
-                    try:
-                        elements = await page.locator(selector).all()
-                        for element in elements:
-                            if await element.is_visible():
-                                logger.info(f"🎯 Found purchase element: {selector}")
-                                
-                                # Realistic delay before clicking
-                                await asyncio.sleep(random.uniform(1.0, 2.5))
-                                
-                                # Attempt click
-                                await element.click()
-                                purchase_attempted = True
-                                
-                                # Wait for page response
-                                await page.wait_for_load_state('networkidle', timeout=10000)
-                                
-                                logger.info(f"✅ Clicked purchase element: {selector}")
-                                break
-                        
-                        if purchase_attempted:
-                            break
-                            
-                    except Exception as e:
-                        logger.debug(f"Failed to interact with {selector}: {e}")
+                    if opportunity.id in self.active_strikes and self.active_strikes[opportunity.id].done() is False:
+                        self.opportunity_queue.task_done()
                         continue
-                
-                # Check for success indicators if we attempted a purchase
-                if purchase_attempted:
-                    success_indicators = [
-                        'text=success', 'text=Success', 'text=SUCCESS',
-                        'text=successo', 'text=Successo', 
-                        'text=confermato', 'text=Confermato',
-                        'text=purchased', 'text=acquistato',
-                        '.success', '.confirmation', '.order-complete',
-                        '#success', '#confirmation'
-                    ]
-                    
-                    for indicator in success_indicators:
+                    if opportunity.fingerprint in self.processed_opportunity_fingerprints:
+                        self.opportunity_queue.task_done()
+                        continue
+    
+                    logger.info(f"Processing opportunity: {opportunity.event_name} (Score: {-neg_score:.2f})")
+                    async with self.strike_semaphore: # type: ignore
+                        if stop_event.is_set(): break # Check again after acquiring semaphore
+    
+                        strike_task = asyncio.create_task(
+                            # Assuming self.strike_force.execute_coordinated_strike exists and is correct
+                            self.strike_force.execute_coordinated_strike(opportunity, self.mode), # type: ignore
+                            name=f"strike_{opportunity.id[:8]}"
+                        )
+                        self.active_strikes[opportunity.id] = strike_task
+    
+                        # Wait for this strike to complete or manage active_strikes list
                         try:
-                            if await page.locator(indicator).count() > 0:
-                                logger.critical(f"🎉 SUCCESS INDICATOR FOUND: {indicator}")
-                                return True
-                        except:
-                            continue
-                    
-                    # If no explicit success indicator, assume the click was successful
-                    # (Many sites don't have clear success messages)
-                    logger.warning("⚠️ Purchase attempted but no clear success indicator found")
-                    return True  # Optimistic assumption
-                else:
-                    logger.warning("❌ No purchase button found on page")
-                    
-                    # Save screenshot for debugging (optional)
-                    try:
-                        screenshot_path = f"debug_no_button_{int(time.time())}.png"
-                        await page.screenshot(path=screenshot_path)
-                        logger.info(f"📸 Debug screenshot saved: {screenshot_path}")
-                    except:
-                        pass
-                    
-                    return False
-            
-            finally:
-                # Always cleanup the page
-                try:
-                    await page.close()
-                except:
-                    pass
-        
-        except Exception as e:
-            logger.error(f"❌ Strike execution failed: {e}", exc_info=True)
-            return False
+                            success = await strike_task
+                            if success:
+                                logger.critical(f"STRIKE SUCCESSFUL for {opportunity.event_name}!")
+                                self.processed_opportunity_fingerprints.add(opportunity.fingerprint)
+                                await self._clear_related_opportunities(opportunity) # Clear others for same event
+                            else:
+                                logger.warning(f"Strike FAILED for {opportunity.event_name}.")
+                                opportunity.attempt_count += 1
+                                if opportunity.attempt_count < 3: # Retry limit
+                                    # Re-queue with lower priority (higher negative score)
+                                    new_score = self._calculate_opportunity_score(opportunity) 
+                                    await self.opportunity_queue.put((-new_score, priority_opp))
+                                    logger.info(f"Re-queued {opportunity.event_name}, attempt {opportunity.attempt_count + 1}")
+                                else:
+                                    logger.error(f"Max retries reached for {opportunity.event_name}.")
+                                    self.processed_opportunity_fingerprints.add(opportunity.fingerprint)
     
+                        except Exception as e_strike:
+                            logger.error(f"Error during strike execution for {opportunity.event_name}: {e_strike}", exc_info=True)
+                        finally:
+                            if opportunity.id in self.active_strikes:
+                                 del self.active_strikes[opportunity.id]
+                    self.opportunity_queue.task_done()
+                except asyncio.TimeoutError:
+                    continue # No opportunity in queue, normal
+                except asyncio.CancelledError:
+                    logger.info("Strike processor loop cancelled.")
+                    break
+                except Exception as e:
+                    logger.error(f"Unexpected error in strike_processor_loop: {e}", exc_info=True)
+                    await asyncio.sleep(1) # Brief pause before retrying loop
+    
+            # Cleanup active strike tasks on exit
+            if self.active_strikes:
+                logger.info(f"Shutting down: waiting for {len(self.active_strikes)} active strike tasks...")
+                await asyncio.gather(*self.active_strikes.values(), return_exceptions=True)
+            logger.info("Strike processor finished.")
+
     async def _clear_related_opportunities(self, successful_opp: EnhancedTicketOpportunity):
-        """Clear opportunities for the same event after success"""
-        
-        cleared = 0
-        
-        # Clear from queue
-        temp_items = []
-        while not self.opportunity_queue.empty():
-            try:
-                item = self.opportunity_queue.get_nowait()
-                if item[1].opportunity.event_name != successful_opp.event_name:
-                    temp_items.append(item)
+        cleared_count = 0
+        temp_queue = []
+        try:
+            while not self.opportunity_queue.empty():
+                neg_score, item = self.opportunity_queue.get_nowait()
+                if item.opportunity.event_name == successful_opp.event_name and \
+                   item.opportunity.id != successful_opp.id:
+                    logger.info(f"Clearing related opportunity for {successful_opp.event_name}: ID {item.opportunity.id}")
+                    self.processed_opportunity_fingerprints.add(item.opportunity.fingerprint)
+                    cleared_count += 1
                 else:
-                    cleared += 1
+                    temp_queue.append((-neg_score, item)) # Store with original score logic
                 self.opportunity_queue.task_done()
-            except asyncio.QueueEmpty:
-                break
-        
-        # Re-add non-related items
-        for item in temp_items:
-            await self.opportunity_queue.put(item)
-        
-        if cleared > 0:
-            logger.info(f"Cleared {cleared} related opportunities for {successful_opp.event_name}")
-    
+        except asyncio.QueueEmpty:
+            pass
+        finally:
+            for neg_score, item in temp_queue: # Re-add items that were not cleared
+                await self.opportunity_queue.put((neg_score, item))
+        if cleared_count > 0:
+             logger.info(f"Cleared {cleared_count} related opportunities from queue for event: {successful_opp.event_name}")
+
+
     async def _health_monitor_loop(self, stop_event: asyncio.Event) -> None:
-        """Monitor system health and performance"""
-        
         logger.info("Health monitor started")
         process = psutil.Process(os.getpid())
-        
         while not stop_event.is_set():
             try:
-                # Update system metrics
                 self.system_health.cpu_percent = process.cpu_percent(interval=0.1)
                 memory_info = process.memory_info()
                 self.system_health.memory_percent = (memory_info.rss / psutil.virtual_memory().total) * 100
-                self.system_health.active_tasks = len(self.active_strikes) + self.metrics['active_monitoring_tasks']
+                self.system_health.active_tasks = len(self.active_strikes) + self.metrics.get('active_monitoring_tasks', 0)
                 
-                # Calculate error rate
                 total_attempts = sum(self.metrics['attempts_by_platform'].values())
                 total_failures = sum(self.metrics['failures_by_platform'].values())
                 self.system_health.error_rate = total_failures / max(total_attempts, 1)
-                
-                # Update peak memory
-                self.metrics['peak_memory_usage'] = max(
-                    self.metrics['peak_memory_usage'],
-                    memory_info.rss / 1024 / 1024  # MB
-                )
-                
-                # Health actions
+                self.metrics['peak_memory_usage'] = max(self.metrics.get('peak_memory_usage',0), memory_info.rss / (1024*1024))
+
                 if not self.system_health.is_healthy:
-                    logger.warning(f"System unhealthy: CPU={self.system_health.cpu_percent:.1f}%, "
-                                 f"Memory={self.system_health.memory_percent:.1f}%, "
-                                 f"Errors={self.system_health.error_rate:.1%}")
-                    
-                    # Take corrective action
-                    if self.system_health.memory_percent > 85:
-                        gc.collect()
-                        logger.info("Forced garbage collection due to high memory")
-                    
+                    logger.warning(f"System unhealthy: CPU={self.system_health.cpu_percent:.1f}%, Mem={self.system_health.memory_percent:.1f}%, Errors={self.system_health.error_rate:.1%}")
+                    if self.system_health.memory_percent > 85: gc.collect(); logger.info("Forced GC.")
                     if self.system_health.consecutive_failures > 20:
-                        logger.critical("Too many consecutive failures, entering recovery mode")
-                        self._pause_monitoring = True
-                        await asyncio.sleep(30)  # Recovery period
-                        self._pause_monitoring = False
+                        logger.critical("Too many consecutive failures, pausing monitoring.")
+                        self._pause_monitoring = True; await asyncio.sleep(30); self._pause_monitoring = False
                 
-                # Run performance optimizer
                 await self.performance_optimizer.optimize(self)
-                
-                await asyncio.sleep(10)  # Health check interval
-                
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Health monitor error: {e}", exc_info=True)
-                await asyncio.sleep(30)
-        
+                await asyncio.sleep(10)
+            except asyncio.CancelledError: break
+            except Exception as e: logger.error(f"Health monitor error: {e}", exc_info=True); await asyncio.sleep(30)
         logger.info("Health monitor finished")
 
     async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
-        """
-        Periodically cleans up old entries in the response cache and updates cache metrics.
-        """
         logger.info("Cache maintenance loop started.")
-        
-        # Get settings from config, with defaults
         cache_settings = self.config.get('cache_settings', {})
-        cleanup_interval_s = int(cache_settings.get('cleanup_interval_s', 300))  # e.g., 5 minutes
-        max_entry_age_s = int(cache_settings.get('max_entry_age_s', 1800))    # e.g., 30 minutes
-
-        logger.info(f"Cache maintenance: Cleanup interval {cleanup_interval_s}s, Max entry age {max_entry_age_s}s.")
-
+        cleanup_interval_s = int(cache_settings.get('cleanup_interval_s', 300))
+        max_entry_age_s = int(cache_settings.get('max_entry_age_s', 1800))
+        logger.info(f"Cache maintenance: Interval {cleanup_interval_s}s, Max age {max_entry_age_s}s.")
         while not stop_event.is_set():
             try:
-                await asyncio.sleep(cleanup_interval_s) # Wait for the configured interval
-                
-                if stop_event.is_set(): # Check again after sleep
-                    break
-
-                if self.response_cache:
-                    logger.debug("Cache maintenance: Running cleanup cycle.")
-                    cleared_count = 0
-                    
-                    # Primary method: Use clear_old_entries if available
-                    if hasattr(self.response_cache, 'clear_old_entries'):
-                        # The clear_old_entries method in your ResponseCache (from managers.py)
-                        # already handles the logic of finding and removing old entries.
-                        cleared_count = await self.response_cache.clear_old_entries(max_age_seconds=max_entry_age_s)
-                        if cleared_count > 0:
-                            logger.info(f"Cache Maintenance: Cleared {cleared_count} old entries older than {max_entry_age_s}s using clear_old_entries.")
-                    
-                    # Fallback: Manual cleanup (should not be needed if ResponseCache is correctly implemented)
-                    # This part is more for a scenario where clear_old_entries might not exist or if you want a different logic.
-                    # Given your ResponseCache structure, this fallback is less likely to be hit if the primary method works.
-                    elif hasattr(self.response_cache, 'cache') and isinstance(self.response_cache.cache, dict):
-                        logger.warning("Cache maintenance: Falling back to manual cleanup (clear_old_entries not found or preferred).")
-                        now = datetime.now()
-                        keys_to_delete = []
-                        
-                        # Your ResponseCache stores items as tuples: (content, timestamp, response_headers)
-                        # Or if using IntelligentResponseCache, it uses CacheEntry objects.
-                        # Let's assume CacheEntry objects as per IntelligentResponseCache in components.py/managers.py
-                        
-                        cache_dict_view = list(self.response_cache.cache.items()) # Iterate over a copy
-
-                        for key, entry_item in cache_dict_view:
-                            entry_timestamp = None
-                            if hasattr(entry_item, 'timestamp') and isinstance(entry_item.timestamp, datetime): # For CacheEntry objects
-                                entry_timestamp = entry_item.timestamp
-                            elif isinstance(entry_item, tuple) and len(entry_item) > 1 and isinstance(entry_item[1], datetime): # For (content, timestamp, ...) tuples
-                                entry_timestamp = entry_item[1]
-
-                            if entry_timestamp:
-                                age_seconds = (now - entry_timestamp).total_seconds()
-                                if age_seconds > max_entry_age_s:
-                                    keys_to_delete.append(key)
-                            else:
-                                logger.debug(f"Cache maintenance: Skipping entry {key} due to missing or invalid timestamp.")
-                        
-                        if keys_to_delete:
-                            logger.info(f"Cache maintenance: Manually identified {len(keys_to_delete)} entries to clear.")
-                            for key_to_delete in keys_to_delete:
-                                # Need a method to remove from cache and update size, or do it directly
-                                if hasattr(self.response_cache, '_remove_entry'): # If using IntelligentResponseCache
-                                    await self.response_cache._remove_entry(key_to_delete)
-                                    cleared_count +=1
-                                elif key_to_delete in self.response_cache.cache: # Basic cache
-                                    entry_to_remove = self.response_cache.cache.pop(key_to_delete)
-                                    if hasattr(self.response_cache, 'current_size_bytes') and entry_to_remove:
-                                        content_bytes = None
-                                        if hasattr(entry_to_remove, 'data'): # CacheEntry
-                                            content_bytes = entry_to_remove.data
-                                        elif isinstance(entry_to_remove, tuple) and entry_to_remove[0]: # (content, ...)
-                                            content_bytes = entry_to_remove[0]
-                                        if content_bytes:
-                                            self.response_cache.current_size_bytes -= len(content_bytes)
-                                    cleared_count += 1
-                            logger.info(f"Cache Maintenance: Manually cleared {cleared_count} entries older than {max_entry_age_s}s.")
-                    
-                    # Update orchestrator metrics from cache stats if ResponseCache has hit_count/miss_count
-                    if self.response_cache:
-                        if hasattr(self.response_cache, 'hit_count'):
-                            self.metrics['cache_hits'] = self.response_cache.hit_count
-                        if hasattr(self.response_cache, 'miss_count'):
-                            self.metrics['cache_misses'] = self.response_cache.miss_count
-                        if hasattr(self.response_cache, 'current_size_mb'):
-                            logger.debug(f"Cache size after maintenance: {self.response_cache.current_size_mb:.2f} MB")
-
-                else:
-                    logger.debug("Cache maintenance: Response cache not initialized.")
-
-            except asyncio.CancelledError:
-                logger.info("Cache maintenance loop cancelled.")
-                break
-            except Exception as e:
-                logger.error(f"Error in cache maintenance loop: {e}", exc_info=True)
-                # Prevent rapid error looping if something is persistently wrong
-                await asyncio.sleep(cleanup_interval_s / 2 if cleanup_interval_s > 20 else 10) 
-                
+                await asyncio.sleep(cleanup_interval_s)
+                if stop_event.is_set(): break
+                if self.response_cache and hasattr(self.response_cache, 'clear_old_entries'):
+                    cleared_count = await self.response_cache.clear_old_entries(max_age_seconds=max_entry_age_s) # type: ignore
+                    if cleared_count > 0: logger.info(f"Cache Maintenance: Cleared {cleared_count} old entries.")
+                    if hasattr(self.response_cache, 'hit_count'): self.metrics['cache_hits'] = self.response_cache.hit_count # type: ignore
+                    if hasattr(self.response_cache, 'miss_count'): self.metrics['cache_misses'] = self.response_cache.miss_count # type: ignore
+                    if hasattr(self.response_cache, 'current_size_mb'): logger.debug(f"Cache size: {self.response_cache.current_size_mb:.2f} MB") # type: ignore
+            except asyncio.CancelledError: logger.info("Cache maintenance loop cancelled."); break
+            except Exception as e: logger.error(f"Error in cache maintenance loop: {e}", exc_info=True); await asyncio.sleep(cleanup_interval_s / 2 if cleanup_interval_s > 20 else 10)
         logger.info("Cache maintenance loop finished.")
 
-    
     async def _metrics_reporter_loop(self, stop_event: asyncio.Event) -> None:
-        """Enhanced metrics reporting with performance insights"""
-        
         report_interval = self.config.get('app_settings', {}).get('metrics_interval_s', 60)
         logger.info(f"Metrics reporter started (interval: {report_interval}s)")
-        
         while not stop_event.is_set():
             try:
                 await asyncio.sleep(report_interval)
-                if stop_event.is_set():
-                    break
-                
-                # Generate comprehensive report
+                if stop_event.is_set(): break
                 report = self._generate_metrics_report()
                 logger.info(report)
-                
-                # Send to GUI if connected
-                if self.gui_queue:
-                    self.gui_queue.put(("metrics", self.metrics))
-                
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Metrics reporter error: {e}", exc_info=True)
-        
+                if self.gui_queue: self.gui_queue.put(("metrics", dict(self.metrics))) # Send a copy
+            except asyncio.CancelledError: break
+            except Exception as e: logger.error(f"Metrics reporter error: {e}", exc_info=True)
         logger.info("Metrics reporter finished")
-    
+
     def _generate_metrics_report(self) -> str:
-        """Generate comprehensive metrics report"""
-        
-        runtime = datetime.now() - self.start_time
-        runtime_minutes = runtime.total_seconds() / 60
-        
-        # Calculate rates
+        runtime_minutes = (datetime.now() - self.start_time).total_seconds() / 60
         total_attempts = sum(self.metrics['attempts_by_platform'].values())
         total_successes = sum(self.metrics['successes_by_platform'].values())
-        total_detections = sum(self.metrics['detections_by_platform'].values())
-        
         success_rate = (total_successes / total_attempts * 100) if total_attempts > 0 else 0
+        cache_total = self.metrics.get('cache_hits',0) + self.metrics.get('cache_misses',0)
+        cache_hit_rate = (self.metrics.get('cache_hits',0) / cache_total * 100) if cache_total > 0 else 0
         
-        # Cache performance
-        cache_total = self.metrics['cache_hits'] + self.metrics['cache_misses']
-        cache_hit_rate = (self.metrics['cache_hits'] / cache_total * 100) if cache_total > 0 else 0
-        
-        # Profile info
-        active_profiles = 0
-        total_profiles = 0
-        if self.profile_manager:
-            pool_metrics = self.profile_manager.get_pool_metrics()
-            active_profiles = pool_metrics.get('active_profiles', 0)
-            total_profiles = pool_metrics.get('total_profiles', 0)
-        
-        # Data usage
-        data_used = self.data_tracker.total_used_mb
-        data_saved = self.data_tracker.blocked_resources_saved_mb
-        data_remaining = self.data_tracker.get_remaining_mb()
-        
-        # Build report
+        active_profiles, total_profiles_val = 0, 0
+        if self.profile_manager and hasattr(self.profile_manager, 'get_pool_metrics'):
+            pool_metrics = self.profile_manager.get_pool_metrics() # type: ignore
+            active_profiles = pool_metrics.get('active_profiles',0)
+            total_profiles_val = pool_metrics.get('total_profiles',0)
+
         lines = [
-            f"\n{'='*70}",
-            f"📊 SYSTEM METRICS - Runtime: {runtime_minutes:.1f} minutes",
-            f"{'='*70}",
+            f"\n{'='*70}", f"📊 SYSTEM METRICS - Runtime: {runtime_minutes:.1f} min", f"{'='*70}",
             f"Mode: {self.mode.value.upper()} | Dry Run: {self.is_dry_run}",
-            f"Health: CPU={self.system_health.cpu_percent:.1f}% | "
-            f"Memory={self.system_health.memory_percent:.1f}% | "
-            f"Tasks={self.system_health.active_tasks}",
-            f"",
-            f"🎯 PERFORMANCE",
-            f"Detections: {total_detections} | Attempts: {total_attempts} | "
-            f"Success: {total_successes} ({success_rate:.1f}%)",
-            f"Queue: {self.opportunity_queue.qsize()} | "
-            f"Active Strikes: {len(self.active_strikes)}",
-            f"Cache: Hits={self.metrics['cache_hits']} ({cache_hit_rate:.1f}%) | "
-            f"Size={self.response_cache.current_size_bytes / (1024*1024) if self.response_cache else 0:.1f}MB",
-            f"",
-            f"👤 PROFILES",
-            f"Active: {active_profiles} | Total: {total_profiles} | "
-            f"Rotations: {self.metrics['profile_rotations']}",
-            f"",
-            f"💾 DATA USAGE",
-            f"Used: {data_used:.1f}MB | Saved: {data_saved:.1f}MB | "
-            f"Remaining: {data_remaining:.1f}MB",
-            f"",
-            f"📈 PLATFORM BREAKDOWN",
+            f"Health: CPU={self.system_health.cpu_percent:.1f}% | Mem={self.system_health.memory_percent:.1f}% | Tasks={self.system_health.active_tasks}",
+            f"🎯 PERFORMANCE: Detections={sum(self.metrics['detections_by_platform'].values())} | Attempts={total_attempts} | Success={total_successes} ({success_rate:.1f}%)",
+            f"Queue: {self.opportunity_queue.qsize()} | Active Strikes: {len(self.active_strikes)}",
+            f"Cache: Hits={self.metrics.get('cache_hits',0)} ({cache_hit_rate:.1f}%) | Size={self.response_cache.current_size_mb if self.response_cache else 0:.1f}MB", # type: ignore
+            f"👤 PROFILES: Active={active_profiles} | Total={total_profiles_val} | Rotations={self.metrics.get('profile_rotations',0)}",
+            f"💾 DATA USAGE: Used={self.data_tracker.total_used_mb:.1f}MB | Saved={self.data_tracker.blocked_resources_saved_mb:.1f}MB | Remaining={self.data_tracker.get_remaining_mb():.1f}MB",
+            f"📈 PLATFORM BREAKDOWN:",
         ]
-        
-        # Platform details
         for platform in sorted(PlatformType, key=lambda p: p.value):
             pv = platform.value
-            detects = self.metrics['detections_by_platform'][pv]
-            attempts = self.metrics['attempts_by_platform'][pv]
-            successes = self.metrics['successes_by_platform'][pv]
-            blocks = self.metrics['blocks_by_platform'][pv]
-            
-            if attempts > 0:
-                platform_success_rate = (successes / attempts) * 100
-                lines.append(
-                    f"{pv.upper():>12}: D={detects:>3} | A={attempts:>3} | "
-                    f"S={successes:>3} ({platform_success_rate:>4.1f}%) | B={blocks:>3}"
-                )
-        
+            s_rate = (self.metrics['successes_by_platform'][pv] / self.metrics['attempts_by_platform'][pv] * 100) if self.metrics['attempts_by_platform'][pv] > 0 else 0
+            lines.append(f"{pv.upper():>12}: D={self.metrics['detections_by_platform'][pv]:>3} | A={self.metrics['attempts_by_platform'][pv]:>3} | S={self.metrics['successes_by_platform'][pv]:>3} ({s_rate:>4.1f}%) | B={self.metrics['blocks_by_platform'][pv]:>3}")
         lines.append("="*70)
-        
         return "\n".join(lines)
     
+    # ADDED graceful_shutdown
     async def graceful_shutdown(self) -> None:
+        self._shutdown_initiated = True # Mark that shutdown has started
         logger.info("UnifiedOrchestrator graceful_shutdown called.")
-        await self.shutdown_tasks() # Call the existing task shutdown
+        await self.shutdown_tasks() 
         if self.profile_manager and hasattr(self.profile_manager, 'stop_background_tasks'):
-            await self.profile_manager.stop_background_tasks()
+            await self.profile_manager.stop_background_tasks() # type: ignore
         if self.connection_pool and hasattr(self.connection_pool, 'close_all'):
             await self.connection_pool.close_all()
         if self.browser_manager and hasattr(self.browser_manager, 'close_all'):
             await self.browser_manager.close_all()
         if self.thread_pool:
-            self.thread_pool.shutdown(wait=True)
-        # Add any other component shutdowns here
+            self.thread_pool.shutdown(wait=True, cancel_futures=True) # Add cancel_futures
         logger.info("UnifiedOrchestrator graceful_shutdown completed.")
 
-    async def shutdown_tasks(self) -> None: # Ensure this method exists
-        """Gracefully shut down all background tasks."""
+    async def shutdown_tasks(self) -> None:
         logger.info("Shutting down background tasks...")
         if hasattr(self, 'background_tasks') and self.background_tasks:
             for task in self.background_tasks:
@@ -1150,65 +871,57 @@ class UnifiedOrchestrator:
                     task.cancel()
             await asyncio.gather(*self.background_tasks, return_exceptions=True)
             self.background_tasks.clear()
-        logger.info("Background tasks shutdown complete.")
+        # Also cancel any active strike tasks that might not be in background_tasks
+        active_strike_tasks_list = list(self.active_strikes.values())
+        for task in active_strike_tasks_list:
+            if not task.done():
+                task.cancel()
+        if active_strike_tasks_list:
+             await asyncio.gather(*active_strike_tasks_list, return_exceptions=True)
+        self.active_strikes.clear()
+        logger.info("Background and active strike tasks shutdown process initiated/complete.")
 
-    # Add a placeholder for clear_sensitive_data if it's not defined yet
     def clear_sensitive_data(self) -> None:
-        logger.info("clear_sensitive_data called (placeholder).")
-        # Implement actual sensitive data clearing logic here if needed
-        pass
+        logger.info("clear_sensitive_data called.")
+        # Example: Clear cached profile data if sensitive
+        if self.profile_manager and hasattr(self.profile_manager, 'static_profiles'):
+            # self.profile_manager.static_profiles.clear() # Be cautious with this
+            pass
+        if self.opportunity_cache:
+            self.opportunity_cache.clear()
+        # Consider clearing specific fields in self.config if they hold secrets
+        # and are no longer needed.
+        logger.info("Sensitive data clearing (example) finished.")
     
     async def _adaptive_optimizer_loop(self, stop_event: asyncio.Event) -> None:
-        """Dynamically optimize strategy based on performance"""
-        
         optimizer_interval = self.config.get('app_settings', {}).get('optimizer_interval_s', 300)
         logger.info(f"Adaptive optimizer started (interval: {optimizer_interval}s)")
-        
-        mode_switch_cooldown = 600  # 10 minutes between mode switches
+        mode_switch_cooldown = 600 
         last_mode_switch = time.time()
-        
         while not stop_event.is_set():
             try:
                 await asyncio.sleep(optimizer_interval)
-                if stop_event.is_set():
-                    break
+                if stop_event.is_set(): break
+                if self.mode != OperationMode.ADAPTIVE: continue
                 
-                # Only optimize in adaptive mode
-                if self.mode != OperationMode.ADAPTIVE:
-                    continue
-                
-                # Collect performance metrics
                 total_attempts = sum(self.metrics['attempts_by_platform'].values())
-                if total_attempts < 20:  # Need minimum data
-                    continue
+                if total_attempts < 20: continue
                 
                 total_successes = sum(self.metrics['successes_by_platform'].values())
                 total_blocks = sum(self.metrics['blocks_by_platform'].values())
+                success_rate = total_successes / total_attempts if total_attempts > 0 else 0
+                block_rate = total_blocks / total_attempts if total_attempts > 0 else 0
                 
-                success_rate = total_successes / total_attempts
-                block_rate = total_blocks / total_attempts
-                
-                # Get thresholds from config
-                thresholds = self.config.get('optimizer_settings', {}).get('adaptive_thresholds', {
-                    'low_success_rate': 0.1,
-                    'high_success_rate': 0.5,
-                    'high_block_rate': 0.3
-                })
-                
+                thresholds = self.config.get('optimizer_settings', {}).get('adaptive_thresholds', {'low_success_rate': 0.1, 'high_success_rate': 0.5, 'high_block_rate': 0.3})
                 current_time = time.time()
                 can_switch = (current_time - last_mode_switch) > mode_switch_cooldown
                 
-                # Make optimization decisions
                 if can_switch:
                     new_mode = None
-                    
                     if block_rate > thresholds['high_block_rate'] or success_rate < thresholds['low_success_rate']:
-                        # High detection, switch to ultra stealth
                         new_mode = OperationMode.ULTRA_STEALTH
-                        logger.warning(f"High detection rate ({block_rate:.1%}), switching to ULTRA_STEALTH")
-                        
+                        logger.warning(f"High detection ({block_rate:.1%}), switching to ULTRA_STEALTH")
                     elif success_rate > thresholds['high_success_rate'] and block_rate < thresholds['high_block_rate'] / 2:
-                        # Good performance, be more aggressive
                         new_mode = OperationMode.HYBRID
                         logger.info(f"Good performance (SR: {success_rate:.1%}), switching to HYBRID")
                     
@@ -1217,9 +930,11 @@ class UnifiedOrchestrator:
                         await self._apply_mode_specific_settings()
                         last_mode_switch = current_time
                 
-                # Additional optimizations
-                # Example: handle if data usage is approaching limit
                 if hasattr(self.data_tracker, "is_approaching_limit") and self.data_tracker.is_approaching_limit():
-                    logger.warning("Data usage is approaching the limit. Consider reducing activity.")
-            except Exception as e:
-                logger.error(f"Adaptive optimizer error: {e}", exc_info=True)
+                    logger.warning("Data usage approaching limit. Consider reducing activity or increasing data_optimization.")
+            except asyncio.CancelledError: break
+            except Exception as e: logger.error(f"Adaptive optimizer error: {e}", exc_info=True)
+        
+        # Get optimal profile for this platform (example: use 'generic' or obtain from config if needed)
+        platform_str = 'generic'
+        profile = await self._get_profile_for_platform(platform_str)

@@ -9929,3 +9929,1082 @@ Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
 2025-06-04 14:41:19.875 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
 2025-06-04 14:41:24.877 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
 2025-06-04 14:41:24.878 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_0deeaa89 for fansale (score: 120.99, has_session: False)
+2025-06-04 14:44:31.596 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 14:44:31.597 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 14:44:31.852 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 14:44:31.852 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 14:44:31.857 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 14:44:31.863 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T12:31:33.294896
+2025-06-04 14:44:31.866 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 14:44:31.866 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 14:44:31.866 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 14:44:31.866 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 14:44:31.866 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 14:44:31.866 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 14:44:31.867 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 14:44:31.867 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 14:44:31.867 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 14:44:31.867 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 14:44:31.883 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 14:44:31.883 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 14:44:31.883 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 14:44:31.883 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 14:44:31.883 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 14:44:31.988 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 14:44:31.989 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 14:44:31.991 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-04 14:44:31.992 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-04 14:44:41.884 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:44:46.889 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:44:46.891 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:44:51.892 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:44:51.893 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:45:06.895 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:11.897 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:11.898 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:45:16.901 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:45:16.902 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:45:31.884 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:45:31.903 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:36.905 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:36.906 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:45:41.907 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:45:41.908 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:45:56.910 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:01.912 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:01.913 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:46:06.914 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:46:06.915 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:46:21.917 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:26.920 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:26.922 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:46:31.886 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 2.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:46:31.922 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:46:31.922 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:46:46.924 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:51.927 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:51.928 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:46:56.929 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:46:56.929 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:47:11.931 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:16.934 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:16.935 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:47:21.936 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:47:21.938 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:47:31.887 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 3.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:47:36.940 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:41.941 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:41.942 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:47:46.942 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:47:46.943 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:48:01.944 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:06.945 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:06.946 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:48:11.947 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:48:11.948 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:48:26.949 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:31.889 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 4.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:48:31.952 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:31.952 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:48:36.953 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:48:36.954 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:48:51.956 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:56.958 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:56.959 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:49:01.960 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:49:01.962 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:49:16.963 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:21.965 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:21.967 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:49:26.967 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:49:26.968 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:49:31.890 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 5.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.2% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:49:41.970 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:46.972 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:46.974 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:49:51.974 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:49:51.976 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:50:06.978 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:11.980 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:11.981 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:50:16.982 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:50:16.983 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:50:31.891 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 6.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:50:31.984 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:37.010 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:37.012 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:50:42.013 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:50:42.014 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:50:57.221 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:02.223 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:02.224 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:51:07.431 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:51:07.431 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:51:22.434 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:27.436 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:27.436 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:51:31.892 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 7.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:51:32.437 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:51:32.438 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:51:47.440 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:52.441 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:52.442 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:51:57.443 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:51:57.444 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:52:12.446 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:17.449 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:17.450 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:52:22.450 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:52:22.451 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:52:31.894 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 8.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.0% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 2 | Total: 27 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 14:52:37.453 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:42.455 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:42.456 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_72701dc2 for fansale (score: 144.99, has_session: False)
+2025-06-04 14:52:47.457 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:52:47.458 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4a24c602 for ticketmaster (score: 90.99, has_session: False)
+2025-06-04 14:59:41.802 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 14:59:41.808 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 14:59:42.060 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 14:59:42.061 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 14:59:42.066 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 14:59:42.071 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T12:31:33.294896
+2025-06-04 14:59:42.074 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 14:59:42.074 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 14:59:42.074 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 14:59:42.074 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 14:59:42.075 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 246, in initialize_subsystems
+    if not await self._validate_profile_manager():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+2025-06-04 14:59:42.077 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-04 14:59:42.097 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.29 seconds
+2025-06-04 14:59:42.097 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 14:59:42.097 | INFO     | src.core.orchestrator          | graceful_shutdown    | UnifiedOrchestrator graceful_shutdown called.
+2025-06-04 14:59:42.097 | INFO     | src.core.orchestrator          | shutdown_tasks       | Shutting down background tasks...
+2025-06-04 14:59:42.097 | INFO     | src.core.orchestrator          | shutdown_tasks       | Background tasks shutdown complete.
+2025-06-04 15:03:27.536 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 15:03:27.536 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 15:03:27.537 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 15:03:27.805 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 15:03:27.805 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 15:03:27.810 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 15:03:27.813 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T12:31:33.294896
+2025-06-04 15:03:27.816 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 15:03:27.816 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 15:03:27.816 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 15:03:27.816 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 15:03:27.816 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 246, in initialize_subsystems
+    if not await self._validate_profile_manager():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+2025-06-04 15:03:27.817 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-04 15:03:27.832 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.30 seconds
+2025-06-04 15:03:27.833 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 15:03:27.833 | INFO     | src.core.orchestrator          | graceful_shutdown    | UnifiedOrchestrator graceful_shutdown called.
+2025-06-04 15:03:27.833 | INFO     | src.core.orchestrator          | shutdown_tasks       | Shutting down background tasks...
+2025-06-04 15:03:27.833 | INFO     | src.core.orchestrator          | shutdown_tasks       | Background tasks shutdown complete.
+2025-06-04 15:33:27.841 | INFO     | src.profiles.persistence       | save_profiles        | Saved 25 profiles to disk
+2025-06-04 15:33:27.841 | INFO     | src.profiles.manager           | stop_background_tasks | Background tasks stopped
+2025-06-04 15:33:27.842 | INFO     | src.core.orchestrator          | graceful_shutdown    | UnifiedOrchestrator graceful_shutdown completed.
+2025-06-04 15:33:27.842 | INFO     | src.core.orchestrator          | clear_sensitive_data | clear_sensitive_data called (placeholder).
+2025-06-04 15:33:27.842 | INFO     | __main__                       | async_main_logic     | async_main_logic completed.
+2025-06-04 15:33:27.842 | INFO     | __main__                       | main_cli             | 🏁 Stealth system shutdown complete
+2025-06-04 15:54:47.794 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 15:54:47.794 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 15:54:47.794 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 15:54:47.795 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 15:54:48.085 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 15:54:48.085 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 15:54:48.090 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 15:54:48.101 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 15:54:48.103 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 15:54:48.104 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 15:54:48.104 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 15:54:48.104 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 15:54:48.104 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 15:54:48.104 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles loaded, attempting to initialize profile pool
+2025-06-04 15:54:48.125 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 15:54:48.128 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 50 profiles from disk
+2025-06-04 15:54:48.128 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 15:54:48.128 | INFO     | src.core.orchestrator          | _validate_profile_manager | After initialization: 50 dynamic, 0 static profiles
+2025-06-04 15:54:48.128 | INFO     | src.core.orchestrator          | _validate_profile_manager | Platform distribution: {}
+2025-06-04 15:54:48.128 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 15:54:48.129 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_522b2f72 for fansale
+2025-06-04 15:54:48.129 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 15:54:48.129 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_f39ba17e for ticketmaster
+2025-06-04 15:54:48.129 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 15:54:48.129 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_e9de6ae1 for vivaticket
+2025-06-04 15:54:48.129 | ERROR    | src.core.orchestrator          | initialize_subsystems | ProfileManager validation failed - no profiles available!
+2025-06-04 15:54:48.131 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 53 profiles loaded
+2025-06-04 15:54:48.131 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 15:54:48.131 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 15:54:48.131 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 15:54:48.131 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 15:54:48.131 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 15:54:48.132 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 15:54:48.132 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _adaptive_optimizer_loop | Adaptive optimizer started (interval: 300s)
+2025-06-04 15:54:48.132 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-04 15:54:48.234 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started.
+2025-06-04 15:54:48.234 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance: Cleanup interval 300s, Max entry age 1800s.
+2025-06-04 15:54:58.134 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:03.136 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:08.137 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:55:23.141 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:28.142 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:33.144 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:55:48.134 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 1.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.3% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 15:55:48.147 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:53.148 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:58.151 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:56:13.153 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:18.154 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:23.156 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:56:38.159 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:43.162 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:48.137 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 2.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.3% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 15:56:48.164 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:03.167 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:08.169 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:13.171 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:28.174 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:33.176 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:38.177 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:48.140 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 3.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.3% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 15:57:53.181 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:58.183 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:03.184 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:58:18.188 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:23.190 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:28.191 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:58:43.194 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:48.142 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 4.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.0% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 15:58:48.196 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:53.198 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:08.201 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:13.201 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:18.203 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:33.205 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:38.206 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:43.208 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:48.144 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 5.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 15:59:58.210 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:03.213 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:08.214 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:00:23.216 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:28.218 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:33.220 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:00:48.146 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 6.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 16:00:48.222 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:53.254 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:58.256 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:01:13.462 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:18.464 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:23.672 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:01:38.675 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:43.677 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:48.148 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 7.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.1% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 16:01:48.679 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:03.682 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:08.685 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:13.687 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:28.690 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:33.695 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:38.697 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:48.150 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+======================================================================
+📊 SYSTEM METRICS - Runtime: 8.0 minutes
+======================================================================
+Mode: ADAPTIVE | Dry Run: False
+Health: CPU=0.2% | Memory=0.2% | Tasks=3
+
+🎯 PERFORMANCE
+Detections: 0 | Attempts: 0 | Success: 0 (0.0%)
+Queue: 0 | Active Strikes: 0
+Cache: Hits=0 (0.0%) | Size=0.0MB
+
+👤 PROFILES
+Active: 0 | Total: 53 | Rotations: 0
+
+💾 DATA USAGE
+Used: 0.0MB | Saved: 0.0MB | Remaining: 1000.0MB
+
+📈 PLATFORM BREAKDOWN
+======================================================================
+2025-06-04 16:02:53.700 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:58.702 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:03:03.707 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:03:58.837 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:04:03.839 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:04:08.840 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:06:15.784 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 16:06:15.786 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 16:06:15.786 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 16:06:15.786 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 16:06:15.787 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 16:06:16.040 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 16:06:16.040 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 16:06:16.046 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 16:06:16.053 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 16:06:16.055 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 16:06:16.056 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 16:06:16.056 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 16:06:16.056 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 16:06:16.056 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 16:06:16.056 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-04 16:06:16.056 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 25 static profiles from dynamic profiles
+2025-06-04 16:06:16.056 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 16:06:16.056 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 16:06:16.058 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 16:06:16.058 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 16:06:16.058 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 16:06:16.058 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 16:06:16.058 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 16:06:16.058 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 16:06:16.058 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 16:06:16.058 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 16:06:16.058 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 16:06:16.058 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 16:06:16.059 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 16:06:16.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 16:06:16.059 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 16:06:16.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 16:06:16.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 16:06:16.059 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 16:06:16.059 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 16:06:16.074 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 16:06:16.076 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:16.076 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for fansale
+2025-06-04 16:06:16.077 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:16.077 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for ticketmaster
+2025-06-04 16:06:16.078 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 16:06:16.078 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 16:06:16.080 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 16:06:16.080 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.29 seconds
+2025-06-04 16:06:16.080 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 16:06:16.080 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 16:06:16.081 | INFO     | __main__                       | main_cli             | 🏁 Stealth system shutdown complete
+2025-06-04 16:06:20.929 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 16:06:20.930 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 16:06:21.047 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 16:06:21.048 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 16:06:21.053 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 16:06:21.055 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 16:06:21.058 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 16:06:21.058 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 16:06:21.058 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 16:06:21.058 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 16:06:21.058 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 16:06:21.058 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-04 16:06:21.059 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 25 static profiles from dynamic profiles
+2025-06-04 16:06:21.059 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 16:06:21.059 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 16:06:21.059 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 16:06:21.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 16:06:21.059 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 16:06:21.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 16:06:21.059 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 16:06:21.060 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 16:06:21.060 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 16:06:21.060 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 16:06:21.060 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 16:06:21.060 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 16:06:21.061 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 16:06:21.061 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 16:06:21.061 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 16:06:21.061 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 16:06:21.069 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 16:06:21.070 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:21.070 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for fansale
+2025-06-04 16:06:21.071 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:21.071 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for ticketmaster
+2025-06-04 16:06:21.072 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 16:06:21.072 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 16:06:21.074 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 16:06:21.075 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.14 seconds
+2025-06-04 16:06:21.075 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 16:06:21.075 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 16:06:21.076 | INFO     | __main__                       | main_cli             | 🏁 Stealth system shutdown complete
+2025-06-04 18:37:35.455 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 18:37:35.459 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 18:37:35.460 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:37:35.460 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 18:37:35.460 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 18:37:35.756 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 18:37:35.756 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 18:37:35.762 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 18:37:35.769 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 18:37:35.772 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 18:37:35.772 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 18:37:35.772 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 18:37:35.772 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 18:37:35.772 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 18:37:35.772 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-04 18:37:35.773 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 25 static profiles from dynamic profiles
+2025-06-04 18:37:35.773 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 18:37:35.773 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:37:35.775 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 18:37:35.775 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:37:35.776 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 18:37:35.776 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:37:35.776 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 18:37:35.776 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 18:37:35.776 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 18:37:35.776 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 18:37:35.776 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 18:37:35.776 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 18:37:35.777 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 18:37:35.777 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 18:37:35.777 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 18:37:35.777 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 18:37:35.777 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 18:37:35.777 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 18:37:35.777 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 18:37:35.827 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 18:37:35.829 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 18:37:35.829 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for fansale
+2025-06-04 18:37:35.830 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 18:37:35.830 | WARNING  | src.core.orchestrator          | _get_profile_for_platform | Attempting to create new profile for ticketmaster
+2025-06-04 18:37:35.831 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:37:35.831 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:37:35.833 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:37:35.833 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.37 seconds
+2025-06-04 18:37:35.833 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 18:37:35.833 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 18:37:35.834 | INFO     | __main__                       | main_cli             | 🏁 Stealth system shutdown complete
+2025-06-04 18:46:12.248 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 18:46:12.255 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:46:12.256 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 18:46:12.256 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 18:46:12.514 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 18:46:12.514 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 18:46:12.519 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 18:46:12.524 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 18:46:12.527 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 18:46:12.527 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 18:46:12.527 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 18:46:12.527 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 18:46:12.528 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 18:46:12.528 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-04 18:46:12.528 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 25 static profiles from dynamic profiles
+2025-06-04 18:46:12.528 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 18:46:12.528 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:46:12.532 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 18:46:12.532 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:46:12.532 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 18:46:12.532 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:46:12.532 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 18:46:12.532 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 18:46:12.532 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 18:46:12.532 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 18:46:12.533 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 18:46:12.533 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 18:46:12.533 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 18:46:12.533 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 18:46:12.551 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 18:46:12.553 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:46:12.553 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:46:12.556 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:46:12.557 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.30 seconds
+2025-06-04 18:46:12.557 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 18:46:12.557 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 18:46:12.558 | INFO     | __main__                       | main_cli             | 🏁 Stealth system shutdown complete
+2025-06-04 18:49:53.060 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-04 18:49:53.064 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:49:53.064 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-04 18:49:53.064 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-04 18:49:53.065 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-04 18:49:53.338 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-04 18:49:53.338 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-04 18:49:53.343 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-04 18:49:53.349 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-04T13:33:27.837089
+2025-06-04 18:49:53.352 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 25 profiles from disk
+2025-06-04 18:49:53.352 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-04 18:49:53.352 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-04 18:49:53.352 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-04 18:49:53.352 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 25 dynamic, 0 static profiles
+2025-06-04 18:49:53.352 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-04 18:49:53.352 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 25 static profiles from dynamic profiles
+2025-06-04 18:49:53.352 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-04 18:49:53.352 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:49:53.358 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-04 18:49:53.358 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:49:53.359 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-04 18:49:53.359 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:49:53.359 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 25 profiles loaded
+2025-06-04 18:49:53.359 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-04 18:49:53.359 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-04 18:49:53.359 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-04 18:49:53.359 | INFO     | src.core.managers              | __init__             | SmartBrowserContextManager initialized. Stealth script: src/core/stealth_init.js
+2025-06-04 18:49:53.359 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-04 18:49:53.360 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-04 18:49:53.360 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-04 18:49:53.360 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-04 18:49:53.360 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-04 18:49:53.360 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-04 18:49:53.360 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-04 18:49:53.360 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-04 18:49:53.376 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-04 18:49:53.378 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:49:53.378 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:49:53.380 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:49:53.381 | INFO     | __main__                       | async_main_logic     | Bot session duration: 0.32 seconds
+2025-06-04 18:49:53.381 | INFO     | __main__                       | async_main_logic     | Initiating secure shutdown sequence...
+2025-06-04 18:49:53.381 | INFO     | src.core.orchestrator          | graceful_shutdown    | UnifiedOrchestrator graceful_shutdown called.
+2025-06-04 18:49:53.381 | INFO     | src.core.orchestrator          | shutdown_tasks       | Shutting down background tasks...
+2025-06-04 18:49:53.381 | INFO     | src.core.orchestrator          | shutdown_tasks       | Background and active strike tasks shutdown process initiated/complete.
+2025-06-04 18:50:18.381 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:50:18.382 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:50:43.386 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:50:43.389 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:51:08.393 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:08.396 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:51:33.396 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:33.397 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:51:58.402 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:58.404 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented
+2025-06-04 18:52:23.407 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:52:23.408 | WARNING  | src.core.orchestrator          | _monitor_single_target_loop | Skipping monitoring for vivaticket - monitor not implemented

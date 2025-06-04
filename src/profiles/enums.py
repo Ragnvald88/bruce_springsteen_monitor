@@ -6,18 +6,18 @@ from enum import Enum
 class ProfileQuality(Enum):
     """Profile quality tiers with enhanced metadata."""
     LOW = (1, 0.1, 300)      # (tier, success_multiplier, cooldown_seconds)
-    MEDIUM = (2, 0.5, 180)   
-    HIGH = (3, 0.8, 120)     
-    PREMIUM = (4, 1.0, 60)   
-    
+    MEDIUM = (2, 0.5, 180)
+    HIGH = (3, 0.8, 120)
+    PREMIUM = (4, 1.0, 60)
+
     @property
     def tier(self):
         return self.value[0]
-    
+
     @property
     def success_multiplier(self):
         return self.value[1]
-    
+
     @property
     def cooldown_seconds(self):
         return self.value[2]
@@ -36,16 +36,18 @@ class Platform(Enum):
     FANSALE = "fansale"
     TICKETMASTER = "ticketmaster"
     VIVATICKET = "vivaticket"
-    
+    GENERIC = "generic"  # <<< ADD THIS LINE
+
     @property
     def login_url(self):
         urls = {
             "fansale": "https://www.fansale.it/login",
             "ticketmaster": "https://shop.ticketmaster.it/login",
-            "vivaticket": "https://shop.vivaticket.com/login"
+            "vivaticket": "https://shop.vivaticket.com/login",
+            "generic": "" # Generic may not have a specific login URL
         }
         return urls.get(self.value, "")
-    
+
     @property
     def stealth_requirements(self):
         """Platform-specific stealth requirements."""
@@ -69,6 +71,7 @@ class Platform(Enum):
                 "aggressive_stealth": True,
                 "require_residential_proxy": False,
                 "browser_preferences": ["Chrome", "Firefox"]
-            }
+            },
+            "generic": {} # Generic has no specific requirements
         }
         return requirements.get(self.value, {})

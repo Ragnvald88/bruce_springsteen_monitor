@@ -3226,3 +3226,355 @@ AttributeError: 'BrowserProfile' object has no attribute 'platform'. Did you mea
 2025-06-04 14:41:04.872 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: unexpected indent (vivaticket.py, line 2)
 2025-06-04 14:41:19.875 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
 2025-06-04 14:41:24.877 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:44:41.884 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:44:46.889 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:44:51.892 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:45:06.895 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:11.897 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:16.901 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:45:31.903 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:36.905 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:45:41.907 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:45:56.910 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:01.912 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:06.914 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:46:21.917 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:26.920 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:31.922 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:46:46.924 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:51.927 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:46:56.929 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:47:11.931 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:16.934 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:21.936 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:47:36.940 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:41.941 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:47:46.942 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:48:01.944 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:06.945 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:11.947 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:48:26.949 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:31.952 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:36.953 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:48:51.956 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:48:56.958 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:01.960 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:49:16.963 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:21.965 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:26.967 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:49:41.970 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:46.972 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:49:51.974 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:50:06.978 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:11.980 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:16.982 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:50:31.984 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:37.010 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:50:42.013 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:50:57.221 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:02.223 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:07.431 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:51:22.434 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:27.436 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:32.437 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:51:47.440 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:52.441 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:51:57.443 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:52:12.446 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:17.449 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:22.450 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:52:37.453 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:42.455 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'str' object has no attribute 'get'
+2025-06-04 14:52:47.457 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 14:59:42.075 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 246, in initialize_subsystems
+    if not await self._validate_profile_manager():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+2025-06-04 14:59:42.077 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-04 15:03:27.816 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 246, in initialize_subsystems
+    if not await self._validate_profile_manager():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_validate_profile_manager'
+2025-06-04 15:03:27.817 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-04 15:54:48.129 | ERROR    | src.core.orchestrator          | initialize_subsystems | ProfileManager validation failed - no profiles available!
+2025-06-04 15:54:58.134 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:03.136 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:08.137 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:55:23.141 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:28.142 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:33.144 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:55:48.147 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:53.148 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:55:58.151 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:56:13.153 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:18.154 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:23.156 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:56:38.159 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:43.162 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:56:48.164 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:03.167 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:08.169 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:13.171 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:28.174 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:33.176 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:38.177 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:57:53.181 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:57:58.183 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:03.184 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:58:18.188 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:23.190 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:28.191 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:58:43.194 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:48.196 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:58:53.198 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:08.201 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:13.201 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:18.203 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:33.205 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:38.206 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 15:59:43.208 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 15:59:58.210 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:03.213 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:08.214 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:00:23.216 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:28.218 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:33.220 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:00:48.222 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:53.254 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:00:58.256 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:01:13.462 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:18.464 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:23.672 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:01:38.675 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:43.677 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:01:48.679 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:03.682 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:08.685 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:13.687 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:28.690 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:33.695 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:38.697 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:02:53.700 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:02:58.702 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:03:03.707 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:03:58.837 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task fansale_Bruce_Springsteen_Milano_2025_(FS) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:04:03.839 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task ticketmaster_Bruce_Springsteen_San_Siro_2025_(TM) failed: 'UnifiedOrchestrator' object has no attribute '_get_profile_for_platform'
+2025-06-04 16:04:08.840 | ERROR    | src.core.orchestrator          | _monitoring_loop     | Monitor task vivaticket_Bruce_Springsteen_Resale_(VT) failed: cannot import name 'VivaticketMonitor' from 'src.platforms.vivaticket' (/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/platforms/vivaticket.py)
+2025-06-04 16:06:16.056 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 16:06:16.058 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 16:06:16.058 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 16:06:16.076 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:16.077 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:16.078 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 16:06:16.080 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 16:06:16.080 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 16:06:21.059 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 16:06:21.070 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:21.071 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 16:06:21.072 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 16:06:21.074 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 16:06:21.075 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 18:37:35.773 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:37:35.775 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:37:35.776 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:37:35.829 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for fansale: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 18:37:35.830 | ERROR    | src.core.orchestrator          | _get_profile_for_platform | Error getting profile for ticketmaster: type object 'Platform' has no attribute 'GENERIC'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 227, in _get_profile_for_platform
+    core_platform = platform_enum_map.get(platform_str, CorePlatformEnum.GENERIC)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Platform' has no attribute 'GENERIC'
+2025-06-04 18:37:35.831 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:37:35.833 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:37:35.833 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 18:46:12.528 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:46:12.532 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:46:12.532 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:46:12.553 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:46:12.556 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:46:12.557 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 522, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 269, in async_main_logic
+    await _orchestrator_instance.graceful_shutdown()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'graceful_shutdown'
+2025-06-04 18:49:53.352 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for fansale: 'FANSALE' is not a valid Platform
+2025-06-04 18:49:53.358 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for ticketmaster: 'TICKETMASTER' is not a valid Platform
+2025-06-04 18:49:53.359 | ERROR    | src.core.orchestrator          | _validate_profile_manager | Failed to create profile for vivaticket: 'VIVATICKET' is not a valid Platform
+2025-06-04 18:49:53.378 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:49:53.380 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 256, in async_main_logic
+    await _orchestrator_instance.run(stop_event)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 498, in run
+    asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute '_strike_processor_loop'
+2025-06-04 18:50:18.381 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:50:43.386 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:08.393 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:33.396 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:51:58.402 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor
+2025-06-04 18:52:23.407 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | VivaticketMonitor not implemented yet, using base monitor

@@ -11683,3 +11683,69 @@ Traceback (most recent call last):
     proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
                    ^^^^^^^^^
 AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:04.094 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:09.024 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:09.111 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.812 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.823 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.824 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'

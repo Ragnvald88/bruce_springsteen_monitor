@@ -23850,3 +23850,141 @@ Traceback (most recent call last):
     proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
                    ^^^^^^^^^
 AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:04.092 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-05 12:58:04.094 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:04.370 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.2% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.0MB
+👤 PROFILES: Active=4 | Total=315 | Rotations=0
+📊 DATA USAGE: Used=0.0MB | Saved=0.0MB | Remaining=1000.0MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 12:58:09.021 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-05 12:58:09.024 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:09.110 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-05 12:58:09.111 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.456 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-05 12:58:25.468 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-05 12:58:25.636 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-05 12:58:25.636 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-05 12:58:25.640 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-05 12:58:25.640 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-05 12:58:25.640 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-05 12:58:25.641 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-05 12:58:25.654 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T10:36:17.305284
+2025-06-05 12:58:25.688 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 311 profiles from disk
+2025-06-05 12:58:25.688 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-05 12:58:25.688 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-05 12:58:25.688 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-05 12:58:25.689 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 311 dynamic, 0 static profiles
+2025-06-05 12:58:25.689 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-05 12:58:25.694 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 311 static profiles from dynamic profiles
+2025-06-05 12:58:25.694 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-05 12:58:25.694 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_35616b7e for fansale
+2025-06-05 12:58:25.694 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_dfafd183 for ticketmaster
+2025-06-05 12:58:25.695 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_5f6dba3c for vivaticket
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 314 profiles loaded
+2025-06-05 12:58:25.695 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-05 12:58:25.695 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-05 12:58:25.696 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-05 12:58:25.696 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-05 12:58:25.696 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-05 12:58:25.696 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-05 12:58:25.696 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-05 12:58:25.696 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-05 12:58:25.696 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-05 12:58:25.706 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-05 12:58:25.706 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-05 12:58:25.706 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-05 12:58:25.706 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-05 12:58:25.811 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-05 12:58:25.812 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-05 12:58:25.812 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_35616b7e for fansale (score: 141.00, has_session: False)
+2025-06-05 12:58:25.812 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.823 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-05 12:58:25.823 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_dfafd183 for ticketmaster (score: 126.00, has_session: False)
+2025-06-05 12:58:25.823 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 12:58:25.824 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-05 12:58:25.824 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_5f6dba3c for vivaticket (score: 105.00, has_session: False)
+2025-06-05 12:58:25.824 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 234, in get_client
+    pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 157, in _get_pool_key
+    proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+                   ^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'get'

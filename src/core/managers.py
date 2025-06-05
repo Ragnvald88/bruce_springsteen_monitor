@@ -154,7 +154,10 @@ class ConnectionPoolManager:
         proxy_key = ""
         if hasattr(profile, 'proxy_config') and profile.proxy_config:
             proxy = profile.proxy_config
-            proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+            if isinstance(proxy, dict):
+                proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+            else:
+                proxy_key = f"{proxy.host}:{proxy.port}"
         
         tls_key = f"tls_{getattr(profile, 'tls_fingerprint', 'default')}" if use_tls_fingerprint else "default"
         profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
@@ -193,27 +196,44 @@ class ConnectionPoolManager:
         
         return headers
     
-    def _create_proxy_config(self, profile: BrowserProfile) -> Optional[str]:
+    def _create_proxy_config(self, profile: BrowserProfile) -> Optional[Dict[str, Any]]:
         """Create httpx-compatible proxy configuration"""
         if not hasattr(profile, 'proxy_config') or not profile.proxy_config:
             return None
-        
+
         proxy_data = profile.proxy_config
-        
-        # Build proxy URL
-        protocol = proxy_data.get('proxy_type', 'http')
-        host = proxy_data.get('host')
-        port = proxy_data.get('port')
-        username = proxy_data.get('username')
-        password = proxy_data.get('password')
-        
+        proxy_url = None
+
+        # Handle both dict and ProxyConfig object
+        if isinstance(proxy_data, dict):
+            # Original dict handling
+            protocol = proxy_data.get('proxy_type', 'http')
+            host = proxy_data.get('host')
+            port = proxy_data.get('port')
+            username = proxy_data.get('username')
+            password = proxy_data.get('password')
+        else:
+            # It's a ProxyConfig object
+            protocol = proxy_data.protocol
+            host = proxy_data.host
+            port = proxy_data.port
+            username = proxy_data.username
+            password = proxy_data.password
+
         if host and port:
             if username and password:
-                return f"{protocol}://{username}:{password}@{host}:{port}"
+                proxy_url = f"{protocol}://{username}:{password}@{host}:{port}"
             else:
-                return f"{protocol}://{host}:{port}"
-        
-        return None
+                proxy_url = f"{protocol}://{host}:{port}"
+
+        if not proxy_url:
+            return None
+
+        # httpx expects proxies in this format
+        return {
+            "http://": proxy_url,
+            "https://": proxy_url,
+        }
     
     def _apply_timing_jitter(self, base_value: float) -> float:
         """Apply realistic timing jitter to avoid patterns"""

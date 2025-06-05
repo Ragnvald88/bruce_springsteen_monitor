@@ -1,4 +1,4 @@
-# src/core/managers.py
+# src/core/managers.py - FIXED VERSION
 """
 StealthMaster AI Enhanced Connection Pool Manager
 Ultra-stealth HTTP client management with advanced proxy rotation and fingerprinting
@@ -13,14 +13,16 @@ from dataclasses import dataclass, field
 import ssl
 import h2.connection
 import h2.config
-from loguru import logger
+import logging
 import certifi
+import os
 from contextlib import asynccontextmanager
 
-# Assuming these imports exist based on your structure
-from src.profiles.models import Profile
-from src.utils.tls_fingerprint import TLSFingerprint
+# FIXED: Correct import path
+from ..profiles.models import BrowserProfile  # Changed from Profile to BrowserProfile
+from ..utils.tls_fingerprint import TLSFingerprint
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class ProxyConfig:
@@ -80,7 +82,7 @@ class StealthSSLContext:
     ]
     
     @classmethod
-    def create_context(cls, profile: Optional[Profile] = None) -> ssl.SSLContext:
+    def create_context(cls, profile: Optional[BrowserProfile] = None) -> ssl.SSLContext:
         """Create SSL context with browser-like fingerprint"""
         context = ssl.create_default_context(cafile=certifi.where())
         
@@ -123,8 +125,9 @@ class ConnectionPoolManager:
     - Stealth header rotation
     """
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], profile_manager=None):
         self.config = config
+        self.profile_manager = profile_manager
         self.pools: Dict[str, httpx.AsyncClient] = {}
         self.pool_lock = asyncio.Lock()
         
@@ -146,17 +149,18 @@ class ConnectionPoolManager:
         logger.info(f"ConnectionPoolManager initialized with max_connections={self.max_connections}, "
                    f"max_keepalive={self.max_keepalive}")
     
-    def _get_pool_key(self, profile: Profile, use_tls_fingerprint: bool = True) -> str:
+    def _get_pool_key(self, profile: BrowserProfile, use_tls_fingerprint: bool = True) -> str:
         """Generate unique pool key for connection reuse"""
         proxy_key = ""
-        if profile.proxy_config:
+        if hasattr(profile, 'proxy_config') and profile.proxy_config:
             proxy = profile.proxy_config
             proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
         
-        tls_key = f"tls_{profile.tls_fingerprint}" if use_tls_fingerprint else "default"
-        return f"{profile.id}_{proxy_key}_{tls_key}"
+        tls_key = f"tls_{getattr(profile, 'tls_fingerprint', 'default')}" if use_tls_fingerprint else "default"
+        profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
+        return f"{profile_id}_{proxy_key}_{tls_key}"
     
-    def _create_stealth_headers(self, profile: Profile) -> Dict[str, str]:
+    def _create_stealth_headers(self, profile: BrowserProfile) -> Dict[str, str]:
         """Generate browser-like headers with controlled randomization"""
         # Base headers that all browsers send
         headers = {
@@ -189,13 +193,12 @@ class ConnectionPoolManager:
         
         return headers
     
-    def _create_proxy_config(self, profile: Profile) -> Optional[Dict[str, Any]]:
+    def _create_proxy_config(self, profile: BrowserProfile) -> Optional[str]:
         """Create httpx-compatible proxy configuration"""
-        if not profile.proxy_config:
+        if not hasattr(profile, 'proxy_config') or not profile.proxy_config:
             return None
         
         proxy_data = profile.proxy_config
-        proxy_url = None
         
         # Build proxy URL
         protocol = proxy_data.get('proxy_type', 'http')
@@ -206,18 +209,11 @@ class ConnectionPoolManager:
         
         if host and port:
             if username and password:
-                proxy_url = f"{protocol}://{username}:{password}@{host}:{port}"
+                return f"{protocol}://{username}:{password}@{host}:{port}"
             else:
-                proxy_url = f"{protocol}://{host}:{port}"
+                return f"{protocol}://{host}:{port}"
         
-        if not proxy_url:
-            return None
-        
-        # httpx expects proxies in this format
-        return {
-            "http://": proxy_url,
-            "https://": proxy_url,
-        }
+        return None
     
     def _apply_timing_jitter(self, base_value: float) -> float:
         """Apply realistic timing jitter to avoid patterns"""
@@ -226,14 +222,14 @@ class ConnectionPoolManager:
     
     async def get_client(
         self, 
-        profile: Profile, 
+        profile: BrowserProfile, 
         use_tls_fingerprint: bool = True,
         force_new: bool = False
     ) -> httpx.AsyncClient:
         """
         Get or create an HTTP client with proper proxy and stealth configuration
         
-        CRITICAL FIX: Properly configure httpx with proxies parameter in mounts
+        CRITICAL FIX: Properly configure httpx with proxies parameter
         """
         pool_key = self._get_pool_key(profile, use_tls_fingerprint)
         
@@ -268,11 +264,10 @@ class ConnectionPoolManager:
                 ssl_context = StealthSSLContext.create_context(profile)
             
             # Get proxy configuration
-            proxy_config = self._create_proxy_config(profile)
+            proxy_url = self._create_proxy_config(profile)
             
             # Create the client with all stealth features
             try:
-                # CRITICAL: httpx uses 'mounts' for proxy configuration, not 'proxies'
                 client_kwargs = {
                     'limits': limits,
                     'timeout': timeout,
@@ -284,12 +279,8 @@ class ConnectionPoolManager:
                 }
                 
                 # Add proxy configuration if available
-                if proxy_config:
-                    # httpx uses 'mounts' parameter for proxies
-                    client_kwargs['mounts'] = {
-                        "http://": httpx.AsyncHTTPTransport(proxy=proxy_config["http://"]),
-                        "https://": httpx.AsyncHTTPTransport(proxy=proxy_config["https://"]),
-                    }
+                if proxy_url:
+                    client_kwargs['proxies'] = proxy_url
                 
                 client = httpx.AsyncClient(**client_kwargs)
                 
@@ -298,13 +289,13 @@ class ConnectionPoolManager:
                 self.last_rotation[pool_key] = time.time()
                 self.connection_health[pool_key] = 100.0
                 
-                logger.debug(f"Created new httpx client for profile {profile.id} "
-                           f"(proxy: {bool(proxy_config)}, tls_fingerprint: {use_tls_fingerprint})")
+                logger.debug(f"Created new httpx client for profile {getattr(profile, 'profile_id', 'unknown')} "
+                           f"(proxy: {bool(proxy_url)}, tls_fingerprint: {use_tls_fingerprint})")
                 
                 return client
                 
             except Exception as e:
-                logger.error(f"Error creating httpx client for profile {profile.id}: {e}")
+                logger.error(f"Error creating httpx client for profile {getattr(profile, 'profile_id', 'unknown')}: {e}")
                 # Return a basic client without proxy as fallback
                 return httpx.AsyncClient(
                     limits=limits,
@@ -313,7 +304,7 @@ class ConnectionPoolManager:
                     http2=self.http2_enabled,
                 )
     
-    async def release_client(self, profile: Profile, client: httpx.AsyncClient):
+    async def release_client(self, profile: BrowserProfile, client: httpx.AsyncClient):
         """Release client back to pool (no-op for persistent connections)"""
         # Connections are persistent in the pool, so we just track health
         pool_key = self._get_pool_key(profile)
@@ -321,12 +312,12 @@ class ConnectionPoolManager:
             # Decay health slightly to encourage rotation
             self.connection_health[pool_key] *= 0.99
     
-    async def mark_client_compromised(self, profile: Profile):
+    async def mark_client_compromised(self, profile: BrowserProfile):
         """Mark a client as potentially detected"""
         pool_key = self._get_pool_key(profile)
         async with self.pool_lock:
             if pool_key in self.pools:
-                logger.warning(f"Marking client for profile {profile.id} as compromised")
+                logger.warning(f"Marking client for profile {getattr(profile, 'profile_id', 'unknown')} as compromised")
                 await self.pools[pool_key].aclose()
                 del self.pools[pool_key]
                 if pool_key in self.connection_health:
@@ -363,6 +354,164 @@ class ConnectionPoolManager:
         }
 
 
+class ResponseCache:
+    """Response cache implementation"""
+    
+    def __init__(self, max_size_mb: int = 50):
+        self.max_size_mb = max_size_mb
+        self.cache: Dict[str, Any] = {}
+        self.hit_count = 0
+        self.miss_count = 0
+        self.current_size_mb = 0.0
+        
+    async def get(self, url: str, max_age_seconds: int = 300) -> Optional[bytes]:
+        """Get cached response if not expired"""
+        cache_key = self._get_cache_key(url)
+        
+        if cache_key in self.cache:
+            entry = self.cache[cache_key]
+            age = time.time() - entry['timestamp']
+            
+            if age < max_age_seconds:
+                self.hit_count += 1
+                return entry['content']
+            else:
+                # Remove expired entry
+                del self.cache[cache_key]
+        
+        self.miss_count += 1
+        return None
+    
+    async def put(self, url: str, content: bytes, headers: Dict[str, str], response_headers: Dict[str, str]):
+        """Store response in cache"""
+        cache_key = self._get_cache_key(url)
+        
+        entry = {
+            'content': content,
+            'headers': headers,
+            'response_headers': response_headers,
+            'timestamp': time.time(),
+            'size': len(content)
+        }
+        
+        self.cache[cache_key] = entry
+        self.current_size_mb += len(content) / (1024 * 1024)
+        
+        # Clean up if over limit
+        if self.current_size_mb > self.max_size_mb:
+            await self._cleanup_cache()
+    
+    def _get_cache_key(self, url: str) -> str:
+        """Generate cache key from URL"""
+        import hashlib
+        return hashlib.sha256(url.encode()).hexdigest()[:16]
+    
+    async def _cleanup_cache(self):
+        """Remove oldest entries to stay under size limit"""
+        # Sort by timestamp and remove oldest
+        sorted_items = sorted(
+            self.cache.items(),
+            key=lambda x: x[1]['timestamp']
+        )
+        
+        while self.current_size_mb > self.max_size_mb * 0.8 and sorted_items:
+            key, entry = sorted_items.pop(0)
+            self.current_size_mb -= entry['size'] / (1024 * 1024)
+            del self.cache[key]
+    
+    async def clear_old_entries(self, max_age_seconds: int = 1800) -> int:
+        """Clear entries older than max_age_seconds"""
+        now = time.time()
+        to_remove = []
+        
+        for key, entry in self.cache.items():
+            if now - entry['timestamp'] > max_age_seconds:
+                to_remove.append(key)
+        
+        for key in to_remove:
+            entry = self.cache[key]
+            self.current_size_mb -= entry['size'] / (1024 * 1024)
+            del self.cache[key]
+        
+        return len(to_remove)
+    
+    @property
+    def hit_rate(self) -> float:
+        """Calculate cache hit rate"""
+        total = self.hit_count + self.miss_count
+        return self.hit_count / total if total > 0 else 0.0
+
+
+class SmartBrowserContextManager:
+    """Smart browser context manager with profile integration"""
+    
+    def __init__(self, playwright_instance, profile_manager, data_tracker, config):
+        self.playwright = playwright_instance
+        self.profile_manager = profile_manager
+        self.data_tracker = data_tracker
+        self.config = config
+        self.contexts: Dict[str, Any] = {}
+        
+    async def get_stealth_context(self, profile: BrowserProfile, force_new: bool = False):
+        """Get or create a stealth browser context"""
+        profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
+        
+        if profile_id in self.contexts and not force_new:
+            return self.contexts[profile_id]
+        
+        # Create new context with stealth settings
+        context = await self.playwright.chromium.launch_persistent_context(
+            user_data_dir=f"/tmp/browser_profile_{profile_id}",
+            headless=True,
+            args=[
+                '--disable-blink-features=AutomationControlled',
+                '--disable-features=VizDisplayCompositor',
+                '--disable-extensions',
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--disable-gpu',
+                '--hide-scrollbars',
+                '--mute-audio',
+                '--disable-background-timer-throttling',
+                '--disable-renderer-backgrounding',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-background-networking'
+            ],
+            viewport={'width': profile.viewport_width, 'height': profile.viewport_height},
+            user_agent=profile.user_agent,
+            locale=getattr(profile, 'locale', 'en-US'),
+            timezone_id=getattr(profile, 'timezone', 'America/New_York'),
+            permissions=['geolocation'],
+            extra_http_headers={
+                'Accept-Language': getattr(profile, 'accept_language', 'en-US,en;q=0.9'),
+            }
+        )
+        
+        # Inject stealth script
+        stealth_script_path = self.config.get('paths', {}).get('stealth_script', 'src/core/stealth_init.js')
+        if os.path.exists(stealth_script_path):
+            with open(stealth_script_path, 'r') as f:
+                stealth_script = f.read()
+            
+            await context.add_init_script(stealth_script)
+        
+        self.contexts[profile_id] = context
+        return context
+    
+    async def close_all(self):
+        """Close all browser contexts"""
+        for context in self.contexts.values():
+            try:
+                await context.close()
+            except Exception as e:
+                logger.error(f"Error closing context: {e}")
+        self.contexts.clear()
+
+
 # Additional helper for pre-warming connections
 class ConnectionPreWarmer:
     """Pre-warm connections to reduce latency on first request"""
@@ -370,7 +519,7 @@ class ConnectionPreWarmer:
     @staticmethod
     async def prewarm_connections(
         pool_manager: ConnectionPoolManager,
-        profiles: List[Profile],
+        profiles: List[BrowserProfile],
         targets: List[str]
     ):
         """Pre-establish connections to target domains"""
@@ -383,7 +532,7 @@ class ConnectionPreWarmer:
                         client = await pool_manager.get_client(p)
                         # Just establish TCP/TLS connection, don't actually request
                         # This is done implicitly when the client is created
-                        logger.debug(f"Pre-warmed connection for {p.id} to {t}")
+                        logger.debug(f"Pre-warmed connection for {getattr(p, 'profile_id', 'unknown')} to {t}")
                     except Exception as e:
                         logger.warning(f"Failed to pre-warm connection: {e}")
                 

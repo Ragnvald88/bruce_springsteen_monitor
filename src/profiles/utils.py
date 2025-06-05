@@ -20,41 +20,58 @@ logger = logging.getLogger(__name__)
 def parse_proxy_configs(proxy_data: List[Dict[str, Any]]) -> List[ProxyConfig]:
     """Parse list of ProxyConfig from data, resolving environment variables."""
     configs = []
-    
-    for proxy_dict in proxy_data:
-        try:
-            # Resolve environment variables
-            host_str = os.path.expandvars(proxy_dict.get('host', ''))
-            port_str = os.path.expandvars(str(proxy_dict.get('port', 0)))
-            username_str = os.path.expandvars(proxy_dict.get('username', ''))
-            password_str = os.path.expandvars(proxy_dict.get('password', ''))
+    if not proxy_data:
+        logger.warning("No proxy data provided to parse_proxy_configs.")
+        return configs
 
-            config = ProxyConfig(
+    logger.info(f"Attempting to parse {len(proxy_data)} proxy entries.")
+    for i, proxy_dict in enumerate(proxy_data):
+        try:
+            logger.debug(f"Raw proxy entry #{i+1} from YAML: {proxy_dict}")
+
+            raw_host = proxy_dict.get('host', '')
+            raw_port = str(proxy_dict.get('port', '0')) 
+            raw_username = proxy_dict.get('username', '')
+            raw_password = proxy_dict.get('password', '')
+
+            host_str = os.path.expandvars(raw_host)
+            port_str = os.path.expandvars(raw_port)
+            username_str = os.path.expandvars(raw_username)
+            password_str = os.path.expandvars(raw_password)
+            
+            logger.debug(f"Expanded proxy entry #{i+1}: host='{host_str}', port='{port_str}', user='{username_str}'")
+
+            parsed_port = int(port_str) if port_str.isdigit() else 0
+
+            if not host_str or parsed_port <= 0:
+                logger.warning(f"Skipping proxy entry #{i+1} due to missing/invalid host ('{host_str}') or port ({parsed_port}) after expansion.")
+                continue
+            
+            config_instance = ProxyConfig(
                 proxy_type=proxy_dict.get('type', 'http'),
                 host=host_str,
-                port=int(port_str) if port_str.isdigit() else 0,
+                port=parsed_port,
                 username=username_str if username_str else None,
                 password=password_str if password_str else None,
                 rotation_endpoint=proxy_dict.get('rotation_endpoint'),
                 sticky_session=proxy_dict.get('sticky_session', True),
                 country_code=proxy_dict.get('country_code'),
-                # THIS IS THE CORRECTED LINE:
-                # It should be proxy_provider (field in dataclass) = proxy_dict.get('provider') (key in YAML)
-                proxy_provider=proxy_dict.get('provider') 
+                proxy_provider=proxy_dict.get('provider')  # Corrected: maps 'provider' from YAML
             )
+            configs.append(config_instance)
+            logger.info(f"Successfully parsed proxy: {config_instance.host}:{config_instance.port}, Provider: {config_instance.proxy_provider}")
             
-            if config.host and config.port > 0:
-                configs.append(config)
-                logger.debug(f"Successfully parsed and expanded proxy: host='{config.host}', port={config.port}, provider='{config.proxy_provider}'")
-            else:
-                logger.warning(f"Invalid proxy config after env var expansion: missing host or port. Original: {proxy_dict}, Expanded: host='{host_str}', port_str='{port_str}'")
-                
-        except TypeError as te: # Catch the specific TypeError
-            logger.error(f"TypeError parsing proxy config: {proxy_dict}. Error: {te}. This usually means a mismatch between YAML keys and ProxyConfig dataclass fields.")
+        except TypeError as te:
+            logger.error(f"TypeError during ProxyConfig instantiation for entry: {proxy_dict}. Error: {te}. Ensure ProxyConfig fields match arguments.", exc_info=True)
         except Exception as e:
-            logger.error(f"Failed to parse proxy config: {proxy_dict}. Error: {e}")
+            logger.error(f"Failed to parse proxy config entry: {proxy_dict}. Error: {e}", exc_info=True)
     
+    if not configs:
+        logger.warning("Proxy parsing finished, but no valid proxy configurations were loaded.")
+    else:
+        logger.info(f"Successfully loaded {len(configs)} proxy configurations.")
     return configs
+
 
 def parse_profile_manager_config(config_data: Dict[str, Any]) -> ProfileManagerConfig:
     """Parse ProfileManagerConfig from dict"""
@@ -197,42 +214,6 @@ def parse_scoring_config(scoring_data: Dict[str, Any]) -> ProfileScoringConfig:
         config.min_unique_tls_fingerprints = adv.get('min_unique_tls', 3)
     
     return config
-
-
-def parse_proxy_configs(proxy_data: List[Dict[str, Any]]) -> List[ProxyConfig]:
-    """Parse list of ProxyConfig from data"""
-    configs = []
-    
-    for proxy_dict in proxy_data:
-        try:
-            config = ProxyConfig(
-                proxy_type=proxy_dict.get('type', 'http'),
-                host=proxy_dict.get('host', ''),
-                port=proxy_dict.get('port', 0),
-                username=proxy_dict.get('username'),
-                password=proxy_dict.get('password'),
-                rotation_endpoint=proxy_dict.get('rotation_endpoint'),
-                sticky_session=proxy_dict.get('sticky_session', True),
-                country_code=proxy_dict.get('country_code'),
-                provider=proxy_dict.get('provider'),
-                ssl_verification=proxy_dict.get('ssl_verification', True),
-                connection_timeout=proxy_dict.get('connection_timeout', 30),
-                read_timeout=proxy_dict.get('read_timeout', 60),
-                retry_count=proxy_dict.get('retry_count', 3),
-                rotation_interval_minutes=proxy_dict.get('rotation_interval'),
-                force_rotation_on_error=proxy_dict.get('force_rotation_on_error', True)
-            )
-            
-            if config.host and config.port:
-                configs.append(config)
-            else:
-                logger.warning(f"Invalid proxy config: missing host or port")
-                
-        except Exception as e:
-            logger.error(f"Failed to parse proxy config: {e}")
-    
-    return configs
-
 
 def parse_cooldowns(cooldown_data: Dict[str, Any]) -> Dict[str, Tuple[float, float]]:
     """Parse cooldown configurations"""

@@ -13,6 +13,7 @@ from playwright.async_api import BrowserContext
 
 from .enums import ProfileQuality, DataOptimizationLevel, Platform
 from .types import SessionData, ProfileMetrics
+from .enums import Platform, ProfileQuality # Assuming these are correctly defined
 
 @dataclass
 class ProxyConfig:

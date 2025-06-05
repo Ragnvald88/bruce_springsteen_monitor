@@ -4771,3 +4771,603 @@ Traceback (most recent call last):
     raise mapped_exc(message) from exc
 httpx.ReadError
 2025-06-04 21:03:17.379 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:09:56.491 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:11:03.921 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:11:26.581 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 217, in _receive_event
+    data = await self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.READ_NUM_BYTES, timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 32, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadError
+2025-06-04 21:16:15.610 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:18:56.112 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:22:47.710 | ERROR    | src.profiles.utils             | parse_proxy_configs  | Failed to parse proxy config: ProxyConfig.__init__() got an unexpected keyword argument 'provider'
+2025-06-04 21:23:13.708 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http11.py", line 217, in _receive_event
+    data = await self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.READ_NUM_BYTES, timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 32, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadError
+2025-06-04 21:28:01.672 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:28:01.678 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:28:01.679 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:28:08.120 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:28:08.121 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:28:08.122 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 82, in get_client
+    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
+TypeError: AsyncHTTPTransport.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.422 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_56bc06f1: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.429 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.431 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_3aab8728: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.431 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.431 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_8869be39: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:54.432 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.807 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_738ba880: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.808 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.809 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_0fb4fc27: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.809 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.809 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_ce35ed7b: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:34:59.810 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.558 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_9468ba4d: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.563 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.564 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_6a9420f0: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.564 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.564 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_197f2ef8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:36:35.564 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:31.413 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_93f4e60e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:31.415 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:31.605 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_e32df52a: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:31.605 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:35.002 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_1d252747: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:37:35.002 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 103, in get_client
+    self.pools[client_key] = httpx.AsyncClient(**client_creation_args)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.807 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile fansale_a335446e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.812 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.813 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile ticketmaster_d5fd93b8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.813 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.813 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile vivaticket_540b1819: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:47:50.814 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:52.084 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile ticketmaster_15ea2e84: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:52.085 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:52.919 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile vivaticket_f4f8912b: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:52.923 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:54.363 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile fansale_bf2b2928: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-04 21:48:54.364 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.773 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile fansale_d995cacd: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.781 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.782 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile ticketmaster_639d1df8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.782 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.783 | ERROR    | src.core.managers              | get_client           | TypeError creating httpx client for profile vivaticket_17d6e951: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 11:02:38.783 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 86, in get_client
+    actual_client = httpx.AsyncClient(
+        limits=limits,
+    ...<5 lines>...
+        proxies=proxies_for_client # Explicitly passing the proxies argument
+    )
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'

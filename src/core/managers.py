@@ -50,8 +50,8 @@ class ConnectionPoolManager:
 
 
     async def get_client(self,
-                        profile: BrowserProfile,
-                        use_tls_fingerprint: bool = True) -> httpx.AsyncClient:
+                     profile: BrowserProfile, # Assuming BrowserProfile is correctly imported
+                     use_tls_fingerprint: bool = True) -> httpx.AsyncClient:
         async with self._lock:
             client_key = f"{profile.profile_id}_{use_tls_fingerprint}"
             if client_key not in self.pools:
@@ -65,40 +65,63 @@ class ConnectionPoolManager:
                     headers = profile.get_headers()
                 elif hasattr(profile, 'extra_http_headers'):
                     headers = profile.extra_http_headers.copy()
-                    if not headers.get('User-Agent') and hasattr(profile, 'user_agent'): # Ensure UA
-                         headers['User-Agent'] = profile.user_agent
-
+                    if not headers.get('User-Agent') and hasattr(profile, 'user_agent'):
+                        headers['User-Agent'] = profile.user_agent
 
                 proxy_url_str = None
-                if profile.proxy_config: # Corrected indentation for this block
+                if profile.proxy_config:
                     proxy_url_str = profile.proxy_config.get_proxy_url(session_id=getattr(profile, 'proxy_session_id', None))
 
-                transport_proxies_dict = None
-                if proxy_url_str: # Ensure proxy_url_str is not None or empty
-                    transport_proxies_dict = {"all://": proxy_url_str}
-
-                # Configure transport with proxies if they exist
-                if transport_proxies_dict:
-                    transport = httpx.AsyncHTTPTransport(proxies=transport_proxies_dict, retries=1) # You can configure retries
-                else:
-                    # If no proxy, you might still want to configure retries or other transport settings
-                    transport = httpx.AsyncHTTPTransport(retries=1) 
+                proxies_for_client = None
+                if proxy_url_str:
+                    proxies_for_client = {"all://": proxy_url_str}
+                
+                actual_client = None
+                log_proxy_message = "Proxy: No"
 
                 try:
-                    self.pools[client_key] = httpx.AsyncClient(
-                        limits=limits,
-                        headers=headers,
-                        transport=transport, # <--- USE TRANSPORT ARGUMENT HERE
-                        timeout=httpx.Timeout(self.connect_timeout, read=self.read_timeout),
-                        follow_redirects=True,
-                        verify=True, 
-                        http2=True,
-                    )
-                    logger.info(f"Created httpx client for profile {profile.profile_id}. Proxy: {'Yes' if transport_proxies_dict else 'No'}")
+                    if proxies_for_client:
+                        log_proxy_message = f"with proxy: {proxy_url_str}"
+                        logger.debug(f"Attempting to create AsyncClient explicitly with proxies: {proxies_for_client}")
+                        actual_client = httpx.AsyncClient(
+                            limits=limits,
+                            headers=headers,
+                            timeout=httpx.Timeout(self.connect_timeout, read=self.read_timeout),
+                            follow_redirects=True,
+                            verify=True,
+                            http2=True,
+                            proxies=proxies_for_client # Explicitly passing the proxies argument
+                        )
+                    else:
+                        # No proxies, define transport with retries
+                        transport = httpx.AsyncHTTPTransport(retries=1)
+                        actual_client = httpx.AsyncClient(
+                            limits=limits,
+                            headers=headers,
+                            timeout=httpx.Timeout(self.connect_timeout, read=self.read_timeout),
+                            follow_redirects=True,
+                            verify=True,
+                            http2=True,
+                            transport=transport
+                        )
+                    
+                    if actual_client:
+                        self.pools[client_key] = actual_client
+                        logger.info(f"Created httpx client for profile {profile.profile_id}. {log_proxy_message}")
+                    else:
+                        # This path should ideally not be hit if instantiation fails, as an exception would be raised.
+                        logger.error(f"Failed to create httpx client instance for profile {profile.profile_id} (actual_client is None).")
+                        # Consider raising an exception if actual_client is None to prevent returning None
+                        raise Exception(f"HTTPX client creation resulted in None for profile {profile.profile_id}")
+
+                except TypeError as te: # Catch the specific TypeError again
+                    logger.error(f"TypeError creating httpx client for profile {profile.profile_id}: {te}", exc_info=True)
+                    raise # Re-raise the TypeError to see if it still occurs with the explicit call
                 except Exception as e:
-                    logger.error(f"Error creating httpx client for profile {profile.profile_id}: {e}", exc_info=True)
+                    logger.error(f"General error creating httpx client for profile {profile.profile_id}: {e}", exc_info=True)
                     raise
-            return self.pools[client_key] # This line was previously outdented, now correctly part of get_client
+
+            return self.pools[client_key]
 
     async def close_all(self):
         async with self._lock:

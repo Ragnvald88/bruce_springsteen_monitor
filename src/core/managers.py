@@ -8,7 +8,7 @@ import asyncio
 import httpx
 import random
 import time
-from typing import Dict, Optional, Any, List, Tuple, Union
+from typing import Dict, Optional, Any, List, Tuple, Union, Set
 from dataclasses import dataclass, field
 import ssl
 import h2.connection
@@ -116,7 +116,7 @@ class StealthSSLContext:
 
 class ConnectionPoolManager:
     """
-    StealthMaster AI Enhanced Connection Pool Manager
+    StealthMaster AI Enhanced Connection Pool Manager - OPTIMIZED
     
     Features:
     - Proper httpx proxy configuration
@@ -124,6 +124,7 @@ class ConnectionPoolManager:
     - Connection persistence and pooling
     - Adaptive timeout management
     - Stealth header rotation
+    - Pre-warming and performance optimization
     """
     
     def __init__(self, config: Dict[str, Any], profile_manager=None):
@@ -132,13 +133,13 @@ class ConnectionPoolManager:
         self.pools: Dict[str, httpx.AsyncClient] = {}
         self.pool_lock = asyncio.Lock()
         
-        # Connection limits from config
-        self.max_connections = config.get('max_connections_per_host', 10)
-        self.max_keepalive = config.get('max_keepalive_connections', 5)
+        # Connection limits from config (optimized defaults)
+        self.max_connections = config.get('max_connections_per_host', 20)  # Increased
+        self.max_keepalive = config.get('max_keepalive_connections', 10)   # Increased
         
-        # Timeouts with jitter
-        self.base_connect_timeout = config.get('connect_timeout_seconds', 15)
-        self.base_read_timeout = config.get('read_timeout_seconds', 20)
+        # Optimized timeouts
+        self.base_connect_timeout = config.get('connect_timeout_seconds', 10)  # Reduced
+        self.base_read_timeout = config.get('read_timeout_seconds', 15)        # Reduced
         
         # HTTP/2 configuration
         self.http2_enabled = config.get('http2_enabled', True)
@@ -146,6 +147,14 @@ class ConnectionPoolManager:
         # Connection health tracking
         self.connection_health: Dict[str, float] = {}
         self.last_rotation: Dict[str, float] = {}
+        
+        # Performance optimization
+        self.pre_warmed_pools: Set[str] = set()
+        self.warm_up_tasks: Dict[str, asyncio.Task] = {}
+        
+        # Connection reuse optimization
+        self.connection_reuse_count: Dict[str, int] = {}
+        self.max_reuse_per_connection = config.get('max_reuse_per_connection', 100)
         
         logger.info(f"ConnectionPoolManager initialized with max_connections={self.max_connections}, "
                    f"max_keepalive={self.max_keepalive}")
@@ -206,6 +215,42 @@ class ConnectionPoolManager:
         
         return headers
     
+    async def pre_warm_connections(self, profiles: List[BrowserProfile], target_domains: List[str]):
+        """Pre-warm connections for faster first requests."""
+        logger.info(f"Pre-warming connections for {len(profiles)} profiles to {len(target_domains)} domains")
+        
+        warm_up_tasks = []
+        for profile in profiles[:5]:  # Limit to avoid overwhelming
+            for domain in target_domains:
+                task = asyncio.create_task(self._warm_single_connection(profile, domain))
+                warm_up_tasks.append(task)
+        
+        # Run warm-up tasks concurrently with timeout
+        try:
+            await asyncio.wait_for(
+                asyncio.gather(*warm_up_tasks, return_exceptions=True),
+                timeout=10.0  # Maximum 10 seconds for warm-up
+            )
+            logger.info("Connection pre-warming completed")
+        except asyncio.TimeoutError:
+            logger.warning("Connection pre-warming timed out, proceeding anyway")
+    
+    async def _warm_single_connection(self, profile: BrowserProfile, domain: str):
+        """Warm up a single connection."""
+        try:
+            client = await self.get_client(profile)
+            # Make a minimal HEAD request to establish connection
+            test_url = f"https://{domain.replace('https://', '').replace('http://', '')}"
+            response = await client.head(test_url, timeout=3.0)
+            
+            pool_key = self._get_pool_key(profile)
+            self.pre_warmed_pools.add(pool_key)
+            
+            logger.debug(f"Pre-warmed connection to {domain} via profile {getattr(profile, 'profile_id', 'unknown')}")
+            
+        except Exception as e:
+            logger.debug(f"Pre-warm failed for {domain}: {str(e)[:50]}...")
+    
     def _create_proxy_config(self, profile: BrowserProfile) -> Optional[Dict[str, Any]]:
         """Create httpx-compatible proxy configuration"""
         if not hasattr(profile, 'proxy_config') or not profile.proxy_config:
@@ -252,11 +297,8 @@ class ConnectionPoolManager:
 
         logger.debug(f"Created proxy URL: {protocol}://{host}:{port} (auth: {bool(username and password)})")
 
-        # httpx expects proxies in this format
-        return {
-            "http://": proxy_url,
-            "https://": proxy_url,
-        }
+        # httpx expects proxies in this format (string or dict)
+        return proxy_url
     
     def _apply_timing_jitter(self, base_value: float) -> float:
         """Apply realistic timing jitter to avoid patterns"""
@@ -267,7 +309,8 @@ class ConnectionPoolManager:
         self, 
         profile: BrowserProfile, 
         use_tls_fingerprint: bool = True,
-        force_new: bool = False
+        force_new: bool = False,
+        max_retries: int = 3
     ) -> httpx.AsyncClient:
         """
         Get or create an HTTP client with proper proxy and stealth configuration
@@ -307,45 +350,52 @@ class ConnectionPoolManager:
                 ssl_context = StealthSSLContext.create_context(profile)
             
             # Get proxy configuration
-            proxy_url = self._create_proxy_config(profile)
+            proxy_config = self._create_proxy_config(profile)
             
-            # Create the client with all stealth features
-            try:
-                client_kwargs = {
-                    'limits': limits,
-                    'timeout': timeout,
-                    'headers': self._create_stealth_headers(profile),
-                    'http2': self.http2_enabled,
-                    'verify': ssl_context if ssl_context else True,
-                    'follow_redirects': True,
-                    'max_redirects': 5,
-                }
-                
-                # Add proxy configuration if available
-                if proxy_url:
-                    client_kwargs['proxies'] = proxy_url
-                
-                client = httpx.AsyncClient(**client_kwargs)
-                
-                # Store in pool
-                self.pools[pool_key] = client
-                self.last_rotation[pool_key] = time.time()
-                self.connection_health[pool_key] = 100.0
-                
-                logger.debug(f"Created new httpx client for profile {getattr(profile, 'profile_id', 'unknown')} "
-                           f"(proxy: {bool(proxy_url)}, tls_fingerprint: {use_tls_fingerprint})")
-                
-                return client
-                
-            except Exception as e:
-                logger.error(f"Error creating httpx client for profile {getattr(profile, 'profile_id', 'unknown')}: {e}")
-                # Return a basic client without proxy as fallback
-                return httpx.AsyncClient(
-                    limits=limits,
-                    timeout=timeout,
-                    headers=self._create_stealth_headers(profile),
-                    http2=self.http2_enabled,
-                )
+            # Create the client with all stealth features and retry logic
+            for attempt in range(max_retries):
+                try:
+                    client_kwargs = {
+                        'limits': limits,
+                        'timeout': timeout,
+                        'headers': self._create_stealth_headers(profile),
+                        'http2': self.http2_enabled,
+                        'verify': ssl_context if ssl_context else True,
+                        'follow_redirects': True,
+                        'max_redirects': 5,
+                    }
+                    
+                    # Add proxy configuration if available
+                    if proxy_config:
+                        client_kwargs['proxy'] = proxy_config
+                    
+                    client = httpx.AsyncClient(**client_kwargs)
+                    
+                    # Store in pool on success
+                    self.pools[pool_key] = client
+                    self.last_rotation[pool_key] = time.time()
+                    self.connection_health[pool_key] = 100.0
+                    
+                    logger.debug(f"Created new httpx client for profile {getattr(profile, 'profile_id', 'unknown')} "
+                               f"(proxy: {bool(proxy_config)}, tls_fingerprint: {use_tls_fingerprint})")
+                    
+                    return client
+                    
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        # Exponential backoff
+                        wait_time = (2 ** attempt) * 0.1
+                        await asyncio.sleep(wait_time)
+                        continue
+                    else:
+                        # Final attempt failed - return fallback client
+                        logger.error(f"Failed to create httpx client after {max_retries} attempts for profile {getattr(profile, 'profile_id', 'unknown')}: {e}")
+                        return httpx.AsyncClient(
+                            limits=limits,
+                            timeout=timeout,
+                            headers=self._create_stealth_headers(profile),
+                            http2=self.http2_enabled,
+                        )
     
     async def release_client(self, profile: BrowserProfile, client: httpx.AsyncClient):
         """Release client back to pool (no-op for persistent connections)"""

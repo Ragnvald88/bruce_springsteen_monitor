@@ -11827,3 +11827,285 @@ AttributeError: 'ProxyConfig' object has no attribute 'protocol'
 2025-06-05 16:59:26.757 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_da88e211: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
 2025-06-05 16:59:47.875 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_ab7aca2e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
 2025-06-05 17:00:12.349 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_ec7dda79: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:02:43.218 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_fcf87310: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:02:43.268 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_3ed30f06: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:02:43.291 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_96494966: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:08:32.312 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_fcf87310: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:08:32.477 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-05 17:08:38.537 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_3ed30f06: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:08:38.700 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-05 17:08:40.664 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_96494966: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:08:40.835 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-05 17:09:33.546 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2f770949: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:09:57.645 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_e21d44df: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:09:57.778 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_6f5100d8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:15:02.264 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2f770949: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:15:26.543 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_e21d44df: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:15:59.885 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_6f5100d8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:20:27.365 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2f770949: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:20:51.208 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_e21d44df: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:22:10.158 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_6f5100d8: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:25:55.115 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2f770949: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:26:30.244 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_e21d44df: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:40:06.605 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_2f770949: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:44:25.174 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_a2d86e75: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:44:25.224 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_f6a05e82: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:44:25.246 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_bed366cf: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:35:59.291 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_26e299eb: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:35:59.343 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_917153b2: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:35:59.366 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_f0b1ad5c: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:40:45.725 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_3d6957d7: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:40:45.773 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_0661376c: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 18:40:45.795 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_073a4304: AsyncClient.__init__() got an unexpected keyword argument 'proxies'

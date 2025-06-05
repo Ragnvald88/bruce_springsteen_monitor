@@ -185,7 +185,8 @@ class UnifiedOrchestrator:
             )
             
             if hasattr(self.profile_manager, 'initialize'):
-                await self.profile_manager.initialize()
+                # Use fast initialization for better startup performance
+                await self.profile_manager.initialize(lazy_load=True)
             
             if not await self._validate_profile_manager():
                 logger.error("ProfileManager validation failed!")

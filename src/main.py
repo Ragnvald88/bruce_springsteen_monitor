@@ -8,21 +8,14 @@ import signal
 import sys
 import os
 import yaml
-import json
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Set
+from typing import Dict, Optional, Any
 import threading
 import queue as thread_queue
 from datetime import datetime
 import hashlib
-import random
 import re
-
-# Advanced imports for stealth
-import httpx
-from fake_useragent import UserAgent
-import aiofiles
 
 # Ensure the project root is in the Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -33,8 +26,7 @@ from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env")
 
 # Playwright with stealth capabilities
-from playwright.async_api import async_playwright, Playwright
-from playwright_stealth import stealth_async
+from playwright.async_api import async_playwright
 
 # Core Application Imports
 from src.core.orchestrator import UnifiedOrchestrator
@@ -62,6 +54,10 @@ class StealthLogger(logging.Logger):
         msg = re.sub(r'(session|token|key)=[^&\s]+', r'\1=***', msg)
         # Remove profile IDs in logs
         msg = re.sub(r'profile_[a-f0-9]{8}', 'profile_***', msg)
+        # Remove proxy credentials from URLs
+        msg = re.sub(r'://[^:/@]+:[^:/@]+@', '://***:***@', msg)
+        # Remove standalone password patterns
+        msg = re.sub(r'(password|passwd|pwd)["\s]*[:=]["\s]*[^\s"&]+', r'\1=***', msg, flags=re.IGNORECASE)
         return msg
     
     def _log(self, level, msg, args, **kwargs):
@@ -71,7 +67,7 @@ class StealthLogger(logging.Logger):
 # Replace default logger class
 logging.setLoggerClass(StealthLogger)
 
-def signal_handler(sig, frame):
+def signal_handler(sig, _):
     """Enhanced signal handler with proper cleanup"""
     signal_name = signal.Signals(sig).name
     logger.warning(f"Received {signal_name}, initiating stealth shutdown...")
@@ -229,7 +225,7 @@ def load_and_merge_configs(main_config_path: Path, beast_config_path: Optional[P
 
 async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
                           gui_queue: Optional[thread_queue.Queue] = None) -> None:
-    """Enhanced core logic with stealth optimizations"""
+    """Enhanced core logic with stealth optimizations and fast startup"""
     global _orchestrator_instance
     
     start_time = time.time()
@@ -237,10 +233,6 @@ async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
     try:
         # Initialize Playwright with stealth
         async with async_playwright() as playwright:
-            # Apply stealth patches globally
-            for browser_type in [playwright.chromium, playwright.firefox, playwright.webkit]:
-                # This would require implementing stealth for each browser type
-                pass
             
             _orchestrator_instance = UnifiedOrchestrator(
                 config, 
@@ -249,8 +241,12 @@ async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
                 gui_queue=gui_queue
             )
             
-            # Performance optimization: pre-warm connections
-            await _orchestrator_instance.pre_warm_connections()
+            # Log startup time
+            startup_time = time.time() - start_time
+            logger.info(f"⚡ Fast startup completed in {startup_time:.2f}s")
+            
+            # Performance optimization: pre-warm connections (non-blocking)
+            asyncio.create_task(_orchestrator_instance.pre_warm_connections())
             
             # Run the orchestrator
             await _orchestrator_instance.run(stop_event)
@@ -293,10 +289,6 @@ def main_loop_for_gui(config_for_gui: Dict[str, Any],
         # Create isolated event loop for thread
         _gui_bot_asyncio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(_gui_bot_asyncio_loop)
-        
-        # Set event loop policy for better compatibility
-        if sys.platform == "win32":
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         
         try:
             _gui_bot_asyncio_loop.run_until_complete(
@@ -508,12 +500,15 @@ Examples:
     if hasattr(signal, 'SIGBREAK'):  # Windows
         signal.signal(signal.SIGBREAK, signal_handler)
     
+    # Set event loop policy before creating any asyncio objects (Windows only)
+    # Note: This code is unreachable on non-Windows platforms but left for cross-platform compatibility
+    if sys.platform == "win32":  # pragma: no cover
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
     _stop_event_asyncio = asyncio.Event()
     
     # Run main logic
     try:
-        if sys.platform == "win32":
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         
         # Pre-flight checks
         logger.info("Running pre-flight stealth checks...")

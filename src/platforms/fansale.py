@@ -118,7 +118,7 @@ class FansaleMonitor:
         logger.info(f"FansaleMonitor initialized for {self.event_name}")
 
     async def initialize(self):
-        """Initialize with Fansale-specific ultra-stealth"""
+        """Initialize with Fansale-specific ultra-stealth and authentication"""
         try:
             logger.info(f"Initializing Fansale ultra-stealth for {self.event_name}")
             
@@ -135,6 +135,9 @@ class FansaleMonitor:
             await self._setup_intelligent_blocking()
             await self._configure_advanced_behavior()
             await self._setup_api_monitoring()
+            
+            # Perform authentication if credentials are available
+            await self._perform_authentication()
             
             logger.info(f"Fansale ultra-stealth initialized for {self.event_name}")
             
@@ -447,6 +450,332 @@ class FansaleMonitor:
         
         except Exception as e:
             logger.debug(f"Error processing API response: {e}")
+
+    async def _perform_authentication(self):
+        """Perform FanSale authentication to access protected content"""
+        try:
+            # Load credentials from environment
+            import os
+            email = os.getenv('FANSALE_EMAIL')
+            password = os.getenv('FANSALE_PASSWORD')
+            
+            if not email or not password:
+                logger.warning("FanSale credentials not found in environment variables")
+                return False
+            
+            logger.info("Attempting FanSale authentication...")
+            
+            # Navigate to login page with stealth
+            await self._navigate_to_login_page()
+            
+            # Perform login process
+            login_success = await self._execute_login(email, password)
+            
+            if login_success:
+                logger.critical("✅ FanSale authentication successful!")
+                return True
+            else:
+                logger.warning("❌ FanSale authentication failed")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error during FanSale authentication: {e}")
+            return False
+
+    async def _navigate_to_login_page(self):
+        """Navigate to FanSale login page with human behavior"""
+        try:
+            # First visit main page to establish session
+            await self.page.goto("https://www.fansale.it/", wait_until='networkidle', timeout=30000)
+            await asyncio.sleep(random.uniform(2.0, 4.0))
+            
+            # Look for login link/button
+            login_selectors = [
+                'a[href*="/login"]',
+                'a[href*="/accedi"]', 
+                'button:text("Accedi")',
+                'a:text("Accedi")',
+                '.login-link',
+                '.user-login',
+                '#login-button'
+            ]
+            
+            login_clicked = False
+            for selector in login_selectors:
+                try:
+                    login_element = self.page.locator(selector).first
+                    if await login_element.count() and await login_element.is_visible():
+                        # Scroll to and click login
+                        await login_element.scroll_into_view_if_needed()
+                        await asyncio.sleep(random.uniform(0.5, 1.5))
+                        await login_element.click()
+                        login_clicked = True
+                        logger.debug(f"Clicked login using selector: {selector}")
+                        break
+                except Exception as e:
+                    logger.debug(f"Login selector {selector} failed: {e}")
+                    continue
+            
+            if not login_clicked:
+                # Direct navigation to login page as fallback
+                await self.page.goto("https://www.fansale.it/login", wait_until='networkidle', timeout=30000)
+            
+            # Wait for login page to load
+            await self.page.wait_for_load_state('networkidle', timeout=15000)
+            await asyncio.sleep(random.uniform(1.0, 2.0))
+            
+            logger.debug("Successfully navigated to FanSale login page")
+            
+        except Exception as e:
+            logger.error(f"Failed to navigate to login page: {e}")
+            raise
+
+    async def _execute_login(self, email: str, password: str) -> bool:
+        """Execute the login process with human-like behavior"""
+        try:
+            # Wait for login form to be visible
+            await self._wait_for_login_form()
+            
+            # Fill email field
+            email_filled = await self._fill_email_field(email)
+            if not email_filled:
+                logger.error("Failed to fill email field")
+                return False
+            
+            # Fill password field
+            password_filled = await self._fill_password_field(password)
+            if not password_filled:
+                logger.error("Failed to fill password field")
+                return False
+            
+            # Submit form
+            submitted = await self._submit_login_form()
+            if not submitted:
+                logger.error("Failed to submit login form")
+                return False
+            
+            # Verify login success
+            return await self._verify_login_success()
+            
+        except Exception as e:
+            logger.error(f"Login execution failed: {e}")
+            return False
+
+    async def _wait_for_login_form(self):
+        """Wait for login form elements to be available"""
+        form_selectors = [
+            'form[action*="login"]',
+            'form#login-form',
+            '.login-form',
+            'form:has(input[type="email"], input[type="password"])'
+        ]
+        
+        for selector in form_selectors:
+            try:
+                await self.page.wait_for_selector(selector, timeout=10000)
+                logger.debug(f"Login form found with selector: {selector}")
+                return
+            except:
+                continue
+        
+        # Fallback - just wait for email/password inputs
+        await self.page.wait_for_selector('input[type="email"], input[name*="email"]', timeout=10000)
+
+    async def _fill_email_field(self, email: str) -> bool:
+        """Fill email field with human-like typing"""
+        email_selectors = [
+            'input[type="email"]',
+            'input[name="email"]',
+            'input[name="username"]',
+            'input[id*="email"]',
+            'input[placeholder*="email"]',
+            'input[placeholder*="Email"]'
+        ]
+        
+        for selector in email_selectors:
+            try:
+                email_field = self.page.locator(selector).first
+                if await email_field.count() and await email_field.is_visible():
+                    # Clear field first
+                    await email_field.click()
+                    await asyncio.sleep(random.uniform(0.1, 0.3))
+                    await email_field.clear()
+                    
+                    # Type email with realistic timing
+                    await self._type_with_human_timing(email_field, email)
+                    logger.debug(f"Successfully filled email field: {selector}")
+                    return True
+            except Exception as e:
+                logger.debug(f"Email field {selector} failed: {e}")
+                continue
+        
+        return False
+
+    async def _fill_password_field(self, password: str) -> bool:
+        """Fill password field with human-like typing"""
+        password_selectors = [
+            'input[type="password"]',
+            'input[name="password"]',
+            'input[id*="password"]',
+            'input[placeholder*="password"]',
+            'input[placeholder*="Password"]'
+        ]
+        
+        for selector in password_selectors:
+            try:
+                password_field = self.page.locator(selector).first
+                if await password_field.count() and await password_field.is_visible():
+                    # Clear field first
+                    await password_field.click()
+                    await asyncio.sleep(random.uniform(0.1, 0.3))
+                    await password_field.clear()
+                    
+                    # Type password with realistic timing
+                    await self._type_with_human_timing(password_field, password)
+                    logger.debug(f"Successfully filled password field: {selector}")
+                    return True
+            except Exception as e:
+                logger.debug(f"Password field {selector} failed: {e}")
+                continue
+        
+        return False
+
+    async def _type_with_human_timing(self, element, text: str):
+        """Type text with human-like timing and occasional corrections"""
+        for i, char in enumerate(text):
+            # Realistic typing speed with variation
+            delay = random.uniform(0.05, 0.15)
+            
+            # Occasional slower typing (thinking)
+            if random.random() < 0.1:
+                delay += random.uniform(0.2, 0.5)
+            
+            await element.type(char, delay=delay * 1000)
+            
+            # Very rare typing mistakes (backspace + retype)
+            if random.random() < 0.02 and i > 0:
+                await asyncio.sleep(random.uniform(0.1, 0.3))
+                await element.press('Backspace')
+                await asyncio.sleep(random.uniform(0.1, 0.2))
+                await element.type(char, delay=delay * 1000)
+
+    async def _submit_login_form(self) -> bool:
+        """Submit login form with multiple strategies"""
+        submit_selectors = [
+            'button[type="submit"]',
+            'input[type="submit"]',
+            'button:text("Accedi")',
+            'button:text("Login")',
+            'button:text("Entra")',
+            '.login-button',
+            '.submit-button',
+            'form button:last-child'
+        ]
+        
+        # Try clicking submit button
+        for selector in submit_selectors:
+            try:
+                submit_button = self.page.locator(selector).first
+                if await submit_button.count() and await submit_button.is_visible():
+                    await submit_button.scroll_into_view_if_needed()
+                    await asyncio.sleep(random.uniform(0.5, 1.0))
+                    await submit_button.click()
+                    logger.debug(f"Clicked submit button: {selector}")
+                    
+                    # Wait for navigation/response
+                    await self.page.wait_for_load_state('networkidle', timeout=15000)
+                    return True
+            except Exception as e:
+                logger.debug(f"Submit button {selector} failed: {e}")
+                continue
+        
+        # Fallback: try Enter key on password field
+        try:
+            password_field = self.page.locator('input[type="password"]').first
+            if await password_field.count():
+                await password_field.press('Enter')
+                await self.page.wait_for_load_state('networkidle', timeout=15000)
+                return True
+        except Exception as e:
+            logger.debug(f"Enter key fallback failed: {e}")
+        
+        return False
+
+    async def _verify_login_success(self) -> bool:
+        """Verify if login was successful"""
+        try:
+            # Wait a moment for page to update
+            await asyncio.sleep(2.0)
+            
+            # Check current URL for login success indicators
+            current_url = self.page.url.lower()
+            
+            # If still on login page, probably failed
+            if 'login' in current_url and 'error' not in current_url:
+                # Check for error messages
+                error_selectors = [
+                    '.error', '.alert-danger', '.login-error',
+                    ':text("Credenziali non valide")',
+                    ':text("Email o password errati")',
+                    ':text("Invalid credentials")'
+                ]
+                
+                for selector in error_selectors:
+                    try:
+                        if await self.page.locator(selector).count() > 0:
+                            logger.warning("Login error message detected")
+                            return False
+                    except:
+                        continue
+                
+                # Still on login page without clear error - might be failed
+                logger.warning("Still on login page - login may have failed")
+                return False
+            
+            # Look for login success indicators
+            success_indicators = [
+                # Account/profile links
+                'a[href*="/account"]', 'a[href*="/profilo"]', 'a[href*="/profile"]',
+                # Logout links
+                'a[href*="/logout"]', 'a[href*="/esci"]',
+                # User menu/dropdown
+                '.user-menu', '.account-menu', '.profile-menu',
+                # User name/email display
+                ':text("Benvenuto")', ':text("Ciao")', ':text("Welcome")'
+            ]
+            
+            for indicator in success_indicators:
+                try:
+                    if await self.page.locator(indicator).count() > 0:
+                        logger.info(f"Login success indicator found: {indicator}")
+                        return True
+                except:
+                    continue
+            
+            # Check if we're redirected to a different page (likely success)
+            if not any(term in current_url for term in ['login', 'accedi', 'signin']):
+                logger.info("Redirected away from login page - likely successful")
+                return True
+            
+            # Try to navigate to the target event page to test access
+            try:
+                await self.page.goto(self.url, wait_until='networkidle', timeout=20000)
+                await asyncio.sleep(2.0)
+                
+                # Check if we can access the page without being redirected to login
+                final_url = self.page.url.lower()
+                if 'login' not in final_url:
+                    logger.info("Successfully accessed target page after login")
+                    return True
+            except:
+                pass
+            
+            logger.warning("Could not verify login success definitively")
+            return False
+            
+        except Exception as e:
+            logger.error(f"Error verifying login success: {e}")
+            return False
 
     async def check_opportunities(self) -> List[EnhancedTicketOpportunity]:
         """Check for ticket opportunities using advanced HTML intelligence"""
@@ -892,9 +1221,9 @@ class FansaleMonitor:
                     
                     // Look for variable assignments with offer data
                     const patterns = [
-                        /var\s+\w+\s*=\s*(\{[^}]*offer[^}]*\})/gi,
-                        /const\s+\w+\s*=\s*(\{[^}]*price[^}]*\})/gi,
-                        /let\s+\w+\s*=\s*(\{[^}]*ticket[^}]*\})/gi
+                        /var\\s+\\w+\\s*=\\s*(\\{[^}]*offer[^}]*\\})/gi,
+                        /const\\s+\\w+\\s*=\\s*(\\{[^}]*price[^}]*\\})/gi,
+                        /let\\s+\\w+\\s*=\\s*(\\{[^}]*ticket[^}]*\\})/gi
                     ];
                     
                     patterns.forEach(pattern => {
@@ -902,7 +1231,7 @@ class FansaleMonitor:
                         if (matches) {
                             matches.forEach(match => {
                                 try {
-                                    const jsonMatch = match.match(/\{.*\}/);
+                                    const jsonMatch = match.match(/\\{.*\\}/);
                                     if (jsonMatch) {
                                         const json = JSON.parse(jsonMatch[0]);
                                         data.push({

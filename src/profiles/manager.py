@@ -77,15 +77,67 @@ class ProfileManager:
             f"{self.config.profiles_per_platform} per platform"
         )
     
-    async def initialize(self):
-        """Initialize the profile manager."""
+    async def initialize(self, lazy_load: bool = True):
+        """Initialize the profile manager with optional lazy loading."""
         if self._initialized:
             return
         
-        await self._initialize_profile_pool()
-        await self.start_background_tasks()
-        self._initialized = True
-        logger.info("ProfileManager fully initialized")
+        if lazy_load:
+            # Fast initialization - defer profile pool creation
+            logger.info("ProfileManager fast initialization (lazy mode)")
+            self._initialized = True
+            # Start background tasks immediately for responsiveness
+            await self.start_background_tasks()
+            # Initialize profile pool in background
+            asyncio.create_task(self._lazy_initialize_profile_pool())
+        else:
+            # Full initialization (original behavior)
+            await self._initialize_profile_pool()
+            await self.start_background_tasks()
+            self._initialized = True
+            logger.info("ProfileManager fully initialized")
+    
+    async def _lazy_initialize_profile_pool(self):
+        """Initialize profile pool in background without blocking startup."""
+        try:
+            logger.info("Starting background profile pool initialization...")
+            await self._initialize_profile_pool()
+            logger.info("Background profile pool initialization complete")
+        except Exception as e:
+            logger.error(f"Background profile pool initialization failed: {e}")
+            # Fallback to minimal profile creation
+            await self._create_minimal_profile_pool()
+    
+    async def _create_minimal_profile_pool(self):
+        """Create a minimal profile pool for immediate functionality."""
+        try:
+            from .enums import Platform
+            platforms = [Platform.TICKETMASTER, Platform.FANSALE, Platform.VIVATICKET]
+            
+            # Create just one profile per platform for immediate functionality
+            for platform in platforms:
+                profile_id = f"{platform.value}_{random.randint(10000000, 99999999):08x}"
+                
+                # Create a basic dynamic profile
+                from ..core.advanced_profile_system import DynamicProfile, ProfileState
+                profile = DynamicProfile(
+                    profile_id=profile_id,
+                    platform=platform.value,
+                    state=ProfileState.PRISTINE,
+                    base_template=self._get_default_base_template()
+                )
+                
+                self.dynamic_profiles.append(profile)
+                
+                # Add to platform pools
+                if platform.value not in self.platform_pools:
+                    self.platform_pools[platform.value] = []
+                self.platform_pools[platform.value].append(profile_id)
+            
+            logger.info(f"Created minimal profile pool: {len(self.dynamic_profiles)} profiles")
+            
+        except Exception as e:
+            logger.error(f"Failed to create minimal profile pool: {e}")
     
     async def shutdown(self):
         """Shutdown the profile manager."""

@@ -107,11 +107,12 @@ targets:
 # NETWORK CONFIGURATION
 # -----------------------------------------------------------------------------
 network:
-  max_connections_per_host: 10
-  max_keepalive_connections: 5
-  connect_timeout_seconds: 15
-  read_timeout_seconds: 20
+  max_connections_per_host: 20
+  max_keepalive_connections: 10
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 15
   http2_enabled: true
+  max_reuse_per_connection: 100
 
 # -----------------------------------------------------------------------------
 # CACHE CONFIGURATION
@@ -157,12 +158,13 @@ strike_settings:
 # This should align with your ProfileManagerConfig dataclass
 # -----------------------------------------------------------------------------
 profile_manager:
-  num_target_profiles: 20 # Maps to ProfileManagerConfig in src/profiles/config.py
-  profiles_per_platform: 5
-  evolution_interval_seconds: 900
-  persistence_filepath: "profiles_backup.json" # Maps to ProfileManagerConfig
+  num_target_profiles: 15 # Reduced for faster startup
+  profiles_per_platform: 3 # Reduced for faster startup
+  evolution_interval_seconds: 1800 # Increased interval
+  persistence_filepath: "profiles_backup.json"
   session_backup_dir: "session_backups"
   enable_encrypted_storage: true
+  lazy_loading: true # Enable lazy loading
   # compromise_threshold_pct, min_pool_size_for_replacement, etc. are in ProfileManagerConfig defaults
 
   # scoring_config: # Fields for ProfileScoringConfig

@@ -23988,3 +23988,462 @@ Traceback (most recent call last):
     proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
                    ^^^^^^^^^
 AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 13:52:59.735 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-05 13:52:59.746 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 13:52:59.746 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-05 13:52:59.746 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-05 13:52:59.746 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-05 13:52:59.746 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-05 13:52:59.747 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-05 13:52:59.747 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 13:52:59.747 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-05 13:52:59.747 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-05 13:53:00.000 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-05 13:53:00.000 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-05 13:53:00.004 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-05 13:53:00.005 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-05 13:53:00.005 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-05 13:53:00.005 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-05 13:53:00.021 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T10:36:17.305284
+2025-06-05 13:53:00.057 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 311 profiles from disk
+2025-06-05 13:53:00.057 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-05 13:53:00.057 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-05 13:53:00.057 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-05 13:53:00.057 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 311 dynamic, 0 static profiles
+2025-06-05 13:53:00.057 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-05 13:53:00.063 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 311 static profiles from dynamic profiles
+2025-06-05 13:53:00.063 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-05 13:53:00.063 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_f432c4d1 for fansale
+2025-06-05 13:53:00.063 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-05 13:53:00.063 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_0e2317fd for ticketmaster
+2025-06-05 13:53:00.063 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-05 13:53:00.063 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_b041abc3 for vivaticket
+2025-06-05 13:53:00.063 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 314 profiles loaded
+2025-06-05 13:53:00.063 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-05 13:53:00.064 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-05 13:53:00.064 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-05 13:53:00.064 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-05 13:53:00.081 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-05 13:53:00.081 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-05 13:53:00.081 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-05 13:53:00.081 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-05 13:53:00.184 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-05 13:53:00.184 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-05 13:53:00.184 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_f432c4d1 for fansale (score: 105.00, has_session: False)
+2025-06-05 13:53:00.203 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:00.212 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-05 13:53:00.212 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_0e2317fd for ticketmaster (score: 126.00, has_session: False)
+2025-06-05 13:53:00.224 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:00.225 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-05 13:53:00.225 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_b041abc3 for vivaticket (score: 141.00, has_session: False)
+2025-06-05 13:53:00.237 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:58.708 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-05 13:53:58.735 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:59.075 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-05 13:53:59.105 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:59.310 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-05 13:53:59.336 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:54:00.083 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.0MB
+👤 PROFILES: Active=6 | Total=317 | Rotations=0
+📊 DATA USAGE: Used=0.0MB | Saved=0.0MB | Remaining=1000.0MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 14:01:29.024 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-05 14:01:29.040 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-05 14:01:29.323 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-05 14:01:29.323 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-05 14:01:29.328 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-05 14:01:29.328 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-05 14:01:29.328 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-05 14:01:29.328 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-05 14:01:29.344 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T10:36:17.305284
+2025-06-05 14:01:29.379 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 311 profiles from disk
+2025-06-05 14:01:29.379 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-05 14:01:29.379 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-05 14:01:29.379 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-05 14:01:29.379 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 311 dynamic, 0 static profiles
+2025-06-05 14:01:29.379 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 311 static profiles from dynamic profiles
+2025-06-05 14:01:29.385 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_5d221d21 for fansale
+2025-06-05 14:01:29.385 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_8fe58f29 for ticketmaster
+2025-06-05 14:01:29.385 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_d94092f7 for vivaticket
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 314 profiles loaded
+2025-06-05 14:01:29.385 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-05 14:01:29.385 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-05 14:01:29.386 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-05 14:01:29.386 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-05 14:01:29.386 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-05 14:01:29.386 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-05 14:01:29.386 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-05 14:01:29.386 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-05 14:01:29.386 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-05 14:01:29.404 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-05 14:01:29.404 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-05 14:01:29.404 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-05 14:01:29.404 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-05 14:01:29.509 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-05 14:01:29.510 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-05 14:01:29.510 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_5d221d21 for fansale (score: 121.00, has_session: False)
+2025-06-05 14:01:29.529 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_5d221d21: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:01:29.571 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-05 14:01:29.571 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_8fe58f29 for ticketmaster (score: 22.00, has_session: False)
+2025-06-05 14:01:29.581 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_8fe58f29: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:01:29.593 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-05 14:01:29.593 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_d94092f7 for vivaticket (score: 145.00, has_session: False)
+2025-06-05 14:01:29.604 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_d94092f7: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:02:29.406 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 14:02:31.765 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 14:02:32.010 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 14:02:58.163 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 14:03:29.409 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 2.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.2% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 14:03:34.917 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 14:03:35.701 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 14:04:20.502 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 14:05:00.463 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-05 14:05:00.464 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 14:05:00.464 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-05 14:05:00.465 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-05 14:05:00.632 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-05 14:05:00.632 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-05 14:05:00.636 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-05 14:05:00.636 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-05 14:05:00.636 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-05 14:05:00.637 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-05 14:05:00.647 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T10:36:17.305284
+2025-06-05 14:05:00.681 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 311 profiles from disk
+2025-06-05 14:05:00.682 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-05 14:05:00.682 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-05 14:05:00.682 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-05 14:05:00.682 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 311 dynamic, 0 static profiles
+2025-06-05 14:05:00.682 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 311 static profiles from dynamic profiles
+2025-06-05 14:05:00.688 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_d3c7952e for fansale
+2025-06-05 14:05:00.688 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_b66ca306 for ticketmaster
+2025-06-05 14:05:00.688 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_f101da14 for vivaticket
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 314 profiles loaded
+2025-06-05 14:05:00.688 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-05 14:05:00.688 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-05 14:05:00.689 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-05 14:05:00.689 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-05 14:05:00.689 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-05 14:05:00.699 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-05 14:05:00.699 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-05 14:05:00.699 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-05 14:05:00.699 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-05 14:05:00.801 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-05 14:05:00.801 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-05 14:05:00.802 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_d3c7952e for fansale (score: 145.00, has_session: False)
+2025-06-05 14:05:00.818 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_d3c7952e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:05:00.855 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-05 14:05:00.855 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_b66ca306 for ticketmaster (score: 130.00, has_session: False)
+2025-06-05 14:05:00.866 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_b66ca306: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:05:00.878 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-05 14:05:00.878 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_f101da14 for vivaticket (score: 85.00, has_session: False)
+2025-06-05 14:05:00.889 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_f101da14: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:09.618 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-05 16:54:09.629 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-05 16:54:09.925 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-05 16:54:09.925 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-05 16:54:09.930 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-05 16:54:09.930 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-05 16:54:09.930 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-05 16:54:09.930 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 20 profiles, 5 per platform
+2025-06-05 16:54:09.947 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T10:36:17.305284
+2025-06-05 16:54:09.982 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 311 profiles from disk
+2025-06-05 16:54:09.982 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {}
+2025-06-05 16:54:09.982 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-05 16:54:09.982 | INFO     | src.profiles.manager           | initialize           | ProfileManager fully initialized
+2025-06-05 16:54:09.982 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 311 dynamic, 0 static profiles
+2025-06-05 16:54:09.982 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No static profiles but have dynamic profiles, creating static versions
+2025-06-05 16:54:09.988 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created 311 static profiles from dynamic profiles
+2025-06-05 16:54:09.988 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-05 16:54:09.988 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_ab7aca2e for fansale
+2025-06-05 16:54:09.988 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_ec7dda79 for ticketmaster
+2025-06-05 16:54:09.989 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_da88e211 for vivaticket
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 314 profiles loaded
+2025-06-05 16:54:09.989 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=10, max_keepalive=5
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-05 16:54:09.989 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-05 16:54:09.990 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-05 16:54:09.990 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-05 16:54:09.990 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-05 16:54:09.990 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-05 16:54:09.990 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-05 16:54:09.990 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-05 16:54:09.990 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-05 16:54:10.007 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-05 16:54:10.007 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-05 16:54:10.008 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-05 16:54:10.008 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-05 16:54:10.113 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-05 16:54:10.113 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-05 16:54:10.113 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_ab7aca2e for fansale (score: 145.00, has_session: False)
+2025-06-05 16:54:10.134 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_ab7aca2e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:10.179 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-05 16:54:10.179 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_ec7dda79 for ticketmaster (score: 70.00, has_session: False)
+2025-06-05 16:54:10.190 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_ec7dda79: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:10.202 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-05 16:54:10.202 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_da88e211 for vivaticket (score: 121.00, has_session: False)
+2025-06-05 16:54:10.213 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_da88e211: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:55:09.914 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 16:55:10.011 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 16:55:11.181 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 16:55:31.101 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 16:56:05.302 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 16:56:10.016 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 2.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 16:56:11.306 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 16:56:57.556 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 16:57:20.556 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 16:57:20.557 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 3.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 16:57:20.557 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 16:58:20.561 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 4.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 16:58:22.232 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 16:58:22.702 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 16:58:45.989 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 16:59:20.566 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 5.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=11 (78.6%) | Size=0.1MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 16:59:26.741 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_da88e211 for vivaticket (score: 148.02, has_session: False)
+2025-06-05 16:59:26.757 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_da88e211: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:59:47.852 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_ab7aca2e for fansale (score: 176.80, has_session: False)
+2025-06-05 16:59:47.875 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_ab7aca2e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:00:12.336 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_ec7dda79 for ticketmaster (score: 88.29, has_session: False)
+2025-06-05 17:00:12.349 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_ec7dda79: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:00:20.571 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 6.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=11 (78.6%) | Size=0.2MB
+👤 PROFILES: Active=3 | Total=314 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 17:00:29.924 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 17:01:08.485 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))

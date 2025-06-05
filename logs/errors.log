@@ -11749,3 +11749,81 @@ Traceback (most recent call last):
     proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
                    ^^^^^^^^^
 AttributeError: 'ProxyConfig' object has no attribute 'get'
+2025-06-05 13:53:00.203 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:00.224 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:00.237 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:58.735 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:59.105 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 13:53:59.336 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): 'ProxyConfig' object has no attribute 'protocol'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 587, in check_ultra_efficient
+    http_client = await self.connection_pool.get_client(profile, use_tls_fingerprint=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 287, in get_client
+    proxy_url = self._create_proxy_config(profile)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/managers.py", line 217, in _create_proxy_config
+    protocol = proxy_data.protocol
+               ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProxyConfig' object has no attribute 'protocol'
+2025-06-05 14:01:29.529 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_5d221d21: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:01:29.581 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_8fe58f29: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:01:29.604 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_d94092f7: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:05:00.818 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_d3c7952e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:05:00.866 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_b66ca306: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 14:05:00.889 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_f101da14: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:10.134 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_ab7aca2e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:10.190 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_ec7dda79: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:54:10.213 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_da88e211: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:59:26.757 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile vivaticket_da88e211: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 16:59:47.875 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile fansale_ab7aca2e: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2025-06-05 17:00:12.349 | ERROR    | src.core.managers              | get_client           | Error creating httpx client for profile ticketmaster_ec7dda79: AsyncClient.__init__() got an unexpected keyword argument 'proxies'

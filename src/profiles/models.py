@@ -5,7 +5,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional, Set, Union
 import uuid
 
 from cryptography.fernet import Fernet
@@ -57,7 +57,8 @@ class BrowserProfile:
     # Basic identification
     name: str
     profile_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    
+    proxy_config: Optional[Union[Dict[str, Any], 'ProxyConfig']] = None
+
     # Browser fingerprint
     user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     viewport_width: int = 1920
@@ -142,7 +143,20 @@ class BrowserProfile:
         
         if self.persistent_context_dir is None:
             self.persistent_context_dir = Path(f"browser_contexts/{self.profile_id}")
-        
+        if self.proxy_config and isinstance(self.proxy_config, dict):
+            # Import at runtime to avoid circular imports
+            from src.core.managers import ProxyConfig
+            
+            # Handle both 'protocol' and 'proxy_type' keys
+            protocol = self.proxy_config.get('protocol') or self.proxy_config.get('proxy_type', 'http')
+            
+            self.proxy_config = ProxyConfig(
+                host=self.proxy_config.get('host'),
+                port=self.proxy_config.get('port'),
+                username=self.proxy_config.get('username'),
+                password=self.proxy_config.get('password'),
+                proxy_type=protocol
+            )
         # Generate fingerprint hash
         self._generate_fingerprint_hash()
         

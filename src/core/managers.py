@@ -8,7 +8,7 @@ import asyncio
 import httpx
 import random
 import time
-from typing import Dict, Optional, Any, List, Tuple
+from typing import Dict, Optional, Any, List, Tuple, Union
 from dataclasses import dataclass, field
 import ssl
 import h2.connection
@@ -17,6 +17,7 @@ import logging
 import certifi
 import os
 from contextlib import asynccontextmanager
+from loguru import logger
 
 # FIXED: Correct import path
 from ..profiles.models import BrowserProfile  # Changed from Profile to BrowserProfile
@@ -154,13 +155,22 @@ class ConnectionPoolManager:
         proxy_key = ""
         if hasattr(profile, 'proxy_config') and profile.proxy_config:
             proxy = profile.proxy_config
-            if isinstance(proxy, dict):
-                proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
-            else:
-                proxy_key = f"{proxy.host}:{proxy.port}"
-        
-        tls_key = f"tls_{getattr(profile, 'tls_fingerprint', 'default')}" if use_tls_fingerprint else "default"
-        profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
+            # Robust handling for any proxy config format
+            host = None
+            port = None
+
+            if hasattr(proxy, 'host'):
+                host = proxy.host
+                port = proxy.port
+            elif isinstance(proxy, dict):
+                host = proxy.get('host')
+                port = proxy.get('port')
+
+            if host and port:
+                proxy_key = f"{host}:{port}"
+
+        tls_key = f"tls_{getattr(profile, 'tls_fingerprint', '')}" if use_tls_fingerprint and hasattr(profile, 'tls_fingerprint') else "default"
+        profile_id = getattr(profile, 'id', getattr(profile, 'profile_id', 'unknown'))
         return f"{profile_id}_{proxy_key}_{tls_key}"
     
     def _create_stealth_headers(self, profile: BrowserProfile) -> Dict[str, str]:
@@ -202,32 +212,45 @@ class ConnectionPoolManager:
             return None
 
         proxy_data = profile.proxy_config
-        proxy_url = None
 
-        # Handle both dict and ProxyConfig object
-        if isinstance(proxy_data, dict):
-            # Original dict handling
-            protocol = proxy_data.get('proxy_type', 'http')
+        # Extract values with multiple fallbacks
+        protocol = None
+        host = None
+        port = None
+        username = None
+        password = None
+
+        # Try object attributes first
+        if hasattr(proxy_data, '__dict__'):
+            # It's an object with attributes
+            protocol = getattr(proxy_data, 'protocol', None) or getattr(proxy_data, 'proxy_type', None) or 'http'
+            host = getattr(proxy_data, 'host', None)
+            port = getattr(proxy_data, 'port', None)
+            username = getattr(proxy_data, 'username', None)
+            password = getattr(proxy_data, 'password', None)
+        elif isinstance(proxy_data, dict):
+            # It's a dictionary
+            protocol = proxy_data.get('protocol') or proxy_data.get('proxy_type', 'http')
             host = proxy_data.get('host')
             port = proxy_data.get('port')
             username = proxy_data.get('username')
             password = proxy_data.get('password')
         else:
-            # It's a ProxyConfig object
-            protocol = proxy_data.protocol
-            host = proxy_data.host
-            port = proxy_data.port
-            username = proxy_data.username
-            password = proxy_data.password
-
-        if host and port:
-            if username and password:
-                proxy_url = f"{protocol}://{username}:{password}@{host}:{port}"
-            else:
-                proxy_url = f"{protocol}://{host}:{port}"
-
-        if not proxy_url:
+            logger.warning(f"Unknown proxy config type: {type(proxy_data)}")
             return None
+
+        # Validate required fields
+        if not host or not port:
+            logger.warning(f"Invalid proxy config: missing host ({host}) or port ({port})")
+            return None
+
+        # Build proxy URL
+        if username and password:
+            proxy_url = f"{protocol}://{username}:{password}@{host}:{port}"
+        else:
+            proxy_url = f"{protocol}://{host}:{port}"
+
+        logger.debug(f"Created proxy URL: {protocol}://{host}:{port} (auth: {bool(username and password)})")
 
         # httpx expects proxies in this format
         return {

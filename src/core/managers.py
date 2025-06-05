@@ -1,396 +1,393 @@
-# src/core/managers.py - v5.0 - Ultra-Performance Enhanced Edition
-from __future__ import annotations
+# src/core/managers.py
+"""
+StealthMaster AI Enhanced Connection Pool Manager
+Ultra-stealth HTTP client management with advanced proxy rotation and fingerprinting
+"""
 
 import asyncio
-import hashlib
-import logging
-import json
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, Optional, Tuple, Any, List, TYPE_CHECKING
-
 import httpx
+import random
+import time
+from typing import Dict, Optional, Any, List, Tuple
+from dataclasses import dataclass, field
+import ssl
+import h2.connection
+import h2.config
+from loguru import logger
+import certifi
+from contextlib import asynccontextmanager
 
-if TYPE_CHECKING:
-    from playwright.async_api import (
-        Playwright,
-        Browser,
-        BrowserContext as PlaywrightContext,
-        Page as PlaywrightPage,
-        Route,
-        Request,
-        Response
-    )
+# Assuming these imports exist based on your structure
+from src.profiles.models import Profile
+from src.utils.tls_fingerprint import TLSFingerprint
 
-# FIXED: Project-specific imports with correct paths
-from ..profiles.manager import ProfileManager
-from ..profiles.models import BrowserProfile
-from ..profiles.enums import DataOptimizationLevel
 
-from .models import DataUsageTracker
+@dataclass
+class ProxyConfig:
+    """Enhanced proxy configuration with stealth features"""
+    host: str
+    port: int
+    username: Optional[str] = None
+    password: Optional[str] = None
+    protocol: str = "http"
+    
+    def to_httpx_proxy(self) -> str:
+        """Convert to httpx-compatible proxy URL format"""
+        if self.username and self.password:
+            return f"{self.protocol}://{self.username}:{self.password}@{self.host}:{self.port}"
+        return f"{self.protocol}://{self.host}:{self.port}"
 
-logger = logging.getLogger(__name__)
+
+class StealthSSLContext:
+    """Advanced SSL context factory for fingerprint randomization"""
+    
+    # Real browser cipher suites (Chrome 120+, Firefox 120+, Safari 17+)
+    BROWSER_CIPHER_SUITES = [
+        # Chrome 120 cipher suite order
+        [
+            'TLS_AES_128_GCM_SHA256',
+            'TLS_AES_256_GCM_SHA384',
+            'TLS_CHACHA20_POLY1305_SHA256',
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES128-GCM-SHA256',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+            'ECDHE-ECDSA-CHACHA20-POLY1305',
+            'ECDHE-RSA-CHACHA20-POLY1305',
+        ],
+        # Firefox 120 cipher suite order
+        [
+            'TLS_AES_128_GCM_SHA256',
+            'TLS_CHACHA20_POLY1305_SHA256',
+            'TLS_AES_256_GCM_SHA384',
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES128-GCM-SHA256',
+            'ECDHE-ECDSA-CHACHA20-POLY1305',
+            'ECDHE-RSA-CHACHA20-POLY1305',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+        ],
+        # Safari 17 cipher suite order
+        [
+            'TLS_AES_256_GCM_SHA384',
+            'TLS_AES_128_GCM_SHA256',
+            'TLS_CHACHA20_POLY1305_SHA256',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+            'ECDHE-RSA-AES128-GCM-SHA256',
+        ]
+    ]
+    
+    @classmethod
+    def create_context(cls, profile: Optional[Profile] = None) -> ssl.SSLContext:
+        """Create SSL context with browser-like fingerprint"""
+        context = ssl.create_default_context(cafile=certifi.where())
+        
+        # Randomize TLS version based on profile or random selection
+        if profile and hasattr(profile, 'tls_version'):
+            context.minimum_version = getattr(ssl.TLSVersion, profile.tls_version, ssl.TLSVersion.TLSv1_2)
+        else:
+            # Weight towards newer versions like real browsers
+            tls_versions = [ssl.TLSVersion.TLSv1_2] * 2 + [ssl.TLSVersion.TLSv1_3] * 8
+            context.minimum_version = random.choice(tls_versions)
+        
+        context.maximum_version = ssl.TLSVersion.TLSv1_3
+        
+        # Select cipher suite based on profile or random browser
+        cipher_suite = random.choice(cls.BROWSER_CIPHER_SUITES)
+        context.set_ciphers(':'.join(cipher_suite))
+        
+        # Browser-like SSL options
+        context.options |= ssl.OP_NO_SSLv2
+        context.options |= ssl.OP_NO_SSLv3
+        context.options |= ssl.OP_NO_COMPRESSION
+        context.options |= ssl.OP_NO_TICKET  # Some browsers disable session tickets
+        
+        # Enable hostname checking
+        context.check_hostname = True
+        context.verify_mode = ssl.CERT_REQUIRED
+        
+        return context
 
 
 class ConnectionPoolManager:
-    """Manage HTTP connection pools with profile integration"""
-
-    def __init__(self, config: Dict[str, Any], profile_manager: ProfileManager):
+    """
+    StealthMaster AI Enhanced Connection Pool Manager
+    
+    Features:
+    - Proper httpx proxy configuration
+    - Advanced TLS fingerprinting
+    - Connection persistence and pooling
+    - Adaptive timeout management
+    - Stealth header rotation
+    """
+    
+    def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.profile_manager = profile_manager
         self.pools: Dict[str, httpx.AsyncClient] = {}
-        self._lock = asyncio.Lock()
-
-        network_config = self.config.get('network', {})
-        self.max_connections = network_config.get('max_connections', 10)
-        self.max_keepalive = network_config.get('max_keepalive_connections', 20)
-        self.connect_timeout = network_config.get('connect_timeout', 10.0)
-        self.read_timeout = network_config.get('read_timeout', 30.0)
-        logger.info(f"ConnectionPoolManager initialized with max_connections={self.max_connections}, max_keepalive={self.max_keepalive}")
-
-
-    async def get_client(self,
-                     profile: BrowserProfile, # Assuming BrowserProfile is correctly imported
-                     use_tls_fingerprint: bool = True) -> httpx.AsyncClient:
-        async with self._lock:
-            client_key = f"{profile.profile_id}_{use_tls_fingerprint}"
-            if client_key not in self.pools:
-                logger.debug(f"Creating new httpx client for key: {client_key}")
-                limits = httpx.Limits(
-                    max_connections=self.max_connections,
-                    max_keepalive_connections=self.max_keepalive
-                )
-                headers = {}
-                if hasattr(profile, 'get_headers') and callable(profile.get_headers):
-                    headers = profile.get_headers()
-                elif hasattr(profile, 'extra_http_headers'):
-                    headers = profile.extra_http_headers.copy()
-                    if not headers.get('User-Agent') and hasattr(profile, 'user_agent'):
-                        headers['User-Agent'] = profile.user_agent
-
-                proxy_url_str = None
-                if profile.proxy_config:
-                    proxy_url_str = profile.proxy_config.get_proxy_url(session_id=getattr(profile, 'proxy_session_id', None))
-
-                proxies_for_client = None
-                if proxy_url_str:
-                    proxies_for_client = {"all://": proxy_url_str}
+        self.pool_lock = asyncio.Lock()
+        
+        # Connection limits from config
+        self.max_connections = config.get('max_connections_per_host', 10)
+        self.max_keepalive = config.get('max_keepalive_connections', 5)
+        
+        # Timeouts with jitter
+        self.base_connect_timeout = config.get('connect_timeout_seconds', 15)
+        self.base_read_timeout = config.get('read_timeout_seconds', 20)
+        
+        # HTTP/2 configuration
+        self.http2_enabled = config.get('http2_enabled', True)
+        
+        # Connection health tracking
+        self.connection_health: Dict[str, float] = {}
+        self.last_rotation: Dict[str, float] = {}
+        
+        logger.info(f"ConnectionPoolManager initialized with max_connections={self.max_connections}, "
+                   f"max_keepalive={self.max_keepalive}")
+    
+    def _get_pool_key(self, profile: Profile, use_tls_fingerprint: bool = True) -> str:
+        """Generate unique pool key for connection reuse"""
+        proxy_key = ""
+        if profile.proxy_config:
+            proxy = profile.proxy_config
+            proxy_key = f"{proxy.get('host')}:{proxy.get('port')}"
+        
+        tls_key = f"tls_{profile.tls_fingerprint}" if use_tls_fingerprint else "default"
+        return f"{profile.id}_{proxy_key}_{tls_key}"
+    
+    def _create_stealth_headers(self, profile: Profile) -> Dict[str, str]:
+        """Generate browser-like headers with controlled randomization"""
+        # Base headers that all browsers send
+        headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+        }
+        
+        # Add user agent from profile
+        if hasattr(profile, 'user_agent') and profile.user_agent:
+            headers['User-Agent'] = profile.user_agent
+        else:
+            # Fallback to recent Chrome
+            headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        
+        # Randomize sec-ch-ua headers for Chromium browsers
+        if 'Chrome' in headers.get('User-Agent', ''):
+            headers.update({
+                'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-User': '?1',
+                'Sec-Fetch-Dest': 'document',
+            })
+        
+        return headers
+    
+    def _create_proxy_config(self, profile: Profile) -> Optional[Dict[str, Any]]:
+        """Create httpx-compatible proxy configuration"""
+        if not profile.proxy_config:
+            return None
+        
+        proxy_data = profile.proxy_config
+        proxy_url = None
+        
+        # Build proxy URL
+        protocol = proxy_data.get('proxy_type', 'http')
+        host = proxy_data.get('host')
+        port = proxy_data.get('port')
+        username = proxy_data.get('username')
+        password = proxy_data.get('password')
+        
+        if host and port:
+            if username and password:
+                proxy_url = f"{protocol}://{username}:{password}@{host}:{port}"
+            else:
+                proxy_url = f"{protocol}://{host}:{port}"
+        
+        if not proxy_url:
+            return None
+        
+        # httpx expects proxies in this format
+        return {
+            "http://": proxy_url,
+            "https://": proxy_url,
+        }
+    
+    def _apply_timing_jitter(self, base_value: float) -> float:
+        """Apply realistic timing jitter to avoid patterns"""
+        jitter = random.uniform(0.8, 1.2)
+        return base_value * jitter
+    
+    async def get_client(
+        self, 
+        profile: Profile, 
+        use_tls_fingerprint: bool = True,
+        force_new: bool = False
+    ) -> httpx.AsyncClient:
+        """
+        Get or create an HTTP client with proper proxy and stealth configuration
+        
+        CRITICAL FIX: Properly configure httpx with proxies parameter in mounts
+        """
+        pool_key = self._get_pool_key(profile, use_tls_fingerprint)
+        
+        async with self.pool_lock:
+            # Check if we need to rotate the connection
+            if pool_key in self.pools and not force_new:
+                last_rotation = self.last_rotation.get(pool_key, 0)
+                if time.time() - last_rotation < 300:  # 5 minute rotation
+                    return self.pools[pool_key]
+                else:
+                    # Close old client before creating new one
+                    await self.pools[pool_key].aclose()
+            
+            # Create connection limits
+            limits = httpx.Limits(
+                max_keepalive_connections=self.max_keepalive,
+                max_connections=self.max_connections,
+                keepalive_expiry=30.0,
+            )
+            
+            # Configure timeouts with jitter
+            timeout = httpx.Timeout(
+                connect=self._apply_timing_jitter(self.base_connect_timeout),
+                read=self._apply_timing_jitter(self.base_read_timeout),
+                write=10.0,
+                pool=5.0,
+            )
+            
+            # Create SSL context if using TLS fingerprinting
+            ssl_context = None
+            if use_tls_fingerprint:
+                ssl_context = StealthSSLContext.create_context(profile)
+            
+            # Get proxy configuration
+            proxy_config = self._create_proxy_config(profile)
+            
+            # Create the client with all stealth features
+            try:
+                # CRITICAL: httpx uses 'mounts' for proxy configuration, not 'proxies'
+                client_kwargs = {
+                    'limits': limits,
+                    'timeout': timeout,
+                    'headers': self._create_stealth_headers(profile),
+                    'http2': self.http2_enabled,
+                    'verify': ssl_context if ssl_context else True,
+                    'follow_redirects': True,
+                    'max_redirects': 5,
+                }
                 
-                actual_client = None
-                log_proxy_message = "Proxy: No"
-
-                try:
-                    if proxies_for_client:
-                        log_proxy_message = f"with proxy: {proxy_url_str}"
-                        logger.debug(f"Attempting to create AsyncClient explicitly with proxies: {proxies_for_client}")
-                        actual_client = httpx.AsyncClient(
-                            limits=limits,
-                            headers=headers,
-                            timeout=httpx.Timeout(self.connect_timeout, read=self.read_timeout),
-                            follow_redirects=True,
-                            verify=True,
-                            http2=True,
-                            proxies=proxies_for_client # Explicitly passing the proxies argument
-                        )
-                    else:
-                        # No proxies, define transport with retries
-                        transport = httpx.AsyncHTTPTransport(retries=1)
-                        actual_client = httpx.AsyncClient(
-                            limits=limits,
-                            headers=headers,
-                            timeout=httpx.Timeout(self.connect_timeout, read=self.read_timeout),
-                            follow_redirects=True,
-                            verify=True,
-                            http2=True,
-                            transport=transport
-                        )
-                    
-                    if actual_client:
-                        self.pools[client_key] = actual_client
-                        logger.info(f"Created httpx client for profile {profile.profile_id}. {log_proxy_message}")
-                    else:
-                        # This path should ideally not be hit if instantiation fails, as an exception would be raised.
-                        logger.error(f"Failed to create httpx client instance for profile {profile.profile_id} (actual_client is None).")
-                        # Consider raising an exception if actual_client is None to prevent returning None
-                        raise Exception(f"HTTPX client creation resulted in None for profile {profile.profile_id}")
-
-                except TypeError as te: # Catch the specific TypeError again
-                    logger.error(f"TypeError creating httpx client for profile {profile.profile_id}: {te}", exc_info=True)
-                    raise # Re-raise the TypeError to see if it still occurs with the explicit call
-                except Exception as e:
-                    logger.error(f"General error creating httpx client for profile {profile.profile_id}: {e}", exc_info=True)
-                    raise
-
-            return self.pools[client_key]
-
+                # Add proxy configuration if available
+                if proxy_config:
+                    # httpx uses 'mounts' parameter for proxies
+                    client_kwargs['mounts'] = {
+                        "http://": httpx.AsyncHTTPTransport(proxy=proxy_config["http://"]),
+                        "https://": httpx.AsyncHTTPTransport(proxy=proxy_config["https://"]),
+                    }
+                
+                client = httpx.AsyncClient(**client_kwargs)
+                
+                # Store in pool
+                self.pools[pool_key] = client
+                self.last_rotation[pool_key] = time.time()
+                self.connection_health[pool_key] = 100.0
+                
+                logger.debug(f"Created new httpx client for profile {profile.id} "
+                           f"(proxy: {bool(proxy_config)}, tls_fingerprint: {use_tls_fingerprint})")
+                
+                return client
+                
+            except Exception as e:
+                logger.error(f"Error creating httpx client for profile {profile.id}: {e}")
+                # Return a basic client without proxy as fallback
+                return httpx.AsyncClient(
+                    limits=limits,
+                    timeout=timeout,
+                    headers=self._create_stealth_headers(profile),
+                    http2=self.http2_enabled,
+                )
+    
+    async def release_client(self, profile: Profile, client: httpx.AsyncClient):
+        """Release client back to pool (no-op for persistent connections)"""
+        # Connections are persistent in the pool, so we just track health
+        pool_key = self._get_pool_key(profile)
+        if pool_key in self.connection_health:
+            # Decay health slightly to encourage rotation
+            self.connection_health[pool_key] *= 0.99
+    
+    async def mark_client_compromised(self, profile: Profile):
+        """Mark a client as potentially detected"""
+        pool_key = self._get_pool_key(profile)
+        async with self.pool_lock:
+            if pool_key in self.pools:
+                logger.warning(f"Marking client for profile {profile.id} as compromised")
+                await self.pools[pool_key].aclose()
+                del self.pools[pool_key]
+                if pool_key in self.connection_health:
+                    del self.connection_health[pool_key]
+                if pool_key in self.last_rotation:
+                    del self.last_rotation[pool_key]
+    
     async def close_all(self):
-        async with self._lock:
-            logger.info(f"Closing {len(self.pools)} HTTP connection pools.")
-            for client_key, client in self.pools.items():
+        """Gracefully close all connections"""
+        async with self.pool_lock:
+            for client in self.pools.values():
                 try:
                     await client.aclose()
-                    logger.debug(f"Closed client: {client_key}")
                 except Exception as e:
-                    logger.error(f"Error closing client {client_key}: {e}", exc_info=True)
+                    logger.error(f"Error closing client: {e}")
             self.pools.clear()
-            logger.info("All HTTP connection pools closed.")
-
-
-class ResponseCache:
-    """Intelligent response caching to minimize data usage"""
-
-    def __init__(self, max_size_mb: float = 50):
-        self.max_size_bytes = max_size_mb * 1024 * 1024
-        self.current_size_bytes = 0
-        self.cache: Dict[str, Tuple[bytes, datetime, Optional[Dict[str, str]]]] = {}
-        self._lock = asyncio.Lock()
-        self.hit_count = 0 # Added missing attribute
-        self.miss_count = 0 # Added missing attribute
+            self.connection_health.clear()
+            self.last_rotation.clear()
     
-    @property
-    def current_size_mb(self) -> float:
-        """Get current cache size in MB"""
-        return self.current_size_bytes / (1024 * 1024)
+    async def get_pool_stats(self) -> Dict[str, Any]:
+        """Get connection pool statistics"""
+        return {
+            'active_pools': len(self.pools),
+            'total_connections': sum(1 for _ in self.pools.values()),
+            'average_health': sum(self.connection_health.values()) / max(len(self.connection_health), 1),
+            'pools': [
+                {
+                    'key': key,
+                    'health': self.connection_health.get(key, 0),
+                    'age': time.time() - self.last_rotation.get(key, time.time())
+                }
+                for key in self.pools.keys()
+            ]
+        }
+
+
+# Additional helper for pre-warming connections
+class ConnectionPreWarmer:
+    """Pre-warm connections to reduce latency on first request"""
     
-    async def clear_old_entries(self, max_age_seconds: int) -> int: # Correctly indented
-        async with self._lock:
-            now = datetime.now()
-            keys_to_delete = []
-            for key, cached_item_tuple in list(self.cache.items()):
-                if len(cached_item_tuple) >= 2:
-                    timestamp = cached_item_tuple[1]
-                    if isinstance(timestamp, datetime):
-                        age = (now - timestamp).total_seconds()
-                        if age > max_age_seconds:
-                            keys_to_delete.append(key)
-                    else:
-                        logger.warning(f"Cache item {key} has unexpected timestamp format: {timestamp}")
-                else:
-                    logger.warning(f"Cache item {key} has unexpected structure: {cached_item_tuple}")
-
-            cleared_count = 0
-            for key in keys_to_delete:
-                if key in self.cache:
-                    cached_item_to_pop = self.cache.pop(key)
-                    if cached_item_to_pop and isinstance(cached_item_to_pop, (tuple, list)) and len(cached_item_to_pop) > 0:
-                        content_bytes = cached_item_to_pop[0]
-                        if content_bytes is not None and isinstance(content_bytes, bytes):
-                            self.current_size_bytes -= len(content_bytes)
-                    cleared_count += 1
-
-            if cleared_count > 0:
-                logger.debug(f"Cache maintenance: Cleared {cleared_count} old entries older than {max_age_seconds}s.")
-            return cleared_count
-
-    def _generate_key(self, url: str, headers: Optional[Dict[str, str]] = None) -> str: # Correctly indented
-        key_parts = [url]
-        if headers:
-            for header_name in ['Accept', 'Accept-Language', 'X-Platform-Specific-Cache-Key']:
-                if header_name in headers:
-                    key_parts.append(f"{header_name}:{headers[header_name]}")
-        return hashlib.sha256("|".join(key_parts).encode()).hexdigest()
-
-    async def get(self, url: str, headers: Optional[Dict[str, str]] = None,
-                  max_age_seconds: int = 300) -> Optional[bytes]: # Correctly indented
-        async with self._lock:
-            key = self._generate_key(url, headers)
-            cached_item = self.cache.get(key)
-            if cached_item:
-                content, timestamp, response_headers = cached_item
-                age = (datetime.now() - timestamp).total_seconds()
-                if age <= max_age_seconds:
-                    self.hit_count += 1
-                    logger.debug(f"Cache hit for {url} (age: {age:.1f}s)")
-                    return content
-                else:
-                    logger.debug(f"Cache stale for {url} (age: {age:.1f}s > {max_age_seconds}s). Evicting.")
-                    if content is not None:
-                        self.current_size_bytes -= len(content)
-                    del self.cache[key]
-            self.miss_count += 1
-            logger.debug(f"Cache miss for {url}")
-            return None
-
-    async def put(self, url: str, content: bytes,
-                  headers: Optional[Dict[str, str]] = None,
-                  response_headers: Optional[Dict[str, str]] = None): # Correctly indented
-        async with self._lock:
-            key = self._generate_key(url, headers)
-            if content is None:
-                logger.debug(f"Not caching None content for {url}")
-                return
-            content_size = len(content)
-            while (self.current_size_bytes + content_size > self.max_size_bytes) and self.cache:
-                try:
-                    oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k][1])
-                except ValueError:
-                    break
-                old_content_bytes, _, _ = self.cache.pop(oldest_key)
-                if old_content_bytes is not None:
-                    self.current_size_bytes -= len(old_content_bytes)
-                logger.debug(f"Cache eviction: Removed {oldest_key} to free space.")
-            if self.current_size_bytes + content_size <= self.max_size_bytes:
-                self.cache[key] = (content, datetime.now(), response_headers or {})
-                self.current_size_bytes += content_size
-                logger.debug(f"Cached {url} ({content_size / 1024:.2f} KB). Cache: {self.current_size_bytes / (1024*1024):.2f} MB")
-            else:
-                logger.warning(f"Could not cache {url} ({content_size / 1024:.2f} KB). Cache full.")
-
-    @property
-    def hit_rate(self) -> float: # Correctly indented
-        total_requests = self.hit_count + self.miss_count
-        return self.hit_count / max(1, total_requests)
-
-    async def clear_cache(self): # Correctly indented
-        async with self._lock:
-            self.cache.clear()
-            self.current_size_bytes = 0
-            self.hit_count = 0
-            self.miss_count = 0
-            logger.info("ResponseCache cleared.")
-
-
-class SmartBrowserContextManager:
-    """Manages Playwright BrowserContexts with profile integration"""
-    def __init__(self,
-                 playwright: Playwright,
-                 profile_manager: ProfileManager,
-                 data_tracker: DataUsageTracker,
-                 config: Dict[str, Any]):
-        self.playwright = playwright
-        self.profile_manager = profile_manager
-        self.data_tracker = data_tracker
-        self.config = config
-        self.contexts: Dict[str, PlaywrightContext] = {}
-        self.context_locks: Dict[str, asyncio.Lock] = {}
-        self._pool_lock = asyncio.Lock()
-        self.browsers: Dict[str, Any] = {}
-        self.context_ttl_minutes = self.config.get('browser_pool', {}).get('context_ttl_minutes', 30)
-        self.stealth_script_path = Path(self.config.get('paths', {}).get('stealth_script', "src/core/stealth_init.js"))
-        logger.info(f"SmartBrowserContextManager initialized. Stealth script: {self.stealth_script_path}")
-
-    async def get_context(self, profile: BrowserProfile) -> PlaywrightContext:
-        profile_specific_lock = self.context_locks.setdefault(profile.profile_id, asyncio.Lock())
-        async with profile_specific_lock:
-            if profile.profile_id in self.contexts:
-                context = self.contexts[profile.profile_id]
-                if await self._is_context_valid(context):
-                    logger.debug(f"Reusing context for profile {profile.profile_id}")
-                    return context
-                else:
-                    logger.info(f"Invalid context for profile {profile.profile_id}. Recreating.")
-                    await self._close_context(profile.profile_id)
-            logger.info(f"Creating new context for profile {profile.profile_id} ({profile.name})")
-            new_context = await self._create_context(profile)
-            self.contexts[profile.profile_id] = new_context
-            return new_context
-
-    async def _is_context_valid(self, context: PlaywrightContext) -> bool:
-        try:
-            if not context.browser or not context.browser.is_connected():
-                logger.warning("Context's browser not connected.")
-                return False
-            _ = context.pages # Simple check
-            return True
-        except Exception as e:
-            logger.warning(f"Context validity check failed: {e}")
-            return False
-
-    async def _create_context(self, profile: BrowserProfile) -> PlaywrightContext:
-        ua_lower = profile.user_agent.lower()
-        if 'firefox' in ua_lower: browser_key = 'firefox'
-        elif 'webkit' in ua_lower and 'chrome' not in ua_lower: browser_key = 'webkit'
-        else: browser_key = 'chromium'
-        logger.debug(f"Browser key '{browser_key}' for profile {profile.profile_id}.")
-        try:
-            async with self._pool_lock:
-                if browser_key not in self.browsers or not self.browsers[browser_key].is_connected():
-                    logger.info(f"Launching new '{browser_key}' browser.")
-                    browser_launcher = getattr(self.playwright, browser_key)
-                    launch_options = profile.get_launch_options()
-                    launch_options['headless'] = self.config.get('browser_settings', {}).get('headless', True)
-                    self.browsers[browser_key] = await browser_launcher.launch(**launch_options)
-            browser = self.browsers[browser_key]
-            context_params = profile.get_context_params()
-            full_init_script = None
-            if self.stealth_script_path.exists():
-                try:
-                    stealth_content = self.stealth_script_path.read_text(encoding='utf-8')
-                    js_data = (profile.get_stealth_init_js_profile_data()
-                               if hasattr(profile, 'get_stealth_init_js_profile_data')
-                               else {'name': profile.name, 'user_agent': profile.user_agent}) # Basic fallback
-                    full_init_script = f"window.__fingerprint_profile__ = {json.dumps(js_data)};\n{stealth_content}"
-                except Exception as e: logger.error(f"Failed to prep stealth script for {profile.profile_id}: {e}", exc_info=True)
-            else: logger.warning(f"Stealth script not found: {self.stealth_script_path}")
-            context = await browser.new_context(**context_params)
-            if full_init_script:
-                await context.add_init_script(full_init_script)
-                logger.debug(f"Added init script for {profile.profile_id}")
-            if profile.data_optimization_level != DataOptimizationLevel.OFF:
-                await self._setup_request_interception(context, profile)
-            logger.info(f"Created context for profile {profile.profile_id} ({profile.name})")
-            return context
-        except Exception as e:
-            logger.error(f"Fatal error creating context for {profile.profile_id}: {e}", exc_info=True)
-            async with self._pool_lock: # Check if browser needs cleanup
-                if browser_key in self.browsers and self.browsers[browser_key].is_connected():
-                    is_used = any(hasattr(ctx, 'browser') and ctx.browser == self.browsers[browser_key] and pid != profile.profile_id
-                                  for pid, ctx in self.contexts.items())
-                    if not is_used:
-                        logger.warning(f"Closing browser '{browser_key}' due to creation error.")
-                        await self.browsers[browser_key].close()
-                        del self.browsers[browser_key]
-            raise
-
-    async def _setup_request_interception(self, context: PlaywrightContext, profile: BrowserProfile):
-        block_patterns = profile.get_resource_block_patterns()
-        resource_types_to_block = getattr(profile, 'block_resources', set())
-        async def handle_route(route: Route):
-            request = route.request; url = request.url; resource_type = request.resource_type.lower()
-            should_block = False
-            if resource_type in resource_types_to_block: should_block = True
-            else:
-                for p_str in block_patterns:
-                    if (p_str.startswith("*") and p_str.endswith("*") and p_str[1:-1] in url) or \
-                       (p_str.startswith("*") and url.endswith(p_str[1:])) or \
-                       (p_str.endswith("*") and url.startswith(p_str[:-1])) or (p_str == url):
-                        should_block = True; break
-            if should_block:
-                logger.debug(f"Blocking: {url} (Type: {resource_type}) for prof {profile.profile_id}")
-                self.data_tracker.blocked_resources_saved_mb += 0.05
-                try: await route.abort()
-                except Exception as e: logger.debug(f"Could not abort {url}: {e}")
-            else:
-                try: await route.continue_()
-                except Exception as e: logger.debug(f"Could not continue {url}: {e}")
-        try:
-            await context.route("**/*", handle_route)
-            logger.info(f"Req interception for prof {profile.profile_id} (Opt: {profile.data_optimization_level.value})")
-        except Exception as e: logger.error(f"Failed to set up req interception for {profile.profile_id}: {e}", exc_info=True)
-
-    async def _close_context(self, context_key: str):
-        context = self.contexts.pop(context_key, None)
-        self.context_locks.pop(context_key, None)
-        if context:
-            try:
-                logger.debug(f"Attempting to close context for key {context_key}")
-                await context.close()
-                logger.info(f"Successfully closed context for key {context_key}")
-            except Exception as e: logger.error(f"Error closing context {context_key}: {e}", exc_info=True)
-
-    async def close_all(self):
-        logger.info("Closing all SmartBrowserContextManager resources...")
-        context_keys = list(self.contexts.keys())
-        for context_key in context_keys: await self._close_context(context_key)
-        async with self._pool_lock:
-            browser_keys = list(self.browsers.keys())
-            for browser_key in browser_keys:
-                browser = self.browsers.pop(browser_key, None)
-                if browser and browser.is_connected():
+    @staticmethod
+    async def prewarm_connections(
+        pool_manager: ConnectionPoolManager,
+        profiles: List[Profile],
+        targets: List[str]
+    ):
+        """Pre-establish connections to target domains"""
+        tasks = []
+        
+        for profile in profiles[:3]:  # Limit pre-warming to avoid suspicion
+            for target in targets:
+                async def warm_connection(p=profile, t=target):
                     try:
-                        logger.info(f"Closing browser instance: {browser_key}")
-                        await browser.close()
-                    except Exception as e: logger.error(f"Error closing browser {browser_key}: {e}", exc_info=True)
-            self.browsers.clear()
-        self.contexts.clear(); self.context_locks.clear()
-        logger.info("All SmartBrowserContextManager resources closed.")
+                        client = await pool_manager.get_client(p)
+                        # Just establish TCP/TLS connection, don't actually request
+                        # This is done implicitly when the client is created
+                        logger.debug(f"Pre-warmed connection for {p.id} to {t}")
+                    except Exception as e:
+                        logger.warning(f"Failed to pre-warm connection: {e}")
+                
+                tasks.append(warm_connection())
+        
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)

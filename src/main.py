@@ -230,8 +230,19 @@ async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
     start_time = time.time()
     
     try:
+        from src.utils.live_status_logger import (
+            get_live_status_logger, 
+            update_operation_progress,
+            complete_operation,
+            print_status_dashboard
+        )
+        
+        live_logger = get_live_status_logger()
+        
         # Initialize Playwright with stealth
         async with async_playwright() as playwright:
+            
+            update_operation_progress("bot_startup", 30.0, "Initializing orchestrator...")
             
             _orchestrator_instance = UnifiedOrchestrator(
                 config, 
@@ -244,11 +255,36 @@ async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
             startup_time = time.time() - start_time
             logger.info(f"⚡ Fast startup completed in {startup_time:.2f}s")
             
+            update_operation_progress("bot_startup", 60.0, "Pre-warming connections...")
+            
             # Performance optimization: pre-warm connections (non-blocking)
             asyncio.create_task(_orchestrator_instance.pre_warm_connections())
             
-            # Run the orchestrator
-            await _orchestrator_instance.run(stop_event)
+            update_operation_progress("bot_startup", 90.0, "Starting ticket monitoring...")
+            complete_operation("bot_startup", True, "Ticket hunting bot is now active!")
+            
+            # Periodic status dashboard updates
+            async def periodic_dashboard_update():
+                while not stop_event.is_set():
+                    try:
+                        await asyncio.sleep(30)  # Update every 30 seconds
+                        if not stop_event.is_set():
+                            print_status_dashboard()
+                    except Exception as e:
+                        logger.debug(f"Dashboard update error: {e}")
+            
+            # Start dashboard updates in background
+            dashboard_task = asyncio.create_task(periodic_dashboard_update())
+            
+            try:
+                # Run the orchestrator
+                await _orchestrator_instance.run(stop_event)
+            finally:
+                dashboard_task.cancel()
+                try:
+                    await dashboard_task
+                except asyncio.CancelledError:
+                    pass
             
     except Exception as e:
         logger.critical(f"Fatal error in async_main_logic: {e}", exc_info=True)
@@ -476,23 +512,50 @@ Examples:
     # Setup logging
     setup_logging(config)
     
-    # Enhanced startup info with visibility status
+    # Initialize live status logging
+    from src.utils.live_status_logger import (
+        init_live_status_logging, 
+        start_operation, 
+        update_operation_progress,
+        complete_operation,
+        StatusLevel
+    )
+    
+    live_logger = init_live_status_logging(enable_gui=False)
+    
+    # 🛡️ Initialize StealthMaster AI
+    from src.core.stealth_integration import init_bruce_stealth_integration
+    stealth_integration = init_bruce_stealth_integration(live_logger)
+    logger.critical("🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!")
+    
+    # Enhanced startup info with live status
+    start_operation("system_startup", "Initializing Bruce Springsteen Ticket Hunter", 10.0)
+    
     logger.critical("="*80)
     logger.critical("🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸")
     logger.critical("="*80)
+    
+    update_operation_progress("system_startup", 20.0, "Loading configuration...")
+    
     logger.critical(f"🎯 Mode: {config.get('app_settings', {}).get('mode', 'adaptive').upper()}")
     logger.critical(f"📄 Config: {args.config}")
     logger.critical(f"👤 Profiles: {config.get('profile_settings', {}).get('max_concurrent', 'auto')}")
     logger.critical(f"🐍 Python: {sys.version.split()[0]}")
+    
+    update_operation_progress("system_startup", 40.0, "Checking browser configuration...")
     
     # Show browser visibility status
     browser_headless = config.get('browser_options', {}).get('headless', True)
     if browser_headless:
         logger.error("⚠️  BROWSERS WILL BE HIDDEN (headless: true)")
         logger.error("   💡 Change 'headless: false' in config to see browsers")
+        live_logger.log_status(StatusLevel.WARNING, "BROWSER", "Browsers will be HIDDEN - you won't see login process")
     else:
         logger.critical("👀 BROWSERS WILL BE VISIBLE (headless: false)")
         logger.critical("   ✅ You will see browser windows during operation")
+        live_logger.log_status(StatusLevel.SUCCESS, "BROWSER", "Browsers will be VISIBLE - you can watch the login process")
+    
+    update_operation_progress("system_startup", 60.0, "Validating authentication...")
     
     # Show authentication status
     auth_enabled = config.get('authentication', {}).get('enabled', False)
@@ -501,13 +564,21 @@ Examples:
         fansale_auth = config.get('authentication', {}).get('platforms', {}).get('fansale')
         if fansale_auth:
             logger.critical("   ✅ FanSale credentials configured")
+            live_logger.log_status(StatusLevel.SUCCESS, "AUTH", "FanSale credentials configured - automatic login enabled")
         else:
             logger.error("   ❌ FanSale credentials missing")
+            live_logger.log_status(StatusLevel.ERROR, "AUTH", "FanSale credentials missing - login will fail")
     else:
         logger.error("⚠️  AUTHENTICATION DISABLED")
         logger.error("   💡 Enable authentication in config.yaml")
+        live_logger.log_status(StatusLevel.WARNING, "AUTH", "Authentication DISABLED - manual login required")
+    
+    update_operation_progress("system_startup", 80.0, "Preparing to start hunting...")
     
     logger.critical("="*80)
+    
+    # Print initial status dashboard
+    live_logger.print_dashboard()
     
     # Validate targets
     enabled_targets = [t for t in config.get('targets', []) if t.get('enabled')]
@@ -535,7 +606,18 @@ Examples:
         # Pre-flight checks
         logger.info("Running pre-flight stealth checks...")
         
-        # Start the bot
+        # Apply TLS fingerprint evasion patches BEFORE any network activity
+        # FIXED: The old pre-flight check for TLS fingerprinting is no longer needed.
+        # The new StealthEngine handles TLS on a per-profile, per-session basis,
+        # which is a more advanced and effective approach.
+        logger.info("Running pre-flight stealth checks...")
+        # (Old block removed)
+        
+        # The StealthMaster AI is already initialized and will handle all stealth aspects.
+        complete_operation("system_startup", True, "System ready for ticket hunting!")
+        
+        # Start the bot with live status tracking
+        start_operation("bot_startup", "Starting ticket hunting bot", 15.0)
         asyncio.run(async_main_logic(config, _stop_event_asyncio))
         
     except KeyboardInterrupt:

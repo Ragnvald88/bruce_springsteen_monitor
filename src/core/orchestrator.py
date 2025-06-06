@@ -34,6 +34,7 @@ else:
 from ..profiles.manager import ProfileManager, BrowserProfile
 from ..profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
 from ..profiles.utils import create_profile_manager_from_config
+from .stealth_engine import StealthEngine, StealthEngineIntegration
 
 # FIXED: Correct import for advanced_profile_system (it's in core, not profiles)
 from .advanced_profile_system import DetectionEvent
@@ -80,14 +81,18 @@ class SystemHealth:
 class UnifiedOrchestrator:
     """Ultra-performance orchestrator with complete strike processing"""
     
-    def __init__(self, config: Dict[str, Any], playwright_instance: Playwright, 
-                 config_file_path: Path, gui_queue: Optional[queue.Queue] = None):
+    def __init__(self, config, playwright_instance, config_file_path, gui_queue=None):
         
         self.config = config
         self.playwright = playwright_instance
         self.config_file_path = config_file_path
         self.gui_queue = gui_queue
-        
+        # Import StealthEngine here to fix NameError
+        from .stealth_engine import StealthEngine
+        self.stealth_engine = StealthEngine(
+            profile_manager=self.profile_manager,
+            ml_optimizer=None  # Enable if TensorFlow installed
+        )
         # Operation mode and settings
         self.mode = OperationMode(config.get('app_settings', {}).get('mode', 'adaptive'))
         self.is_dry_run = config.get('app_settings', {}).get('dry_run', False)
@@ -233,6 +238,17 @@ class UnifiedOrchestrator:
             self.is_initialized = False
             return False
     
+    
+    async def _execute_single_strike(self, opportunity, profile, task_id, params):
+        context = await self.browser_manager.get_stealth_context(profile)
+        
+        stealth_context = await self.stealth_engine.create_stealth_context(
+            context, 
+            self.stealth_engine.generate_device_profile(opportunity.platform.value),
+            opportunity.platform.value
+        )
+        pass
+
     async def _validate_profile_manager(self) -> bool:
         """Enhanced profile manager validation"""
         try:

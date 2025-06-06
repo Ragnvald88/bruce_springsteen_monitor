@@ -1,4 +1,4 @@
-# src/platforms/fansale.py - Ultra-Enhanced v6.0 with HTML Intelligence
+# src/platforms/fansale.py - STEALTHMASTER AI ENHANCED v7.0 
 from __future__ import annotations
 
 import asyncio
@@ -19,13 +19,16 @@ from src.core.enums import PlatformType, PriorityLevel
 from src.profiles.models import BrowserProfile
 from src.core.errors import BlockedError, PlatformError
 
+# StealthMaster AI Integration
+from src.core.stealth_integration import get_bruce_stealth_integration
+
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
 
 class FansaleMonitor:
-    """Revolutionary Fansale monitor with HTML structure intelligence"""
+    """🎸 STEALTHMASTER AI ENHANCED - Revolutionary Fansale monitor with ultimate stealth"""
     
     def __init__(self, config: Dict[str, Any], profile: BrowserProfile, 
                  browser_manager, connection_manager, cache):
@@ -49,6 +52,10 @@ class FansaleMonitor:
         self.page: Optional[Page] = None
         self.last_check = None
         self.detected_offers = set()
+        
+        # 🛡️ StealthMaster AI Integration
+        self.stealth_integration = get_bruce_stealth_integration()
+        self.session_id: Optional[str] = None
         
         # Advanced selectors based on HTML analysis
         self.selectors = {
@@ -137,44 +144,105 @@ class FansaleMonitor:
         logger.info(f"🥷 StealthMaster AI Tracker: ACTIVE")
 
     async def initialize(self):
-        """Initialize with Fansale-specific ultra-stealth and authentication"""
+        """🛡️ STEALTHMASTER AI ENHANCED - Initialize with ultimate anti-detection"""
         try:
-            logger.critical("🚀 FANSALE BROWSER INITIALIZATION STARTING")
+            from ..utils.live_status_logger import (
+                log_browser_status, 
+                start_operation, 
+                update_operation_progress,
+                complete_operation,
+                log_auth_status,
+                get_live_status_logger
+            )
+            
+            # Initialize StealthMaster AI with live status integration
+            live_logger = get_live_status_logger()
+            self.stealth_integration = get_bruce_stealth_integration(live_logger)
+            
+            start_operation("fansale_stealthmaster_init", f"🛡️ StealthMaster AI: Initializing FanSale for {self.event_name}", 25.0)
+            
+            logger.critical("🚀 STEALTHMASTER AI FANSALE INITIALIZATION STARTING")
             logger.critical(f"   📋 Event: {self.event_name}")
             logger.critical(f"   🌐 URL: {self.url}")
             logger.critical(f"   👤 Profile: {getattr(self.profile, 'profile_id', 'unknown')}")
+            logger.critical("   🛡️ STEALTHMASTER AI PROTECTION ACTIVE")
             
-            # Get stealth browser context with enhanced logging
-            logger.info("   🎭 Creating stealth browser context...")
-            self.browser_context = await self.browser_manager.get_stealth_context(
-                self.profile, force_new=False
+            update_operation_progress("fansale_stealthmaster_init", 30.0, "Creating StealthMaster AI context...")
+            log_browser_status("🛡️ StealthMaster AI: Creating FanSale context", True)
+            
+            # Convert BrowserProfile to legacy format for StealthEngine
+            legacy_profile = {
+                'id': getattr(self.profile, 'profile_id', 'fansale_profile'),
+                'device_type': 'desktop',  # FanSale optimized for desktop
+                'os': getattr(self.profile, 'os', 'Windows 11'),
+                'browser': getattr(self.profile, 'browser_name', 'Chrome'),
+                'browser_version': getattr(self.profile, 'browser_version', '121.0.6167.85'),
+                'screen_width': getattr(self.profile, 'screen_width', 1920),
+                'screen_height': getattr(self.profile, 'screen_height', 1080),
+                'viewport_width': getattr(self.profile, 'viewport_width', 1820),
+                'viewport_height': getattr(self.profile, 'viewport_height', 930),
+                'hardware_concurrency': getattr(self.profile, 'hardware_concurrency', 8),
+                'device_memory': getattr(self.profile, 'device_memory', 16),
+                'user_agent': self.profile.user_agent,
+                'locale': 'it-IT',  # FanSale is Italian platform
+                'languages': ['it-IT', 'it', 'en-US', 'en'],
+                'timezone': 'Europe/Rome',
+                'gpu_vendor': getattr(self.profile, 'gpu_vendor', 'NVIDIA'),
+                'gpu_model': getattr(self.profile, 'gpu_model', 'GeForce RTX 3060')
+            }
+            
+            update_operation_progress("fansale_stealthmaster_init", 50.0, "Applying advanced anti-detection...")
+            
+            # 🛡️ CREATE STEALTHMASTER AI PROTECTED BROWSER CONTEXT
+            logger.critical("   🛡️ Creating StealthMaster AI protected context...")
+            self.browser_context = await self.stealth_integration.create_stealth_browser_context(
+                browser=self.browser_manager.browser,
+                legacy_profile=legacy_profile,
+                platform="fansale"
             )
-            logger.info("   ✅ Browser context created successfully")
             
-            # Create page with advanced stealth
-            logger.info("   📄 Creating new browser page...")
+            # Extract session ID for tracking
+            session_stats = self.stealth_integration.get_all_session_stats()
+            if session_stats:
+                self.session_id = session_stats[-1]['session_id']
+                logger.critical(f"   ✅ StealthMaster AI Session: {self.session_id}")
+            
+            log_browser_status("🛡️ StealthMaster AI context created successfully", True)
+            
+            update_operation_progress("fansale_stealthmaster_init", 70.0, "Creating protected browser page...")
+            
+            # Create page with StealthMaster AI protection
+            logger.info("   📄 Creating StealthMaster AI protected page...")
             self.page = await self.browser_context.new_page()
-            logger.info("   ✅ Browser page created successfully")
+            logger.info("   ✅ Protected browser page created successfully")
+            log_browser_status("Protected browser page created successfully", True)
             
-            # Setup Fansale-specific stealth measures
-            logger.info("   🛡️  Injecting FanSale stealth measures...")
-            await self._inject_fansale_stealth()
+            # Additional FanSale-specific enhancements
+            logger.info("   🇮🇹 Applying FanSale-specific optimizations...")
             await self._setup_intelligent_blocking()
             await self._configure_advanced_behavior()
             await self._setup_api_monitoring()
-            logger.info("   ✅ Stealth measures injected successfully")
+            logger.info("   ✅ FanSale optimizations applied successfully")
             
-            # Perform authentication if credentials are available
-            logger.critical("   🔐 STARTING FANSALE AUTHENTICATION...")
+            update_operation_progress("fansale_stealthmaster_init", 85.0, "Performing StealthMaster AI authentication...")
+            
+            # Perform authentication with StealthMaster AI protection
+            logger.critical("   🔐 STARTING STEALTHMASTER AI ENHANCED AUTHENTICATION...")
             auth_success = await self._perform_authentication()
             if auth_success:
                 logger.critical("   🎉 FANSALE AUTHENTICATION SUCCESSFUL!")
+                log_auth_status("FanSale", True, {"event": self.event_name})
             else:
                 logger.error("   ❌ FANSALE AUTHENTICATION FAILED!")
+                log_auth_status("FanSale", False, {"event": self.event_name})
+            
+            complete_operation("fansale_init", auth_success, 
+                              f"FanSale ready for {self.event_name}" if auth_success else "FanSale initialization failed")
             
             logger.critical("🎯 FANSALE BROWSER READY FOR TICKET HUNTING!")
             logger.critical("   👀 Browser windows should now be visible")
             logger.critical("   🔍 Watch for authentication and ticket detection")
+            log_browser_status(f"FanSale ready for ticket hunting: {self.event_name}", True)
             
         except Exception as e:
             logger.error(f"💥 FAILED TO INITIALIZE FANSALE BROWSER: {e}")
@@ -1012,24 +1080,39 @@ class FansaleMonitor:
         if not self.page:
             await self.initialize()
         
+        from ..utils.live_status_logger import (
+            log_network_status, 
+            log_ticket_status, 
+            start_operation, 
+            update_operation_progress,
+            complete_operation
+        )
+        
         opportunities = []
         start_time = time.time()
         
         try:
+            start_operation("ticket_check", f"Checking tickets for {self.event_name}", 10.0)
+            
             # 🥷 STEALTHMASTER AI ENHANCED LOGGING
             logger.info(f"🔍 FANSALE STEALTH SCAN: {self.event_name}")
             logger.info(f"   📍 URL: {self.url}")
             logger.info(f"   👤 Profile: {getattr(self.profile, 'profile_id', 'unknown')}")
             logger.info(f"   🌐 Proxy: {bool(getattr(self.profile, 'proxy_config', None))}")
             
+            update_operation_progress("ticket_check", 30.0, "Navigating to FanSale page...")
+            
             # Navigate with human-like behavior and capture response
             logger.info("   🎭 Executing stealth navigation...")
             response = await self._navigate_with_human_behavior()
             
-            # 🛡️ ENHANCED STEALTH METRICS LOGGING
+            update_operation_progress("ticket_check", 60.0, "Analyzing page response...")
+            
+            # 🛡️ STEALTHMASTER AI ENHANCED METRICS LOGGING
             if response:
                 response_time = time.time() - start_time
                 logger.info(f"   📊 RESPONSE: HTTP {response.status} in {response_time:.2f}s")
+                log_network_status(f"FanSale page load", response.status, response_time * 1000)
                 
                 # Get page fingerprint info
                 page_content = await self.page.content()
@@ -1037,6 +1120,36 @@ class FansaleMonitor:
                 title = await self.page.title()
                 
                 logger.info(f"   📄 Page: '{title[:50]}...' ({content_size:,} bytes)")
+                
+                # 🛡️ StealthMaster AI Success Tracking
+                if response.status == 200:
+                    if self.session_id:
+                        self.stealth_integration.track_operation_success(
+                            platform="fansale",
+                            session_id=self.session_id,
+                            success=True,
+                            details={
+                                "operation": "page_load",
+                                "response_time": response_time,
+                                "status_code": response.status,
+                                "content_size": content_size
+                            }
+                        )
+                    logger.info("   🎯 StealthMaster AI: Page load SUCCESS tracked")
+                else:
+                    if self.session_id:
+                        self.stealth_integration.track_operation_success(
+                            platform="fansale",
+                            session_id=self.session_id,
+                            success=False,
+                            details={
+                                "operation": "page_load",
+                                "response_time": response_time,
+                                "status_code": response.status,
+                                "error": f"HTTP {response.status}"
+                            }
+                        )
+                    logger.warning("   ⚠️ StealthMaster AI: Page load FAILURE tracked")
                 
                 # 🔍 ADVANCED BLOCKING DETECTION WITH DETAILED LOGGING
                 is_accessible = await self._handle_blocked_response(
@@ -1048,14 +1161,20 @@ class FansaleMonitor:
                     logger.error("🚫 FANSALE STEALTH BREACH DETECTED!")
                     logger.error(f"   ❌ Status: {response.status}")
                     logger.error(f"   ❌ Profile compromised: {getattr(self.profile, 'profile_id', 'unknown')}")
+                    log_network_status(f"FanSale access BLOCKED", response.status, response_time * 1000, blocked=True)
                     self._update_stealth_metrics(blocked=True, response_time=response_time)
                     self._log_stealth_effectiveness()
+                    complete_operation("ticket_check", False, "Access blocked by FanSale")
                     return []
                 else:
                     logger.info("   ✅ STEALTH STATUS: UNDETECTED")
+                    log_network_status(f"FanSale access successful", response.status, response_time * 1000)
                     self._update_stealth_metrics(success=True, response_time=response_time)
             else:
                 logger.warning("   ⚠️  No response object received")
+                log_network_status("FanSale navigation", None, None)
+                
+            update_operation_progress("ticket_check", 80.0, "Scanning for tickets...")
             
             # 🕵️ CAPTCHA & VERIFICATION DETECTION
             logger.info("   🔎 Scanning for captcha/verification challenges...")
@@ -1148,11 +1267,24 @@ class FansaleMonitor:
                     logger.critical(f"   #{i}: {opp.section} - €{opp.price} ({opp.quantity} tickets)")
                 logger.critical(f"   ⏱️  Scan completed in {total_time:.2f}s")
                 logger.critical("   🚀 Preparing for automated ticket acquisition...")
+                
+                # Log to live status system
+                log_ticket_status(self.event_name, len(opportunities), {
+                    "scan_time": total_time,
+                    "top_price": min(opp.price for opp in opportunities),
+                    "total_tickets": sum(opp.quantity for opp in opportunities)
+                })
+                complete_operation("ticket_check", True, f"TICKETS FOUND! {len(opportunities)} opportunities")
+                
             else:
                 logger.info(f"   📭 No tickets found (scan time: {total_time:.2f}s)")
+                log_ticket_status(self.event_name, 0, {"scan_time": total_time})
+                complete_operation("ticket_check", True, f"No tickets available (checked in {total_time:.1f}s)")
                 
         except Exception as e:
             logger.error(f"Error checking Fansale opportunities: {e}")
+            log_network_status("FanSale check failed", None, None, blocked=False)
+            complete_operation("ticket_check", False, f"Error: {str(e)[:50]}")
             
             # Record failure
             if hasattr(self.profile, 'record_usage'):

@@ -14054,3 +14054,130 @@ Traceback (most recent call last):
   File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
     raise mapped_exc(message) from exc
 httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-06 20:12:59.334 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-06 20:12:59.340 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-06 20:12:59.341 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-06 20:12:59.341 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-06 20:12:59.341 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:12:59.341 | CRITICAL | __main__                       | main_cli             | 🛡️ SYSTEM-LEVEL TLS FINGERPRINT EVASION ACTIVATED
+2025-06-06 20:27:01.265 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-06 20:27:01.272 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-06 20:27:01.273 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-06 20:27:01.273 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-06 20:27:01.273 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:27:01.273 | CRITICAL | __main__                       | main_cli             | 🛡️ SYSTEM-LEVEL TLS FINGERPRINT EVASION ACTIVATED
+2025-06-06 20:41:54.321 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-06 20:41:54.326 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-06 20:41:54.327 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-06 20:41:54.327 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:41:54.327 | CRITICAL | __main__                       | main_cli             | 🛡️ SYSTEM-LEVEL TLS FINGERPRINT EVASION ACTIVATED
+2025-06-06 20:41:54.598 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 247, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(
+        config,
+    ...<2 lines>...
+        gui_queue=gui_queue
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 93, in __init__
+    profile_manager=self.profile_manager,
+                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+2025-06-06 20:41:54.599 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 623, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 247, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(
+        config,
+    ...<2 lines>...
+        gui_queue=gui_queue
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 93, in __init__
+    profile_manager=self.profile_manager,
+                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+2025-06-06 20:44:22.472 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-06 20:44:22.472 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:44:22.472 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-06 20:44:22.472 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:44:22.472 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-06 20:44:22.473 | CRITICAL | __main__                       | main_cli             | 🛡️ SYSTEM-LEVEL TLS FINGERPRINT EVASION ACTIVATED
+2025-06-06 20:44:22.724 | CRITICAL | __main__                       | async_main_logic     | Fatal error in async_main_logic: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 247, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(
+        config,
+    ...<2 lines>...
+        gui_queue=gui_queue
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 93, in __init__
+    profile_manager=self.profile_manager,
+                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+2025-06-06 20:44:22.726 | CRITICAL | __main__                       | main_cli             | Fatal error: 'UnifiedOrchestrator' object has no attribute 'profile_manager'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 623, in main_cli
+    asyncio.run(async_main_logic(config, _stop_event_asyncio))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/main.py", line 247, in async_main_logic
+    _orchestrator_instance = UnifiedOrchestrator(
+        config,
+    ...<2 lines>...
+        gui_queue=gui_queue
+    )
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 93, in __init__
+    profile_manager=self.profile_manager,
+                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UnifiedOrchestrator' object has no attribute 'profile_manager'

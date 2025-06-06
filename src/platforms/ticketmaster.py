@@ -1,4 +1,4 @@
-# src/platforms/ticketmaster.py - Ultra-Stealth v5.0
+# src/platforms/ticketmaster.py - STEALTHMASTER AI ENHANCED v6.0
 from __future__ import annotations
 
 import asyncio
@@ -19,13 +19,16 @@ from src.core.enums import PlatformType, PriorityLevel
 from src.profiles.models import BrowserProfile
 from src.core.errors import BlockedError, PlatformError
 
+# StealthMaster AI Integration
+from src.core.stealth_integration import get_bruce_stealth_integration
+
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
 
 class TicketmasterMonitor:
-    """Revolutionary Ticketmaster monitor with adaptive anti-detection"""
+    """🎸 STEALTHMASTER AI ENHANCED - Revolutionary Ticketmaster monitor with ultimate stealth"""
     
     def __init__(self, config: Dict[str, Any], profile: BrowserProfile, 
                  browser_manager, connection_manager, cache):
@@ -47,6 +50,10 @@ class TicketmasterMonitor:
         self.page: Optional[Page] = None
         self.last_check = None
         self.api_headers = {}
+        
+        # 🛡️ StealthMaster AI Integration
+        self.stealth_integration = get_bruce_stealth_integration()
+        self.session_id: Optional[str] = None
         
         # Advanced detection patterns
         self.api_patterns = {
@@ -107,7 +114,39 @@ class TicketmasterMonitor:
             # Create page with advanced stealth
             self.page = await self.browser_context.new_page()
             
-            # Setup Ticketmaster-specific stealth
+            # Setup Ticketmaster-specific stealth with TLS fingerprinting
+            
+            # CRITICAL: Inject TLS fingerprint BEFORE any page loads
+            from ..utils.tls_fingerprint import inject_tls_fingerprint_for_browser_context
+            try:
+                # Convert BrowserProfile to DynamicProfile-like object for TLS injection
+                profile_snapshot = {
+                    'tls_ja3': getattr(self.profile, 'tls_ja3', '771,4865-4866-4867-49195-49199'),
+                    'h2_header_table_size': getattr(self.profile, 'h2_header_table_size', 65536),
+                    'h2_max_streams': getattr(self.profile, 'h2_max_streams', 1000),
+                    'h2_window_size': getattr(self.profile, 'h2_window_size', 6291456),
+                    'accept_language': ','.join(self.profile.languages_override) if hasattr(self.profile, 'languages_override') else 'en-US,en;q=0.9',
+                    'user_agent': self.profile.user_agent,
+                    'browser_name': 'chrome',
+                    'browser_version': 'latest'
+                }
+                
+                # Create mock profile object for TLS injection
+                class MockProfile:
+                    def __init__(self, snapshot):
+                        self.id = getattr(self.profile, 'profile_id', 'unknown')
+                        self._snapshot = snapshot
+                    
+                    def get_fingerprint_snapshot(self):
+                        return self._snapshot
+                
+                mock_profile = MockProfile(profile_snapshot)
+                await inject_tls_fingerprint_for_browser_context(self.browser_context, mock_profile)
+                logger.info("🛡️ Ticketmaster TLS fingerprint injected successfully")
+                
+            except Exception as e:
+                logger.warning(f"⚠️ Ticketmaster TLS fingerprint injection failed: {e}")
+            
             await self._inject_ticketmaster_stealth()
             await self._setup_api_interception()
             await self._configure_human_behavior()

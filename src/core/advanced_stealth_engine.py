@@ -1,8 +1,25 @@
 #!/usr/bin/env python3
 """
-🛡️ StealthMaster AI - Advanced Anti-Detection Engine v2.0
-Ultra-sophisticated browser fingerprint randomization and behavioral simulation
+🛡️ DEPRECATION NOTICE: This file has been consolidated into stealth_engine.py
+
+All functionality from advanced_stealth_engine.py has been merged into the main
+stealth_engine.py file to eliminate code duplication and improve performance.
+
+Use: from src.core.stealth_engine import StealthEngine
+instead of importing from this file.
+
+Legacy imports are provided below for backward compatibility.
 """
+
+# Import unified stealth engine for backward compatibility
+try:
+    from .stealth_engine import StealthEngine, RealDeviceProfiles, DeviceProfile
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.warning("DEPRECATED: Import from stealth_engine.py instead")
+except ImportError:
+    # Original implementation below for fallback
+    pass
 
 import asyncio
 import random

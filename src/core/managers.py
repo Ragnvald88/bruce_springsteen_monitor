@@ -445,6 +445,69 @@ class ConnectionPoolManager:
                 for key in self.pools.keys()
             ]
         }
+    
+    async def pre_warm(self, count: int = 5):
+        """Pre-warm connection pools for faster startup"""
+        logger.info(f"Pre-warming {count} connection pools for faster startup")
+        
+        try:
+            # Get available profiles from profile manager
+            if not self.profile_manager:
+                logger.warning("No profile manager available for pre-warming")
+                return
+                
+            # Get profiles to pre-warm
+            profiles_to_warm = []
+            if hasattr(self.profile_manager, 'get_profiles_for_platform'):
+                # Try to get profiles for main platforms
+                for platform in ['fansale', 'ticketmaster', 'vivaticket']:
+                    try:
+                        platform_profiles = await self.profile_manager.get_profiles_for_platform(platform, count=2)
+                        profiles_to_warm.extend(platform_profiles[:2])
+                    except Exception as e:
+                        logger.debug(f"Failed to get profiles for {platform}: {e}")
+                        
+            elif hasattr(self.profile_manager, 'static_profiles') and self.profile_manager.static_profiles:
+                # Fallback to static profiles
+                profiles_to_warm = list(self.profile_manager.static_profiles.values())[:count]
+                
+            elif hasattr(self.profile_manager, 'dynamic_profiles') and self.profile_manager.dynamic_profiles:
+                # Fallback to dynamic profiles  
+                profiles_to_warm = self.profile_manager.dynamic_profiles[:count]
+            
+            if not profiles_to_warm:
+                logger.warning("No profiles available for pre-warming")
+                return
+                
+            # Pre-warm connections for each profile
+            warm_up_tasks = []
+            for profile in profiles_to_warm[:count]:
+                task = asyncio.create_task(self._pre_warm_single_profile(profile))
+                warm_up_tasks.append(task)
+            
+            # Run pre-warming with timeout
+            try:
+                await asyncio.wait_for(
+                    asyncio.gather(*warm_up_tasks, return_exceptions=True),
+                    timeout=10.0
+                )
+                logger.info(f"Pre-warming completed for {len(profiles_to_warm)} profiles")
+            except asyncio.TimeoutError:
+                logger.warning("Pre-warming timed out, proceeding anyway")
+                
+        except Exception as e:
+            logger.error(f"Error during pre-warming: {e}")
+    
+    async def _pre_warm_single_profile(self, profile):
+        """Pre-warm connections for a single profile"""
+        try:
+            # Create client (this establishes the connection pool)
+            client = await self.get_client(profile, force_new=False)
+            pool_key = self._get_pool_key(profile)
+            self.pre_warmed_pools.add(pool_key)
+            logger.debug(f"Pre-warmed connection pool for profile {getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))}")
+        except Exception as e:
+            logger.debug(f"Failed to pre-warm profile: {e}")
 
 
 class ResponseCache:

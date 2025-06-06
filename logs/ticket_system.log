@@ -25487,3 +25487,1077 @@ httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
 2025-06-05 22:15:38.064 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_38440aef for fansale (score: 165.00, has_session: False)
 2025-06-05 22:15:38.078 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_e7a5a59d for ticketmaster (score: 126.00, has_session: False)
 2025-06-05 22:15:38.090 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_cdf9de61 for vivaticket (score: 105.00, has_session: False)
+2025-06-05 22:16:37.849 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 22:16:39.685 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 22:16:41.680 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 22:16:57.367 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 22:17:37.570 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 22:17:37.852 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 2.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.1% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 22:17:43.521 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 22:18:22.897 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 22:18:46.181 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 22:18:46.183 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 3.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.2% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 22:18:46.183 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 22:19:46.185 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 4.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.2% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-05 22:19:49.129 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-05 22:20:12.456 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-05 22:20:12.457 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-05 22:20:46.192 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 5.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.1% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=11 (78.6%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:12:56.839 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-06 12:12:56.848 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-06 12:12:57.167 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-06 12:12:57.167 | INFO     | __main__                       | async_main_logic     | ⚡ Fast startup completed in 0.32s
+2025-06-06 12:12:57.167 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-06 12:12:57.173 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-06 12:12:57.173 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-06 12:12:57.173 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-06 12:12:57.173 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 15 profiles, 3 per platform
+2025-06-06 12:12:57.173 | INFO     | src.profiles.manager           | initialize           | ProfileManager fast initialization (lazy mode)
+2025-06-06 12:12:57.173 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-06 12:12:57.173 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 0 dynamic, 0 static profiles
+2025-06-06 12:12:57.173 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-06 12:12:57.174 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_486ea320 for fansale
+2025-06-06 12:12:57.174 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-06 12:12:57.174 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_4742a5c2 for ticketmaster
+2025-06-06 12:12:57.174 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-06 12:12:57.174 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_d376b4b5 for vivaticket
+2025-06-06 12:12:57.175 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 3 profiles loaded
+2025-06-06 12:12:57.175 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=20, max_keepalive=10
+2025-06-06 12:12:57.175 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-06 12:12:57.175 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-06 12:12:57.175 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-06 12:12:57.175 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-06 12:12:57.176 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-06 12:12:57.176 | INFO     | src.core.orchestrator          | pre_warm_connections | Pre-warming connections...
+2025-06-06 12:12:57.193 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Starting background profile pool initialization...
+2025-06-06 12:12:57.193 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-06 12:12:57.193 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-06 12:12:57.193 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-06 12:12:57.193 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-06 12:12:57.297 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-06 12:12:57.297 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-06 12:12:57.297 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-06 12:12:57.297 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-06 12:12:57.311 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T17:16:13.349001
+2025-06-06 12:12:57.347 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 324 profiles from disk
+2025-06-06 12:12:57.347 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {'fansale': ['fansale_486ea320'], 'ticketmaster': ['ticketmaster_4742a5c2'], 'vivaticket': ['vivaticket_d376b4b5']}
+2025-06-06 12:12:57.347 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Background profile pool initialization complete
+2025-06-06 12:12:57.347 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 12:12:57.390 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile generic_cb8b53da for generic (score: 105.00, has_session: False)
+2025-06-06 12:12:57.390 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 12:12:57.401 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_486ea320 for fansale (score: 141.00, has_session: False)
+2025-06-06 12:12:57.412 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4742a5c2 for ticketmaster (score: 90.00, has_session: False)
+2025-06-06 12:12:57.423 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_d376b4b5 for vivaticket (score: 165.00, has_session: False)
+2025-06-06 12:13:54.609 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:13:57.194 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:13:58.900 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:14:24.423 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:14:55.066 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:14:57.196 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 2.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:15:46.204 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:16:09.579 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:16:09.579 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:16:09.580 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 3.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:17:06.311 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:17:06.869 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:17:09.583 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 4.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:17:13.130 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:18:02.042 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_4742a5c2 for ticketmaster (score: 108.32, has_session: False)
+2025-06-06 12:18:02.343 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http_proxy.py", line 288, in handle_async_request
+    connect_response = await self._connection.handle_async_request(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        connect_request
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-06 12:18:04.808 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_d376b4b5 for vivaticket (score: 198.82, has_session: False)
+2025-06-06 12:18:05.116 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Resale (VT): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http_proxy.py", line 288, in handle_async_request
+    connect_response = await self._connection.handle_async_request(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        connect_request
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-06 12:18:09.585 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 5.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=10 (76.9%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:18:40.463 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_486ea320 for fansale (score: 166.40, has_session: False)
+2025-06-06 12:18:40.603 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): [Errno 8] nodename nor servname provided, or not known
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http_proxy.py", line 288, in handle_async_request
+    connect_response = await self._connection.handle_async_request(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        connect_request
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 596, in check_ultra_efficient
+    response = await http_client.get(
+               ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+2025-06-06 12:19:00.626 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for ticketmaster
+2025-06-06 12:19:02.813 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for vivaticket
+2025-06-06 12:19:09.589 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 6.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=10 (76.9%) | Size=0.1MB
+👤 PROFILES: Active=6 | Total=328 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:19:41.634 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for fansale
+2025-06-06 12:20:06.970 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:20:06.971 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:20:09.592 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 7.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=10 (76.9%) | Size=0.2MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:21:03.596 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:21:26.876 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 8.5 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=10 (76.9%) | Size=0.2MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:21:26.876 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:21:26.876 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:22:22.357 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:22:45.537 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 9.8 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.2% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=10 (76.9%) | Size=0.2MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:22:45.637 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:22:45.637 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:23:41.416 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:24:04.597 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_3c3f27cf for vivaticket (score: 60.23, has_session: False)
+2025-06-06 12:24:04.597 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 11.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=18 (66.7%) | Size=0.2MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:24:04.597 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_07f5a6ee for ticketmaster (score: 186.82, has_session: False)
+2025-06-06 12:25:03.053 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:25:04.599 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 12.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=18 (66.7%) | Size=0.2MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.2MB | Saved=0.0MB | Remaining=999.8MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:25:05.391 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_bdab391c for fansale (score: 166.41, has_session: False)
+2025-06-06 12:25:30.344 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:26:01.517 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:26:04.602 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 13.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=18 (66.7%) | Size=0.3MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.3MB | Saved=0.0MB | Remaining=999.7MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:26:30.638 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:26:53.881 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:27:02.522 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:27:04.605 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 14.1 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=18 (66.7%) | Size=0.3MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.3MB | Saved=0.0MB | Remaining=999.7MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:27:53.640 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:28:16.888 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:28:16.889 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:28:16.889 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 15.3 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=27 (69.2%) | Size=0.3MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.3MB | Saved=0.0MB | Remaining=999.7MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:29:16.252 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_07f5a6ee for ticketmaster (score: 188.82, has_session: False)
+2025-06-06 12:29:16.891 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 16.3 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=27 (69.2%) | Size=0.3MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.3MB | Saved=0.0MB | Remaining=999.7MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:29:18.228 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_3c3f27cf for vivaticket (score: 60.42, has_session: False)
+2025-06-06 12:29:20.783 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:30:16.895 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 17.3 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.2% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=27 (69.2%) | Size=0.3MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.3MB | Saved=0.0MB | Remaining=999.7MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:30:20.599 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:30:21.050 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:30:40.853 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_bdab391c for fansale (score: 168.01, has_session: False)
+2025-06-06 12:31:16.898 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 18.3 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=27 (69.2%) | Size=0.4MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.4MB | Saved=0.0MB | Remaining=999.6MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:31:21.987 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:31:24.265 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:32:01.756 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:32:24.997 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 19.5 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=27 (69.2%) | Size=0.4MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.4MB | Saved=0.0MB | Remaining=999.6MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:32:24.997 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:32:25.073 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:33:22.951 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:33:24.521 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:33:47.644 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 20.8 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=36 (70.6%) | Size=0.4MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.4MB | Saved=0.0MB | Remaining=999.6MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:33:47.754 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:34:22.983 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_3c3f27cf for vivaticket (score: 60.62, has_session: False)
+2025-06-06 12:34:44.579 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:35:07.698 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 22.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.2% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=36 (70.6%) | Size=0.4MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.4MB | Saved=0.0MB | Remaining=999.6MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:35:07.801 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_07f5a6ee for ticketmaster (score: 190.80, has_session: False)
+2025-06-06 12:35:21.720 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:36:07.701 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 23.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=36 (70.6%) | Size=0.4MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.4MB | Saved=0.0MB | Remaining=999.6MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:36:08.311 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:36:11.226 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_bdab391c for fansale (score: 169.61, has_session: False)
+2025-06-06 12:36:36.357 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:37:05.709 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:37:07.705 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 24.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=36 (70.6%) | Size=0.5MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.5MB | Saved=0.0MB | Remaining=999.5MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:37:36.668 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:37:39.277 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:38:03.919 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:38:07.708 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 25.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=36 (70.6%) | Size=0.5MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.5MB | Saved=0.0MB | Remaining=999.5MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:38:33.061 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 12:39:01.569 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:39:05.191 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:39:28.296 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 26.5 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=47 (72.3%) | Size=0.5MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.5MB | Saved=0.0MB | Remaining=999.5MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:39:34.740 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_3c3f27cf for vivaticket (score: 60.82, has_session: False)
+2025-06-06 12:40:02.834 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 12:40:28.299 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 27.5 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: True | Threat: LOW
+💊 HEALTH: CPU=0.1% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=47 (72.3%) | Size=0.5MB
+👤 PROFILES: Active=7 | Total=329 | Rotations=0
+📊 DATA USAGE: Used=0.5MB | Saved=0.0MB | Remaining=999.5MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 12:40:30.049 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 12:40:48.013 | WARNING  | __main__                       | signal_handler       | Received SIGTERM, initiating stealth shutdown...
+2025-06-06 12:40:48.013 | INFO     | __main__                       | signal_handler       | Primary asyncio stop event set.
+2025-06-06 12:40:53.169 | CRITICAL | __main__                       | force_cleanup        | Forcing immediate shutdown
+2025-06-06 12:40:53.170 | INFO     | src.core.orchestrator          | run                  | Stop event received, initiating shutdown
+2025-06-06 12:40:53.171 | INFO     | src.core.orchestrator          | shutdown_tasks       | 🔄 Shutting down background tasks...
+2025-06-06 12:40:53.171 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor loop cancelled
+2025-06-06 12:40:53.171 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor finished
+2025-06-06 12:40:53.171 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter finished
+2025-06-06 12:40:53.172 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor finished
+2025-06-06 13:14:31.003 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-06 13:14:31.011 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-06 13:14:31.274 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-06 13:14:31.274 | INFO     | __main__                       | async_main_logic     | ⚡ Fast startup completed in 0.26s
+2025-06-06 13:14:31.274 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-06 13:14:31.278 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-06 13:14:31.279 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-06 13:14:31.279 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-06 13:14:31.279 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 15 profiles, 3 per platform
+2025-06-06 13:14:31.279 | INFO     | src.profiles.manager           | initialize           | ProfileManager fast initialization (lazy mode)
+2025-06-06 13:14:31.279 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-06 13:14:31.279 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 0 dynamic, 0 static profiles
+2025-06-06 13:14:31.279 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_e2d15a8e for fansale
+2025-06-06 13:14:31.280 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_06e1a301 for ticketmaster
+2025-06-06 13:14:31.280 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_35ec9138 for vivaticket
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 3 profiles loaded
+2025-06-06 13:14:31.280 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=20, max_keepalive=10
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-06 13:14:31.280 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-06 13:14:31.281 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-06 13:14:31.281 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-06 13:14:31.281 | INFO     | src.core.orchestrator          | pre_warm_connections | Pre-warming connections...
+2025-06-06 13:14:31.299 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Starting background profile pool initialization...
+2025-06-06 13:14:31.300 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-06 13:14:31.300 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-06 13:14:31.300 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-06 13:14:31.300 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-06 13:14:31.401 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-06 13:14:31.402 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-06 13:14:31.402 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-06 13:14:31.402 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-06 13:14:31.421 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T17:16:13.349001
+2025-06-06 13:14:31.463 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 324 profiles from disk
+2025-06-06 13:14:31.463 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {'fansale': ['fansale_e2d15a8e'], 'ticketmaster': ['ticketmaster_06e1a301'], 'vivaticket': ['vivaticket_35ec9138']}
+2025-06-06 13:14:31.463 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Background profile pool initialization complete
+2025-06-06 13:14:31.463 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 13:14:31.507 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile generic_8fa3462f for generic (score: 105.00, has_session: False)
+2025-06-06 13:14:31.507 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 13:14:31.519 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_e2d15a8e for fansale (score: 141.00, has_session: False)
+2025-06-06 13:14:31.530 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_06e1a301 for ticketmaster (score: 42.00, has_session: False)
+2025-06-06 13:14:31.540 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_35ec9138 for vivaticket (score: 141.00, has_session: False)
+2025-06-06 13:14:45.165 | INFO     | __main__                       | setup_logging        | Stealth logging initialized. Level: INFO
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | 🥷 Ultra-Stealth Ticket System v4.0 Starting
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Mode: ADAPTIVE
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Profiles: auto
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Python: 3.13.2
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | ============================================================
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Active targets: 3
+2025-06-06 13:14:45.166 | INFO     | __main__                       | main_cli             | Running pre-flight stealth checks...
+2025-06-06 13:14:45.282 | INFO     | src.core.orchestrator          | __init__             | 🚀 UnifiedOrchestrator v4.0 initialized - Mode: adaptive
+2025-06-06 13:14:45.282 | INFO     | __main__                       | async_main_logic     | ⚡ Fast startup completed in 0.12s
+2025-06-06 13:14:45.282 | INFO     | src.core.orchestrator          | initialize_subsystems | 🔧 Initializing orchestrator subsystems...
+2025-06-06 13:14:45.287 | INFO     | src.profiles.utils             | parse_proxy_configs  | Attempting to parse 1 proxy entries.
+2025-06-06 13:14:45.287 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully parsed proxy: geo.iproyal.com:12321, Provider: iproyal
+2025-06-06 13:14:45.287 | INFO     | src.profiles.utils             | parse_proxy_configs  | Successfully loaded 1 proxy configurations.
+2025-06-06 13:14:45.287 | INFO     | src.profiles.manager           | __init__             | ProfileManager initialized. Target: 15 profiles, 3 per platform
+2025-06-06 13:14:45.287 | INFO     | src.profiles.manager           | initialize           | ProfileManager fast initialization (lazy mode)
+2025-06-06 13:14:45.287 | INFO     | src.profiles.manager           | start_background_tasks | Background tasks started
+2025-06-06 13:14:45.287 | INFO     | src.core.orchestrator          | _validate_profile_manager | Profile inventory: 0 dynamic, 0 static profiles
+2025-06-06 13:14:45.287 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to fansale, creating one
+2025-06-06 13:14:45.288 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile fansale_4c10dbe6 for fansale
+2025-06-06 13:14:45.288 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to ticketmaster, creating one
+2025-06-06 13:14:45.288 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile ticketmaster_810201b7 for ticketmaster
+2025-06-06 13:14:45.288 | WARNING  | src.core.orchestrator          | _validate_profile_manager | No profiles assigned to vivaticket, creating one
+2025-06-06 13:14:45.289 | INFO     | src.core.orchestrator          | _validate_profile_manager | Created profile vivaticket_2b0603a6 for vivaticket
+2025-06-06 13:14:45.289 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileManager: 3 profiles loaded
+2025-06-06 13:14:45.289 | INFO     | src.core.managers              | __init__             | ConnectionPoolManager initialized with max_connections=20, max_keepalive=10
+2025-06-06 13:14:45.289 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ConnectionPoolManager: Pre-warmed connections
+2025-06-06 13:14:45.289 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ResponseCache: 100MB capacity
+2025-06-06 13:14:45.289 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ SmartBrowserContextManager: Ready
+2025-06-06 13:14:45.290 | INFO     | src.core.components            | __init__             | ProfileAwareLightweightMonitor initialized with 3 platform patterns
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileAwareLightweightMonitor: Configured
+2025-06-06 13:14:45.290 | INFO     | src.core.strike_force          | __init__             | 🎯 ProfileIntegratedStrikeForce initialized with browser automation
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | initialize_subsystems | ✅ ProfileIntegratedStrikeForce: Armed
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | initialize_subsystems | ✨ All subsystems initialized successfully
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | run                  | 🏃 Starting main execution loop - Mode: ADAPTIVE
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | _apply_mode_specific_settings | Applied adaptive mode settings: Strikes=3, Monitors=10
+2025-06-06 13:14:45.290 | INFO     | src.core.orchestrator          | pre_warm_connections | Pre-warming connections...
+2025-06-06 13:14:45.298 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Starting background profile pool initialization...
+2025-06-06 13:14:45.299 | INFO     | src.core.orchestrator          | _monitoring_loop     | Monitoring loop started
+2025-06-06 13:14:45.299 | INFO     | src.core.orchestrator          | _strike_processor_loop | Strike processor started
+2025-06-06 13:14:45.299 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | Metrics reporter started (interval: 60s)
+2025-06-06 13:14:45.299 | INFO     | src.core.orchestrator          | _health_monitor_loop | Health monitor started
+2025-06-06 13:14:45.404 | INFO     | src.core.orchestrator          | _cache_maintenance_loop | Cache maintenance loop started
+2025-06-06 13:14:45.404 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Milano 2025 (FS) on fansale
+2025-06-06 13:14:45.405 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen San Siro 2025 (TM) on ticketmaster
+2025-06-06 13:14:45.405 | INFO     | src.core.orchestrator          | _monitor_single_target_loop | 🔍 Starting monitoring for Bruce Springsteen Resale (VT) on vivaticket
+2025-06-06 13:14:45.414 | INFO     | src.profiles.persistence       | load_profiles        | Loading profiles from 2025-06-05T17:16:13.349001
+2025-06-06 13:14:45.457 | INFO     | src.profiles.manager           | _initialize_profile_pool | Loaded 324 profiles from disk
+2025-06-06 13:14:45.457 | INFO     | src.profiles.manager           | _initialize_profile_pool | Profile pool initialized. Distribution: {'fansale': ['fansale_4c10dbe6'], 'ticketmaster': ['ticketmaster_810201b7'], 'vivaticket': ['vivaticket_2b0603a6']}
+2025-06-06 13:14:45.458 | INFO     | src.profiles.manager           | _lazy_initialize_profile_pool | Background profile pool initialization complete
+2025-06-06 13:14:45.458 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 13:14:45.486 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile generic_b6654057 for generic (score: 57.00, has_session: False)
+2025-06-06 13:14:45.487 | WARNING  | src.profiles.manager           | get_profile_for_platform | No suitable profiles for generic
+2025-06-06 13:14:45.498 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile fansale_4c10dbe6 for fansale (score: 105.00, has_session: False)
+2025-06-06 13:14:45.509 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile ticketmaster_810201b7 for ticketmaster (score: 90.00, has_session: False)
+2025-06-06 13:14:45.520 | INFO     | src.profiles.manager           | get_profile_for_platform | Selected profile vivaticket_2b0603a6 for vivaticket (score: 141.00, has_session: False)
+2025-06-06 13:15:45.301 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 1.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.2% | Mem=0.4% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 13:15:47.641 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 13:15:50.360 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 13:16:09.537 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 13:16:42.754 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 13:16:45.284 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 2.0 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.2% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 13:16:54.599 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))
+2025-06-06 13:17:36.486 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388 (Bruce Springsteen Milano 2025 (FS))
+2025-06-06 13:17:59.836 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.vivaticket.com/it/ricerca/bruce%20springsteen (Bruce Springsteen Resale (VT))
+2025-06-06 13:17:59.942 | INFO     | src.core.orchestrator          | _metrics_reporter_loop | 
+================================================================================
+📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: 3.2 min
+================================================================================
+🎯 MODE: ADAPTIVE | Dry Run: False | Threat: LOW
+💊 HEALTH: CPU=0.0% | Mem=0.3% | Tasks=3
+🎯 PERFORMANCE: Detections=0 | Attempts=0 | Success=0 (0.0%)
+⚡ QUEUE: Pending=0 | Active Strikes=0 | Processed=0
+💾 CACHE: Hits=0 (0.0%) | Size=0.1MB
+👤 PROFILES: Active=4 | Total=326 | Rotations=0
+📊 DATA USAGE: Used=0.1MB | Saved=0.0MB | Remaining=999.9MB
+🏆 PLATFORM BREAKDOWN:
+       FANSALE: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+  TICKETMASTER: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+    VIVATICKET: D=  0 | A=  0 | S=  0 ( 0.0%) | B=  0
+================================================================================
+2025-06-06 13:17:59.942 | INFO     | src.core.components            | check_ultra_efficient | Cache hit for https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html (Bruce Springsteen San Siro 2025 (TM))

@@ -115,7 +115,26 @@ class FansaleMonitor:
             ]
         }
         
+        # 🥷 STEALTHMASTER AI REAL-TIME EFFECTIVENESS TRACKER
+        self.stealth_metrics = {
+            'total_requests': 0,
+            'successful_requests': 0,
+            'blocked_requests': 0,
+            'captcha_encounters': 0,
+            'recovery_attempts': 0,
+            'successful_recoveries': 0,
+            'average_response_time': 0.0,
+            'stealth_effectiveness': 100.0,
+            'last_detection': None,
+            'consecutive_successes': 0,
+            'risk_level': 'LOW',
+            'session_start': datetime.now(),
+            'fingerprint_changes': 0,
+            'proxy_rotations': 0
+        }
+        
         logger.info(f"FansaleMonitor initialized for {self.event_name}")
+        logger.info(f"🥷 StealthMaster AI Tracker: ACTIVE")
 
     async def initialize(self):
         """Initialize with Fansale-specific ultra-stealth and authentication"""
@@ -451,35 +470,230 @@ class FansaleMonitor:
         except Exception as e:
             logger.debug(f"Error processing API response: {e}")
 
+    async def _handle_blocked_response(self, response_status: int = None, page_content: str = "") -> bool:
+        """Handle blocked responses and implement recovery strategies"""
+        try:
+            logger.warning(f"🚫 Handling blocked response: status={response_status}")
+            
+            # 🛡️ ENHANCED FANSALE-SPECIFIC BLOCKING PATTERNS
+            blocking_indicators = [
+                # Standard blocking patterns
+                'blocked', 'forbidden', 'access denied', 'not authorized',
+                'captcha', 'robot', 'bot', 'verification', 'security check',
+                'too many requests', 'rate limit', 'banned', 'suspended',
+                
+                # FanSale-specific patterns (Italian + English)
+                'accesso negato', 'accesso bloccato', 'troppi tentativi',
+                'verifica richiesta', 'controllo sicurezza', 'sessione scaduta',
+                'account sospeso', 'attività sospetta', 'riprova più tardi',
+                'temporarily unavailable', 'service unavailable',
+                'unusual activity', 'automated traffic', 'please wait',
+                
+                # Advanced detection patterns
+                'cloudflare', 'ddos-guard', 'incapsula', 'imperva',
+                'challenge', 'checking your browser', 'moment please',
+                'enable javascript', 'enable cookies', 'security check',
+                'human verification', 'prove you are human'
+            ]
+            
+            content_lower = page_content.lower()
+            is_blocked = any(indicator in content_lower for indicator in blocking_indicators)
+            
+            # Status code based detection
+            if response_status in [403, 429, 503, 521, 525]:
+                is_blocked = True
+            
+            if is_blocked:
+                logger.error(f"🛑 FanSale blocking detected! Status: {response_status}")
+                
+                # Mark profile as potentially compromised
+                if hasattr(self.profile, 'record_usage'):
+                    self.profile.record_usage(
+                        success=False, 
+                        platform="fansale", 
+                        error=f"Blocked (HTTP {response_status})",
+                        detected=True
+                    )
+                
+                # Implement recovery strategies
+                recovery_success = await self._attempt_blocking_recovery()
+                
+                # If recovery failed, trigger profile rotation
+                if not recovery_success and hasattr(self.connection_manager, 'mark_client_compromised'):
+                    await self.connection_manager.mark_client_compromised(self.profile)
+                    logger.warning("🔄 Marked FanSale profile for rotation due to blocking")
+                
+                return False
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error handling blocked response: {e}")
+            return False
+    
+    async def _attempt_blocking_recovery(self) -> bool:
+        """Attempt to recover from blocking situation"""
+        try:
+            logger.info("🔄 Attempting FanSale blocking recovery...")
+            
+            # Strategy 1: Clear cookies and restart session
+            if self.page:
+                await self.page.context.clear_cookies()
+                logger.info("Cleared FanSale cookies")
+            
+            # Strategy 2: Wait with human-like delay
+            wait_time = random.uniform(30, 90)  # 30-90 seconds
+            logger.info(f"Waiting {wait_time:.1f}s for FanSale cooldown...")
+            await asyncio.sleep(wait_time)
+            
+            # Strategy 3: Navigate to main page to reset session
+            if self.page:
+                await self.page.goto("https://www.fansale.it/", 
+                                   wait_until='networkidle', 
+                                   timeout=30000)
+                await asyncio.sleep(random.uniform(2, 5))
+            
+            # Strategy 4: Check if recovery was successful
+            recovery_test = await self._test_fansale_access()
+            
+            if recovery_test:
+                logger.info("✅ FanSale blocking recovery successful")
+                return True
+            else:
+                logger.warning("❌ FanSale blocking recovery failed")
+                return False
+                
+        except Exception as e:
+            logger.error(f"FanSale recovery attempt failed: {e}")
+            return False
+    
+    async def _test_fansale_access(self) -> bool:
+        """Test if FanSale access is restored"""
+        try:
+            if not self.page:
+                return False
+            
+            # Try to access a simple FanSale page
+            response = await self.page.goto("https://www.fansale.it/", 
+                                          wait_until='domcontentloaded',
+                                          timeout=15000)
+            
+            if response and response.status < 400:
+                # Check page content for blocking indicators
+                content = await self.page.content()
+                is_accessible = not any(indicator in content.lower() 
+                                      for indicator in ['blocked', 'forbidden', 'captcha'])
+                return is_accessible
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"FanSale access test failed: {e}")
+            return False
+    
+    async def _detect_captcha_or_verification(self) -> bool:
+        """Detect if FanSale is showing captcha or verification challenges"""
+        try:
+            if not self.page:
+                return False
+            
+            # Common captcha/verification selectors
+            captcha_selectors = [
+                'iframe[src*="captcha"]', 'iframe[src*="recaptcha"]',
+                '.captcha', '.recaptcha', '.hcaptcha',
+                '[data-captcha]', '[id*="captcha"]',
+                'text=Verify you are human', 'text=Security check',
+                'text=Verifica di sicurezza', 'text=Controllo sicurezza'
+            ]
+            
+            for selector in captcha_selectors:
+                try:
+                    element = self.page.locator(selector).first
+                    if await element.count() > 0:
+                        logger.warning(f"🤖 FanSale captcha/verification detected: {selector}")
+                        return True
+                except:
+                    continue
+            
+            # Check page title and content
+            try:
+                title = await self.page.title()
+                if any(word in title.lower() for word in ['captcha', 'verification', 'security']):
+                    logger.warning(f"🤖 FanSale verification in title: {title}")
+                    return True
+            except:
+                pass
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Captcha detection error: {e}")
+            return False
+
     async def _perform_authentication(self):
         """Perform FanSale authentication to access protected content"""
         try:
+            # 🔐 STEALTHMASTER AI AUTHENTICATION PROTOCOL
+            logger.info("🔐 INITIATING FANSALE AUTHENTICATION PROTOCOL")
+            
             # Load credentials from environment
             import os
             email = os.getenv('FANSALE_EMAIL')
             password = os.getenv('FANSALE_PASSWORD')
             
             if not email or not password:
-                logger.warning("FanSale credentials not found in environment variables")
+                logger.error("❌ AUTHENTICATION FAILED: Missing credentials")
+                logger.error("   💡 Set FANSALE_EMAIL and FANSALE_PASSWORD in .env file")
                 return False
             
-            logger.info("Attempting FanSale authentication...")
+            # Log credential status (safely)
+            logger.info(f"   📧 Email: {email[:3]}***@{email.split('@')[1] if '@' in email else '???'}")
+            logger.info(f"   🔑 Password: {'*' * len(password)} ({len(password)} chars)")
             
             # Navigate to login page with stealth
+            logger.info("   🎭 Navigating to login page with stealth protocols...")
+            auth_start = time.time()
             await self._navigate_to_login_page()
             
-            # Perform login process
+            # Perform login process with detailed tracking
+            logger.info("   🚀 Executing automated login sequence...")
             login_success = await self._execute_login(email, password)
             
+            auth_time = time.time() - auth_start
+            
             if login_success:
-                logger.critical("✅ FanSale authentication successful!")
+                logger.critical("🎉 FANSALE AUTHENTICATION SUCCESS!")
+                logger.critical(f"   ⏱️  Login completed in {auth_time:.2f}s")
+                logger.critical(f"   🎫 Ready for ticket acquisition operations")
+                
+                # Record successful authentication
+                if hasattr(self.profile, 'record_usage'):
+                    self.profile.record_usage(
+                        success=True,
+                        platform="fansale_auth",
+                        response_time_ms=int(auth_time * 1000),
+                        detected=False
+                    )
                 return True
             else:
-                logger.warning("❌ FanSale authentication failed")
+                logger.error("❌ FANSALE AUTHENTICATION FAILED")
+                logger.error(f"   ⏱️  Failed after {auth_time:.2f}s")
+                logger.error("   🔧 Check credentials or account status")
+                
+                # Record failed authentication
+                if hasattr(self.profile, 'record_usage'):
+                    self.profile.record_usage(
+                        success=False,
+                        platform="fansale_auth",
+                        error="Login failed",
+                        response_time_ms=int(auth_time * 1000),
+                        detected=False
+                    )
                 return False
                 
         except Exception as e:
-            logger.error(f"Error during FanSale authentication: {e}")
+            logger.error(f"🚨 AUTHENTICATION PROTOCOL ERROR: {e}")
+            logger.error("   🔧 This may indicate a blocking or detection issue")
             return False
 
     async def _navigate_to_login_page(self):
@@ -778,44 +992,185 @@ class FansaleMonitor:
             return False
 
     async def check_opportunities(self) -> List[EnhancedTicketOpportunity]:
-        """Check for ticket opportunities using advanced HTML intelligence"""
+        """Check for ticket opportunities using advanced HTML intelligence with enhanced blocking detection"""
         if not self.page:
             await self.initialize()
         
         opportunities = []
+        start_time = time.time()
         
         try:
-            logger.debug(f"Checking Fansale opportunities for {self.event_name}")
+            # 🥷 STEALTHMASTER AI ENHANCED LOGGING
+            logger.info(f"🔍 FANSALE STEALTH SCAN: {self.event_name}")
+            logger.info(f"   📍 URL: {self.url}")
+            logger.info(f"   👤 Profile: {getattr(self.profile, 'profile_id', 'unknown')}")
+            logger.info(f"   🌐 Proxy: {bool(getattr(self.profile, 'proxy_config', None))}")
             
-            # Navigate with human-like behavior
-            await self._navigate_with_human_behavior()
+            # Navigate with human-like behavior and capture response
+            logger.info("   🎭 Executing stealth navigation...")
+            response = await self._navigate_with_human_behavior()
             
-            # Wait for content to load
+            # 🛡️ ENHANCED STEALTH METRICS LOGGING
+            if response:
+                response_time = time.time() - start_time
+                logger.info(f"   📊 RESPONSE: HTTP {response.status} in {response_time:.2f}s")
+                
+                # Get page fingerprint info
+                page_content = await self.page.content()
+                content_size = len(page_content)
+                title = await self.page.title()
+                
+                logger.info(f"   📄 Page: '{title[:50]}...' ({content_size:,} bytes)")
+                
+                # 🔍 ADVANCED BLOCKING DETECTION WITH DETAILED LOGGING
+                is_accessible = await self._handle_blocked_response(
+                    response_status=response.status,
+                    page_content=page_content
+                )
+                
+                if not is_accessible:
+                    logger.error("🚫 FANSALE STEALTH BREACH DETECTED!")
+                    logger.error(f"   ❌ Status: {response.status}")
+                    logger.error(f"   ❌ Profile compromised: {getattr(self.profile, 'profile_id', 'unknown')}")
+                    self._update_stealth_metrics(blocked=True, response_time=response_time)
+                    self._log_stealth_effectiveness()
+                    return []
+                else:
+                    logger.info("   ✅ STEALTH STATUS: UNDETECTED")
+                    self._update_stealth_metrics(success=True, response_time=response_time)
+            else:
+                logger.warning("   ⚠️  No response object received")
+            
+            # 🕵️ CAPTCHA & VERIFICATION DETECTION
+            logger.info("   🔎 Scanning for captcha/verification challenges...")
+            has_captcha = await self._detect_captcha_or_verification()
+            if has_captcha:
+                logger.warning("🤖 CAPTCHA CHALLENGE DETECTED!")
+                logger.warning("   🔄 Initiating stealth recovery protocol...")
+                self.stealth_metrics['captcha_encounters'] += 1
+                self.stealth_metrics['recovery_attempts'] += 1
+                recovery_success = await self._attempt_blocking_recovery()
+                if not recovery_success:
+                    logger.error("❌ STEALTH RECOVERY FAILED - MISSION ABORTED")
+                    self._update_risk_level('HIGH')
+                    return []
+                else:
+                    logger.info("✅ STEALTH RECOVERY SUCCESSFUL")
+                    self.stealth_metrics['successful_recoveries'] += 1
+                    self._update_risk_level('MEDIUM')
+            else:
+                logger.info("   ✅ No verification challenges detected")
+            
+            # 📥 CONTENT LOADING WITH DETAILED TRACKING
+            logger.info("   ⏳ Waiting for dynamic content...")
             await self._wait_for_dynamic_content()
+            logger.info("   ✅ Content loaded")
             
-            # Multiple extraction strategies
-            opportunities.extend(await self._extract_from_html_structure())
-            opportunities.extend(await self._extract_from_data_attributes())
-            opportunities.extend(await self._extract_from_javascript_variables())
+            # 🎯 MULTI-STRATEGY TICKET EXTRACTION
+            total_found = 0
+            logger.info("   🔍 Beginning ticket hunt with multiple strategies...")
             
-            # Filter and validate opportunities
+            # Strategy 1: HTML Structure
+            logger.info("   🌐 Strategy 1: HTML structure analysis...")
+            try:
+                html_opportunities = await self._extract_from_html_structure()
+                opportunities.extend(html_opportunities)
+                total_found += len(html_opportunities)
+                logger.info(f"      Found {len(html_opportunities)} via HTML structure")
+            except Exception as e:
+                logger.warning(f"      HTML extraction failed: {e}")
+            
+            # Strategy 2: Data Attributes  
+            logger.info("   🏷️  Strategy 2: Data attributes mining...")
+            try:
+                data_opportunities = await self._extract_from_data_attributes()
+                opportunities.extend(data_opportunities)
+                new_found = len(data_opportunities)
+                total_found += new_found
+                logger.info(f"      Found {new_found} via data attributes")
+            except Exception as e:
+                logger.warning(f"      Data attributes extraction failed: {e}")
+            
+            # Strategy 3: JavaScript Variables
+            logger.info("   📜 Strategy 3: JavaScript variables analysis...")
+            try:
+                js_opportunities = await self._extract_from_javascript_variables()
+                opportunities.extend(js_opportunities)
+                new_found = len(js_opportunities)
+                total_found += new_found
+                logger.info(f"      Found {new_found} via JavaScript variables")
+            except Exception as e:
+                logger.warning(f"      JavaScript extraction failed: {e}")
+            
+            # 🎯 OPPORTUNITY FILTERING & VALIDATION
+            raw_count = len(opportunities)
+            logger.info(f"   📊 Raw opportunities found: {raw_count}")
             opportunities = await self._filter_opportunities(opportunities)
+            filtered_count = len(opportunities)
             
-            # Update state
+            if raw_count != filtered_count:
+                logger.info(f"   🔧 Filtered {raw_count - filtered_count} invalid opportunities")
+            
+            # 📈 PERFORMANCE METRICS & STATE UPDATE
+            total_time = time.time() - start_time
             self.last_check = datetime.now()
             
+            # Record detailed metrics
+            if hasattr(self.profile, 'record_usage'):
+                self.profile.record_usage(
+                    success=True,
+                    platform="fansale",
+                    response_time_ms=int(total_time * 1000),
+                    detected=False
+                )
+            
+            # 🎉 RESULTS ANNOUNCEMENT
             if opportunities:
-                logger.critical(f"🚀 FOUND {len(opportunities)} FANSALE OPPORTUNITIES FOR {self.event_name}")
+                logger.critical("🚨🚨🚨 BRUCE SPRINGSTEEN TICKETS FOUND! 🚨🚨🚨")
+                logger.critical(f"   🎫 COUNT: {len(opportunities)} opportunities")
+                for i, opp in enumerate(opportunities[:3], 1):  # Show first 3
+                    logger.critical(f"   #{i}: {opp.section} - €{opp.price} ({opp.quantity} tickets)")
+                logger.critical(f"   ⏱️  Scan completed in {total_time:.2f}s")
+                logger.critical("   🚀 Preparing for automated ticket acquisition...")
+            else:
+                logger.info(f"   📭 No tickets found (scan time: {total_time:.2f}s)")
                 
         except Exception as e:
             logger.error(f"Error checking Fansale opportunities: {e}")
             
-            # Recovery attempt
+            # Record failure
+            if hasattr(self.profile, 'record_usage'):
+                self.profile.record_usage(
+                    success=False,
+                    platform="fansale",
+                    error=str(e),
+                    detected=False
+                )
+            
+            # Enhanced recovery attempt
             try:
-                await self.page.reload(wait_until='networkidle', timeout=15000)
-                await asyncio.sleep(2)
-            except:
-                pass
+                logger.info("🔄 Attempting FanSale page recovery...")
+                
+                # Check if this might be a blocking issue
+                if "timeout" in str(e).lower() or "network" in str(e).lower():
+                    recovery_success = await self._attempt_blocking_recovery()
+                    if recovery_success:
+                        logger.info("✅ FanSale recovery successful, retrying...")
+                        # Recursive retry (but only once)
+                        if not hasattr(self, '_retry_attempted'):
+                            self._retry_attempted = True
+                            return await self.check_opportunities()
+                else:
+                    # Simple page reload for other errors
+                    await self.page.reload(wait_until='networkidle', timeout=15000)
+                    await asyncio.sleep(random.uniform(2, 4))
+                    
+            except Exception as recovery_error:
+                logger.debug(f"Recovery attempt failed: {recovery_error}")
+            finally:
+                # Reset retry flag
+                if hasattr(self, '_retry_attempted'):
+                    delattr(self, '_retry_attempted')
         
         return opportunities
 
@@ -824,8 +1179,8 @@ class FansaleMonitor:
         # Random pre-navigation delay
         await asyncio.sleep(random.uniform(0.5, 2.0))
         
-        # Navigate with realistic timeout
-        await self.page.goto(self.url, wait_until='networkidle', timeout=30000)
+        # Navigate with realistic timeout and capture response
+        response = await self.page.goto(self.url, wait_until='networkidle', timeout=30000)
         
         # Simulate human reading/loading time
         await asyncio.sleep(random.uniform(2.0, 4.0))
@@ -844,6 +1199,8 @@ class FansaleMonitor:
             scroll_amount = random.randint(200, 800)
             await self.page.mouse.wheel(0, scroll_amount)
             await asyncio.sleep(random.uniform(1.0, 2.5))
+        
+        return response
 
     async def _wait_for_dynamic_content(self):
         """Wait for dynamic content with intelligent detection"""
@@ -1634,3 +1991,204 @@ async def check_fansale_event(page, profile, target_cfg, gui_q=None):
             
         except Exception as e:
             logger.error(f"Error creating opportunity from data: {e}")
+    
+    def _update_stealth_metrics(self, success: bool = None, blocked: bool = False, 
+                               response_time: float = 0.0, detected: bool = False):
+        """Update stealth effectiveness metrics with detailed tracking"""
+        try:
+            self.stealth_metrics['total_requests'] += 1
+            
+            if success is not None:
+                if success:
+                    self.stealth_metrics['successful_requests'] += 1
+                    self.stealth_metrics['consecutive_successes'] += 1
+                else:
+                    self.stealth_metrics['consecutive_successes'] = 0
+            
+            if blocked:
+                self.stealth_metrics['blocked_requests'] += 1
+                self.stealth_metrics['last_detection'] = datetime.now()
+                self.stealth_metrics['consecutive_successes'] = 0
+            
+            if detected:
+                self.stealth_metrics['last_detection'] = datetime.now()
+            
+            # Update average response time
+            if response_time > 0:
+                total_time = self.stealth_metrics['average_response_time'] * (self.stealth_metrics['total_requests'] - 1)
+                self.stealth_metrics['average_response_time'] = (total_time + response_time) / self.stealth_metrics['total_requests']
+            
+            # Calculate stealth effectiveness percentage
+            if self.stealth_metrics['total_requests'] > 0:
+                success_rate = self.stealth_metrics['successful_requests'] / self.stealth_metrics['total_requests']
+                block_rate = self.stealth_metrics['blocked_requests'] / self.stealth_metrics['total_requests']
+                
+                # Stealth effectiveness considers both success rate and lack of blocking
+                self.stealth_metrics['stealth_effectiveness'] = max(0.0, min(100.0, 
+                    (success_rate * 100) - (block_rate * 50)  # Blocking heavily penalized
+                ))
+            
+            # Update risk level based on recent performance
+            self._update_risk_level_from_metrics()
+            
+        except Exception as e:
+            logger.debug(f"Error updating stealth metrics: {e}")
+    
+    def _log_stealth_effectiveness(self):
+        """Log comprehensive stealth effectiveness analysis"""
+        try:
+            metrics = self.stealth_metrics
+            session_duration = (datetime.now() - metrics['session_start']).total_seconds() / 60  # minutes
+            
+            logger.info("🥷 STEALTHMASTER AI EFFECTIVENESS REPORT")
+            logger.info("=" * 50)
+            logger.info(f"   📊 SESSION DURATION: {session_duration:.1f} minutes")
+            logger.info(f"   🎯 TOTAL REQUESTS: {metrics['total_requests']}")
+            logger.info(f"   ✅ SUCCESSFUL: {metrics['successful_requests']} ({metrics['successful_requests']/max(1,metrics['total_requests'])*100:.1f}%)")
+            logger.info(f"   🚫 BLOCKED: {metrics['blocked_requests']} ({metrics['blocked_requests']/max(1,metrics['total_requests'])*100:.1f}%)")
+            logger.info(f"   🤖 CAPTCHA ENCOUNTERS: {metrics['captcha_encounters']}")
+            logger.info(f"   🔄 RECOVERY ATTEMPTS: {metrics['recovery_attempts']}")
+            logger.info(f"   ✨ SUCCESSFUL RECOVERIES: {metrics['successful_recoveries']}")
+            logger.info(f"   ⚡ AVG RESPONSE TIME: {metrics['average_response_time']:.2f}ms")
+            logger.info(f"   🔥 CONSECUTIVE SUCCESSES: {metrics['consecutive_successes']}")
+            logger.info(f"   🎭 FINGERPRINT CHANGES: {metrics['fingerprint_changes']}")
+            logger.info(f"   🌐 PROXY ROTATIONS: {metrics['proxy_rotations']}")
+            
+            # Stealth effectiveness score
+            effectiveness = metrics['stealth_effectiveness']
+            if effectiveness >= 90:
+                status = "🟢 EXCELLENT"
+            elif effectiveness >= 75:
+                status = "🟡 GOOD"
+            elif effectiveness >= 50:
+                status = "🟠 MODERATE"
+            else:
+                status = "🔴 COMPROMISED"
+            
+            logger.critical(f"   🛡️  STEALTH EFFECTIVENESS: {effectiveness:.1f}% - {status}")
+            logger.critical(f"   ⚠️  RISK LEVEL: {metrics['risk_level']}")
+            
+            # Last detection warning
+            if metrics['last_detection']:
+                time_since = (datetime.now() - metrics['last_detection']).total_seconds() / 60
+                logger.warning(f"   🚨 LAST DETECTION: {time_since:.1f} minutes ago")
+            else:
+                logger.info(f"   🎉 NO DETECTIONS THIS SESSION")
+            
+            logger.info("=" * 50)
+            
+            # Performance recommendations
+            if effectiveness < 70:
+                logger.warning("🔧 STEALTH RECOMMENDATIONS:")
+                if metrics['blocked_requests'] > metrics['successful_requests'] * 0.3:
+                    logger.warning("   • Consider rotating profiles more frequently")
+                    logger.warning("   • Implement longer delays between requests")
+                if metrics['captcha_encounters'] > 3:
+                    logger.warning("   • Review behavioral patterns for human-likeness")
+                    logger.warning("   • Consider using different browser fingerprints")
+                if metrics['average_response_time'] > 5000:
+                    logger.warning("   • Network may be throttled or detected")
+                    logger.warning("   • Consider proxy rotation")
+                    
+        except Exception as e:
+            logger.debug(f"Error logging stealth effectiveness: {e}")
+    
+    def _update_risk_level(self, level: str = None):
+        """Update risk level with automatic assessment if no level provided"""
+        try:
+            if level:
+                self.stealth_metrics['risk_level'] = level
+            else:
+                self._update_risk_level_from_metrics()
+                
+        except Exception as e:
+            logger.debug(f"Error updating risk level: {e}")
+    
+    def _update_risk_level_from_metrics(self):
+        """Automatically determine risk level from current metrics"""
+        try:
+            metrics = self.stealth_metrics
+            
+            # Calculate risk factors
+            if metrics['total_requests'] == 0:
+                self.stealth_metrics['risk_level'] = 'LOW'
+                return
+            
+            block_rate = metrics['blocked_requests'] / metrics['total_requests']
+            success_rate = metrics['successful_requests'] / metrics['total_requests']
+            recent_captchas = metrics['captcha_encounters']
+            consecutive_failures = metrics['total_requests'] - metrics['successful_requests'] - metrics['consecutive_successes']
+            
+            # Time since last detection
+            time_since_detection = float('inf')
+            if metrics['last_detection']:
+                time_since_detection = (datetime.now() - metrics['last_detection']).total_seconds() / 60  # minutes
+            
+            # Risk assessment logic
+            risk_score = 0
+            
+            # Blocking rate (most critical factor)
+            if block_rate >= 0.5:
+                risk_score += 40
+            elif block_rate >= 0.3:
+                risk_score += 25
+            elif block_rate >= 0.1:
+                risk_score += 10
+            
+            # Success rate
+            if success_rate < 0.3:
+                risk_score += 30
+            elif success_rate < 0.5:
+                risk_score += 20
+            elif success_rate < 0.7:
+                risk_score += 10
+            
+            # Recent captcha encounters
+            if recent_captchas >= 5:
+                risk_score += 20
+            elif recent_captchas >= 3:
+                risk_score += 15
+            elif recent_captchas >= 1:
+                risk_score += 5
+            
+            # Consecutive failures
+            if consecutive_failures >= 10:
+                risk_score += 15
+            elif consecutive_failures >= 5:
+                risk_score += 10
+            elif consecutive_failures >= 3:
+                risk_score += 5
+            
+            # Time since last detection (good if long time)
+            if time_since_detection < 5:  # Very recent detection
+                risk_score += 20
+            elif time_since_detection < 15:
+                risk_score += 10
+            elif time_since_detection < 60:
+                risk_score += 5
+            # No penalty if > 60 minutes
+            
+            # Determine risk level
+            if risk_score >= 60:
+                risk_level = 'CRITICAL'
+            elif risk_score >= 40:
+                risk_level = 'HIGH'
+            elif risk_score >= 20:
+                risk_level = 'MEDIUM'
+            else:
+                risk_level = 'LOW'
+            
+            self.stealth_metrics['risk_level'] = risk_level
+            
+            # Log risk level changes
+            if hasattr(self, '_last_risk_level') and self._last_risk_level != risk_level:
+                logger.warning(f"🚨 RISK LEVEL CHANGED: {self._last_risk_level} → {risk_level}")
+                logger.warning(f"   📊 Risk Score: {risk_score}/100")
+                logger.warning(f"   🚫 Block Rate: {block_rate:.1%}")
+                logger.warning(f"   ✅ Success Rate: {success_rate:.1%}")
+            
+            self._last_risk_level = risk_level
+            
+        except Exception as e:
+            logger.debug(f"Error updating risk level from metrics: {e}")
+            self.stealth_metrics['risk_level'] = 'UNKNOWN'

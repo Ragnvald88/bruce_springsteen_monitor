@@ -63,7 +63,6 @@ class StealthLogger(logging.Logger):
     def _log(self, level, msg, args, **kwargs):
         msg = self._sanitize_message(str(msg))
         super()._log(level, msg, args, **kwargs)
-
 # Replace default logger class
 logging.setLoggerClass(StealthLogger)
 

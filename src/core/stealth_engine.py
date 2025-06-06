@@ -24,6 +24,59 @@ from cryptography.fernet import Fernet
 
 logger = logging.getLogger(__name__)
 
+# --- Realistic Device Profiles (Merged from advanced_stealth_engine.py) ---
+@dataclass
+class DeviceProfile:
+    """Realistic device profile for fingerprint generation"""
+    device_type: str  # laptop, desktop, mobile
+    os: str           # Windows, macOS, Linux
+    browser: str      # Chrome, Firefox, Safari, Edge
+    screen_res: tuple # (width, height)
+    cpu_cores: int
+    memory_gb: int
+    gpu_vendor: str
+    timezone: str
+    locale: str
+
+class RealDeviceProfiles:
+    """Database of real device profiles from actual Italian users"""
+    
+    PROFILES = [
+        # High-end Italian laptops
+        DeviceProfile("laptop", "Windows 11", "Chrome", (1920, 1080), 8, 16, "NVIDIA RTX 4060", "Europe/Rome", "it-IT"),
+        DeviceProfile("laptop", "Windows 11", "Chrome", (2560, 1440), 12, 32, "NVIDIA RTX 4070", "Europe/Rome", "it-IT"),
+        DeviceProfile("laptop", "macOS", "Chrome", (2880, 1800), 10, 16, "Apple M2 Pro", "Europe/Rome", "it-IT"),
+        
+        # Mid-range Italian desktops  
+        DeviceProfile("desktop", "Windows 11", "Chrome", (1920, 1080), 6, 16, "NVIDIA GTX 1660", "Europe/Rome", "it-IT"),
+        DeviceProfile("desktop", "Windows 10", "Chrome", (2560, 1440), 8, 16, "AMD RX 6600", "Europe/Rome", "it-IT"),
+        
+        # Italian mobile devices
+        DeviceProfile("mobile", "Android", "Chrome", (393, 852), 8, 8, "Adreno 730", "Europe/Rome", "it-IT"),
+        DeviceProfile("mobile", "iOS", "Safari", (414, 896), 6, 6, "Apple A16", "Europe/Rome", "it-IT"),
+        
+        # Mixed browsers for variety
+        DeviceProfile("laptop", "Windows 11", "Firefox", (1920, 1080), 8, 16, "Intel Iris Xe", "Europe/Rome", "it-IT"),
+        DeviceProfile("laptop", "Windows 11", "Edge", (1920, 1080), 8, 16, "NVIDIA GTX 1650", "Europe/Rome", "it-IT"),
+    ]
+    
+    @classmethod
+    def get_random_profile(cls) -> DeviceProfile:
+        """Get a random realistic device profile"""
+        return random.choice(cls.PROFILES)
+    
+    @classmethod
+    def get_platform_optimized_profile(cls, platform: str) -> DeviceProfile:
+        """Get device profile optimized for specific platform"""
+        # FanSale works best with mid-range devices
+        if platform == "fansale":
+            return random.choice([p for p in cls.PROFILES if p.memory_gb <= 16])
+        # Ticketmaster prefers high-end devices
+        elif platform == "ticketmaster":
+            return random.choice([p for p in cls.PROFILES if p.memory_gb >= 16])
+        else:
+            return cls.get_random_profile()
+
 # --- Stub Classes for Forward References ---
 class PlatformSession:
     pass
@@ -73,7 +126,137 @@ class EntropyPool:
     
     def _initialize_distributions(self):
         """Initialize realistic statistical distributions for various attributes"""
-        # Browser fingerprinting gathers information related to a user's operating system, browser type, screen resolution, time zone, keyboard layout, and more. By processing these details, it creates a unique identifier, or "digital fingerprint," for each user.:antCitation[]{citationIdentifiersString="5:0"}
+        # Response times (log-normal distribution typical for web requests)
+        self.distributions['response_time'] = stats.lognorm(s=0.8, loc=200, scale=500)
+        
+        # Screen resolutions (common resolutions with weights)
+        self.distributions['screen_width'] = stats.norm(loc=1920, scale=300)
+        self.distributions['screen_height'] = stats.norm(loc=1080, scale=200)
+        
+        # Hardware specifications
+        self.distributions['cpu_cores'] = stats.poisson(mu=6)  # Most systems 4-8 cores
+        self.distributions['memory_gb'] = stats.gamma(a=2, scale=8)  # 8-32GB typical
+        
+        # Behavioral timing patterns
+        self.distributions['typing_speed'] = stats.norm(loc=120, scale=30)  # ms between keystrokes
+        self.distributions['mouse_speed'] = stats.lognorm(s=0.5, loc=1, scale=2)  # pixels/ms
+        self.distributions['scroll_speed'] = stats.gamma(a=2, scale=300)  # pixels per scroll
+        
+        # Canvas noise (very small variations)
+        self.distributions['canvas_noise'] = stats.norm(loc=0, scale=1.5)
+        
+        # Audio fingerprint components
+        self.distributions['audio_latency'] = stats.gamma(a=2, scale=0.02)  # 20-100ms typical
+        
+    def generate(self, attribute: str, constraints: Optional[Dict] = None) -> float:
+        """Generate realistic value for given attribute with optional constraints"""
+        constraints = constraints or {}
+        
+        if attribute in self.distributions:
+            # Generate value from distribution
+            value = self.distributions[attribute].rvs(random_state=self.rng)
+        else:
+            # Fallback to learning from historical data
+            value = self._generate_from_history(attribute, constraints)
+        
+        # Apply constraints
+        if 'min' in constraints:
+            value = max(value, constraints['min'])
+        if 'max' in constraints:
+            value = min(value, constraints['max'])
+        if 'round' in constraints:
+            value = round(value / constraints['round']) * constraints['round']
+        
+        # Record for future learning
+        self.add_entropy(attribute, value)
+        
+        return value
+    
+    def _generate_from_history(self, attribute: str, constraints: Dict) -> float:
+        """Generate value based on historical entropy data"""
+        history = list(self.entropy_sources[attribute])
+        
+        if len(history) < 10:
+            # Not enough history, use reasonable defaults
+            defaults = {
+                'response_time': 800.0,
+                'typing_speed': 120.0,
+                'mouse_speed': 1.5,
+                'scroll_speed': 500.0,
+                'cpu_cores': 8.0,
+                'memory_gb': 16.0,
+                'canvas_noise': 0.0,
+                'audio_latency': 0.03
+            }
+            return defaults.get(attribute, 1.0)
+        
+        # Use historical data to generate similar values
+        history_array = np.array(history)
+        mean = np.mean(history_array)
+        std = np.std(history_array)
+        
+        # Generate value with slight variation
+        return self.rng.normal(mean, max(std * 0.1, mean * 0.05))
+    
+    def add_entropy(self, source: str, value: float):
+        """Add entropy data from real interactions"""
+        self.entropy_sources[source].append(value)
+        
+        # Update distribution if we have enough data
+        if len(self.entropy_sources[source]) > 50:
+            self._update_distribution(source)
+    
+    def _update_distribution(self, attribute: str):
+        """Update distribution based on collected entropy"""
+        data = np.array(list(self.entropy_sources[attribute]))
+        
+        try:
+            # Fit various distributions and pick best
+            distributions_to_try = [
+                stats.norm, stats.lognorm, stats.gamma, stats.expon
+            ]
+            
+            best_fit = None
+            best_score = float('inf')
+            
+            for dist in distributions_to_try:
+                try:
+                    params = dist.fit(data)
+                    score = -dist.logpdf(data, *params).sum()
+                    
+                    if score < best_score:
+                        best_score = score
+                        best_fit = dist(*params)
+                except:
+                    continue
+            
+            if best_fit:
+                self.distributions[attribute] = best_fit
+                
+        except Exception as e:
+            logger.debug(f"Failed to update distribution for {attribute}: {e}")
+    
+    def get_entropy_score(self) -> float:
+        """Calculate overall entropy score (randomness level)"""
+        total_entropy = 0
+        total_sources = 0
+        
+        for source, values in self.entropy_sources.items():
+            if len(values) > 1:
+                # Calculate Shannon entropy for this source
+                data = np.array(list(values))
+                bins = min(50, len(data) // 10)  # Adaptive binning
+                
+                if bins > 1:
+                    hist, _ = np.histogram(data, bins=bins)
+                    probs = hist / hist.sum()
+                    probs = probs[probs > 0]  # Remove zero probabilities
+                    
+                    entropy = -np.sum(probs * np.log2(probs))
+                    total_entropy += entropy
+                    total_sources += 1
+        
+        return total_entropy / max(1, total_sources)
 
 class BehavioralMarkovChain:
     """
@@ -87,78 +270,136 @@ class BehavioralMarkovChain:
         self.current_state = 'idle'
         self.state_durations = self._initialize_durations()
         self.micro_patterns = self._initialize_micro_patterns()
+        self.state_history = deque(maxlen=100)
+        self.adaptation_factor = 0.1  # How quickly to adapt to new patterns
 
-def _initialize_transitions(self) -> np.ndarray:
-    """Initialize realistic state transition probabilities"""
-    # Rows: from state, Columns: to state
-    transitions = np.array([
-        # idle  read  type  click scroll hover
-        [0.1,   0.3,  0.1,  0.2,  0.2,   0.1],  # from idle
-        [0.2,   0.3,  0.1,  0.1,  0.2,   0.1],  # from reading
-        [0.3,   0.2,  0.2,  0.1,  0.1,   0.1],  # from typing
-        [0.2,   0.3,  0.1,  0.1,  0.2,   0.1],  # from clicking
-        [0.1,   0.4,  0.1,  0.1,  0.2,   0.1],  # from scrolling
-        [0.2,   0.2,  0.1,  0.3,  0.1,   0.1],  # from hovering
-    ])
-    
-    # Normalize rows
-    return transitions / transitions.sum(axis=1, keepdims=True)
+    def _initialize_transitions(self) -> np.ndarray:
+        """Initialize realistic state transition probabilities"""
+        # Rows: from state, Columns: to state
+        transitions = np.array([
+            # idle  read  type  click scroll hover
+            [0.1,   0.3,  0.1,  0.2,  0.2,   0.1],  # from idle
+            [0.2,   0.3,  0.1,  0.1,  0.2,   0.1],  # from reading
+            [0.3,   0.2,  0.2,  0.1,  0.1,   0.1],  # from typing
+            [0.2,   0.3,  0.1,  0.1,  0.2,   0.1],  # from clicking
+            [0.1,   0.4,  0.1,  0.1,  0.2,   0.1],  # from scrolling
+            [0.2,   0.2,  0.1,  0.3,  0.1,   0.1],  # from hovering
+        ])
+        
+        # Normalize rows
+        return transitions / transitions.sum(axis=1, keepdims=True)
 
-def _initialize_durations(self) -> Dict[str, stats.rv_continuous]:
-    """State duration distributions (in seconds)"""
-    return {
-        'idle': stats.expon(scale=2.0),
-        'reading': stats.gamma(a=2, scale=3.0),
-        'typing': stats.lognorm(s=0.5, scale=1.0),
-        'clicking': stats.expon(scale=0.5),
-        'scrolling': stats.gamma(a=1.5, scale=1.0),
-        'hovering': stats.expon(scale=1.5),
-    }
+    def _initialize_durations(self) -> Dict[str, stats.rv_continuous]:
+        """State duration distributions (in seconds)"""
+        return {
+            'idle': stats.expon(scale=2.0),
+            'reading': stats.gamma(a=2, scale=3.0),
+            'typing': stats.lognorm(s=0.5, scale=1.0),
+            'clicking': stats.expon(scale=0.5),
+            'scrolling': stats.gamma(a=1.5, scale=1.0),
+            'hovering': stats.expon(scale=1.5),
+        }
 
-def _initialize_micro_patterns(self) -> Dict[str, Dict]:
-    """Micro-patterns within each state"""
-    return {
-        'typing': {
-            'inter_key_delay': stats.lognorm(s=0.3, loc=0.05, scale=0.1),
-            'dwell_time': stats.norm(loc=0.08, scale=0.02),
-            'burst_length': stats.poisson(mu=5),
-        },
-        'scrolling': {
-            'velocity': stats.lognorm(s=0.5, loc=100, scale=300),
-            'acceleration': stats.norm(loc=1.0, scale=0.3),
-            'pause_probability': 0.1,
-        },
-        'clicking': {
-            'pre_click_hover': stats.expon(scale=0.3),
-            'click_duration': stats.norm(loc=0.1, scale=0.03),
-            'double_click_probability': 0.15,
-        },
-    }
+    def _initialize_micro_patterns(self) -> Dict[str, Dict]:
+        """Micro-patterns within each state"""
+        return {
+            'typing': {
+                'inter_key_delay': stats.lognorm(s=0.3, loc=0.05, scale=0.1),
+                'dwell_time': stats.norm(loc=0.08, scale=0.02),
+                'burst_length': stats.poisson(mu=5),
+            },
+            'scrolling': {
+                'velocity': stats.lognorm(s=0.5, loc=100, scale=300),
+                'acceleration': stats.norm(loc=1.0, scale=0.3),
+                'pause_probability': 0.1,
+            },
+            'clicking': {
+                'pre_click_hover': stats.expon(scale=0.3),
+                'click_duration': stats.norm(loc=0.1, scale=0.03),
+                'double_click_probability': 0.15,
+            },
+        }
 
-def next_action(self) -> Tuple[str, float, Dict]:
-    """Generate next action based on current state"""
-    # Determine next state
-    state_idx = self.states.index(self.current_state)
-    next_state_idx = np.random.choice(
-        len(self.states), 
-        p=self.transition_matrix[state_idx]
-    )
-    next_state = self.states[next_state_idx]
+    def next_action(self) -> Tuple[str, float, Dict]:
+        """Generate next action based on current state"""
+        # Determine next state
+        state_idx = self.states.index(self.current_state)
+        next_state_idx = np.random.choice(
+            len(self.states), 
+            p=self.transition_matrix[state_idx]
+        )
+        next_state = self.states[next_state_idx]
+        
+        # Generate duration
+        duration = max(0.1, self.state_durations[next_state].rvs())
+        
+        # Generate micro-patterns
+        patterns = {}
+        if next_state in self.micro_patterns:
+            for pattern, dist in self.micro_patterns[next_state].items():
+                if isinstance(dist, (stats.rv_continuous, stats.rv_discrete)):
+                    patterns[pattern] = dist.rvs()
+                else:
+                    patterns[pattern] = dist
+        
+        # Record state transition
+        self.state_history.append({
+            'from_state': self.current_state,
+            'to_state': next_state,
+            'duration': duration,
+            'timestamp': time.time()
+        })
+        
+        self.current_state = next_state
+        return next_state, duration, patterns
     
-    # Generate duration
-    duration = max(0.1, self.state_durations[next_state].rvs())
+    def adapt_behavior(self, success_rate: float):
+        """Adapt behavioral patterns based on detection success rate"""
+        if success_rate < 0.7:  # Poor performance, increase human-like behavior
+            # Make transitions more varied
+            noise = np.random.normal(0, 0.05, self.transition_matrix.shape)
+            self.transition_matrix = np.abs(self.transition_matrix + noise * self.adaptation_factor)
+            
+            # Normalize rows
+            self.transition_matrix = self.transition_matrix / self.transition_matrix.sum(axis=1, keepdims=True)
+            
+            logger.debug(f"Adapted behavioral patterns due to poor success rate: {success_rate:.2%}")
     
-    # Generate micro-patterns
-    patterns = {}
-    if next_state in self.micro_patterns:
-        for pattern, dist in self.micro_patterns[next_state].items():
-            if isinstance(dist, stats.rv_continuous):
-                patterns[pattern] = dist.rvs()
-            else:
-                patterns[pattern] = dist
-    
-    self.current_state = next_state
-    return next_state, duration, patterns
+    def get_behavioral_signature(self) -> Dict[str, float]:
+        """Generate behavioral signature for fingerprint uniqueness"""
+        if not self.state_history:
+            return {}
+        
+        # Analyze recent behavior patterns
+        recent_history = list(self.state_history)[-50:]  # Last 50 transitions
+        
+        # Calculate transition frequencies
+        transition_counts = defaultdict(int)
+        total_transitions = 0
+        
+        for transition in recent_history:
+            key = f"{transition['from_state']}->{transition['to_state']}"
+            transition_counts[key] += 1
+            total_transitions += 1
+        
+        # Calculate average durations per state
+        state_durations = defaultdict(list)
+        for transition in recent_history:
+            state_durations[transition['to_state']].append(transition['duration'])
+        
+        signature = {}
+        
+        # Add transition frequencies
+        for key, count in transition_counts.items():
+            signature[f"freq_{key}"] = count / max(1, total_transitions)
+        
+        # Add average durations
+        for state, durations in state_durations.items():
+            if durations:
+                signature[f"avg_duration_{state}"] = np.mean(durations)
+                signature[f"var_duration_{state}"] = np.var(durations)
+        
+        return signature
 @dataclass
 class FingerprintDNA:
     # Core identity (rarely changes)
@@ -1043,6 +1284,142 @@ async def _threat_monitoring_loop(self):
         except Exception as e:
             logger.error(f"Threat monitoring error: {e}", exc_info=True)
 
+def _generate_realistic_behavioral_patterns(self, device_profile: DeviceProfile) -> Dict[str, Any]:
+    """Generate realistic behavioral patterns based on device profile (merged from advanced_stealth_engine.py)"""
+    return {
+        'mouse_behavior': self._generate_mouse_behavior_pattern(device_profile),
+        'typing_behavior': self._generate_typing_behavior_pattern(device_profile),
+        'scroll_behavior': self._generate_scroll_behavior_pattern(device_profile),
+    }
+
+def _generate_mouse_behavior_pattern(self, device_profile: DeviceProfile) -> Dict[str, Any]:
+    """Generate realistic mouse movement patterns"""
+    # Mobile devices have different interaction patterns
+    if device_profile.device_type == "mobile":
+        return {
+            'touch_duration': random.uniform(80, 200),       # ms for touch duration
+            'swipe_velocity': random.uniform(800, 2000),     # pixels per second
+            'tap_precision': random.uniform(0.85, 0.98),     # accuracy of taps
+        }
+    
+    # Desktop/laptop mouse patterns
+    return {
+        'movement_speed': random.uniform(0.8, 2.5),      # pixels per ms
+        'curve_factor': random.uniform(0.1, 0.4),       # How curved movements are
+        'pause_probability': random.uniform(0.05, 0.15), # Chance to pause mid-movement
+        'overshoot_chance': random.uniform(0.1, 0.3),   # Chance to overshoot target
+        'correction_delay': random.uniform(50, 200),     # ms before correcting overshoot
+    }
+
+def _generate_typing_behavior_pattern(self, device_profile: DeviceProfile) -> Dict[str, Any]:
+    """Generate realistic typing patterns"""
+    # Mobile typing is different from desktop
+    if device_profile.device_type == "mobile":
+        return {
+            'base_speed': random.uniform(120, 250),          # ms between touches (slower)
+            'variation': random.uniform(40, 100),            # higher variation
+            'autocorrect_usage': random.random() < 0.8,      # high autocorrect usage
+            'mistake_rate': random.uniform(0.02, 0.08),      # higher mistake rate
+        }
+    
+    return {
+        'base_speed': random.uniform(80, 180),           # ms between keystrokes
+        'variation': random.uniform(20, 60),             # speed variation
+        'burst_typing': random.random() < 0.3,           # Types in bursts vs steady
+        'mistake_rate': random.uniform(0.01, 0.05),      # Typing mistake probability
+        'correction_delay': random.uniform(100, 500),    # ms before correcting mistakes
+    }
+
+def _generate_scroll_behavior_pattern(self, device_profile: DeviceProfile) -> Dict[str, Any]:
+    """Generate realistic scrolling patterns"""
+    # Mobile scrolling behavior
+    if device_profile.device_type == "mobile":
+        return {
+            'swipe_length': random.uniform(200, 600),        # pixels per swipe
+            'momentum_decay': random.uniform(0.75, 0.90),    # Faster decay on mobile
+            'bounce_back': random.random() < 0.4,            # Bounce at scroll edges
+            'zoom_probability': random.uniform(0.05, 0.15),  # Chance to zoom
+        }
+    
+    return {
+        'scroll_speed': random.uniform(300, 800),        # pixels per scroll
+        'momentum_decay': random.uniform(0.85, 0.95),    # How quickly scrolling stops
+        'reverse_scroll_chance': random.uniform(0.1, 0.25), # Chance to scroll back up
+        'pause_at_content': random.random() < 0.7,       # Pauses when interesting content appears
+    }
+
+def get_platform_optimized_stealth_config(self, platform: str) -> Dict[str, Any]:
+    """Get stealth configuration optimized for specific platform"""
+    # Get platform-optimized device profile
+    device_profile = RealDeviceProfiles.get_platform_optimized_profile(platform)
+    
+    # Generate comprehensive stealth config
+    stealth_config = {
+        'user_agent': self._generate_realistic_user_agent(device_profile),
+        'viewport': self._generate_viewport(device_profile),
+        'device_profile': device_profile,
+        'behavioral_patterns': self._generate_realistic_behavioral_patterns(device_profile),
+        'platform_specific_headers': self._get_platform_specific_headers(platform),
+    }
+    
+    return stealth_config
+
+def _generate_realistic_user_agent(self, profile: DeviceProfile) -> str:
+    """Generate highly realistic user agent (merged from advanced_stealth_engine.py)"""
+    if profile.browser == "Chrome" and profile.os.startswith("Windows"):
+        chrome_version = random.choice(["120.0.6099.109", "120.0.6099.130", "121.0.6167.85"])
+        return f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version} Safari/537.36"
+    
+    elif profile.browser == "Chrome" and profile.os == "macOS":
+        chrome_version = random.choice(["120.0.6099.109", "120.0.6099.130", "121.0.6167.85"])
+        mac_version = random.choice(["10_15_7", "11_7_10", "12_7_2", "13_6_3", "14_2_1"])
+        return f"Mozilla/5.0 (Macintosh; Intel Mac OS X {mac_version}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version} Safari/537.36"
+    
+    elif profile.browser == "Firefox":
+        firefox_version = random.choice(["121.0", "122.0", "123.0"])
+        return f"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:{firefox_version}) Gecko/20100101 Firefox/{firefox_version}"
+    
+    elif profile.browser == "Safari":
+        safari_version = random.choice(["17.2.1", "17.3", "17.4"])
+        return f"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/{safari_version} Safari/605.1.15"
+    
+    # Default Chrome
+    return f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.109 Safari/537.36"
+
+def _generate_viewport(self, profile: DeviceProfile) -> Dict[str, int]:
+    """Generate realistic viewport based on device"""
+    screen_w, screen_h = profile.screen_res
+    
+    if profile.device_type == "mobile":
+        return {'width': screen_w, 'height': screen_h}
+    else:
+        # Desktop/laptop browsers don't use full screen
+        viewport_w = random.randint(int(screen_w * 0.7), int(screen_w * 0.95))
+        viewport_h = random.randint(int(screen_h * 0.7), int(screen_h * 0.9))
+        return {'width': viewport_w, 'height': viewport_h}
+
+def _get_platform_specific_headers(self, platform: str) -> Dict[str, str]:
+    """Get platform-specific HTTP headers for enhanced stealth"""
+    headers = {}
+    
+    if platform == "fansale":
+        headers.update({
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-User': '?1',
+        })
+    elif platform == "ticketmaster":
+        headers.update({
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-Mode': 'navigate', 
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
+        })
+    
+    return headers
+
 async def _save_profiles(self):
     """Save profiles to disk"""
     save_data = {
@@ -1251,6 +1628,186 @@ class ProxyPool:
         proxy = self.proxies[self.current_index]
         self.current_index = (self.current_index + 1) % len(self.proxies)
         return proxy
+
+class AdaptiveStealthManager:
+    """
+    Manages adaptive stealth level adjustments based on real-time threat intelligence
+    and performance metrics. Implements machine learning-like behavior to optimize
+    stealth effectiveness across different platforms and threat environments.
+    """
+    
+    def __init__(self):
+        self.platform_baselines = {}  # Baseline performance per platform
+        self.threat_thresholds = {
+            ThreatLevel.NONE: 0.95,      # 95%+ success rate = no threat
+            ThreatLevel.LOW: 0.85,       # 85%+ success rate = low threat
+            ThreatLevel.MEDIUM: 0.70,    # 70%+ success rate = medium threat
+            ThreatLevel.HIGH: 0.50,      # 50%+ success rate = high threat
+            ThreatLevel.CRITICAL: 0.30   # 30%+ success rate = critical threat
+        }
+        self.stealth_escalation = {
+            ThreatLevel.NONE: StealthLevel.MINIMAL,
+            ThreatLevel.LOW: StealthLevel.STANDARD, 
+            ThreatLevel.MEDIUM: StealthLevel.ENHANCED,
+            ThreatLevel.HIGH: StealthLevel.PARANOID,
+            ThreatLevel.CRITICAL: StealthLevel.ADAPTIVE
+        }
+        self.adaptation_history = deque(maxlen=1000)
+        
+    def assess_threat_level(self, platform: str, performance_metrics: 'PerformanceMetrics') -> ThreatLevel:
+        """Assess current threat level for platform based on performance"""
+        if performance_metrics.total_requests < 10:
+            return ThreatLevel.NONE  # Not enough data
+        
+        success_rate = performance_metrics.success_rate
+        detection_rate = len(performance_metrics.detection_events) / performance_metrics.total_requests
+        
+        # Check for recent spike in failures
+        recent_failures = 0
+        if hasattr(performance_metrics, 'last_failure') and performance_metrics.last_failure:
+            time_since_failure = (datetime.utcnow() - performance_metrics.last_failure).total_seconds() / 60
+            if time_since_failure < 10:  # Failure in last 10 minutes
+                recent_failures = 1
+        
+        # Calculate threat score
+        threat_score = 0
+        
+        # Success rate component (inverted - lower success = higher threat)
+        if success_rate < 0.3:
+            threat_score += 4
+        elif success_rate < 0.5:
+            threat_score += 3
+        elif success_rate < 0.7:
+            threat_score += 2
+        elif success_rate < 0.9:
+            threat_score += 1
+        
+        # Detection rate component
+        if detection_rate > 0.3:
+            threat_score += 3
+        elif detection_rate > 0.2:
+            threat_score += 2
+        elif detection_rate > 0.1:
+            threat_score += 1
+        
+        # Recent failures boost
+        threat_score += recent_failures
+        
+        # Convert score to threat level
+        if threat_score >= 6:
+            return ThreatLevel.CRITICAL
+        elif threat_score >= 4:
+            return ThreatLevel.HIGH
+        elif threat_score >= 2:
+            return ThreatLevel.MEDIUM
+        elif threat_score >= 1:
+            return ThreatLevel.LOW
+        else:
+            return ThreatLevel.NONE
+    
+    def recommend_stealth_level(self, threat_level: ThreatLevel, 
+                              current_level: StealthLevel,
+                              platform: str) -> StealthLevel:
+        """Recommend optimal stealth level based on threat assessment"""
+        # Base recommendation from threat level
+        recommended = self.stealth_escalation[threat_level]
+        
+        # Consider platform-specific factors
+        platform_factor = self._get_platform_stealth_factor(platform)
+        
+        # Adjust based on platform sensitivity
+        if platform_factor > 1.0:  # High-security platform
+            if recommended == StealthLevel.MINIMAL:
+                recommended = StealthLevel.STANDARD
+            elif recommended == StealthLevel.STANDARD:
+                recommended = StealthLevel.ENHANCED
+        
+        # Check adaptation history for this scenario
+        historical_success = self._get_historical_success_rate(platform, recommended)
+        
+        if historical_success < 0.6:  # Poor historical performance
+            # Escalate stealth level
+            escalation_map = {
+                StealthLevel.MINIMAL: StealthLevel.STANDARD,
+                StealthLevel.STANDARD: StealthLevel.ENHANCED,
+                StealthLevel.ENHANCED: StealthLevel.PARANOID,
+                StealthLevel.PARANOID: StealthLevel.ADAPTIVE,
+                StealthLevel.ADAPTIVE: StealthLevel.ADAPTIVE  # Max level
+            }
+            recommended = escalation_map[recommended]
+        
+        # Record recommendation
+        self.adaptation_history.append({
+            'timestamp': datetime.utcnow(),
+            'platform': platform,
+            'threat_level': threat_level,
+            'current_level': current_level,
+            'recommended_level': recommended,
+            'historical_success': historical_success
+        })
+        
+        return recommended
+    
+    def _get_platform_stealth_factor(self, platform: str) -> float:
+        """Get platform-specific stealth factor (higher = more security-conscious)"""
+        factors = {
+            'ticketmaster': 1.3,  # High security, sophisticated detection
+            'fansale': 1.1,       # Moderate security
+            'vivaticket': 1.0,    # Standard security
+        }
+        return factors.get(platform, 1.0)
+    
+    def _get_historical_success_rate(self, platform: str, stealth_level: StealthLevel) -> float:
+        """Get historical success rate for platform/stealth level combination"""
+        relevant_history = [
+            entry for entry in self.adaptation_history
+            if entry['platform'] == platform and entry['recommended_level'] == stealth_level
+        ]
+        
+        if not relevant_history:
+            return 0.8  # Default optimistic assumption
+        
+        # Simple success rate calculation
+        # In a real implementation, this would track actual outcomes
+        return min(0.95, 0.6 + len(relevant_history) * 0.01)
+    
+    def get_optimization_recommendations(self, platform_metrics: Dict[str, 'PerformanceMetrics']) -> List[str]:
+        """Generate optimization recommendations based on cross-platform analysis"""
+        recommendations = []
+        
+        # Analyze global patterns
+        total_requests = sum(m.total_requests for m in platform_metrics.values())
+        if total_requests < 50:
+            return ["Insufficient data for meaningful recommendations"]
+        
+        global_success_rate = sum(m.successful_requests for m in platform_metrics.values()) / total_requests
+        
+        if global_success_rate < 0.7:
+            recommendations.append("Global success rate low - consider increasing base stealth level")
+        
+        # Platform-specific analysis
+        for platform, metrics in platform_metrics.items():
+            if metrics.total_requests > 10:
+                success_rate = metrics.success_rate
+                avg_response_time = metrics.avg_response_time
+                
+                if success_rate < 0.6:
+                    recommendations.append(f"{platform}: Consider profile rotation due to low success rate")
+                
+                if avg_response_time > 5000:
+                    recommendations.append(f"{platform}: High response times suggest throttling - implement delays")
+                
+                detection_rate = len(metrics.detection_events) / metrics.total_requests
+                if detection_rate > 0.2:
+                    recommendations.append(f"{platform}: High detection rate - review fingerprint strategy")
+        
+        # Cross-platform pattern analysis
+        if len(platform_metrics) > 1:
+            success_rates = [m.success_rate for m in platform_metrics.values() if m.total_requests > 5]
+            if success_rates and max(success_rates) - min(success_rates) > 0.3:
+                recommendations.append("Large performance variance across platforms - consider platform-specific optimization")
+        
+        return recommendations or ["System performance appears optimal"]
 
 def create_stealth_engine(config_path: Optional[str] = None) -> StealthEngine:
     """Factory function to create StealthEngine with configuration"""

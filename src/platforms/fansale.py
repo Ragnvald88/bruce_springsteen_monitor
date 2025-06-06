@@ -139,29 +139,45 @@ class FansaleMonitor:
     async def initialize(self):
         """Initialize with Fansale-specific ultra-stealth and authentication"""
         try:
-            logger.info(f"Initializing Fansale ultra-stealth for {self.event_name}")
+            logger.critical("🚀 FANSALE BROWSER INITIALIZATION STARTING")
+            logger.critical(f"   📋 Event: {self.event_name}")
+            logger.critical(f"   🌐 URL: {self.url}")
+            logger.critical(f"   👤 Profile: {getattr(self.profile, 'profile_id', 'unknown')}")
             
-            # Get stealth browser context
+            # Get stealth browser context with enhanced logging
+            logger.info("   🎭 Creating stealth browser context...")
             self.browser_context = await self.browser_manager.get_stealth_context(
                 self.profile, force_new=False
             )
+            logger.info("   ✅ Browser context created successfully")
             
             # Create page with advanced stealth
+            logger.info("   📄 Creating new browser page...")
             self.page = await self.browser_context.new_page()
+            logger.info("   ✅ Browser page created successfully")
             
             # Setup Fansale-specific stealth measures
+            logger.info("   🛡️  Injecting FanSale stealth measures...")
             await self._inject_fansale_stealth()
             await self._setup_intelligent_blocking()
             await self._configure_advanced_behavior()
             await self._setup_api_monitoring()
+            logger.info("   ✅ Stealth measures injected successfully")
             
             # Perform authentication if credentials are available
-            await self._perform_authentication()
+            logger.critical("   🔐 STARTING FANSALE AUTHENTICATION...")
+            auth_success = await self._perform_authentication()
+            if auth_success:
+                logger.critical("   🎉 FANSALE AUTHENTICATION SUCCESSFUL!")
+            else:
+                logger.error("   ❌ FANSALE AUTHENTICATION FAILED!")
             
-            logger.info(f"Fansale ultra-stealth initialized for {self.event_name}")
+            logger.critical("🎯 FANSALE BROWSER READY FOR TICKET HUNTING!")
+            logger.critical("   👀 Browser windows should now be visible")
+            logger.critical("   🔍 Watch for authentication and ticket detection")
             
         except Exception as e:
-            logger.error(f"Failed to initialize Fansale stealth: {e}")
+            logger.error(f"💥 FAILED TO INITIALIZE FANSALE BROWSER: {e}")
             raise
 
     async def _inject_fansale_stealth(self):
@@ -1756,19 +1772,29 @@ class FansaleMonitor:
             return opportunities
 
     async def attempt_purchase(self, opportunity: EnhancedTicketOpportunity) -> bool:
-        """Attempt to purchase Fansale ticket with advanced automation"""
+        """Attempt to purchase Fansale ticket with advanced automation and manual handoff"""
         if not self.page:
             logger.error("Cannot attempt purchase: no page available")
             return False
         
         try:
-            logger.critical(f"🚀 ATTEMPTING FANSALE PURCHASE: {opportunity.section} - €{opportunity.price}")
+            logger.critical("🚨🚨🚨 BRUCE SPRINGSTEEN TICKETS FOUND! 🚨🚨🚨")
+            logger.critical("🎸🎸🎸 AUTOMATED PURCHASE SEQUENCE STARTING 🎸🎸🎸")
+            logger.critical(f"🎫 TICKET: {opportunity.section} - €{opportunity.price}")
+            logger.critical(f"🎯 QUANTITY: {opportunity.quantity}")
+            logger.critical(f"📍 URL: {opportunity.offer_url}")
+            
+            # Make browser window prominent
+            await self._make_browser_prominent()
             
             # Navigate to offer URL if different
             if opportunity.offer_url != self.page.url:
+                logger.critical("🔄 Navigating to ticket page...")
                 await self.page.goto(opportunity.offer_url, wait_until='networkidle', timeout=20000)
+                logger.critical("✅ Navigation complete!")
             
             # Human-like delay before interaction
+            logger.info("⏳ Simulating human reading time...")
             await asyncio.sleep(random.uniform(1.5, 3.0))
             
             # Look for buy buttons with multiple strategies
@@ -1834,15 +1860,116 @@ class FansaleMonitor:
                     logger.debug(f"Container click strategy failed: {e}")
             
             if purchase_success:
-                logger.critical(f"✅ FANSALE PURCHASE INITIATED: {opportunity.section}")
+                logger.critical("🎉🎉🎉 FANSALE PURCHASE INITIATED! 🎉🎉🎉")
+                logger.critical(f"🎫 TICKET RESERVED: {opportunity.section}")
+                logger.critical("🚨 MANUAL COMPLETION REQUIRED:")
+                logger.critical("   1. Browser window should be visible")
+                logger.critical("   2. Complete payment manually")
+                logger.critical("   3. Ticket is RESERVED for limited time")
+                logger.critical("   4. DO NOT CLOSE BROWSER WINDOW")
+                await self._send_purchase_notification(opportunity)
             else:
-                logger.warning(f"❌ Fansale purchase attempt unclear: {opportunity.section}")
+                logger.warning(f"⚠️  Fansale purchase attempt status unclear: {opportunity.section}")
+                logger.warning("🔍 Check browser window for status")
             
             return purchase_success
             
         except Exception as e:
-            logger.error(f"Fansale purchase attempt failed: {e}")
+            logger.error(f"💥 Fansale purchase attempt failed: {e}")
             return False
+    
+    async def _make_browser_prominent(self):
+        """Make browser window prominent and visible"""
+        try:
+            # Bring window to front
+            await self.page.bring_to_front()
+            
+            # Set window title to alert user
+            await self.page.evaluate("""
+                document.title = '🚨 BRUCE SPRINGSTEEN TICKETS FOUND! 🚨 - ' + document.title;
+            """)
+            
+            # Create visual alert on page
+            await self.page.evaluate("""
+                // Create alert banner
+                const alertBanner = document.createElement('div');
+                alertBanner.id = 'bruce-alert-banner';
+                alertBanner.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 60px;
+                    background: linear-gradient(90deg, #ff0000, #ffa500, #ff0000);
+                    color: white;
+                    font-size: 20px;
+                    font-weight: bold;
+                    text-align: center;
+                    line-height: 60px;
+                    z-index: 999999;
+                    animation: flash 1s infinite;
+                `;
+                alertBanner.innerHTML = '🚨 BRUCE SPRINGSTEEN TICKETS FOUND! COMPLETE PURCHASE MANUALLY! 🚨';
+                
+                // Add flashing animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes flash {
+                        0%, 50% { opacity: 1; }
+                        51%, 100% { opacity: 0.3; }
+                    }
+                `;
+                document.head.appendChild(style);
+                document.body.appendChild(alertBanner);
+            """)
+            
+            logger.critical("🎆 Browser window made prominent with visual alerts!")
+            
+        except Exception as e:
+            logger.debug(f"Failed to make browser prominent: {e}")
+    
+    async def _send_purchase_notification(self, opportunity: EnhancedTicketOpportunity):
+        """Send purchase notification and instructions"""
+        try:
+            # Log detailed instructions
+            logger.critical("📋 MANUAL PURCHASE INSTRUCTIONS:")
+            logger.critical("=" * 60)
+            logger.critical(f"🎫 Event: {self.event_name}")
+            logger.critical(f"🎪 Section: {opportunity.section}")
+            logger.critical(f"💰 Price: €{opportunity.price}")
+            logger.critical(f"📊 Quantity: {opportunity.quantity}")
+            logger.critical(f"⭐ Confidence: {opportunity.confidence_score:.1%}")
+            logger.critical("=" * 60)
+            logger.critical("🚨 URGENT ACTIONS REQUIRED:")
+            logger.critical("   1. ✅ Check browser window is visible")
+            logger.critical("   2. 💳 Complete payment form")
+            logger.critical("   3. ✔️  Confirm purchase")
+            logger.critical("   4. 📧 Check for confirmation email")
+            logger.critical("   5. 🚫 DO NOT CLOSE BROWSER")
+            logger.critical("=" * 60)
+            
+            # Optional: System notification (platform dependent)
+            try:
+                import subprocess
+                import sys
+                
+                if sys.platform == "darwin":  # macOS
+                    subprocess.run([
+                        "osascript", "-e", 
+                        f'display notification "Bruce Springsteen tickets found! Complete purchase manually." with title "🎸 TICKET ALERT 🎸"'
+                    ])
+                elif sys.platform.startswith("linux"):  # Linux
+                    subprocess.run([
+                        "notify-send", "🎸 TICKET ALERT 🎸", 
+                        "Bruce Springsteen tickets found! Complete purchase manually."
+                    ])
+                # Windows notification would need additional setup
+                    
+            except Exception as notify_error:
+                logger.debug(f"System notification failed: {notify_error}")
+                
+        except Exception as e:
+            logger.debug(f"Failed to send purchase notification: {e}")
 
     async def _verify_fansale_purchase(self) -> bool:
         """Verify if Fansale purchase process was initiated"""

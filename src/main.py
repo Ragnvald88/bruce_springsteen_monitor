@@ -476,14 +476,38 @@ Examples:
     # Setup logging
     setup_logging(config)
     
-    # Log startup info
-    logger.info("="*60)
-    logger.info("🥷 Ultra-Stealth Ticket System v4.0 Starting")
-    logger.info(f"Mode: {config.get('app_settings', {}).get('mode', 'adaptive').upper()}")
-    logger.info(f"Config: {args.config}")
-    logger.info(f"Profiles: {config.get('profile_settings', {}).get('max_concurrent', 'auto')}")
-    logger.info(f"Python: {sys.version.split()[0]}")
-    logger.info("="*60)
+    # Enhanced startup info with visibility status
+    logger.critical("="*80)
+    logger.critical("🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸")
+    logger.critical("="*80)
+    logger.critical(f"🎯 Mode: {config.get('app_settings', {}).get('mode', 'adaptive').upper()}")
+    logger.critical(f"📄 Config: {args.config}")
+    logger.critical(f"👤 Profiles: {config.get('profile_settings', {}).get('max_concurrent', 'auto')}")
+    logger.critical(f"🐍 Python: {sys.version.split()[0]}")
+    
+    # Show browser visibility status
+    browser_headless = config.get('browser_options', {}).get('headless', True)
+    if browser_headless:
+        logger.error("⚠️  BROWSERS WILL BE HIDDEN (headless: true)")
+        logger.error("   💡 Change 'headless: false' in config to see browsers")
+    else:
+        logger.critical("👀 BROWSERS WILL BE VISIBLE (headless: false)")
+        logger.critical("   ✅ You will see browser windows during operation")
+    
+    # Show authentication status
+    auth_enabled = config.get('authentication', {}).get('enabled', False)
+    if auth_enabled:
+        logger.critical("🔐 AUTHENTICATION ENABLED")
+        fansale_auth = config.get('authentication', {}).get('platforms', {}).get('fansale')
+        if fansale_auth:
+            logger.critical("   ✅ FanSale credentials configured")
+        else:
+            logger.error("   ❌ FanSale credentials missing")
+    else:
+        logger.error("⚠️  AUTHENTICATION DISABLED")
+        logger.error("   💡 Enable authentication in config.yaml")
+    
+    logger.critical("="*80)
     
     # Validate targets
     enabled_targets = [t for t in config.get('targets', []) if t.get('enabled')]
@@ -499,9 +523,8 @@ Examples:
     if hasattr(signal, 'SIGBREAK'):  # Windows
         signal.signal(signal.SIGBREAK, signal_handler)
     
-    # Set event loop policy before creating any asyncio objects (Windows only)
-    # Note: This code is unreachable on non-Windows platforms but left for cross-platform compatibility
-    if sys.platform == "win32":  # pragma: no cover
+    # Set event loop policy for Windows compatibility
+    if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     
     _stop_event_asyncio = asyncio.Event()

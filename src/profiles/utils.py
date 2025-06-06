@@ -9,10 +9,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple, Callable
 from collections import defaultdict
 
-from .enums import Platform, ProfileQuality
-from .models import ProxyConfig
-from .config import ProfileManagerConfig
-from .scoring import ProfileScoringConfig
+from .consolidated_models import Platform, ProfileQuality, ProxyConfig
 from .manager import ProfileManager
 
 logger = logging.getLogger(__name__)
@@ -73,7 +70,7 @@ def parse_proxy_configs(proxy_data: List[Dict[str, Any]]) -> List[ProxyConfig]:
     return configs
 
 
-def parse_profile_manager_config(config_data: Dict[str, Any]) -> ProfileManagerConfig:
+def parse_profile_manager_config(config_data: Dict[str, Any]) -> Dict[str, Any]:
     """Parse ProfileManagerConfig from dict"""
     pm_settings = config_data.get('profile_manager', {})
 
@@ -86,73 +83,73 @@ def parse_profile_manager_config(config_data: Dict[str, Any]) -> ProfileManagerC
     proxy_configs = parse_proxy_configs(pm_settings.get('proxies', []))
 
     # Create main config
-    config = ProfileManagerConfig(
+    config = {
         # Pool settings
-        num_target_profiles=pm_settings.get('num_target_profiles', 20), # Updated to use num_target_profiles
-        profiles_per_platform=pm_settings.get('profiles_per_platform', 5),
+        'num_target_profiles': pm_settings.get('num_target_profiles', 20),
+        'profiles_per_platform': pm_settings.get('profiles_per_platform', 5),
 
         # Evolution settings
-        evolution_interval_seconds=pm_settings.get('evolution_interval_seconds', 900), # Updated key
-        evolution_max_retries=pm_settings.get('evolution_max_retries', 3),
-        evolution_retry_backoff_base_seconds=pm_settings.get('evolution_retry_backoff_base_seconds', 60), # Updated key
-        evolution_interval_jitter_factor=pm_settings.get('evolution_interval_jitter_factor', 0.2), # Updated key
+        'evolution_interval_seconds': pm_settings.get('evolution_interval_seconds', 900),
+        'evolution_max_retries': pm_settings.get('evolution_max_retries', 3),
+        'evolution_retry_backoff_base_seconds': pm_settings.get('evolution_retry_backoff_base_seconds', 60),
+        'evolution_interval_jitter_factor': pm_settings.get('evolution_interval_jitter_factor', 0.2),
 
         # Persistence settings
-        persistence_filepath=pm_settings.get('persistence_filepath', 'profiles_backup.json'), # Updated key
-        session_backup_dir=pm_settings.get('session_backup_dir', 'session_backups'),
-        enable_encrypted_storage=bool(pm_settings.get('enable_encrypted_storage', True)),
+        'persistence_filepath': pm_settings.get('persistence_filepath', 'storage/browser_profiles.yaml'),
+        'session_backup_dir': pm_settings.get('session_backup_dir', 'session_backups'),
+        'enable_encrypted_storage': bool(pm_settings.get('enable_encrypted_storage', False)),
 
         # Session settings
-        session_validation_interval_seconds=pm_settings.get('session_validation_interval_seconds', 1800), # Updated key
-        max_session_age_hours=pm_settings.get('max_session_age_hours', 24),
-        auto_login_retry_limit=pm_settings.get('auto_login_retry_limit', 3),
+        'session_validation_interval_seconds': pm_settings.get('session_validation_interval_seconds', 1800),
+        'max_session_age_hours': pm_settings.get('max_session_age_hours', 24),
+        'auto_login_retry_limit': pm_settings.get('auto_login_retry_limit', 3),
 
         # Pool management
-        compromise_threshold_pct=pm_settings.get('compromise_threshold_pct', 0.20), # Updated key
-        min_pool_size_for_replacement=pm_settings.get('min_pool_size_for_replacement', 10), # Updated key
-        max_pool_size_multiplier=pm_settings.get('max_pool_size_multiplier', 1.5), # Updated key
+        'compromise_threshold_pct': pm_settings.get('compromise_threshold_pct', 0.20),
+        'min_pool_size_for_replacement': pm_settings.get('min_pool_size_for_replacement', 10),
+        'max_pool_size_multiplier': pm_settings.get('max_pool_size_multiplier', 1.5),
 
         # Proxy settings
-        proxy_failure_threshold=pm_settings.get('proxy_failure_threshold', 5),
-        proxy_configs=proxy_configs, # This is now correctly populated
+        'proxy_failure_threshold': pm_settings.get('proxy_failure_threshold', 5),
+        'proxy_configs': proxy_configs,
 
         # Feature flags
-        enable_tls_rotation=pm_settings.get('enable_tls_rotation', True),
-        enable_behavioral_warmup=pm_settings.get('enable_behavioral_warmup', True),
-        enable_session_preloading=pm_settings.get('enable_session_preloading', True),
-        enable_profile_cloning=pm_settings.get('enable_profile_cloning', True),
+        'enable_tls_rotation': pm_settings.get('enable_tls_rotation', True),
+        'enable_behavioral_warmup': pm_settings.get('enable_behavioral_warmup', True),
+        'enable_session_preloading': pm_settings.get('enable_session_preloading', True),
+        'enable_profile_cloning': pm_settings.get('enable_profile_cloning', True),
 
         # Warmup settings
-        warmup_sites=pm_settings.get('warmup_sites', [
+        'warmup_sites': pm_settings.get('warmup_sites', [
             "https://www.google.it",
             "https://www.repubblica.it",
             "https://www.corriere.it",
             "https://www.amazon.it"
         ]),
-        warmup_duration_seconds=pm_settings.get('warmup_duration_seconds', (60, 180)), # Updated key
-        warmup_actions=pm_settings.get('warmup_actions', ['scroll', 'click', 'hover', 'wait']),
+        'warmup_duration_seconds': pm_settings.get('warmup_duration_seconds', (60, 180)),
+        'warmup_actions': pm_settings.get('warmup_actions', ['scroll', 'click', 'hover', 'wait']),
 
         # Platform settings
-        platform_priorities=pm_settings.get('platform_priorities', {
+        'platform_priorities': pm_settings.get('platform_priorities', {
             'ticketmaster': 1.0,
             'fansale': 0.8,
             'vivaticket': 0.7
         }),
-        platform_distribution=pm_settings.get('platform_distribution', { # Ensure this is used if needed by ProfileManager
+        'platform_distribution': pm_settings.get('platform_distribution', {
             'ticketmaster': 0.4,
             'fansale': 0.3,
             'vivaticket': 0.3
         }),
 
         # Metrics
-        metrics_export_path=pm_settings.get('metrics_export_path', 'metrics'),
+        'metrics_export_path': pm_settings.get('metrics_export_path', 'metrics'),
 
         # Scoring config
-        scoring_config=scoring_config,
+        'scoring_config': scoring_config,
 
         # Cooldowns
-        cooldowns_seconds=parse_cooldowns(pm_settings.get('cooldowns_seconds', {})) # Updated key
-    )
+        'cooldowns_seconds': parse_cooldowns(pm_settings.get('cooldowns_seconds', {}))
+    }
 
     return config
 
@@ -657,7 +654,7 @@ class ProfileMonitor:
         
         # Check pool size
         pool_size = metrics.get('pool_size', 0)
-        if pool_size < self.manager.config.min_pool_size_for_replacement:
+        if pool_size < self.manager.config.get('min_pool_size_for_replacement', 10):
             alerts.append({
                 'level': 'warning',
                 'message': f'Low pool size: {pool_size}'

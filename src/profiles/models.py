@@ -11,9 +11,7 @@ import uuid
 from cryptography.fernet import Fernet
 from playwright.async_api import BrowserContext
 
-from .enums import ProfileQuality, DataOptimizationLevel, Platform
-from .types import SessionData, ProfileMetrics
-from .enums import Platform, ProfileQuality # Assuming these are correctly defined
+from .consolidated_models import ProfileQuality, DataOptimizationLevel, Platform, SessionData, ProfileMetrics
 
 @dataclass
 class ProxyConfig:
@@ -145,12 +143,12 @@ class BrowserProfile:
             self.persistent_context_dir = Path(f"browser_contexts/{self.profile_id}")
         if self.proxy_config and isinstance(self.proxy_config, dict):
             # Import at runtime to avoid circular imports
-            from src.core.managers import ProxyConfig
+            from .consolidated_models import ProxyConfig as ConsolidatedProxyConfig
             
             # Handle both 'protocol' and 'proxy_type' keys
             protocol = self.proxy_config.get('protocol') or self.proxy_config.get('proxy_type', 'http')
             
-            self.proxy_config = ProxyConfig(
+            self.proxy_config = ConsolidatedProxyConfig(
                 host=self.proxy_config.get('host'),
                 port=self.proxy_config.get('port'),
                 username=self.proxy_config.get('username'),

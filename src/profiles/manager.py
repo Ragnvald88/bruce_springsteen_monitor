@@ -12,9 +12,7 @@ from typing import Dict, List, Optional, Set, Tuple, Any, Callable
 
 import numpy as np
 
-from .config import ProfileManagerConfig
-from .enums import Platform, ProfileQuality
-from .models import BrowserProfile, ProxyConfig
+from .consolidated_models import Platform, ProfileQuality, BrowserProfile, ProxyConfig
 from .persistence import ProfilePersistence
 from .scoring import ProfileScorer
 from .session_manager import SessionManager
@@ -33,20 +31,20 @@ class ProfileManager:
     
     def __init__(
         self,
-        config: Optional[ProfileManagerConfig] = None,
+        config: Optional[Dict[str, Any]] = None,
         base_profile_template: Optional[Dict] = None
     ):
-        self.config = config or ProfileManagerConfig()
+        self.config = config or self._get_default_config()
         self.dynamic_profiles: List[DynamicProfile] = []
         self.static_profiles: Dict[str, BrowserProfile] = {}
         self.mutation_strategy = MutationStrategy()
         
         # Initialize components
-        self.scorer = ProfileScorer(self.config.scoring_config)
-        self.session_manager = SessionManager(self.config.session_backup_dir)
+        self.scorer = ProfileScorer(self.config.get('scoring_config', {}))
+        self.session_manager = SessionManager(self.config.get('session_backup_dir', 'session_backups'))
         self.persistence = ProfilePersistence(
-            self.config.persistence_filepath,
-            enable_encryption=self.config.enable_encrypted_storage
+            self.config.get('persistence_filepath', 'storage/browser_profiles.yaml'),
+            enable_encryption=self.config.get('enable_encrypted_storage', False)
         )
         
         # Cooldown management
@@ -73,9 +71,35 @@ class ProfileManager:
         self._current_tls_index = 0
         
         logger.info(
-            f"ProfileManager initialized. Target: {self.config.num_target_profiles} profiles, "
-            f"{self.config.profiles_per_platform} per platform"
+            f"ProfileManager initialized. Target: {self.config.get('num_target_profiles', 10)} profiles, "
+            f"{self.config.get('profiles_per_platform', 3)} per platform"
         )
+    
+    def _get_default_config(self) -> Dict[str, Any]:
+        """Get default configuration for ProfileManager"""
+        return {
+            'num_target_profiles': 10,
+            'profiles_per_platform': 3,
+            'scoring_config': {},
+            'session_backup_dir': 'session_backups',
+            'persistence_filepath': 'storage/browser_profiles.yaml',
+            'enable_encrypted_storage': False,
+            'cooldowns_seconds': {
+                'task_selection': (10, 0.2),
+                'success': (30, 0.1),
+                'hard_block': (3600, 0.3),
+                'captcha_challenge': (600, 0.2)
+            },
+            'enable_behavioral_warmup': True,
+            'warmup_sites': ['https://google.it', 'https://repubblica.it'],
+            'max_session_age_hours': 24,
+            'evolution_interval_seconds': 1800,
+            'evolution_interval_jitter_factor': 0.3,
+            'session_validation_interval_seconds': 3600,
+            'compromise_threshold_pct': 0.3,
+            'enable_session_preloading': True,
+            'enable_tls_rotation': True
+        }
     
     async def initialize(self, lazy_load: bool = True):
         """Initialize the profile manager with optional lazy loading."""
@@ -111,7 +135,7 @@ class ProfileManager:
     async def _create_minimal_profile_pool(self):
         """Create a minimal profile pool for immediate functionality."""
         try:
-            from .enums import Platform
+            from .consolidated_models import Platform
             platforms = [Platform.TICKETMASTER, Platform.FANSALE, Platform.VIVATICKET]
             
             # Create just one profile per platform for immediate functionality
@@ -195,7 +219,7 @@ class ProfileManager:
                                     self.session_manager.session_ready_profiles[platform.value].add(dp.id)
             
             # Create new profiles if needed
-            profiles_needed = self.config.num_target_profiles - len(self.dynamic_profiles)
+            profiles_needed = self.config.get('num_target_profiles', 10) - len(self.dynamic_profiles)
             
             if profiles_needed > 0:
                 logger.info(f"Creating {profiles_needed} new profiles")
@@ -266,7 +290,7 @@ class ProfileManager:
                 selected_profile = candidates[0][1]
                 
                 # Apply cooldown
-                cooldown_base, variance = self.config.cooldowns_seconds.get("task_selection", (10, 0.2))
+                cooldown_base, variance = self.config.get('cooldowns_seconds', {}).get('task_selection', (10, 0.2))
                 cooldown_seconds = self._calculate_cooldown_with_jitter(cooldown_base, variance)
                 self.profile_cooldowns[selected_profile.profile_id] = now + timedelta(seconds=cooldown_seconds)
                 
@@ -324,7 +348,7 @@ class ProfileManager:
                 
                 # Apply cooldown based on event
                 now = datetime.utcnow()
-                cooldown_params = self.config.cooldowns_seconds.get(event.value)
+                cooldown_params = self.config.get('cooldowns_seconds', {}).get(event.value)
                 
                 if cooldown_params:
                     base_duration, variance = cooldown_params
@@ -341,7 +365,7 @@ class ProfileManager:
         browser_manager: Any
     ) -> bool:
         """Warm up profile with realistic browsing."""
-        if not self.config.enable_behavioral_warmup:
+        if not self.config.get('enable_behavioral_warmup', True):
             return True
         
         logger.info(f"Warming up profile {profile.profile_id}")
@@ -351,9 +375,10 @@ class ProfileManager:
             context = await browser_manager.get_persistent_context_for_profile(profile)
             
             # Visit Italian sites
+            warmup_sites = self.config.get('warmup_sites', ['https://google.it', 'https://repubblica.it'])
             sites_to_visit = random.sample(
-                self.config.warmup_sites,
-                k=min(3, len(self.config.warmup_sites))
+                warmup_sites,
+                k=min(3, len(warmup_sites))
             )
             
             for site in sites_to_visit:
@@ -427,7 +452,7 @@ class ProfileManager:
             session_age = (
                 datetime.utcnow() - datetime.fromisoformat(session['last_updated'])
             ).total_seconds() / 3600
-            if session_age < self.config.max_session_age_hours:
+            if session_age < self.config.get('max_session_age_hours', 24):
                 return True
         
         # Need to login
@@ -505,13 +530,14 @@ class ProfileManager:
             )[0]
             
             # Setup proxy if available
-            if hasattr(self.config, 'proxy_configs') and self.config.proxy_configs:
-                proxy_config = random.choice(self.config.proxy_configs)
+            proxy_configs = self.config.get('proxy_configs', [])
+            if proxy_configs:
+                proxy_config = random.choice(proxy_configs)
                 # Prefer residential proxies for aggressive platforms
                 if requirements.get('require_residential_proxy'):
                     residential_proxies = [
-                        p for p in self.config.proxy_configs
-                        if p.proxy_provider in ['brightdata', 'oxylabs', 'smartproxy']
+                        p for p in proxy_configs
+                        if getattr(p, 'proxy_provider', None) in ['brightdata', 'oxylabs', 'smartproxy']
                     ]
                     if residential_proxies:
                         proxy_config = random.choice(residential_proxies)
@@ -524,7 +550,7 @@ class ProfileManager:
                 static_profile.extra_http_headers.update(requirements['additional_headers'])
             
             # TLS fingerprint rotation
-            if self.config.enable_tls_rotation and self._tls_fingerprints:
+            if self.config.get('enable_tls_rotation', True) and self._tls_fingerprints:
                 tls_fingerprint = self._tls_fingerprints[self._current_tls_index]
                 self._current_tls_index = (self._current_tls_index + 1) % len(self._tls_fingerprints)
                 static_profile.extra_js_props['tls_fingerprint'] = tls_fingerprint
@@ -600,8 +626,8 @@ class ProfileManager:
             try:
                 # Jittered sleep
                 sleep_duration = self._calculate_cooldown_with_jitter(
-                    self.config.evolution_interval_seconds,
-                    self.config.evolution_interval_jitter_factor
+                    self.config.get('evolution_interval_seconds', 1800),
+                    self.config.get('evolution_interval_jitter_factor', 0.3)
                 )
                 await asyncio.sleep(sleep_duration)
                 
@@ -645,14 +671,14 @@ class ProfileManager:
         """Validate sessions periodically."""
         while not self._shutdown_event.is_set():
             try:
-                await asyncio.sleep(self.config.session_validation_interval_seconds)
+                await asyncio.sleep(self.config.get('session_validation_interval_seconds', 3600))
                 
                 if self._shutdown_event.is_set():
                     break
                 
                 await self.session_manager.validate_sessions(
                     self.static_profiles,
-                    self.config.max_session_age_hours
+                    self.config.get('max_session_age_hours', 24)
                 )
                 
             except Exception as e:
@@ -670,7 +696,7 @@ class ProfileManager:
         
         compromise_rate = len(compromised_profiles) / len(self.dynamic_profiles)
         
-        if compromise_rate >= self.config.compromise_threshold_pct:
+        if compromise_rate >= self.config.get('compromise_threshold_pct', 0.3):
             logger.warning(f"Replacing {len(compromised_profiles)} compromised profiles")
             
             for profile in compromised_profiles:
@@ -717,7 +743,7 @@ class ProfileManager:
         self._evolution_task = asyncio.create_task(self._periodic_profile_evolution_task())
         
         # Start session validation
-        if self.config.enable_session_preloading:
+        if self.config.get('enable_session_preloading', True):
             self._session_validation_task = asyncio.create_task(self._periodic_session_validation())
         
         logger.info("Background tasks started")

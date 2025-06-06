@@ -12,7 +12,8 @@ from datetime import datetime
 
 if TYPE_CHECKING:
     from playwright.async_api import Page as PlaywrightPage
-    from .managers import SmartBrowserContextManager
+    # SmartBrowserContextManager replaced by stealth_integration
+    from .stealth_integration import BruceStealthIntegration
 
 # FIXED: Imports from profiles package
 from ..profiles import (
@@ -36,11 +37,11 @@ class ProfileIntegratedStrikeForce:
     """Enhanced strike system with robust browser automation"""
 
     def __init__(self,
-                 browser_manager: 'SmartBrowserContextManager',
+                 stealth_integration: 'BruceStealthIntegration',
                  profile_manager: ProfileManager,
                  data_tracker: DataUsageTracker,
                  config: Dict[str, Any]):
-        self.browser_manager = browser_manager
+        self.stealth_integration = stealth_integration
         self.profile_manager = profile_manager
         self.data_tracker = data_tracker
         self.config = config
@@ -58,7 +59,7 @@ class ProfileIntegratedStrikeForce:
             PlatformType.VIVATICKET: self._strike_vivaticket
         }
         
-        logger.info("🎯 ProfileIntegratedStrikeForce initialized with browser automation")
+        logger.info("🎯 ProfileIntegratedStrikeForce initialized with StealthMaster AI integration")
     
     async def execute_coordinated_strike(self,
                                        opportunity: EnhancedTicketOpportunity,

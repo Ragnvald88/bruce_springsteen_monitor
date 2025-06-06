@@ -19,9 +19,10 @@ import os
 from contextlib import asynccontextmanager
 from loguru import logger
 
-# FIXED: Correct import path
-from ..profiles.models import BrowserProfile  # Changed from Profile to BrowserProfile
-from ..utils.tls_fingerprint import TLSFingerprint
+# Profile imports
+from ..profiles.models import BrowserProfile
+# TLS fingerprinting now handled by stealth_engine.py
+# from ..utils.tls_fingerprint import TLSFingerprint  # Deprecated - use stealth_engine.py
 
 logger = logging.getLogger(__name__)
 
@@ -41,89 +42,20 @@ class ProxyConfig:
         return f"{self.protocol}://{self.host}:{self.port}"
 
 
-class StealthSSLContext:
-    """Advanced SSL context factory for fingerprint randomization"""
-    
-    # Real browser cipher suites (Chrome 120+, Firefox 120+, Safari 17+)
-    BROWSER_CIPHER_SUITES = [
-        # Chrome 120 cipher suite order
-        [
-            'TLS_AES_128_GCM_SHA256',
-            'TLS_AES_256_GCM_SHA384',
-            'TLS_CHACHA20_POLY1305_SHA256',
-            'ECDHE-ECDSA-AES128-GCM-SHA256',
-            'ECDHE-RSA-AES128-GCM-SHA256',
-            'ECDHE-ECDSA-AES256-GCM-SHA384',
-            'ECDHE-RSA-AES256-GCM-SHA384',
-            'ECDHE-ECDSA-CHACHA20-POLY1305',
-            'ECDHE-RSA-CHACHA20-POLY1305',
-        ],
-        # Firefox 120 cipher suite order
-        [
-            'TLS_AES_128_GCM_SHA256',
-            'TLS_CHACHA20_POLY1305_SHA256',
-            'TLS_AES_256_GCM_SHA384',
-            'ECDHE-ECDSA-AES128-GCM-SHA256',
-            'ECDHE-RSA-AES128-GCM-SHA256',
-            'ECDHE-ECDSA-CHACHA20-POLY1305',
-            'ECDHE-RSA-CHACHA20-POLY1305',
-            'ECDHE-ECDSA-AES256-GCM-SHA384',
-            'ECDHE-RSA-AES256-GCM-SHA384',
-        ],
-        # Safari 17 cipher suite order
-        [
-            'TLS_AES_256_GCM_SHA384',
-            'TLS_AES_128_GCM_SHA256',
-            'TLS_CHACHA20_POLY1305_SHA256',
-            'ECDHE-ECDSA-AES256-GCM-SHA384',
-            'ECDHE-ECDSA-AES128-GCM-SHA256',
-            'ECDHE-RSA-AES256-GCM-SHA384',
-            'ECDHE-RSA-AES128-GCM-SHA256',
-        ]
-    ]
-    
-    @classmethod
-    def create_context(cls, profile: Optional[BrowserProfile] = None) -> ssl.SSLContext:
-        """Create SSL context with browser-like fingerprint"""
-        context = ssl.create_default_context(cafile=certifi.where())
-        
-        # Randomize TLS version based on profile or random selection
-        if profile and hasattr(profile, 'tls_version'):
-            context.minimum_version = getattr(ssl.TLSVersion, profile.tls_version, ssl.TLSVersion.TLSv1_2)
-        else:
-            # Weight towards newer versions like real browsers
-            tls_versions = [ssl.TLSVersion.TLSv1_2] * 2 + [ssl.TLSVersion.TLSv1_3] * 8
-            context.minimum_version = random.choice(tls_versions)
-        
-        context.maximum_version = ssl.TLSVersion.TLSv1_3
-        
-        # Select cipher suite based on profile or random browser
-        cipher_suite = random.choice(cls.BROWSER_CIPHER_SUITES)
-        context.set_ciphers(':'.join(cipher_suite))
-        
-        # Browser-like SSL options
-        context.options |= ssl.OP_NO_SSLv2
-        context.options |= ssl.OP_NO_SSLv3
-        context.options |= ssl.OP_NO_COMPRESSION
-        context.options |= ssl.OP_NO_TICKET  # Some browsers disable session tickets
-        
-        # Enable hostname checking
-        context.check_hostname = True
-        context.verify_mode = ssl.CERT_REQUIRED
-        
-        return context
+# StealthSSLContext moved to storage - superseded by stealth_engine.py TLS handling
+# Advanced TLS fingerprinting is now handled by stealth_engine.py's create_tls_session()
 
 
 class ConnectionPoolManager:
     """
-    StealthMaster AI Enhanced Connection Pool Manager - OPTIMIZED
+    StealthMaster AI Enhanced Connection Pool Manager - INTEGRATED WITH STEALTH_ENGINE
     
     Features:
     - Proper httpx proxy configuration
-    - Advanced TLS fingerprinting
+    - Integration with stealth_engine.py for advanced TLS fingerprinting
     - Connection persistence and pooling
     - Adaptive timeout management
-    - Stealth header rotation
+    - Stealth header rotation via stealth_integration
     - Pre-warming and performance optimization
     """
     
@@ -346,8 +278,7 @@ class ConnectionPoolManager:
             
             # Create SSL context if using TLS fingerprinting
             ssl_context = None
-            if use_tls_fingerprint:
-                ssl_context = StealthSSLContext.create_context(profile)
+            # TLS fingerprinting is now handled by stealth_engine.py, so ssl_context remains None
             
             # Get proxy configuration
             proxy_config = self._create_proxy_config(profile)
@@ -598,101 +529,15 @@ class ResponseCache:
         return self.hit_count / total if total > 0 else 0.0
 
 
-class SmartBrowserContextManager:
-    """Smart browser context manager with profile integration"""
-    
-    def __init__(self, playwright_instance, profile_manager, data_tracker, config):
-        self.playwright = playwright_instance
-        self.profile_manager = profile_manager
-        self.data_tracker = data_tracker
-        self.config = config
-        self.contexts: Dict[str, Any] = {}
-        
-    async def get_stealth_context(self, profile: BrowserProfile, force_new: bool = False):
-        """Get or create a stealth browser context"""
-        profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
-        
-        if profile_id in self.contexts and not force_new:
-            return self.contexts[profile_id]
-        
-        # Create new context with stealth settings
-        context = await self.playwright.chromium.launch_persistent_context(
-            user_data_dir=f"/tmp/browser_profile_{profile_id}",
-            headless=True,
-            args=[
-                '--disable-blink-features=AutomationControlled',
-                '--disable-features=VizDisplayCompositor',
-                '--disable-extensions',
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--disable-gpu',
-                '--hide-scrollbars',
-                '--mute-audio',
-                '--disable-background-timer-throttling',
-                '--disable-renderer-backgrounding',
-                '--disable-backgrounding-occluded-windows',
-                '--disable-background-networking'
-            ],
-            viewport={'width': profile.viewport_width, 'height': profile.viewport_height},
-            user_agent=profile.user_agent,
-            locale=getattr(profile, 'locale', 'en-US'),
-            timezone_id=getattr(profile, 'timezone', 'America/New_York'),
-            permissions=['geolocation'],
-            extra_http_headers={
-                'Accept-Language': getattr(profile, 'accept_language', 'en-US,en;q=0.9'),
-            }
-        )
-        
-        # Inject stealth script
-        stealth_script_path = self.config.get('paths', {}).get('stealth_script', 'src/core/stealth_init.js')
-        if os.path.exists(stealth_script_path):
-            with open(stealth_script_path, 'r') as f:
-                stealth_script = f.read()
-            
-            await context.add_init_script(stealth_script)
-        
-        self.contexts[profile_id] = context
-        return context
-    
-    async def close_all(self):
-        """Close all browser contexts"""
-        for context in self.contexts.values():
-            try:
-                await context.close()
-            except Exception as e:
-                logger.error(f"Error closing context: {e}")
-        self.contexts.clear()
+# SmartBrowserContextManager moved to storage/old/legacy_browser_context_manager.py
+# Functionality superseded by stealth_engine.py integration
 
 
-# Additional helper for pre-warming connections
-class ConnectionPreWarmer:
-    """Pre-warm connections to reduce latency on first request"""
-    
-    @staticmethod
-    async def prewarm_connections(
-        pool_manager: ConnectionPoolManager,
-        profiles: List[BrowserProfile],
-        targets: List[str]
-    ):
-        """Pre-establish connections to target domains"""
-        tasks = []
-        
-        for profile in profiles[:3]:  # Limit pre-warming to avoid suspicion
-            for target in targets:
-                async def warm_connection(p=profile, t=target):
-                    try:
-                        client = await pool_manager.get_client(p)
-                        # Just establish TCP/TLS connection, don't actually request
-                        # This is done implicitly when the client is created
-                        logger.debug(f"Pre-warmed connection for {getattr(p, 'profile_id', 'unknown')} to {t}")
-                    except Exception as e:
-                        logger.warning(f"Failed to pre-warm connection: {e}")
-                
-                tasks.append(warm_connection())
-        
-        if tasks:
-            await asyncio.gather(*tasks, return_exceptions=True)
+# Legacy classes moved to storage/old/legacy_browser_context_manager.py
+# SmartBrowserContextManager and ConnectionPreWarmer functionality
+# has been superseded by stealth_engine.py
+
+# Modern browser context creation is now handled by:
+# from src.core.stealth_integration import get_bruce_stealth_integration
+# stealth_integration = get_bruce_stealth_integration()
+# context = await stealth_integration.create_stealth_browser_context(browser, profile, platform)

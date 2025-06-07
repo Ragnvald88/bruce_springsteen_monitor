@@ -1,0 +1,179 @@
+bugs: []
+recommendations: []
+summary:
+  bugs_found: 0
+  failed: 3
+  successful: 1
+  total_tests: 4
+  warnings: 0
+system_ready: true
+test_results:
+  Full Integration:
+    error: Script not found
+  Monitor Functionality:
+    execution_time: 1830.913626909256
+    report_data: {}
+    return_code: 0
+    stderr_content: "INFO:__main__:\u2705 Configuration loaded from config/config.yaml\n\
+      INFO:__main__:\n================================================================================\n\
+      INFO:__main__:\U0001F310 TESTING URL ACCESSIBILITY\nINFO:__main__:================================================================================\n\
+      INFO:__main__:\n\U0001F4CD Testing fansale: Bruce Springsteen Milano 2025 (FS)\n\
+      INFO:__main__:   URL: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388\n\
+      ERROR:__main__:   \u274C Error: \nINFO:__main__:\n\U0001F4CD Testing ticketmaster:\
+      \ Bruce Springsteen San Siro 2025 (TM)\nINFO:__main__:   URL: https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html\n\
+      INFO:httpx:HTTP Request: GET https://shop.ticketmaster.it/biglietti/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-luglio-2025-stadio-san-siro-milano-9670.html\
+      \ \"HTTP/1.1 403 Forbidden\"\nWARNING:__main__:   \u26A0\uFE0F Non-200 status:\
+      \ 403\nINFO:__main__:\n\U0001F4CD Testing vivaticket: Bruce Springsteen Resale\
+      \ (VT)\nINFO:__main__:   URL: https://shop.vivaticket.com/it/ricerca/bruce%20springsteen\n\
+      INFO:httpx:HTTP Request: GET https://shop.vivaticket.com/it/ricerca/bruce%20springsteen\
+      \ \"HTTP/1.1 200 OK\"\nINFO:__main__:   \u2705 Success: 200 (0.13s, 212 bytes)\n\
+      INFO:__main__:\n================================================================================\n\
+      INFO:__main__:\U0001F527 TESTING MONITOR INITIALIZATION\nINFO:__main__:================================================================================\n\
+      INFO:src.profiles.utils:Attempting to parse 1 proxy entries.\nINFO:src.profiles.utils:Successfully\
+      \ parsed proxy: geo.iproyal.com:12321, Provider: iproyal\nINFO:src.profiles.utils:Successfully\
+      \ loaded 1 proxy configurations.\nINFO:src.profiles.manager:ProfileManager initialized.\
+      \ Target: 15 profiles, 3 per platform\nINFO:src.profiles.manager:ProfileManager\
+      \ fast initialization (lazy mode)\nINFO:src.profiles.manager:Background tasks\
+      \ started\nINFO:src.core.managers:ConnectionPoolManager initialized with max_connections=20,\
+      \ max_keepalive=10\nINFO:src.core.components:ProfileAwareLightweightMonitor\
+      \ initialized with 3 platform patterns\nINFO:__main__:\u2705 Monitor initialized\
+      \ successfully\nINFO:__main__:   Detection patterns: 3 platforms\nINFO:__main__:\
+      \   Default interval: 60.0s\nINFO:__main__:   Cache max age: 300s\nINFO:__main__:\n\
+      ================================================================================\n\
+      INFO:__main__:\U0001F3AF TESTING OPPORTUNITY DETECTION\nINFO:__main__:================================================================================\n\
+      INFO:__main__:\n\U0001F50D Testing detection for fansale: Bruce Springsteen\
+      \ Milano 2025 (FS)\nWARNING:src.profiles.manager:No suitable profiles for fansale\n\
+      WARNING:src.profiles.manager:Invalid Platform enum passed: Platform.FANSALE,\
+      \ <enum 'Platform'>\nINFO:src.profiles.manager:Starting background profile pool\
+      \ initialization...\nINFO:src.profiles.persistence:Loading profiles from 2025-06-07T14:26:54.039046\n\
+      INFO:src.profiles.manager:Loaded 1 profiles from disk\nINFO:src.profiles.manager:Creating\
+      \ 14 new profiles\nINFO:src.profiles.manager:Profile pool initialized. Distribution:\
+      \ {'fansale': ['fansale_4cb8c583', 'fansale_d330956a', 'fansale_579c1780', 'fansale_23b8ca3a',\
+      \ 'fansale_c4997061'], 'ticketmaster': ['ticketmaster_fb6e4fc6', 'ticketmaster_f14887c7',\
+      \ 'ticketmaster_d70bed7a', 'ticketmaster_3781af48'], 'vivaticket': ['vivaticket_3a6ca160',\
+      \ 'vivaticket_1d4018ba', 'vivaticket_05aaf3fe'], 'generic': ['generic_aae07264',\
+      \ 'generic_3da1d11d', 'generic_555fb1bb']}\nINFO:src.profiles.manager:Background\
+      \ profile pool initialization complete\nERROR:src.core.components:Unexpected\
+      \ error for Bruce Springsteen Milano 2025 (FS): <StreamReset stream_id:1, error_code:2,\
+      \ remote_reset:True>\nTraceback (most recent call last):\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py\"\
+      , line 101, in map_httpcore_exceptions\n    yield\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py\"\
+      , line 394, in handle_async_request\n    resp = await self._pool.handle_async_request(req)\n\
+      \           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py\"\
+      , line 256, in handle_async_request\n    raise exc from None\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection_pool.py\"\
+      , line 236, in handle_async_request\n    response = await connection.handle_async_request(\n\
+      \               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        pool_request.request\n\
+      \        ^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/connection.py\"\
+      , line 103, in handle_async_request\n    return await self._connection.handle_async_request(request)\n\
+      \           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"\
+      /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http2.py\"\
+      , line 187, in handle_async_request\n    raise exc\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http2.py\"\
+      , line 150, in handle_async_request\n    status, headers = await self._receive_response(\n\
+      \                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        request=request,\
+      \ stream_id=stream_id\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n\
+      \    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http2.py\"\
+      , line 294, in _receive_response\n    event = await self._receive_stream_event(request,\
+      \ stream_id)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpcore/_async/http2.py\"\
+      , line 339, in _receive_stream_event\n    raise RemoteProtocolError(event)\n\
+      httpcore.RemoteProtocolError: <StreamReset stream_id:1, error_code:2, remote_reset:True>\n\
+      \nThe above exception was the direct cause of the following exception:\n\nTraceback\
+      \ (most recent call last):\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py\"\
+      , line 596, in check_ultra_efficient\n    response = await http_client.get(\n\
+      \               ^^^^^^^^^^^^^^^^^^^^^^\n    ...<4 lines>...\n    )\n    ^\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1768, in get\n    return await self.request(\n           ^^^^^^^^^^^^^^^^^^^\n\
+      \    ...<9 lines>...\n    )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1540, in request\n    return await self.send(request, auth=auth, follow_redirects=follow_redirects)\n\
+      \           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1629, in send\n    response = await self._send_handling_auth(\n     \
+      \          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<4 lines>...\n    )\n   \
+      \ ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1657, in _send_handling_auth\n    response = await self._send_handling_redirects(\n\
+      \               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n\
+      \    )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1694, in _send_handling_redirects\n    response = await self._send_single_request(request)\n\
+      \               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_client.py\"\
+      , line 1730, in _send_single_request\n    response = await transport.handle_async_request(request)\n\
+      \               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py\"\
+      , line 393, in handle_async_request\n    with map_httpcore_exceptions():\n \
+      \        ~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py\"\
+      , line 162, in __exit__\n    self.gen.throw(value)\n    ~~~~~~~~~~~~~~^^^^^^^\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/venv/lib/python3.13/site-packages/httpx/_transports/default.py\"\
+      , line 118, in map_httpcore_exceptions\n    raise mapped_exc(message) from exc\n\
+      httpx.RemoteProtocolError: <StreamReset stream_id:1, error_code:2, remote_reset:True>\n\
+      WARNING:__main__:   \u26A0\uFE0F No opportunities detected\nINFO:__main__: \
+      \  \U0001F4CA Metrics:\nINFO:__main__:      Successful checks: 0\nINFO:__main__:\
+      \      Failed checks: 1\nINFO:__main__:      Detections: 0\nINFO:__main__: \
+      \     Avg response time: 0.00s\nINFO:__main__:\n\U0001F50D Testing detection\
+      \ for ticketmaster: Bruce Springsteen San Siro 2025 (TM)\nERROR:__main__:  \
+      \ \u274C Detection error: 'Platform' object has no attribute 'requires_stealth'\n\
+      Traceback (most recent call last):\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/test_monitor_functionality.py\"\
+      , line 196, in test_opportunity_detection\n    opportunities = await self.monitor.check_ultra_efficient(\n\
+      \                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        platform,\
+      \ url, event_name, priority\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+      \   )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py\"\
+      , line 578, in check_ultra_efficient\n    profile = await self._select_profile_with_circuit_breaker(platform)\n\
+      \              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+      \ File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py\"\
+      , line 692, in _select_profile_with_circuit_breaker\n    profile = await self.profile_manager.get_profile_for_platform(\n\
+      \              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<2\
+      \ lines>...\n    )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py\"\
+      , line 270, in get_profile_for_platform\n    score = self.scorer.calculate_score(\n\
+      \        dynamic_profile, static_profile, platform, require_session\n    )\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/scoring.py\"\
+      , line 90, in calculate_score\n    score = self._apply_platform_adjustments(score,\
+      \ static_profile, platform)\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/scoring.py\"\
+      , line 210, in _apply_platform_adjustments\n    if platform.requires_stealth:\n\
+      \       ^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'Platform' object has no\
+      \ attribute 'requires_stealth'\nINFO:__main__:\n\U0001F50D Testing detection\
+      \ for vivaticket: Bruce Springsteen Resale (VT)\nERROR:__main__:   \u274C Detection\
+      \ error: 'Platform' object has no attribute 'requires_stealth'\nTraceback (most\
+      \ recent call last):\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/test_monitor_functionality.py\"\
+      , line 196, in test_opportunity_detection\n    opportunities = await self.monitor.check_ultra_efficient(\n\
+      \                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        platform,\
+      \ url, event_name, priority\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+      \   )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py\"\
+      , line 578, in check_ultra_efficient\n    profile = await self._select_profile_with_circuit_breaker(platform)\n\
+      \              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+      \ File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py\"\
+      , line 692, in _select_profile_with_circuit_breaker\n    profile = await self.profile_manager.get_profile_for_platform(\n\
+      \              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<2\
+      \ lines>...\n    )\n    ^\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py\"\
+      , line 270, in get_profile_for_platform\n    score = self.scorer.calculate_score(\n\
+      \        dynamic_profile, static_profile, platform, require_session\n    )\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/scoring.py\"\
+      , line 90, in calculate_score\n    score = self._apply_platform_adjustments(score,\
+      \ static_profile, platform)\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/scoring.py\"\
+      , line 210, in _apply_platform_adjustments\n    if platform.requires_stealth:\n\
+      \       ^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'Platform' object has no\
+      \ attribute 'requires_stealth'\nINFO:__main__:\n================================================================================\n\
+      INFO:__main__:\U0001F52C TESTING DETECTION PATTERNS\nINFO:__main__:================================================================================\n\
+      INFO:__main__:\n\U0001F9EA Testing fansale patterns\nWARNING:__main__:   \u26A0\
+      \uFE0F Pattern did not match sample HTML\nINFO:__main__:\n\U0001F9EA Testing\
+      \ ticketmaster patterns\nWARNING:__main__:   \u26A0\uFE0F Pattern did not match\
+      \ sample HTML\nINFO:__main__:\n\U0001F9EA Testing vivaticket patterns\nWARNING:__main__:\
+      \   \u26A0\uFE0F Pattern did not match sample HTML\nINFO:__main__:\n================================================================================\n\
+      INFO:__main__:\U0001F4CA TESTING DATA TRACKER\nINFO:__main__:================================================================================\n\
+      ERROR:__main__:\u274C Test suite error: 'DataUsageTracker' object has no attribute\
+      \ 'current_optimization_level'\nTraceback (most recent call last):\n  File \"\
+      /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/test_monitor_functionality.py\"\
+      , line 423, in main\n    await tester.test_data_tracking()\n  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/test_monitor_functionality.py\"\
+      , line 342, in test_data_tracking\n    'optimization_level': tracker.current_optimization_level.value,\n\
+      \                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError:\
+      \ 'DataUsageTracker' object has no attribute 'current_optimization_level'\n\
+      ERROR:src.profiles.persistence:Failed to save profiles: 'BrowserProfile' object\
+      \ has no attribute 'platform_sessions'\nTraceback (most recent call last):\n\
+      \  File \"/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/persistence.py\"\
+      , line 76, in save_profiles\n    'platform_sessions': static_profile.platform_sessions,\n\
+      \                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError:\
+      \ 'BrowserProfile' object has no attribute 'platform_sessions'\nINFO:src.profiles.manager:Background\
+      \ tasks stopped\nINFO:src.profiles.manager:ProfileManager shutdown complete\n"
+    stdout_lines: 0
+    success: true
+  Profile Manager:
+    error: Script not found
+  Strike Force:
+    error: Script not found
+timestamp: '2025-06-07T19:22:40.124617'
+warnings: []

@@ -2,12 +2,12 @@
 from __future__ import annotations
 from enum import Enum, auto
 
-# Import CorePlatformEnum from models.enums
+# Import CorePlatformEnum from consolidated models
 try:
-    from ..models.enums import Platform as CorePlatformEnum
+    from ..profiles.consolidated_models import Platform as CorePlatformEnum
 except ImportError:
     # Fallback or error handling if Platform cannot be imported
-    print("CRITICAL ERROR: Could not import CorePlatformEnum from models.enums in core.enums")
+    print("CRITICAL ERROR: Could not import CorePlatformEnum from profiles.consolidated_models in core.enums")
     class CorePlatformEnum(Enum):
         DUMMY = "dummy_platform"
 

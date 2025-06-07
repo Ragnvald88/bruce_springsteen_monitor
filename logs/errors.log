@@ -16779,3 +16779,176 @@ AttributeError: 'BrowserProfile' object has no attribute 'platform_sessions'
 2025-06-07 17:26:02.760 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
 2025-06-07 17:26:02.762 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
 2025-06-07 17:26:02.762 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'
+2025-06-07 17:26:32.762 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
+2025-06-07 17:26:32.762 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
+2025-06-07 17:26:32.762 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'
+2025-06-07 17:26:43.815 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 17:26:43.820 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:26:44.149 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:26:44.149 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:26:44.149 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:29:58.658 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 17:29:58.659 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:29:59.099 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:29:59.099 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:29:59.099 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:56:04.817 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 17:56:04.826 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 17:56:05.219 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:56:05.220 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 17:56:05.220 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:08:47.823 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 18:08:47.831 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:08:47.831 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 18:08:47.831 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:08:47.831 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 18:08:47.831 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 18:08:47.832 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:08:48.139 | ERROR    | src.utils.live_status_logger   | _log                 | Status processor error: [Errno 32] Broken pipe
+2025-06-07 18:08:48.219 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:08:48.219 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:08:48.220 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:08:49.145 | ERROR    | src.utils.live_status_logger   | _log                 | Status processor error: [Errno 32] Broken pipe
+2025-06-07 18:08:50.150 | ERROR    | src.utils.live_status_logger   | _log                 | Status processor error: [Errno 32] Broken pipe
+2025-06-07 18:08:51.156 | ERROR    | src.utils.live_status_logger   | _log                 | Status processor error: [Errno 32] Broken pipe
+2025-06-07 18:09:18.221 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:09:18.225 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:09:18.225 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:09:48.226 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:09:48.229 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:09:48.230 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:10:18.230 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:10:18.231 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:10:18.231 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:25:28.917 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 18:25:28.926 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:25:29.335 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:25:29.336 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:25:29.336 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:28:55.743 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:28:55.744 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:28:55.744 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:54:21.615 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 18:54:21.621 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 18:54:22.050 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:54:22.050 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 18:54:22.050 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): 'Platform' object has no attribute 'requires_stealth'
+2025-06-07 19:36:10.056 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 19:36:10.063 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:36:10.063 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 19:36:10.063 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 19:36:10.064 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:36:10.554 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 590, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 117, in build_headers
+    if profile.sec_ch_ua_platform: # Check if the attribute exists and has a value
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+2025-06-07 19:36:10.567 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 590, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 117, in build_headers
+    if profile.sec_ch_ua_platform: # Check if the attribute exists and has a value
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+2025-06-07 19:47:21.836 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 19:47:21.842 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 19:47:22.359 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen Milano 2025 (FS): 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 590, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 117, in build_headers
+    if profile.sec_ch_ua_platform: # Check if the attribute exists and has a value
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+2025-06-07 19:47:22.372 | ERROR    | src.core.components            | check_ultra_efficient | Unexpected error for Bruce Springsteen San Siro 2025 (TM): 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 590, in check_ultra_efficient
+    headers = self.request_builder.build_headers(profile, url)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/components.py", line 117, in build_headers
+    if profile.sec_ch_ua_platform: # Check if the attribute exists and has a value
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'BrowserProfile' object has no attribute 'sec_ch_ua_platform'

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 # Profile system imports
 from ..profiles.manager import ProfileManager, BrowserProfile
-from ..models.enums import Platform as CorePlatformEnum, DataOptimizationLevel
+from ..profiles.consolidated_models import Platform as CorePlatformEnum, DataOptimizationLevel
 from ..profiles.utils import create_profile_manager_from_config
 from .stealth.stealth_engine import StealthEngine, StealthEngineIntegration
 

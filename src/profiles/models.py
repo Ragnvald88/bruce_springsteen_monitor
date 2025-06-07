@@ -11,7 +11,7 @@ import uuid
 from cryptography.fernet import Fernet
 from playwright.async_api import BrowserContext
 
-from .consolidated_models import ProfileQuality, DataOptimizationLevel, Platform, SessionData, ProfileMetrics
+from .consilidated_models import ProfileQuality, DataOptimizationLevel, Platform, SessionData, ProfileMetrics
 
 @dataclass
 class ProxyConfig:

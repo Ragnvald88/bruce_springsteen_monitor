@@ -14,13 +14,13 @@ from urllib.parse import urljoin, urlparse
 from playwright.async_api import Page, BrowserContext, Error as PlaywrightError
 
 # Core imports
-from src.core.models import EnhancedTicketOpportunity, DataUsageTracker
-from src.core.enums import PlatformType, PriorityLevel
-from src.profiles.models import BrowserProfile
-from src.core.errors import BlockedError, PlatformError
+from ..core.models import EnhancedTicketOpportunity, DataUsageTracker
+from ..core.enums import PlatformType, PriorityLevel
+from ..profiles.models import BrowserProfile
+from ..core.errors import BlockedError, PlatformError
 
 # StealthMaster AI Integration
-from src.core.stealth_integration import get_bruce_stealth_integration
+from ..core.stealth.stealth_integration import get_bruce_stealth_integration
 
 if TYPE_CHECKING:
     pass

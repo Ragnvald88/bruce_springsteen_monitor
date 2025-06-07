@@ -60,6 +60,47 @@ class Platform(Enum):
             self.GENERIC: ["Chrome"]
         }
         return preferences.get(self, ["Chrome"])
+    
+    @property
+    def stealth_requirements(self) -> Dict[str, Any]:
+        """Get stealth requirements for platform"""
+        requirements = {
+            self.FANSALE: {
+                "aggressive_stealth": False,
+                "browser_preferences": ["Chrome", "Firefox", "Edge"],
+                "requires_referrer": True,
+                "supports_mobile": False,
+                "min_viewport_width": 1280,
+                "preferred_locale": "it-IT"
+            },
+            self.TICKETMASTER: {
+                "aggressive_stealth": True,
+                "browser_preferences": ["Chrome", "Edge"],
+                "requires_referrer": True,
+                "supports_mobile": False,
+                "min_viewport_width": 1366,
+                "preferred_locale": "en-US",
+                "requires_webgl": True,
+                "requires_canvas": True
+            },
+            self.VIVATICKET: {
+                "aggressive_stealth": True,
+                "browser_preferences": ["Chrome", "Firefox"],
+                "requires_referrer": True,
+                "supports_mobile": False,
+                "min_viewport_width": 1280,
+                "preferred_locale": "it-IT"
+            },
+            self.GENERIC: {
+                "aggressive_stealth": False,
+                "browser_preferences": ["Chrome"],
+                "requires_referrer": False,
+                "supports_mobile": True,
+                "min_viewport_width": 1024,
+                "preferred_locale": "en-US"
+            }
+        }
+        return requirements.get(self, requirements[self.GENERIC])
 
 # ============== TYPE DEFINITIONS ==============
 
@@ -92,6 +133,9 @@ class ProxyConfig:
     password: Optional[str] = None
     proxy_type: str = "http"
     country_code: Optional[str] = None
+    rotation_endpoint: Optional[str] = None
+    sticky_session: bool = True
+    proxy_provider: Optional[str] = None
     
     def get_proxy_url(self, session_id: Optional[str] = None) -> Optional[str]:
         """Get formatted proxy URL"""

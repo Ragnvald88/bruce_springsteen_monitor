@@ -2,7 +2,7 @@
 """Profile scoring logic for intelligent selection."""
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Any
 
 from .consolidated_models import Platform, BrowserProfile
 from src.core.advanced_profile_system import DynamicProfile, ProfileState
@@ -46,6 +46,14 @@ class ProfileScorer:
             'peak_time_bonus': 5
         }
     
+    def _get_config_value(self, key: str, default: Any = None) -> Any:
+        """Get config value whether config is dict or object"""
+        if hasattr(self.config, key):
+            return getattr(self.config, key)
+        elif isinstance(self.config, dict):
+            return self.config.get(key, default)
+        return default
+    
     def calculate_score(
         self,
         dynamic_profile: DynamicProfile,
@@ -54,10 +62,16 @@ class ProfileScorer:
         require_session: bool
     ) -> float:
         """Calculate comprehensive profile score."""
-        score = self.config.get('base_score', 50.0)
+        # Use config as object if it's ProfileScoringConfig, otherwise as dict
+        score = self._get_config_value('base_score', 50.0)
         
         # State modifier
-        score += self.config.get('state_modifiers', {}).get(dynamic_profile.state.value if hasattr(dynamic_profile.state, 'value') else str(dynamic_profile.state), 0)
+        state_modifiers = self._get_config_value('state_modifiers', {})
+        
+        state_key = dynamic_profile.state
+        if hasattr(state_key, 'value'):
+            state_key = state_key.value
+        score += state_modifiers.get(state_key, 0)
         
         # Session scoring
         score = self._apply_session_scoring(score, static_profile, platform, require_session)
@@ -85,20 +99,22 @@ class ProfileScorer:
         require_session: bool
     ) -> float:
         """Apply session-based scoring."""
-        session = profile.platform_sessions.get(platform.value)
+        # Use sessions instead of platform_sessions
+        session = profile.sessions.get(platform.value) if hasattr(profile, 'sessions') else None
         
-        if session and session.get('is_valid'):
-            score += self.config.get('has_valid_session_bonus', 25)
+        if session and isinstance(session, dict) and session.get('is_valid'):
+            # Get config values properly
+            score += self._get_config_value('has_valid_session_bonus', 25)
             
             # Session age penalty
             session_age_hours = (
                 datetime.utcnow() - datetime.fromisoformat(session['last_updated'])
             ).total_seconds() / 3600
-            score -= session_age_hours * self.config.get('session_age_penalty_per_hour', 0.5)
             
-            # Bonus for matching fingerprint
-            if session.get('fingerprint_hash') == profile.fingerprint_hash:
-                score += 10  # Consistency bonus
+            score -= session_age_hours * self._get_config_value('session_age_penalty_per_hour', 0.5)
+            
+            # Bonus for valid session
+            score += 10  # Session validity bonus
         elif require_session:
             score -= 100  # Heavy penalty if session required but not available
         
@@ -112,34 +128,28 @@ class ProfileScorer:
         dynamic_profile: DynamicProfile
     ) -> float:
         """Apply performance-based scoring."""
-        platform_stats = profile.platform_stats.get(platform.value, {})
+        # Use simple scoring based on existing BrowserProfile fields
+        platform_bonuses = self._get_config_value('platform_bonuses', {})
+        if platform.value in platform_bonuses:
+            score += platform_bonuses[platform.value]
         
-        # Platform success bonus
-        if platform_stats.get('successes', 0) > 0:
-            score += self.config.get('platform_bonuses', {}).get(platform.value, 0)
-            
-            # Success rate
-            success_rate = profile.get_success_rate(platform.value)
-            score += (success_rate - 0.5) * self.config.get('success_rate_weight', 30)
-            
-            # Consecutive successes bonus
-            consecutive = platform_stats.get('consecutive_successes', 0)
-            score += min(consecutive * 2, 20)  # Cap at 20 points
+        # Success rate bonus
+        if profile.success_rate > 0.5:
+            success_weight = self._get_config_value('success_rate_weight', 30)
+            score += (profile.success_rate - 0.5) * success_weight
         
-        # Response time factor
-        avg_response_time = platform_stats.get('avg_response_time_ms', 0)
-        if avg_response_time > 0:
-            normalized_speed = max(0, 1 - (avg_response_time / 5000))
-            score += normalized_speed * self.config.get('avg_response_time_weight', 10)
+        # Consecutive successes bonus (simplified)
+        if profile.success_count > 5:
+            score += min(profile.success_count * 0.5, 20)  # Cap at 20 points
         
-        # Consecutive failures penalty
+        # Consecutive failures penalty from dynamic profile
         consecutive_failures = getattr(dynamic_profile, 'consecutive_failures', 0)
-        score -= consecutive_failures * self.config.get('consecutive_failure_penalty', 5)
+        failure_penalty = self._get_config_value('consecutive_failure_penalty', 5)
+        score -= consecutive_failures * failure_penalty
         
-        # CAPTCHA penalty
-        captcha_rate = platform_stats.get('captcha_solve_rate', 0)
-        if captcha_rate < 0.7 and platform_stats.get('total_captchas', 0) > 5:
-            score -= self.config.get('captcha_penalty', 15)
+        # Platform-specific session bonus
+        if platform.value in profile.sessions and profile.sessions[platform.value].get('is_valid'):
+            score += 10  # Bonus for having valid session
         
         return score
     
@@ -149,11 +159,11 @@ class ProfileScorer:
             avg_risk = sum(dynamic_profile.component_risk_scores.values()) / len(
                 dynamic_profile.component_risk_scores
             )
-            score -= avg_risk * self.config.get('avg_risk_score_penalty_weight', 20)
+            score -= avg_risk * self._get_config_value('avg_risk_score_penalty_weight', 20)
         
         # Drift penalty
         if hasattr(dynamic_profile, 'drift_detected') and dynamic_profile.drift_detected:
-            score -= self.config.get('drift_penalty', 10)
+            score -= self._get_config_value('drift_penalty', 10)
         
         return score
     
@@ -163,7 +173,8 @@ class ProfileScorer:
         
         # Proxy freshness bonus
         if hasattr(profile, 'proxy_config') and profile.proxy_config and hasattr(profile, 'should_rotate_proxy') and profile.should_rotate_proxy():
-            score += self.config.get('proxy_rotation_bonus', 5)
+            proxy_bonus = self._get_config_value('proxy_rotation_bonus', 5)
+            score += proxy_bonus
         
         return score
     
@@ -174,15 +185,17 @@ class ProfileScorer:
             datetime.utcnow() - (profile.last_used or profile.created_at)
         ).total_seconds() / 3600
         
-        recency_threshold = self.config.get('recency_threshold_hours', 24)
+        recency_threshold = self._get_config_value('recency_threshold_hours', 24)
         if time_since_used < recency_threshold:
             recency_factor = 1 - (time_since_used / recency_threshold)
-            score += recency_factor * self.config.get('recency_bonus_max', 10)
+            recency_bonus_max = self._get_config_value('recency_bonus_max', 10)
+            score += recency_factor * recency_bonus_max
         
         # Peak time bonus
         current_hour = datetime.utcnow().hour
         if 9 <= current_hour <= 11 or 18 <= current_hour <= 20:
-            score += self.config.get('peak_time_bonus', 5)
+            peak_bonus = self._get_config_value('peak_time_bonus', 5)
+            score += peak_bonus
         
         return score
     

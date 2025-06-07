@@ -435,8 +435,8 @@ def validate_profile_quality(profile: Any, platform: Platform) -> ProfileQuality
                 score += 10
     
     # Check session availability
-    if hasattr(profile, 'platform_sessions'):
-        if platform.value in profile.platform_sessions:
+    if hasattr(profile, 'sessions'):
+        if platform.value in profile.sessions:
             score += 20
     
     # Platform-specific requirements
@@ -472,31 +472,20 @@ def merge_profile_stats(profiles: List[Any]) -> Dict[str, Any]:
     response_times = defaultdict(list)
     
     for profile in profiles:
-        if not hasattr(profile, 'platform_stats'):
-            continue
-        
-        # Aggregate platform stats
-        for platform, stats in profile.platform_stats.items():
-            platform_stats[platform]['attempts'] += stats.get('attempts', 0)
-            platform_stats[platform]['successes'] += stats.get('successes', 0)
-            platform_stats[platform]['failures'] += stats.get('failures', 0)
-            
-            if 'avg_response_time_ms' in stats and stats['avg_response_time_ms'] > 0:
-                response_times[platform].append(stats['avg_response_time_ms'])
-            
-            # Collect detection events
-            if 'detection_events' in stats:
-                merged_stats['detection_events'].extend(stats['detection_events'])
+        # Aggregate platform stats using simplified BrowserProfile
+        if hasattr(profile, 'platforms'):
+            for platform in profile.platforms:
+                platform_name = platform.value if hasattr(platform, 'value') else str(platform)
+                # Use overall profile stats instead of per-platform stats
+                platform_stats[platform_name]['attempts'] += profile.use_count
+                platform_stats[platform_name]['successes'] += profile.success_count
+                platform_stats[platform_name]['failures'] += profile.failure_count
         
         # Quality stats
         if hasattr(profile, 'quality'):
             quality_name = profile.quality.name
             quality_stats[quality_name]['count'] += 1
-            
-            total_successes = sum(
-                s.get('successes', 0) for s in profile.platform_stats.values()
-            )
-            quality_stats[quality_name]['successes'] += total_successes
+            quality_stats[quality_name]['successes'] += profile.success_count
     
     # Calculate totals
     for platform, stats in platform_stats.items():
@@ -579,7 +568,7 @@ def export_profile_health_report(profiles: List[Any], output_path: str):
             'health_score': health_score,
             'last_used': profile.last_used.isoformat() if hasattr(profile, 'last_used') and profile.last_used else None,
             'success_rate': profile.get_success_rate() if hasattr(profile, 'get_success_rate') else 0.0,
-            'platform_sessions': list(profile.platform_sessions.keys()) if hasattr(profile, 'platform_sessions') else [],
+            'platform_sessions': list(profile.sessions.keys()) if hasattr(profile, 'sessions') else [],
             'proxy_configured': bool(getattr(profile, 'proxy_config', None)),
             'recommendations': generate_profile_recommendations(profile, health_score)
         }
@@ -629,9 +618,9 @@ def calculate_profile_health_score(profile: Any) -> float:
         score -= 30  # Never used
     
     # Check session validity
-    if hasattr(profile, 'platform_sessions'):
+    if hasattr(profile, 'sessions'):
         valid_sessions = sum(
-            1 for session in profile.platform_sessions.values()
+            1 for session in profile.sessions.values()
             if session.get('is_valid', False)
         )
         if valid_sessions == 0:
@@ -664,9 +653,9 @@ def generate_profile_recommendations(profile: Any, health_score: float) -> List[
             recommendations.append("Low success rate - needs behavior adjustment")
     
     # Check sessions
-    if hasattr(profile, 'platform_sessions'):
+    if hasattr(profile, 'sessions'):
         valid_sessions = sum(
-            1 for session in profile.platform_sessions.values()
+            1 for session in profile.sessions.values()
             if session.get('is_valid', False)
         )
         if valid_sessions == 0:

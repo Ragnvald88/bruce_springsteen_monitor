@@ -268,13 +268,13 @@ class ProfileIntegratedStrikeForce:
     def _convert_platform_safe(self, platform: PlatformType):
         """Safely convert PlatformType to CorePlatformEnum"""
         try:
-            from src.profiles.enums import Platform as CorePlatformEnum
+            from ..profiles.consolidated_models import Platform as CorePlatformEnum
             
             # Platform mapping
             mapping = {
-                PlatformType.FANSALE: getattr(CorePlatformEnum, 'FANSALE', CorePlatformEnum.GENERIC),
-                PlatformType.TICKETMASTER: getattr(CorePlatformEnum, 'TICKETMASTER', CorePlatformEnum.GENERIC),
-                PlatformType.VIVATICKET: getattr(CorePlatformEnum, 'VIVATICKET', CorePlatformEnum.GENERIC)
+                PlatformType.FANSALE: CorePlatformEnum.FANSALE,
+                PlatformType.TICKETMASTER: CorePlatformEnum.TICKETMASTER,
+                PlatformType.VIVATICKET: CorePlatformEnum.VIVATICKET
             }
             
             result = mapping.get(platform, CorePlatformEnum.GENERIC)

@@ -27,8 +27,8 @@ class PlatformType(Enum):
     VIVATICKET = "vivaticket"
 
     def to_core_platform(self) -> CorePlatformEnum:
-        """Convert to core Platform enum from src.profiles.enums"""
-        from src.profiles.enums import Platform as CorePlatformEnum
+        """Convert to core Platform enum"""
+        # Use the already imported CorePlatformEnum
         mapping = {
             PlatformType.FANSALE: CorePlatformEnum.FANSALE,
             PlatformType.TICKETMASTER: CorePlatformEnum.TICKETMASTER,

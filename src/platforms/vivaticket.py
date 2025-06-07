@@ -10,8 +10,8 @@ from typing import Dict, List, Optional, Any, TYPE_CHECKING
 from playwright.async_api import Page, Error as PlaywrightError, Response
 
 # Core project imports
-from core.errors import BlockedError
-from src.profiles.manager import BrowserProfile
+from ..core.errors import BlockedError
+from ..profiles.models import BrowserProfile
 if TYPE_CHECKING:
     pass
 

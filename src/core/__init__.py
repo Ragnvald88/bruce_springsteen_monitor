@@ -6,3 +6,6 @@
 
 # src/profiles/__init__.py
 """Profile management system"""
+
+# src/core/stealth/__init__.py
+"""stealth system"""

@@ -1,1237 +1,696 @@
-# src/core/orchestrator.py - FIXED VERSION
-from __future__ import annotations
+# src/core/orchestrator_v2.py
+"""
+Ultimate Orchestrator v2.0 - StealthMaster AI
+Quantum-enhanced control center for ultra-efficient ticket acquisition
+"""
 
 import asyncio
 import gc
 import logging
-import os
 import psutil
-import random
 import time
-from collections import defaultdict, deque
-from dataclasses import dataclass
+import random
+from typing import Dict, List, Optional, Set, Any
 from datetime import datetime
-from typing import Dict, List, Optional, Set, Any, TYPE_CHECKING
+from collections import defaultdict, deque
 
-if TYPE_CHECKING:
-    from playwright.async_api import BrowserContext
+from playwright.async_api import async_playwright, Playwright
 
-
-# Profile system imports
-from ..profiles.manager import ProfileManager, BrowserProfile
-from ..profiles.consolidated_models import Platform as CorePlatformEnum, DataOptimizationLevel
-from ..profiles.utils import create_profile_manager_from_config
-from .stealth.stealth_engine import StealthEngine, StealthEngineIntegration
-
-# FIXED: Correct import for advanced_profile_system (it's in core, not profiles)
-from .advanced_profile_system import DetectionEvent
-
-# Import detection monitoring
-from .detection_monitor import get_detection_monitor, DetectionEventType
-
-# Core module imports (these are already correct as relative imports)
+# Core imports
 from .enums import OperationMode, PlatformType, PriorityLevel
-from .models import EnhancedTicketOpportunity, DataUsageTracker
+from .models import EnhancedTicketOpportunity
 from .managers import ConnectionPoolManager, ResponseCache
 from .ticket_reserver import TicketReserver
-# SmartBrowserContextManager removed - replaced by stealth_engine.py integration
-from .components import ProfileAwareLightweightMonitor
-from .strike_force import ProfileIntegratedStrikeForce
+
+# Enhanced components
+from .stealth.stealth_engine import get_stealthmaster_engine
+from .strike_force import EnhancedStrikeForce
+from .proxy_manager import get_proxy_manager
+from ..platforms.unified_handler import UnifiedTicketingHandler
+from ..profiles.manager import ProfileManager, BrowserProfile
 
 logger = logging.getLogger(__name__)
 
-@dataclass
-class SystemHealth:
-    """Enhanced system health tracking"""
-    cpu_percent: float = 0.0
-    memory_percent: float = 0.0
-    active_tasks: int = 0
-    error_rate: float = 0.0
-    last_success: Optional[datetime] = None
-    consecutive_failures: int = 0
-    detection_events: int = 0
-    profile_rotation_rate: float = 0.0
-    
-    @property
-    def is_healthy(self) -> bool:
-        return (self.cpu_percent < 80 and 
-                self.memory_percent < 85 and 
-                self.error_rate < 0.3 and
-                self.consecutive_failures < 10 and
-                self.detection_events < 20)
-    
-    @property
-    def threat_level(self) -> str:
-        if self.detection_events > 50: return "CRITICAL"
-        elif self.detection_events > 20: return "HIGH"
-        elif self.detection_events > 10: return "MEDIUM"
-        return "LOW"
+# Define BlockedError if not imported from elsewhere
+class BlockedError(Exception):
+    """Raised when a monitor is blocked by the platform."""
+    pass
 
-class UnifiedOrchestrator:
-    """Ultra-performance orchestrator with complete strike processing"""
+
+class UltimateOrchestrator:
+    """Quantum-enhanced orchestrator with revolutionary efficiency"""
     
-    def __init__(self, config, playwright_instance, config_file_path, gui_queue=None):
-        
+    def __init__(self, config: Dict[str, Any], gui_queue=None):
         self.config = config
-        self.playwright = playwright_instance
-        self.config_file_path = config_file_path
         self.gui_queue = gui_queue
-        # StealthEngine will be initialized after profile_manager in initialize_subsystems()
-        self.stealth_engine = None
-        # Operation mode and settings
-        self.mode = OperationMode(config.get('app_settings', {}).get('mode', 'adaptive'))
-        self.is_dry_run = config.get('app_settings', {}).get('dry_run', False)
+        self.mode = OperationMode[config['app_settings']['mode'].upper()]
         
         # Performance settings
-        self.max_concurrent_strikes = config.get('performance', {}).get('max_concurrent_strikes', 3)
-        self.max_concurrent_monitors = config.get('performance', {}).get('max_concurrent_monitors', 10)
+        self.max_concurrent_monitors = self._get_mode_setting('max_concurrent_monitors', 3)
+        self.max_concurrent_strikes = self._get_mode_setting('max_concurrent_strikes', 5)
         
-        # Data tracker
-        self.data_tracker = DataUsageTracker(
-            global_limit_mb=config.get('data_limits', {}).get('global_limit_mb'),
-            session_limit_mb=config.get('data_limits', {}).get('session_limit_mb'),
-            daily_limit_mb=config.get('data_limits', {}).get('daily_limit_mb')
-        )
-        
-        # Core components (initialized in initialize_subsystems)
+        # Core components (initialized in setup)
+        self.playwright: Optional[Playwright] = None
         self.profile_manager: Optional[ProfileManager] = None
         self.connection_pool: Optional[ConnectionPoolManager] = None
         self.response_cache: Optional[ResponseCache] = None
-        # Legacy SmartBrowserContextManager replaced by stealth_integration
-        self.stealth_integration = None
-        self.monitor: Optional[ProfileAwareLightweightMonitor] = None
-        self.strike_force: Optional[ProfileIntegratedStrikeForce] = None
         self.ticket_reserver: Optional[TicketReserver] = None
+        self.strike_force: Optional[EnhancedStrikeForce] = None
         
-        # Detection monitoring
-        self.detection_monitor = get_detection_monitor()
+        # StealthMaster AI Engine
+        self.stealth_engine = get_stealthmaster_engine()
         
-        # Opportunity management with bounded collections to prevent memory leaks
-        self.opportunity_queue: asyncio.PriorityQueue = asyncio.PriorityQueue(maxsize=500)  # Reduced from 1000
-        self.processed_opportunity_fingerprints: Set[str] = set()
-        self._max_fingerprints = 10000  # Prevent unbounded growth
-        self.opportunity_cache: Dict[str, EnhancedTicketOpportunity] = {}
-        self._max_cache_size = 1000  # Prevent unbounded growth
-        self.active_strikes: Dict[str, asyncio.Task] = {}
+        # Monitoring infrastructure
+        self.monitors: Dict[str, UnifiedTicketingHandler] = {}
+        self.monitor_tasks: Dict[str, asyncio.Task] = {}
         
-        # System health tracking
-        self.system_health = SystemHealth()
+        # Opportunity management with quantum optimization
+        self.opportunity_processor = QuantumOpportunityProcessor()
+        self.active_opportunities: Set[str] = set()
         
-        # Metrics and state
+        # System state
+        self.running = False
         self.start_time = datetime.now()
-        self.metrics = self._initialize_metrics()
-        self.background_tasks: List[asyncio.Task] = []
-        self.monitor_semaphore = asyncio.Semaphore(self.max_concurrent_monitors)
-        self.strike_semaphore = asyncio.Semaphore(self.max_concurrent_strikes)
+        self._performance_monitor_task: Optional[asyncio.Task] = None
         
-        # State flags
-        self.is_initialized = False
-        self._shutdown_initiated = False
-        self._pause_monitoring = False
+        # Quantum metrics
+        self.quantum_metrics = QuantumMetrics()
         
-        logger.info(f"🚀 UnifiedOrchestrator v4.0 initialized - Mode: {self.mode.value}")
+        logger.info(f"🚀 Ultimate Orchestrator v2.0 initialized in {self.mode.value} mode")
     
-    def _initialize_metrics(self) -> Dict[str, Any]:
-        """Initialize comprehensive metrics tracking"""
-        return {
-            'detections_by_platform': defaultdict(int),
-            'attempts_by_platform': defaultdict(int),
-            'successes_by_platform': defaultdict(int),
-            'failures_by_platform': defaultdict(int),
-            'blocks_by_platform': defaultdict(int),
-            'profile_rotations': 0,
-            'opportunities_processed_total': 0,
-            'opportunities_queued_total': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
-            'profile_performance': defaultdict(lambda: {
-                'attempts': 0, 'successes': 0, 'blocks': 0, 'response_times': deque(maxlen=100)
-            }),
-            'active_monitoring_tasks': 0,
-            'active_strike_tasks': 0,
-            'average_response_time': 0.0,
-            'peak_memory_usage': 0.0,
-            'total_data_saved_mb': 0.0,
-            'detection_timeline': deque(maxlen=100),   # Reduced from 1000 to prevent memory bloat
-            'success_timeline': deque(maxlen=100),     # Reduced from 1000 to prevent memory bloat
-        }
+    def _get_mode_setting(self, setting: str, default: Any) -> Any:
+        """Get mode-specific setting with fallback"""
+        mode_config = self.config['app_settings'].get('mode_configs', {}).get(self.mode.value, {})
+        return mode_config.get(setting, default)
     
-    async def initialize_subsystems(self) -> bool:
-        """Initialize all subsystems with enhanced error handling"""
-        
-        if self.is_initialized:
-            logger.info("Subsystems already initialized")
-            return True
+    async def initialize(self) -> None:
+        """Initialize all subsystems with quantum enhancements"""
+        logger.info("🔧 Initializing Ultimate Orchestrator subsystems...")
         
         try:
-            logger.info("🔧 Initializing orchestrator subsystems...")
+            # Initialize Playwright
+            self.playwright = await async_playwright().start()
             
-            # 1. Profile Manager
-            profile_settings = self.config.get('profile_manager_settings', {})
+            # Initialize proxy manager
+            self.proxy_manager = get_proxy_manager(self.config)
+            if self.proxy_manager.enabled:
+                await self.proxy_manager.validate_all_proxies()
+                # Start periodic revalidation
+                asyncio.create_task(self.proxy_manager.periodic_revalidation())
             
-            if self.mode == OperationMode.ULTRA_STEALTH:
-                profile_settings['evolution_interval'] = 300
-                profile_settings['min_quality_threshold'] = 0.7
-            elif self.mode == OperationMode.BEAST:
-                profile_settings['evolution_interval'] = 60
-                profile_settings['min_quality_threshold'] = 0.3
+            # Initialize profile manager
+            self.profile_manager = ProfileManager(self.config.get('profile_settings', {}))
+            await self.profile_manager.initialize()
             
-            self.profile_manager = create_profile_manager_from_config(
-                str(self.config_file_path),
-                config_overrides=profile_settings
+            # Initialize core components
+            self.connection_pool = ConnectionPoolManager(
+                max_connections=self._get_mode_setting('max_connections', 50)
             )
             
-            if hasattr(self.profile_manager, 'initialize'):
-                # Use fast initialization for better startup performance
-                await self.profile_manager.initialize(lazy_load=True)
-            
-            if not await self._validate_profile_manager():
-                logger.error("ProfileManager validation failed!")
-                return False
-
-            profile_count = len(getattr(self.profile_manager, 'dynamic_profiles', []))
-            logger.info(f"✅ ProfileManager: {profile_count} profiles loaded")
-            
-            # 2. Connection Pool
-            self.connection_pool = ConnectionPoolManager(self.config, self.profile_manager)
-            logger.info("✅ ConnectionPoolManager: Pre-warmed connections")
-            
-            # 3. Response Cache
-            cache_size_mb = self.config.get('cache_settings', {}).get('max_size_mb', 100)
-            self.response_cache = ResponseCache(max_size_mb=cache_size_mb)
-            logger.info(f"✅ ResponseCache: {cache_size_mb}MB capacity")
-            
-            # 4. Ultra-Stealth Integration (70% less code, 100% effectiveness)
-            from .stealth.ultra_stealth import create_ultra_stealth_engine, get_ultra_stealth_integration
-            
-            self.stealth_engine = create_ultra_stealth_engine()
-            self.stealth_integration = get_ultra_stealth_integration()
-            logger.info("✅ Ultra-Stealth v2.0: Optimized anti-detection system ready")
-            
-            # 5. Monitor
-            self.monitor = ProfileAwareLightweightMonitor(
-                self.config, self.profile_manager, self.connection_pool,
-                self.response_cache, self.data_tracker
+            self.response_cache = ResponseCache(
+                max_size=self._get_mode_setting('cache_size', 1000),
+                ttl=self.config['monitoring_settings'].get('cache_max_age_s', 300)
             )
-            logger.info("✅ ProfileAwareLightweightMonitor: Configured")
             
-            # 6. Strike Force (updated to use stealth_integration)
-            self.strike_force = ProfileIntegratedStrikeForce(
-                self.stealth_integration, self.profile_manager, self.data_tracker, self.config
+            # Initialize ticket reserver
+            self.ticket_reserver = TicketReserver(
+                open_browser_mode=self.config['app_settings'].get('browser_open_mode', 'both')
             )
-            logger.info("✅ ProfileIntegratedStrikeForce: Armed with StealthEngine")
             
-            # 7. Ticket Reserver for immediate browser opening
-            browser_mode = self.config.get('app_settings', {}).get('browser_open_mode', 'both')
-            self.ticket_reserver = TicketReserver(open_browser_mode=browser_mode)
-            logger.info(f"✅ TicketReserver: Ready to open tickets in {browser_mode} mode")
+            # Initialize strike force v2
+            self.strike_force = EnhancedStrikeForce(
+                self.profile_manager,
+                self.playwright.chromium,
+                self.connection_pool,
+                self.ticket_reserver
+            )
             
-            self.is_initialized = True
-            logger.info("✨ All subsystems initialized successfully")
+            # Initialize monitors for all targets
+            await self._initialize_monitors()
             
-            return True
+            logger.info("✅ All subsystems initialized successfully")
             
         except Exception as e:
-            logger.critical(f"Subsystem initialization failed: {e}", exc_info=True)
-            self.is_initialized = False
-            return False
+            logger.error(f"Initialization failed: {e}", exc_info=True)
+            raise
     
-    
-    async def _execute_single_strike(self, opportunity, profile, task_id, params):
-        """Execute a single strike with enhanced stealth capabilities"""
-        try:
-            # Convert legacy profile format to stealth-compatible format
-            legacy_profile = {
-                'id': getattr(profile, 'profile_id', 'unknown'),
-                'browser': getattr(profile, 'browser', 'Chrome'),
-                'os': getattr(profile, 'os', 'Windows 11'),
-                'viewport_width': getattr(profile, 'viewport_width', 1920),
-                'viewport_height': getattr(profile, 'viewport_height', 1080),
-                'user_agent': getattr(profile, 'user_agent', ''),
-                'locale': getattr(profile, 'locale', 'en-US'),
-                'timezone': getattr(profile, 'timezone', 'America/New_York')
-            }
-            
-            # Create stealth context using the integration layer
-            stealth_context = await self.stealth_integration.create_stealth_browser_context(
-                self.playwright.chromium,  # browser instance
-                legacy_profile,
-                opportunity.platform.value
-            )
-            
-            # Context is now ready - pass it to strike force for execution
-            # The strike force expects browser_manager, so we need to adapt
-            # Temporarily store the context in strike force
-            self.strike_force._temp_context = stealth_context
-            
-            # Let strike force handle the actual strike execution
-            success = await self.strike_force._execute_single_strike(
-                opportunity, profile, task_id, params
-            )
-            
-            # Clean up temporary context reference
-            self.strike_force._temp_context = None
-            
-            # Close context after strike completion
+    async def _initialize_monitors(self) -> None:
+        """Initialize monitors for all configured targets"""
+        targets = self.config.get('targets', [])
+        enabled_targets = [t for t in targets if t.get('enabled', True)]
+        
+        logger.info(f"Initializing {len(enabled_targets)} target monitors")
+        
+        for target in enabled_targets:
             try:
-                await stealth_context.close()
-            except Exception as e:
-                logger.debug(f"Error closing stealth context: {e}")
+                # Select optimal profile for monitoring
+                profile = await self._select_monitoring_profile(target)
                 
-            return success
-            
-        except Exception as e:
-            logger.error(f"Strike execution failed: {e}", exc_info=True)
-            return False
-
-    async def _validate_profile_manager(self) -> bool:
-        """Enhanced profile manager validation"""
-        try:
-            if not self.profile_manager:
-                logger.error("ProfileManager is None!")
-                return False
-
-            dynamic_count = len(getattr(self.profile_manager, 'dynamic_profiles', []))
-            static_count = len(getattr(self.profile_manager, 'static_profiles', {}))
-
-            logger.info(f"Profile inventory: {dynamic_count} dynamic, {static_count} static profiles")
-
-            if dynamic_count > 0 and static_count == 0:
-                logger.warning("No static profiles but have dynamic profiles, creating static versions")
-                
-                if not hasattr(self.profile_manager, 'static_profiles'):
-                    self.profile_manager.static_profiles = {}
-                
-                # Convert dynamic to static
-                for dynamic_profile in self.profile_manager.dynamic_profiles:
-                    if hasattr(self.profile_manager, '_adapt_dynamic_to_static'):
-                        static_profile = self.profile_manager._adapt_dynamic_to_static(dynamic_profile)
-                        self.profile_manager.static_profiles[dynamic_profile.id] = static_profile
-                
-                static_count = len(self.profile_manager.static_profiles)
-                logger.info(f"Created {static_count} static profiles from dynamic profiles")
-
-            # Initialize platform pools
-            if not hasattr(self.profile_manager, 'platform_pools'):
-                self.profile_manager.platform_pools = defaultdict(list)
-                
-            platform_pools = self.profile_manager.platform_pools
-
-            # Ensure each platform has profiles
-            for platform in ['fansale', 'ticketmaster', 'vivaticket']:
-                if platform not in platform_pools or not platform_pools[platform]:
-                    logger.warning(f"No profiles assigned to {platform}, creating one")
-                    try:
-                        if hasattr(self.profile_manager, '_create_platform_optimized_profile'):
-                            # Convert string to enum
-                            platform_enum = getattr(CorePlatformEnum, platform.upper(), CorePlatformEnum.GENERIC)
-                            new_profile = await self.profile_manager._create_platform_optimized_profile(platform_enum)
-                            if new_profile:
-                                self.profile_manager.dynamic_profiles.append(new_profile['dynamic'])
-                                self.profile_manager.static_profiles[new_profile['dynamic'].id] = new_profile['static']
-                                platform_pools[platform].append(new_profile['dynamic'].id)
-                                logger.info(f"Created profile {new_profile['dynamic'].id} for {platform}")
-                    except Exception as e:
-                        logger.error(f"Failed to create profile for {platform}: {e}")
-
-            return True
-
-        except Exception as e:
-            logger.error(f"Profile manager validation failed: {e}", exc_info=True)
-            return False
-    
-    async def run(self, stop_event: asyncio.Event) -> None:
-        """Main execution loop with complete task management"""
-        
-        if not await self.initialize_subsystems():
-            logger.critical("Cannot run - initialization failed")
-            return
-        
-        logger.info(f"🏃 Starting main execution loop - Mode: {self.mode.value.upper()}")
-        
-        # Apply mode-specific optimizations
-        await self._apply_mode_specific_settings()
-        
-        # Create essential background tasks (reduced from 5 to 3 for better performance)
-        self.background_tasks = [
-            asyncio.create_task(self._monitoring_loop(stop_event), name="monitoring_loop"),
-            asyncio.create_task(self._strike_processor_loop(stop_event), name="strike_processor"),
-            asyncio.create_task(self._combined_maintenance_loop(stop_event), name="maintenance_loop"),  # Combined metrics, health, and cache
-        ]
-        
-        # Wait for stop signal
-        try:
-            await stop_event.wait()
-            logger.info("Stop event received, initiating shutdown")
-        except asyncio.CancelledError:
-            logger.info("Run loop cancelled")
-        finally:
-            await self.shutdown_tasks()
-    
-    async def _apply_mode_specific_settings(self):
-        """Apply performance and stealth settings based on mode"""
-        
-        mode_configs = {
-            OperationMode.ULTRA_STEALTH: {
-                'max_concurrent_strikes': 1,
-                'max_concurrent_monitors': 3,
-                'min_interval_multiplier': 2.0,
-                'data_optimization': DataOptimizationLevel.AGGRESSIVE,
-            },
-            OperationMode.STEALTH: {
-                'max_concurrent_strikes': 2,
-                'max_concurrent_monitors': 5,
-                'min_interval_multiplier': 1.5,
-                'data_optimization': DataOptimizationLevel.BALANCED,
-            },
-            OperationMode.BEAST: {
-                'max_concurrent_strikes': 5,
-                'max_concurrent_monitors': 20,
-                'min_interval_multiplier': 0.5,
-                'data_optimization': DataOptimizationLevel.MINIMAL,
-            },
-            OperationMode.ADAPTIVE: {
-                'max_concurrent_strikes': 3,
-                'max_concurrent_monitors': 10,
-                'min_interval_multiplier': 1.0,
-                'data_optimization': DataOptimizationLevel.BALANCED,
-            },
-            OperationMode.HYBRID: {
-                'max_concurrent_strikes': 3,
-                'max_concurrent_monitors': 8,
-                'min_interval_multiplier': 1.2,
-                'data_optimization': DataOptimizationLevel.BALANCED,
-            }
-        }
-        
-        settings = mode_configs.get(self.mode, mode_configs[OperationMode.ADAPTIVE])
-        
-        # Apply settings
-        self.max_concurrent_strikes = settings['max_concurrent_strikes']
-        self.max_concurrent_monitors = settings['max_concurrent_monitors']
-        
-        # Update semaphores
-        self.monitor_semaphore = asyncio.Semaphore(self.max_concurrent_monitors)
-        self.strike_semaphore = asyncio.Semaphore(self.max_concurrent_strikes)
-        
-        logger.info(f"Applied {self.mode.value} mode settings: "
-                   f"Strikes={self.max_concurrent_strikes}, "
-                   f"Monitors={self.max_concurrent_monitors}")
-    
-    async def _monitoring_loop(self, stop_event: asyncio.Event) -> None:
-        """Enhanced monitoring loop with platform-specific monitors"""
-        
-        logger.info("Monitoring loop started")
-        active_tasks: Dict[str, asyncio.Task] = {}
-        
-        targets = [t for t in self.config.get('targets', []) if t.get('enabled')]
-        if not targets:
-            logger.warning("No enabled targets")
-            await stop_event.wait()
-            return
-        
-        self.metrics['active_monitoring_tasks'] = len(targets)
-        
-        # Start monitoring tasks for all targets
-        for target in targets:
-            target_id = self._get_target_id(target)
-            task = asyncio.create_task(
-                self._monitor_single_target_loop(target, stop_event),
-                name=f"monitor_{target_id}"
-            )
-            active_tasks[target_id] = task
-        
-        # Monitor task health
-        while not stop_event.is_set():
-            # Check for failed tasks and restart
-            for target_id, task in list(active_tasks.items()):
-                if task.done():
-                    try:
-                        await task  # Retrieve exception if any
-                    except Exception as e:
-                        logger.error(f"Monitor task {target_id} failed: {e}")
-                    
-                    # Find target config
-                    target_config = next((t for t in targets if self._get_target_id(t) == target_id), None)
-                    if target_config:
-                        # Restart with backoff
-                        await asyncio.sleep(5)
-                        active_tasks[target_id] = asyncio.create_task(
-                            self._monitor_single_target_loop(target_config, stop_event),
-                            name=f"monitor_{target_id}_restart"
-                        )
-            
-            await asyncio.sleep(10)  # Health check interval
-        
-        # Cleanup
-        logger.info("Stopping monitoring tasks...")
-        for task in active_tasks.values():
-            if not task.done():
-                task.cancel()
-        
-        await asyncio.gather(*active_tasks.values(), return_exceptions=True)
-        logger.info("Monitoring loop finished")
-    
-    def _get_target_id(self, target: Dict[str, Any]) -> str:
-        """Generate unique target ID"""
-        platform = target.get('platform', 'unknown')
-        event = target.get('event_name', target.get('url', 'unknown'))
-        return f"{platform}_{event}".replace(' ', '_')[:50]
-    
-    async def _monitor_single_target_loop(self, target_config: Dict[str, Any], stop_event: asyncio.Event) -> None:
-        """Monitor a single target with enhanced error handling"""
-        
-        platform_str = target_config.get('platform', '').lower()
-        event_name = target_config.get('event_name', 'Unknown Event')
-        url = target_config.get('url', '')
-        priority = PriorityLevel[target_config.get('priority', 'normal').upper()]
-        
-        if not url:
-            logger.error(f"No URL for target {event_name}")
-            return
-        
-        # Convert to PlatformType
-        platform_map = {
-            'fansale': PlatformType.FANSALE,
-            'ticketmaster': PlatformType.TICKETMASTER,
-            'vivaticket': PlatformType.VIVATICKET
-        }
-        platform = platform_map.get(platform_str, PlatformType.FANSALE)
-        
-        logger.info(f"🔍 Starting monitoring for {event_name} on {platform_str}")
-        
-        while not stop_event.is_set():
-            try:
-                if self._pause_monitoring:
-                    await asyncio.sleep(30)
+                if not profile:
+                    logger.error(f"No suitable profile for {target['event_name']}")
                     continue
                 
-                async with self.monitor_semaphore:
-                    if stop_event.is_set():
-                        break
-                    
-                    # Monitor this target
-                    opportunities = await self.monitor.check_ultra_efficient(
-                        platform, url, event_name, priority
-                    )
-                    
-                    # Process opportunities
-                    for opp in opportunities:
-                        await self._queue_opportunity(opp)
+                # Create unified handler
+                monitor = UnifiedTicketingHandler(
+                    config=target,
+                    profile=profile,
+                    browser_manager=self.playwright.chromium,
+                    connection_manager=self.connection_pool,
+                    cache=self.response_cache
+                )
                 
-                # Dynamic interval based on mode and performance
-                base_interval = target_config.get('check_interval', 60)
-                if self.mode == OperationMode.BEAST:
-                    base_interval *= 0.5
-                elif self.mode == OperationMode.ULTRA_STEALTH:
-                    base_interval *= 2.0
+                # Initialize with StealthMaster protection
+                await monitor.initialize()
                 
-                # Add jitter
-                interval = base_interval + random.uniform(-5, 5)
-                await asyncio.sleep(max(5, interval))
+                # Store monitor
+                monitor_id = f"{target['platform']}_{target['event_name']}"
+                self.monitors[monitor_id] = monitor
                 
-            except asyncio.CancelledError:
-                logger.info(f"Monitor for {event_name} cancelled")
-                break
+                logger.info(f"✅ Monitor initialized: {target['event_name']}")
+                
             except Exception as e:
-                logger.error(f"Monitor error for {event_name}: {e}")
-                await asyncio.sleep(30)  # Backoff on error
+                logger.error(f"Failed to initialize monitor for {target['event_name']}: {e}")
     
-    async def _queue_opportunity(self, opportunity: EnhancedTicketOpportunity):
-        """Enhanced opportunity queuing with deduplication and memory management"""
+    async def _select_monitoring_profile(self, target: Dict[str, Any]) -> Optional[BrowserProfile]:
+        """Select optimal profile for monitoring"""
+        platform = target['platform']
         
-        # Memory management - prevent unbounded growth
-        await self._cleanup_old_data()
+        # Get profiles suitable for platform
+        profiles = await self.profile_manager.get_healthy_profiles(
+            platform=platform,
+            min_quality_tier=2  # Lower quality OK for monitoring
+        )
         
-        # Check if already processed
-        if opportunity.fingerprint in self.processed_opportunity_fingerprints:
-            return
+        if not profiles:
+            return None
         
-        # Check if already in queue
-        if opportunity.id in self.opportunity_cache:
-            return
+        # Select profile with best platform-specific performance
+        best_profile = None
+        best_score = -1
         
-        # Calculate priority score
-        score = self._calculate_opportunity_score(opportunity)
+        for profile in profiles:
+            platform_stats = profile.platform_stats.get(platform, {})
+            score = platform_stats.get('success_rate', 0.5) * 100
+            
+            # Bonus for recent success
+            if platform_stats.get('last_success'):
+                recency_bonus = max(0, 30 - (time.time() - platform_stats['last_success']) / 3600)
+                score += recency_bonus
+            
+            if score > best_score:
+                best_score = score
+                best_profile = profile
+        
+        return best_profile
+    
+    async def start(self) -> None:
+        """Start orchestrator with quantum activation"""
+        logger.critical("⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡")
+        self.running = True
         
         try:
-            # Add to queue (negative score for min-heap priority)
-            await self.opportunity_queue.put((-score, opportunity))
-            self.opportunity_cache[opportunity.id] = opportunity
-            self.metrics['opportunities_queued_total'] += 1
+            # Start monitoring tasks
+            for monitor_id, monitor in self.monitors.items():
+                task = asyncio.create_task(self._monitor_loop(monitor_id, monitor))
+                self.monitor_tasks[monitor_id] = task
             
-            logger.info(f"🎯 Queued opportunity: {opportunity.event_name} (Score: {score:.2f})")
+            # Start opportunity processor
+            asyncio.create_task(self.opportunity_processor.process_loop(self))
             
-            # IMMEDIATELY open browser for high-priority tickets
-            if opportunity.priority == PriorityLevel.CRITICAL or score > 100:
-                logger.critical(f"🚨 HIGH PRIORITY TICKET - OPENING BROWSER IMMEDIATELY!")
-                # Convert opportunity to dict for ticket reserver
-                ticket_info = {
-                    'id': opportunity.id,
-                    'event_name': opportunity.event_name,
-                    'platform': opportunity.platform.value,
-                    'url': getattr(opportunity, 'url', ''),
-                    'price': opportunity.price,
-                    'section': opportunity.section,
-                    'quantity': getattr(opportunity, 'quantity', 1)
-                }
-                # Open browser immediately (non-blocking)
-                if self.ticket_reserver:
-                    asyncio.create_task(self.ticket_reserver.reserve_ticket(ticket_info))
+            # Start performance monitor
+            self._performance_monitor_task = asyncio.create_task(self._monitor_performance())
             
-            # Notify GUI
-            if self.gui_queue:
-                self.gui_queue.put(("opportunity", {
-                    'id': opportunity.id,
-                    'event': opportunity.event_name,
-                    'platform': opportunity.platform.value,
-                    'price': opportunity.price,
-                    'section': opportunity.section,
-                    'score': score
-                }))
+            # Start quantum optimizer
+            asyncio.create_task(self._quantum_optimization_loop())
+            
+            logger.critical("🚀 All systems operational - Hunting for tickets!")
+            
+            # Keep running
+            while self.running:
+                await asyncio.sleep(1)
                 
-        except asyncio.QueueFull:
-            logger.warning(f"Opportunity queue full, dropping: {opportunity.event_name}")
+        except Exception as e:
+            logger.error(f"Orchestrator error: {e}", exc_info=True)
+            raise
     
-    def _calculate_opportunity_score(self, opportunity: EnhancedTicketOpportunity) -> float:
-        """Calculate opportunity priority score"""
-        base_score = 100.0
+    async def _monitor_loop(self, monitor_id: str, monitor: UnifiedTicketingHandler) -> None:
+        """Enhanced monitoring loop with adaptive timing"""
         
-        # Priority weight
-        priority_weights = {
-            PriorityLevel.CRITICAL: 50,
-            PriorityLevel.HIGH: 30,
-            PriorityLevel.NORMAL: 10,
-            PriorityLevel.LOW: 0
+        while self.running:
+            try:
+                # Calculate adaptive interval
+                interval = self._calculate_adaptive_interval(monitor)
+                
+                # Check for tickets
+                start_time = time.time()
+                opportunities = await monitor.check_tickets()
+                check_time = time.time() - start_time
+                
+                # Update quantum metrics
+                self.quantum_metrics.record_scan(monitor_id, check_time, len(opportunities))
+                
+                # Process opportunities
+                if opportunities:
+                    logger.critical(f"🎯 {len(opportunities)} opportunities detected!")
+                    
+                    for opportunity in opportunities:
+                        # Queue for processing
+                        await self.opportunity_processor.queue_opportunity(opportunity)
+                
+                # Adaptive sleep
+                sleep_time = max(0, interval - check_time)
+                await asyncio.sleep(sleep_time)
+                
+            except BlockedError:
+                logger.warning(f"Monitor {monitor_id} blocked - entering stealth mode")
+                await self._handle_monitor_block(monitor_id, monitor)
+                
+            except Exception as e:
+                logger.error(f"Monitor loop error: {e}")
+                await asyncio.sleep(30)  # Error cooldown
+    
+    def _calculate_adaptive_interval(self, monitor: UnifiedTicketingHandler) -> float:
+        """Calculate quantum-optimized monitoring interval"""
+        
+        base_interval = monitor.config.get('interval_s', 30)
+        
+        # Adjust based on mode
+        mode_multipliers = {
+            OperationMode.ULTRA_STEALTH: 2.0,
+            OperationMode.STEALTH: 1.5,
+            OperationMode.ADAPTIVE: 1.0,
+            OperationMode.HYBRID: 0.8,
+            OperationMode.BEAST: 0.5
         }
-        base_score += priority_weights.get(opportunity.priority, 0)
         
-        # Freshness bonus
-        age_minutes = opportunity.age_seconds / 60
-        freshness_bonus = max(0, 20 - age_minutes * 2)
-        base_score += freshness_bonus
+        interval = base_interval * mode_multipliers.get(self.mode, 1.0)
         
-        # Confidence bonus
-        base_score += (opportunity.confidence_score - 0.5) * 40
+        # Adjust based on recent activity
+        recent_opportunities = self.quantum_metrics.get_recent_opportunity_rate(monitor.platform.value)
         
-        # Attempt penalty
-        base_score -= opportunity.attempt_count * 10
+        if recent_opportunities > 0.1:  # High activity
+            interval *= 0.7
+        elif recent_opportunities < 0.01:  # Low activity
+            interval *= 1.3
         
-        # Mode-specific adjustments
-        if self.mode == OperationMode.BEAST:
-            if opportunity.priority == PriorityLevel.CRITICAL:
-                base_score += 30
-        elif self.mode == OperationMode.ULTRA_STEALTH:
-            if opportunity.verification_status:
-                base_score += 15
+        # Add quantum jitter
+        jitter = random.gauss(0, interval * 0.1)
+        interval += jitter
         
-        return max(0, base_score)
+        # Apply burst mode if configured
+        if monitor.config.get('burst_mode', {}).get('enabled'):
+            if self._should_burst(monitor):
+                interval = monitor.config['burst_mode'].get('min_interval_s', 3)
+        
+        return max(1, interval)  # Minimum 1 second
     
-    async def _cleanup_old_data(self):
-        """Prevent memory leaks by cleaning up old data"""
-        # Clean fingerprints if too many
-        if len(self.processed_opportunity_fingerprints) > self._max_fingerprints:
-            # Remove oldest 20% of fingerprints (simple cleanup)
-            to_remove = len(self.processed_opportunity_fingerprints) - int(self._max_fingerprints * 0.8)
-            fingerprints_list = list(self.processed_opportunity_fingerprints)
-            for fp in fingerprints_list[:to_remove]:
-                self.processed_opportunity_fingerprints.discard(fp)
-            logger.info(f"🧹 Cleaned {to_remove} old fingerprints")
+    def _should_burst(self, monitor: UnifiedTicketingHandler) -> bool:
+        """Determine if burst mode should activate"""
         
-        # Clean opportunity cache if too many
-        if len(self.opportunity_cache) > self._max_cache_size:
-            # Remove oldest 20% of cached opportunities
-            to_remove = len(self.opportunity_cache) - int(self._max_cache_size * 0.8)
-            cache_items = list(self.opportunity_cache.items())
-            for opp_id, _ in cache_items[:to_remove]:
-                del self.opportunity_cache[opp_id]
-            logger.info(f"🧹 Cleaned {to_remove} old cached opportunities")
+        # Check recent opportunity rate
+        rate = self.quantum_metrics.get_recent_opportunity_rate(monitor.platform.value)
+        
+        # Burst if high activity detected
+        return rate > 0.05
     
-    # FIXED: Complete _strike_processor_loop implementation
-    async def _strike_processor_loop(self, stop_event: asyncio.Event) -> None:
-        """FIXED: Complete strike processor with proper error handling"""
-        logger.info("Strike processor started")
+    async def _handle_monitor_block(self, monitor_id: str, monitor: UnifiedTicketingHandler) -> None:
+        """Handle blocked monitor with advanced recovery"""
         
-        while not stop_event.is_set():
+        # Switch to ultra-stealth mode temporarily
+        logger.info(f"Activating ultra-stealth recovery for {monitor_id}")
+        
+        # Cooldown with exponential backoff
+        cooldown = 60 * (2 ** self.quantum_metrics.get_block_count(monitor_id))
+        cooldown = min(cooldown, 3600)  # Max 1 hour
+        
+        logger.info(f"Cooling down for {cooldown}s")
+        await asyncio.sleep(cooldown)
+        
+        # Try profile rotation
+        new_profile = await self._select_monitoring_profile(monitor.config)
+        if new_profile and new_profile.profile_id != monitor.profile.profile_id:
+            logger.info("Rotating to fresh profile")
+            # Reinitialize monitor with new profile
+            monitor.profile = new_profile
+            await monitor.initialize()
+    
+    async def _monitor_performance(self) -> None:
+        """Monitor system performance and health"""
+        
+        while self.running:
             try:
-                # Get highest priority opportunity (with timeout)
-                try:
-                    neg_score, opportunity = await asyncio.wait_for(
-                        self.opportunity_queue.get(), 
-                        timeout=1.0
-                    )
-                except asyncio.TimeoutError:
-                    continue  # No opportunity in queue
+                # System metrics
+                cpu_percent = psutil.cpu_percent(interval=1)
+                memory = psutil.virtual_memory()
                 
-                # Skip if already being processed
-                if opportunity.id in self.active_strikes:
-                    if not self.active_strikes[opportunity.id].done():
-                        self.opportunity_queue.task_done()
-                        continue
+                # Calculate health score
+                health_score = self._calculate_health_score(cpu_percent, memory.percent)
                 
-                # Skip if already processed
-                if opportunity.fingerprint in self.processed_opportunity_fingerprints:
-                    self.opportunity_queue.task_done()
-                    continue
+                # Log metrics
+                if health_score < 70:
+                    logger.warning(f"System health degraded: {health_score}%")
                 
-                logger.info(f"🎯 Processing opportunity: {opportunity.event_name} (Score: {-neg_score:.2f})")
-                
-                # Execute strike with semaphore control
-                async with self.strike_semaphore:
-                    if stop_event.is_set():
-                        break
-                    
-                    # Create strike task
-                    strike_task = asyncio.create_task(
-                        self.strike_force.execute_coordinated_strike(opportunity, self.mode),
-                        name=f"strike_{opportunity.id[:8]}"
-                    )
-                    self.active_strikes[opportunity.id] = strike_task
-                    
-                    try:
-                        # Wait for strike completion
-                        success = await strike_task
-                        
-                        # Record metrics
-                        self.metrics['opportunities_processed_total'] += 1
-                        self.metrics['attempts_by_platform'][opportunity.platform.value] += 1
-                        
-                        if success:
-                            logger.critical(f"🎉 STRIKE SUCCESS for {opportunity.event_name}!")
-                            self.metrics['successes_by_platform'][opportunity.platform.value] += 1
-                            self.system_health.last_success = datetime.now()
-                            self.system_health.consecutive_failures = 0
-                            
-                            # Mark as processed
-                            self.processed_opportunity_fingerprints.add(opportunity.fingerprint)
-                            
-                            # Clear related opportunities
-                            await self._clear_related_opportunities(opportunity)
-                            
-                            # Notify GUI
-                            if self.gui_queue:
-                                self.gui_queue.put(("strike_success", {
-                                    'event': opportunity.event_name,
-                                    'platform': opportunity.platform.value,
-                                    'price': opportunity.price
-                                }))
-                        
-                        else:
-                            logger.warning(f"⚠️ Strike FAILED for {opportunity.event_name}")
-                            self.metrics['failures_by_platform'][opportunity.platform.value] += 1
-                            self.system_health.consecutive_failures += 1
-                            
-                            # Retry logic
-                            opportunity.attempt_count += 1
-                            if opportunity.attempt_count < 3:
-                                # Re-queue with lower priority
-                                new_score = self._calculate_opportunity_score(opportunity)
-                                await self.opportunity_queue.put((-new_score, opportunity))
-                                logger.info(f"♻️ Re-queued {opportunity.event_name}, attempt {opportunity.attempt_count + 1}")
-                            else:
-                                logger.error(f"❌ Max retries reached for {opportunity.event_name}")
-                                self.processed_opportunity_fingerprints.add(opportunity.fingerprint)
-                    
-                    except Exception as e:
-                        logger.error(f"Strike execution error for {opportunity.event_name}: {e}", exc_info=True)
-                        self.metrics['failures_by_platform'][opportunity.platform.value] += 1
-                        self.system_health.consecutive_failures += 1
-                    
-                    finally:
-                        # Clean up active strike
-                        if opportunity.id in self.active_strikes:
-                            del self.active_strikes[opportunity.id]
-                
-                # Mark queue task as done
-                self.opportunity_queue.task_done()
-                
-            except asyncio.CancelledError:
-                logger.info("Strike processor loop cancelled")
-                break
-            except Exception as e:
-                logger.error(f"Unexpected error in strike processor: {e}", exc_info=True)
-                await asyncio.sleep(1)  # Brief pause before retrying
-        
-        # Cleanup active strikes on exit
-        if self.active_strikes:
-            logger.info(f"Shutting down: waiting for {len(self.active_strikes)} active strikes...")
-            await asyncio.gather(*self.active_strikes.values(), return_exceptions=True)
-        
-        logger.info("Strike processor finished")
-    async def pre_warm_connections(self):
-        """Pre-warm HTTP connections for faster initial requests"""
-
-        if not self.connection_pool or not self.profile_manager:
-            return
-
-        logger.info("Pre-warming connections...")
-
-        # Get target URLs
-        target_urls = []
-        for target in self.config.get('targets', []):
-            if target.get('enabled') and target.get('url'):
-                target_urls.append(target['url'])
-
-        # Pre-warm connections for each platform
-        pre_warm_tasks = []
-        for url in target_urls[:5]:  # Limit pre-warming
-            task = asyncio.create_task(self._pre_warm_single_connection(url))
-            pre_warm_tasks.append(task)
-
-        if pre_warm_tasks:
-            await asyncio.gather(*pre_warm_tasks, return_exceptions=True)
-
-    async def _pre_warm_single_connection(self, url: str):
-        """Pre-warm a single connection"""
-        try:
-            profile = await self.profile_manager.get_profile_for_platform(
-                platform=CorePlatformEnum.GENERIC,  # Assuming CorePlatformEnum is accessible
-                require_session=False
-            )
-            if profile:
-                client = await self.connection_pool.get_client(profile)
-                # Just establish connection, don't fetch content
-                await client.options(url, timeout=5.0)
-        except Exception as e:
-            logger.debug(f"Pre-warm failed for {url}: {e}")
-        
-    async def _clear_related_opportunities(self, successful_opp: EnhancedTicketOpportunity):
-        """Clear related opportunities after success"""
-        cleared_count = 0
-        temp_queue = []
-        
-        try:
-            # Drain queue and filter
-            while not self.opportunity_queue.empty():
-                try:
-                    neg_score, item = self.opportunity_queue.get_nowait()
-                    
-                    # Check if related to successful opportunity
-                    if (item.event_name == successful_opp.event_name and 
-                        item.id != successful_opp.id):
-                        logger.info(f"🗑️ Clearing related opportunity: {item.id}")
-                        self.processed_opportunity_fingerprints.add(item.fingerprint)
-                        cleared_count += 1
-                    else:
-                        temp_queue.append((neg_score, item))
-                    
-                    self.opportunity_queue.task_done()
-                    
-                except asyncio.QueueEmpty:
-                    break
-        
-        except Exception as e:
-            logger.error(f"Error clearing related opportunities: {e}")
-        
-        finally:
-            # Re-add non-related items
-            for neg_score, item in temp_queue:
-                try:
-                    await self.opportunity_queue.put((neg_score, item))
-                except asyncio.QueueFull:
-                    logger.warning(f"Queue full, dropping opportunity: {item.id}")
-        
-        if cleared_count > 0:
-            logger.info(f"✅ Cleared {cleared_count} related opportunities for {successful_opp.event_name}")
-    
-    async def _health_monitor_loop(self, stop_event: asyncio.Event) -> None:
-        """Enhanced health monitoring with threat detection"""
-        logger.info("Health monitor started")
-        process = psutil.Process(os.getpid())
-        
-        while not stop_event.is_set():
-            try:
-                # Collect system metrics
-                self.system_health.cpu_percent = process.cpu_percent(interval=0.1)
-                memory_info = process.memory_info()
-                self.system_health.memory_percent = (memory_info.rss / psutil.virtual_memory().total) * 100
-                self.system_health.active_tasks = len(self.active_strikes) + self.metrics.get('active_monitoring_tasks', 0)
-                
-                # Calculate error rate
-                total_attempts = sum(self.metrics['attempts_by_platform'].values())
-                total_failures = sum(self.metrics['failures_by_platform'].values())
-                self.system_health.error_rate = total_failures / max(total_attempts, 1)
-                
-                # Track detection events
-                total_blocks = sum(self.metrics['blocks_by_platform'].values())
-                self.system_health.detection_events = total_blocks
-                
-                # Update peak memory
-                self.metrics['peak_memory_usage'] = max(
-                    self.metrics.get('peak_memory_usage', 0), 
-                    memory_info.rss / (1024*1024)
-                )
-                
-                # Health assessment and actions
-                if not self.system_health.is_healthy:
-                    threat_level = self.system_health.threat_level
-                    logger.warning(f"🚨 System unhealthy [Threat: {threat_level}]: "
-                                 f"CPU={self.system_health.cpu_percent:.1f}%, "
-                                 f"Mem={self.system_health.memory_percent:.1f}%, "
-                                 f"Errors={self.system_health.error_rate:.1%}, "
-                                 f"Detections={self.system_health.detection_events}")
-                    
-                    # Automatic remediation
-                    if self.system_health.memory_percent > 85:
-                        gc.collect()
-                        logger.info("🧹 Forced garbage collection")
-                    
-                    if self.system_health.consecutive_failures > 20:
-                        logger.critical("🚨 Too many consecutive failures, activating defensive mode")
-                        self._pause_monitoring = True
-                        await asyncio.sleep(30)
-                        self._pause_monitoring = False
-                    
-                    if threat_level == "CRITICAL":
-                        logger.critical("🔴 CRITICAL threat level - implementing emergency protocols")
-                        # Switch to ultra stealth mode temporarily
-                        if self.mode != OperationMode.ULTRA_STEALTH:
-                            logger.info("🥷 Emergency switch to ULTRA_STEALTH mode")
-                            self.mode = OperationMode.ULTRA_STEALTH
-                            await self._apply_mode_specific_settings()
-                
-                # Notify GUI of health status
+                # Update GUI
                 if self.gui_queue:
                     self.gui_queue.put(("health", {
-                        'cpu': self.system_health.cpu_percent,
-                        'memory': self.system_health.memory_percent,
-                        'error_rate': self.system_health.error_rate,
-                        'threat_level': self.system_health.threat_level,
-                        'is_healthy': self.system_health.is_healthy,
-                        'detection_events': self.system_health.detection_events,
-                        'consecutive_failures': self.system_health.consecutive_failures
+                        'cpu': cpu_percent,
+                        'memory': memory.percent,
+                        'health_score': health_score,
+                        'monitors_active': len(self.monitor_tasks),
+                        'opportunities_queued': self.opportunity_processor.queue_size()
                     }))
                 
-                await asyncio.sleep(10)  # Health check every 10 seconds
+                # Perform cleanup if needed
+                if memory.percent > 80:
+                    gc.collect()
+                    logger.info("Performed garbage collection")
                 
-            except asyncio.CancelledError:
-                break
+                await asyncio.sleep(5)
+                
             except Exception as e:
-                logger.error(f"Health monitor error: {e}", exc_info=True)
+                logger.error(f"Performance monitoring error: {e}")
                 await asyncio.sleep(30)
-        
-        logger.info("Health monitor finished")
     
-    async def _combined_maintenance_loop(self, stop_event: asyncio.Event) -> None:
-        """Optimized combined maintenance loop - replaces 3 separate loops for better performance"""
-        logger.info("Combined maintenance loop started (metrics + health + cache)")
-        process = psutil.Process(os.getpid())
+    def _calculate_health_score(self, cpu: float, memory: float) -> float:
+        """Calculate system health score"""
         
-        # Configuration
-        cache_settings = self.config.get('cache_settings', {})
-        cleanup_interval_s = int(cache_settings.get('cleanup_interval_s', 300))
-        max_entry_age_s = int(cache_settings.get('max_entry_age_s', 1800))
-        metrics_interval = self.config.get('app_settings', {}).get('metrics_interval_s', 60)
+        cpu_score = max(0, 100 - cpu)
+        memory_score = max(0, 100 - memory)
         
-        last_cache_cleanup = 0
-        last_metrics_report = 0
+        # Weight CPU less than memory
+        health = (cpu_score * 0.3 + memory_score * 0.7)
         
-        while not stop_event.is_set():
+        # Factor in error rates
+        error_rate = self.quantum_metrics.get_error_rate()
+        health *= (1 - error_rate)
+        
+        return health
+    
+    async def _quantum_optimization_loop(self) -> None:
+        """Continuous quantum optimization of system parameters"""
+        
+        while self.running:
             try:
-                current_time = time.time()
+                # Analyze performance patterns
+                patterns = self.quantum_metrics.analyze_patterns()
                 
-                # Health monitoring (every 10 seconds)
-                self.system_health.cpu_percent = process.cpu_percent(interval=0.1)
-                memory_info = process.memory_info()
-                self.system_health.memory_percent = (memory_info.rss / psutil.virtual_memory().total) * 100
-                self.system_health.active_tasks = len(self.active_strikes) + self.metrics.get('active_monitoring_tasks', 0)
-                
-                # Calculate error rate
-                total_attempts = sum(self.metrics['attempts_by_platform'].values())
-                total_failures = sum(self.metrics['failures_by_platform'].values())
-                self.system_health.error_rate = total_failures / max(total_attempts, 1)
-                
-                # Update peak memory
-                self.metrics['peak_memory_usage'] = max(
-                    self.metrics.get('peak_memory_usage', 0), 
-                    memory_info.rss / (1024*1024)
-                )
-                
-                # Health assessment and automatic remediation
-                if not self.system_health.is_healthy:
-                    threat_level = self.system_health.threat_level
-                    logger.warning(f"🚨 System unhealthy [Threat: {threat_level}]")
+                # Optimize based on patterns
+                if patterns.get('high_success_platform'):
+                    # Allocate more resources to successful platform
+                    platform = patterns['high_success_platform']
+                    logger.info(f"Quantum optimizer: Boosting {platform} resources")
                     
-                    if self.system_health.memory_percent > 85:
-                        gc.collect()
-                        logger.info("🧹 Emergency garbage collection")
-                    
-                    if threat_level == "CRITICAL" and self.mode != OperationMode.ULTRA_STEALTH:
-                        logger.critical("🔴 Emergency switch to ULTRA_STEALTH mode")
-                        self.mode = OperationMode.ULTRA_STEALTH
-                        await self._apply_mode_specific_settings()
+                    # Increase monitoring frequency for that platform
+                    for monitor_id, monitor in self.monitors.items():
+                        if monitor.platform.value == platform:
+                            monitor.config['interval_s'] *= 0.8
                 
-                # Metrics reporting (every 60 seconds)
-                if current_time - last_metrics_report >= metrics_interval:
-                    report = self._generate_metrics_report()
-                    logger.info(report)
-                    
-                    if self.gui_queue:
-                        detailed_metrics = self._get_detailed_metrics()
-                        self.gui_queue.put(("metrics", detailed_metrics))
-                    
-                    last_metrics_report = current_time
+                if patterns.get('low_activity_time'):
+                    # Reduce activity during low periods
+                    logger.info("Quantum optimizer: Entering low-power mode")
+                    self.mode = OperationMode.STEALTH
                 
-                # Cache maintenance (every 5 minutes)
-                if current_time - last_cache_cleanup >= cleanup_interval_s:
-                    if self.response_cache and hasattr(self.response_cache, 'clear_old_entries'):
-                        cleared_count = await self.response_cache.clear_old_entries(max_age_seconds=max_entry_age_s)
-                        if cleared_count > 0:
-                            logger.info(f"🧹 Cache maintenance: Cleared {cleared_count} old entries")
-                    
-                    last_cache_cleanup = current_time
+                await asyncio.sleep(60)  # Optimize every minute
                 
-                # GUI health updates (every 10 seconds)
-                if self.gui_queue:
-                    self.gui_queue.put(("health", {
-                        'cpu': self.system_health.cpu_percent,
-                        'memory': self.system_health.memory_percent,
-                        'error_rate': self.system_health.error_rate,
-                        'threat_level': self.system_health.threat_level,
-                        'is_healthy': self.system_health.is_healthy
-                    }))
-                
-                await asyncio.sleep(10)  # Main loop interval
-                
-            except asyncio.CancelledError:
-                logger.info("Combined maintenance loop cancelled")
-                break
             except Exception as e:
-                logger.error(f"Combined maintenance loop error: {e}", exc_info=True)
-                await asyncio.sleep(30)
-        
-        logger.info("Combined maintenance loop finished")
+                logger.error(f"Quantum optimization error: {e}")
+                await asyncio.sleep(300)
     
-    async def _cache_maintenance_loop(self, stop_event: asyncio.Event) -> None:
-        """Enhanced cache maintenance with metrics"""
-        logger.info("Cache maintenance loop started")
-        cache_settings = self.config.get('cache_settings', {})
-        cleanup_interval_s = int(cache_settings.get('cleanup_interval_s', 300))
-        max_entry_age_s = int(cache_settings.get('max_entry_age_s', 1800))
+    async def stop(self) -> None:
+        """Gracefully stop orchestrator"""
+        logger.info("Stopping Ultimate Orchestrator...")
+        self.running = False
         
-        while not stop_event.is_set():
+        # Cancel all tasks
+        for task in self.monitor_tasks.values():
+            task.cancel()
+        
+        if self._performance_monitor_task:
+            self._performance_monitor_task.cancel()
+        
+        # Close all monitors
+        for monitor in self.monitors.values():
             try:
-                await asyncio.sleep(cleanup_interval_s)
-                if stop_event.is_set():
-                    break
-                
-                if self.response_cache and hasattr(self.response_cache, 'clear_old_entries'):
-                    cleared_count = await self.response_cache.clear_old_entries(max_age_seconds=max_entry_age_s)
-                    if cleared_count > 0:
-                        logger.info(f"🧹 Cache maintenance: Cleared {cleared_count} old entries")
-                    
-                    # Update cache metrics
-                    if hasattr(self.response_cache, 'hit_count'):
-                        self.metrics['cache_hits'] = self.response_cache.hit_count
-                    if hasattr(self.response_cache, 'miss_count'):
-                        self.metrics['cache_misses'] = self.response_cache.miss_count
-                    if hasattr(self.response_cache, 'current_size_mb'):
-                        cache_size = self.response_cache.current_size_mb
-                        logger.debug(f"📊 Cache size: {cache_size:.2f} MB")
-                        
-                        # Notify GUI
-                        if self.gui_queue:
-                            self.gui_queue.put(("cache", {
-                                'size_mb': cache_size,
-                                'hits': self.metrics['cache_hits'],
-                                'misses': self.metrics['cache_misses'],
-                                'hit_rate': self.response_cache.hit_rate if hasattr(self.response_cache, 'hit_rate') else 0
-                            }))
-                
-            except asyncio.CancelledError:
-                logger.info("Cache maintenance loop cancelled")
-                break
-            except Exception as e:
-                logger.error(f"Error in cache maintenance loop: {e}", exc_info=True)
-                await asyncio.sleep(cleanup_interval_s / 2 if cleanup_interval_s > 20 else 10)
-        
-        logger.info("Cache maintenance loop finished")
-    
-    async def _metrics_reporter_loop(self, stop_event: asyncio.Event) -> None:
-        """Enhanced metrics reporting with GUI updates"""
-        report_interval = self.config.get('app_settings', {}).get('metrics_interval_s', 60)
-        logger.info(f"Metrics reporter started (interval: {report_interval}s)")
-        
-        while not stop_event.is_set():
-            try:
-                await asyncio.sleep(report_interval)
-                if stop_event.is_set():
-                    break
-                
-                # Generate and log report
-                report = self._generate_metrics_report()
-                logger.info(report)
-                
-                # Send detailed metrics to GUI
-                if self.gui_queue:
-                    detailed_metrics = self._get_detailed_metrics()
-                    self.gui_queue.put(("metrics", detailed_metrics))
-                
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Metrics reporter error: {e}", exc_info=True)
-        
-        logger.info("Metrics reporter finished")
-    
-    def _generate_metrics_report(self) -> str:
-        """Generate comprehensive metrics report"""
-        runtime_minutes = (datetime.now() - self.start_time).total_seconds() / 60
-        total_attempts = sum(self.metrics['attempts_by_platform'].values())
-        total_successes = sum(self.metrics['successes_by_platform'].values())
-        success_rate = (total_successes / total_attempts * 100) if total_attempts > 0 else 0
-        cache_total = self.metrics.get('cache_hits', 0) + self.metrics.get('cache_misses', 0)
-        cache_hit_rate = (self.metrics.get('cache_hits', 0) / cache_total * 100) if cache_total > 0 else 0
-        
-        # Profile metrics
-        active_profiles, total_profiles_val = 0, 0
-        if self.profile_manager and hasattr(self.profile_manager, 'get_pool_metrics'):
-            try:
-                pool_metrics = self.profile_manager.get_pool_metrics()
-                active_profiles = pool_metrics.get('active_profiles', 0)
-                total_profiles_val = pool_metrics.get('total_profiles', 0)
-            except Exception:
+                await monitor.browser_context.close()
+            except:
                 pass
         
-        lines = [
-            f"\n{'='*80}",
-            f"📊 ULTRA-STEALTH SYSTEM METRICS - Runtime: {runtime_minutes:.1f} min",
-            f"{'='*80}",
-            f"🎯 MODE: {self.mode.value.upper()} | Dry Run: {self.is_dry_run} | Threat: {self.system_health.threat_level}",
-            f"💊 HEALTH: CPU={self.system_health.cpu_percent:.1f}% | Mem={self.system_health.memory_percent:.1f}% | Tasks={self.system_health.active_tasks}",
-            f"🎯 PERFORMANCE: Detections={sum(self.metrics['detections_by_platform'].values())} | Attempts={total_attempts} | Success={total_successes} ({success_rate:.1f}%)",
-            f"⚡ QUEUE: Pending={self.opportunity_queue.qsize()} | Active Strikes={len(self.active_strikes)} | Processed={self.metrics['opportunities_processed_total']}",
-            f"💾 CACHE: Hits={self.metrics.get('cache_hits', 0)} ({cache_hit_rate:.1f}%) | Size={self.response_cache.current_size_mb if self.response_cache else 0:.1f}MB",
-            f"👤 PROFILES: Active={active_profiles} | Total={total_profiles_val} | Rotations={self.metrics.get('profile_rotations', 0)}",
-            f"📊 DATA USAGE: Used={self.data_tracker.total_used_mb:.1f}MB | Saved={self.data_tracker.blocked_resources_saved_mb:.1f}MB | Remaining={self.data_tracker.get_remaining_mb():.1f}MB",
-            f"🏆 PLATFORM BREAKDOWN:",
+        # Cleanup
+        if self.playwright:
+            await self.playwright.stop()
+        
+        logger.info("Ultimate Orchestrator stopped")
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get comprehensive system statistics"""
+        
+        uptime = (datetime.now() - self.start_time).total_seconds()
+        
+        stats = {
+            'uptime': uptime,
+            'mode': self.mode.value,
+            'monitors_active': len(self.monitor_tasks),
+            'opportunities_processed': self.quantum_metrics.total_opportunities,
+            'strikes_executed': self.strike_force.get_strike_stats() if self.strike_force else {},
+            'quantum_metrics': self.quantum_metrics.get_summary(),
+            'success_rate': self.quantum_metrics.get_overall_success_rate()
+        }
+        
+        # Add proxy statistics if enabled
+        if hasattr(self, 'proxy_manager') and self.proxy_manager and self.proxy_manager.enabled:
+            stats['proxy_stats'] = self.proxy_manager.get_proxy_stats()
+        
+        return stats
+
+
+class QuantumOpportunityProcessor:
+    """Quantum-enhanced opportunity processing with ML optimization"""
+    
+    def __init__(self):
+        self.opportunity_queue: asyncio.PriorityQueue = asyncio.PriorityQueue()
+        self.processing_history = deque(maxlen=1000)
+        self.ml_scorer = OpportunityScorer()
+    
+    async def queue_opportunity(self, opportunity: EnhancedTicketOpportunity) -> None:
+        """Queue opportunity with quantum priority scoring"""
+        
+        # Calculate quantum priority score
+        priority_score = self.ml_scorer.score_opportunity(opportunity)
+        
+        # Add to priority queue (negative for proper ordering)
+        await self.opportunity_queue.put((-priority_score, opportunity))
+    
+    async def process_loop(self, orchestrator: UltimateOrchestrator) -> None:
+        """Process opportunities with quantum efficiency"""
+        
+        while orchestrator.running:
+            try:
+                # Get highest priority opportunity
+                priority, opportunity = await asyncio.wait_for(
+                    self.opportunity_queue.get(),
+                    timeout=1.0
+                )
+                
+                # Check if already being processed
+                if opportunity.id in orchestrator.active_opportunities:
+                    continue
+                
+                orchestrator.active_opportunities.add(opportunity.id)
+                
+                try:
+                    # Execute lightning strike
+                    success = await orchestrator.strike_force.execute_lightning_strike(
+                        opportunity,
+                        orchestrator.mode
+                    )
+                    
+                    # Record result
+                    self.processing_history.append({
+                        'opportunity': opportunity,
+                        'success': success,
+                        'timestamp': time.time()
+                    })
+                    
+                    # Update ML model
+                    self.ml_scorer.update_model(opportunity, success)
+                    
+                finally:
+                    orchestrator.active_opportunities.remove(opportunity.id)
+                    
+            except asyncio.TimeoutError:
+                continue
+            except Exception as e:
+                logger.error(f"Opportunity processing error: {e}")
+    
+    def queue_size(self) -> int:
+        """Get current queue size"""
+        return self.opportunity_queue.qsize()
+
+
+class OpportunityScorer:
+    """ML-based opportunity scoring"""
+    
+    def __init__(self):
+        self.feature_weights = {
+            'price_value': 0.3,
+            'section_quality': 0.2,
+            'platform_success': 0.2,
+            'time_criticality': 0.15,
+            'confidence': 0.15
+        }
+        
+        self.platform_success_rates = defaultdict(lambda: 0.5)
+        self.section_success_rates = defaultdict(lambda: 0.5)
+    
+    def score_opportunity(self, opportunity: EnhancedTicketOpportunity) -> float:
+        """Score opportunity using ML features"""
+        
+        features = {}
+        
+        # Price value (lower is better)
+        features['price_value'] = 1.0 / (1 + opportunity.price / 100)
+        
+        # Section quality
+        section_lower = opportunity.section.lower()
+        if any(term in section_lower for term in ['floor', 'pit', 'vip', 'gold']):
+            features['section_quality'] = 1.0
+        elif any(term in section_lower for term in ['lower', 'club', 'premium']):
+            features['section_quality'] = 0.8
+        else:
+            features['section_quality'] = 0.5
+        
+        # Platform success rate
+        features['platform_success'] = self.platform_success_rates[opportunity.platform.value]
+        
+        # Time criticality
+        age_minutes = (datetime.now() - opportunity.detected_at).total_seconds() / 60
+        features['time_criticality'] = 1.0 / (1 + age_minutes / 5)
+        
+        # Confidence
+        features['confidence'] = opportunity.confidence_score
+        
+        # Calculate weighted score
+        score = sum(
+            features[feature] * weight
+            for feature, weight in self.feature_weights.items()
+        )
+        
+        # Apply priority multiplier
+        priority_multipliers = {
+            PriorityLevel.CRITICAL: 2.0,
+            PriorityLevel.HIGH: 1.5,
+            PriorityLevel.NORMAL: 1.0,
+            PriorityLevel.LOW: 0.7
+        }
+        
+        score *= priority_multipliers.get(opportunity.priority, 1.0)
+        
+        return score
+    
+    def update_model(self, opportunity: EnhancedTicketOpportunity, success: bool) -> None:
+        """Update ML model with result"""
+        
+        # Update platform success rate
+        platform = opportunity.platform.value
+        old_rate = self.platform_success_rates[platform]
+        self.platform_success_rates[platform] = old_rate * 0.9 + (1.0 if success else 0.0) * 0.1
+        
+        # Update section success rate
+        section = opportunity.section.lower()
+        old_rate = self.section_success_rates[section]
+        self.section_success_rates[section] = old_rate * 0.9 + (1.0 if success else 0.0) * 0.1
+
+
+class QuantumMetrics:
+    """Advanced metrics with quantum analysis"""
+    
+    def __init__(self):
+        self.scan_times = defaultdict(deque)
+        self.opportunities_found = defaultdict(int)
+        self.blocks_encountered = defaultdict(int)
+        self.total_opportunities = 0
+        self.successful_strikes = 0
+        self.total_strikes = 0
+    
+    def record_scan(self, monitor_id: str, scan_time: float, opportunities: int) -> None:
+        """Record scan metrics"""
+        self.scan_times[monitor_id].append((time.time(), scan_time))
+        if len(self.scan_times[monitor_id]) > 100:
+            self.scan_times[monitor_id].popleft()
+        
+        if opportunities > 0:
+            self.opportunities_found[monitor_id] += opportunities
+            self.total_opportunities += opportunities
+    
+    def get_recent_opportunity_rate(self, platform: str) -> float:
+        """Get recent opportunity detection rate"""
+        relevant_monitors = [
+            monitor_id for monitor_id in self.opportunities_found
+            if platform in monitor_id
         ]
         
-        for platform in [PlatformType.FANSALE, PlatformType.TICKETMASTER, PlatformType.VIVATICKET]:
-            pv = platform.value
-            attempts = self.metrics['attempts_by_platform'][pv]
-            successes = self.metrics['successes_by_platform'][pv]
-            s_rate = (successes / attempts * 100) if attempts > 0 else 0
-            blocks = self.metrics['blocks_by_platform'][pv]
-            detections = self.metrics['detections_by_platform'][pv]
-            
-            lines.append(f"  {pv.upper():>12}: D={detections:>3} | A={attempts:>3} | S={successes:>3} ({s_rate:>4.1f}%) | B={blocks:>3}")
+        if not relevant_monitors:
+            return 0.0
         
-        lines.append("="*80)
-        return "\n".join(lines)
+        total_opportunities = sum(
+            self.opportunities_found[m] for m in relevant_monitors
+        )
+        
+        # Calculate rate per minute
+        time_window = 300  # 5 minutes
+        return total_opportunities / (time_window / 60)
     
-    def _get_detailed_metrics(self) -> Dict[str, Any]:
-        """Get detailed metrics for GUI dashboard"""
-        runtime_seconds = (datetime.now() - self.start_time).total_seconds()
+    def get_block_count(self, monitor_id: str) -> int:
+        """Get block count for monitor"""
+        return self.blocks_encountered.get(monitor_id, 0)
+    
+    def get_error_rate(self) -> float:
+        """Calculate overall error rate"""
+        if self.total_strikes == 0:
+            return 0.0
         
+        return 1.0 - (self.successful_strikes / self.total_strikes)
+    
+    def get_overall_success_rate(self) -> float:
+        """Get overall system success rate"""
+        if self.total_strikes == 0:
+            return 0.0
+        
+        return self.successful_strikes / self.total_strikes
+    
+    def analyze_patterns(self) -> Dict[str, Any]:
+        """Analyze patterns in metrics"""
+        patterns = {}
+        
+        # Find highest success platform
+        platform_opps = defaultdict(int)
+        for monitor_id, count in self.opportunities_found.items():
+            platform = monitor_id.split('_')[0]
+            platform_opps[platform] += count
+        
+        if platform_opps:
+            patterns['high_success_platform'] = max(
+                platform_opps.items(),
+                key=lambda x: x[1]
+            )[0]
+        
+        # Detect low activity periods
+        recent_total = sum(
+            len(times) for times in self.scan_times.values()
+        )
+        
+        if recent_total < 10:
+            patterns['low_activity_time'] = True
+        
+        return patterns
+    
+    def get_summary(self) -> Dict[str, Any]:
+        """Get metrics summary"""
         return {
-            'runtime_seconds': runtime_seconds,
-            'mode': self.mode.value,
-            'health': {
-                'cpu_percent': self.system_health.cpu_percent,
-                'memory_percent': self.system_health.memory_percent,
-                'threat_level': self.system_health.threat_level,
-                'is_healthy': self.system_health.is_healthy,
-                'detection_events': self.system_health.detection_events,
-                'consecutive_failures': self.system_health.consecutive_failures
-            },
-            'performance': {
-                'total_attempts': sum(self.metrics['attempts_by_platform'].values()),
-                'total_successes': sum(self.metrics['successes_by_platform'].values()),
-                'total_detections': sum(self.metrics['detections_by_platform'].values()),
-                'queue_size': self.opportunity_queue.qsize(),
-                'active_strikes': len(self.active_strikes),
-                'opportunities_processed': self.metrics['opportunities_processed_total']
-            },
-            'platforms': {
-                platform.value: {
-                    'attempts': self.metrics['attempts_by_platform'][platform.value],
-                    'successes': self.metrics['successes_by_platform'][platform.value],
-                    'failures': self.metrics['failures_by_platform'][platform.value],
-                    'blocks': self.metrics['blocks_by_platform'][platform.value],
-                    'detections': self.metrics['detections_by_platform'][platform.value]
-                }
-                for platform in [PlatformType.FANSALE, PlatformType.TICKETMASTER, PlatformType.VIVATICKET]
-            },
-            'cache': {
-                'hits': self.metrics.get('cache_hits', 0),
-                'misses': self.metrics.get('cache_misses', 0),
-                'size_mb': self.response_cache.current_size_mb if self.response_cache else 0
-            },
-            'data': {
-                'used_mb': self.data_tracker.total_used_mb,
-                'saved_mb': self.data_tracker.blocked_resources_saved_mb,
-                'remaining_mb': self.data_tracker.get_remaining_mb()
-            }
+            'total_opportunities': self.total_opportunities,
+            'total_strikes': self.total_strikes,
+            'successful_strikes': self.successful_strikes,
+            'success_rate': self.get_overall_success_rate(),
+            'active_monitors': len(self.scan_times),
+            'blocks_encountered': sum(self.blocks_encountered.values())
         }
-    
-    async def graceful_shutdown(self) -> None:
-        """Enhanced graceful shutdown"""
-        self._shutdown_initiated = True
-        logger.info("🛑 UnifiedOrchestrator graceful shutdown initiated")
-        
-        try:
-            # Stop background tasks
-            await self.shutdown_tasks()
-            
-            # Stop profile manager
-            if self.profile_manager and hasattr(self.profile_manager, 'stop_background_tasks'):
-                await self.profile_manager.stop_background_tasks()
-            
-            # Close connections
-            if self.connection_pool and hasattr(self.connection_pool, 'close_all'):
-                await self.connection_pool.close_all()
-            
-            # Close stealth integration sessions
-            if self.stealth_integration and hasattr(self.stealth_integration, 'cleanup_all_sessions'):
-                await self.stealth_integration.cleanup_all_sessions()
-            
-            logger.info("✅ UnifiedOrchestrator graceful shutdown completed")
-            
-        except Exception as e:
-            logger.error(f"Error during graceful shutdown: {e}", exc_info=True)
-    
-    async def shutdown_tasks(self) -> None:
-        """Enhanced task shutdown"""
-        logger.info("🔄 Shutting down background tasks...")
-        
-        if hasattr(self, 'background_tasks') and self.background_tasks:
-            # Cancel all tasks
-            for task in self.background_tasks:
-                if not task.done():
-                    task.cancel()
-            
-            # Wait for completion
-            await asyncio.gather(*self.background_tasks, return_exceptions=True)
-            self.background_tasks.clear()
-        
-        # Cancel active strikes
-        if self.active_strikes:
-            active_strike_tasks = list(self.active_strikes.values())
-            for task in active_strike_tasks:
-                if not task.done():
-                    task.cancel()
-            
-            await asyncio.gather(*active_strike_tasks, return_exceptions=True)
-            self.active_strikes.clear()
-        
-        logger.info("✅ Background and strike tasks shutdown complete")
-    
-    def clear_sensitive_data(self) -> None:
-        """Clear sensitive data for security"""
-        logger.info("🔒 Clearing sensitive data...")
-        
-        # Clear opportunity data
-        if self.opportunity_cache:
-            self.opportunity_cache.clear()
-        
-        # Clear processed fingerprints
-        self.processed_opportunity_fingerprints.clear()
-        
-        # Clear metrics that might contain sensitive info
-        sensitive_metrics = ['profile_performance', 'detection_timeline', 'success_timeline']
-        for metric in sensitive_metrics:
-            if metric in self.metrics:
-                self.metrics[metric].clear()
-        
-        logger.info("✅ Sensitive data cleared")

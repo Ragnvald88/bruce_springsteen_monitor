@@ -1,635 +1,531 @@
-# src/core/strike_force.py - REWRITTEN WITH ALL FIXES AND IMPROVEMENTS
-from __future__ import annotations
+# src/core/strike_force_v2.py
+"""
+Enhanced Strike Force v2.0 - StealthMaster AI
+Lightning-fast coordinated ticket acquisition with quantum efficiency
+"""
 
 import asyncio
 import logging
 import time
 import random
-from typing import Dict, List, Optional, Set, Any, TYPE_CHECKING
-from collections import defaultdict
-from contextlib import suppress
+from typing import Dict, List, Optional, Set, Any, Tuple
 from datetime import datetime
+from collections import defaultdict
+from dataclasses import dataclass
 
-if TYPE_CHECKING:
-    from playwright.async_api import Page as PlaywrightPage
-    # SmartBrowserContextManager replaced by stealth_integration
-    from .stealth.stealth_integration import BruceStealthIntegration
-
-# FIXED: Imports from profiles package
-from ..profiles import (
-    ProfileManager,
-    BrowserProfile,
-    DataOptimizationLevel,
-    ProfileQuality
-)
-
-# Core imports (already correct)
-from .enums import OperationMode, PlatformType, PriorityLevel
-from .models import EnhancedTicketOpportunity, DataUsageTracker
+from ..core.models import EnhancedTicketOpportunity
+from ..core.enums import OperationMode, PlatformType, PriorityLevel
+from ..profiles.manager import ProfileManager
+from ..profiles.models import BrowserProfile
+from ..core.ticket_reserver import TicketReserver
 
 logger = logging.getLogger(__name__)
 
-class BlockedError(Exception):
-    """Raised when a request is blocked"""
-    pass
 
-class ProfileIntegratedStrikeForce:
-    """Enhanced strike system with robust browser automation"""
+@dataclass
+class StrikeMetrics:
+    """Real-time strike performance metrics"""
+    total_strikes: int = 0
+    successful_strikes: int = 0
+    failed_strikes: int = 0
+    avg_response_time: float = 0
+    fastest_strike: float = float('inf')
+    profile_performance: Dict[str, float] = None
+    
+    def __post_init__(self):
+        if self.profile_performance is None:
+            self.profile_performance = {}
 
-    def __init__(self,
-                 stealth_integration: 'BruceStealthIntegration',
-                 profile_manager: ProfileManager,
-                 data_tracker: DataUsageTracker,
-                 config: Dict[str, Any]):
-        self.stealth_integration = stealth_integration
+
+class EnhancedStrikeForce:
+    """Next-generation strike force with quantum coordination capabilities"""
+    
+    def __init__(self, profile_manager: ProfileManager, browser_manager, 
+                 connection_manager, ticket_reserver: TicketReserver):
         self.profile_manager = profile_manager
-        self.data_tracker = data_tracker
-        self.config = config
-
-        self.max_parallel = config.get('strike_settings', {}).get('max_parallel', 5)
-        self.strike_timeout = config.get('strike_settings', {}).get('timeout', 30)
-
-        self.active_strikes: Dict[str, Set[str]] = defaultdict(set)
-        self.strike_results: Dict[str, bool] = {}
-
-        # Platform strategies
-        self.platform_strategies = {
-            PlatformType.FANSALE: self._strike_fansale,
-            PlatformType.TICKETMASTER: self._strike_ticketmaster,
-            PlatformType.VIVATICKET: self._strike_vivaticket
+        self.browser_manager = browser_manager
+        self.connection_manager = connection_manager
+        self.ticket_reserver = ticket_reserver
+        
+        # Strike coordination
+        self.active_strikes: Dict[str, asyncio.Task] = {}
+        self.strike_queue: asyncio.PriorityQueue = asyncio.PriorityQueue()
+        self.profile_assignments: Dict[str, str] = {}  # opportunity_id -> profile_id
+        
+        # Performance tracking
+        self.strike_metrics = StrikeMetrics()
+        self.profile_cooldowns: Dict[str, float] = {}
+        
+        # Strike strategies
+        self.strike_strategies = {
+            OperationMode.STEALTH: StealthStrikeStrategy(),
+            OperationMode.BEAST: BeastStrikeStrategy(),
+            OperationMode.ULTRA_STEALTH: UltraStealthStrikeStrategy(),
+            OperationMode.ADAPTIVE: AdaptiveStrikeStrategy(),
+            OperationMode.HYBRID: HybridStrikeStrategy()
         }
         
-        logger.info("🎯 ProfileIntegratedStrikeForce initialized with StealthMaster AI integration")
+        # Quantum coordination engine
+        self.quantum_coordinator = QuantumCoordinator()
+        
+        logger.info("⚡ Enhanced Strike Force v2.0 initialized")
     
-    async def execute_coordinated_strike(self,
-                                       opportunity: EnhancedTicketOpportunity,
-                                       mode: OperationMode) -> bool:
-        """Execute coordinated strike with intelligent profile selection"""
-        strike_id = f"{opportunity.id}_{int(time.time())}"
+    async def execute_lightning_strike(
+        self,
+        opportunity: EnhancedTicketOpportunity,
+        mode: OperationMode
+    ) -> bool:
+        """Execute lightning-fast coordinated strike"""
+        
+        strike_id = f"strike_{opportunity.id}_{int(time.time() * 1000)}"
+        start_time = time.time()
+        
+        logger.critical(f"⚡ LIGHTNING STRIKE INITIATED: {opportunity.event_name}")
+        logger.critical(f"   Target: {opportunity.section} - €{opportunity.price}")
+        logger.critical(f"   Mode: {mode.value.upper()}")
         
         try:
-            # Check if already being attempted
-            if opportunity.id in self.active_strikes and self.active_strikes[opportunity.id]:
-                logger.debug(f"Strike already active for {opportunity.id}")
-                return False
+            # Get optimal strike strategy
+            strategy = self.strike_strategies[mode]
             
-            # Get strike parameters
-            params = self._get_strike_params(mode, opportunity)
-            logger.info(f"🎯 Initiating {mode.value} strike for {opportunity.event_name}")
-            logger.info(f"   Parameters: {params['profile_count']} profiles, {params['timeout']}s timeout")
-            
-            # Get profiles for strike
-            profiles = await self._select_profiles_for_strike(opportunity, params)
+            # Select optimal profiles using quantum selection
+            profiles = await self._quantum_profile_selection(opportunity, strategy)
             
             if not profiles:
-                logger.error(f"No suitable profiles for {opportunity.id}")
+                logger.error("No suitable profiles available")
                 return False
             
-            logger.info(f"🔥 Launching strike with {len(profiles)} profiles")
+            logger.info(f"🎯 Deploying {len(profiles)} profiles for coordinated strike")
             
-            # Create strike tasks
-            tasks = []
-            for i, profile in enumerate(profiles):
-                task_id = f"{strike_id}_{i}"
-                self.active_strikes[opportunity.id].add(task_id)
-                
-                task = asyncio.create_task(
-                    self._execute_single_strike(opportunity, profile, task_id, params),
-                    name=f"strike_{task_id}"
-                )
-                tasks.append(task)
-            
-            # Execute strikes
-            done, pending = await asyncio.wait(
-                tasks,
-                timeout=params['timeout'],
-                return_when=asyncio.FIRST_COMPLETED if params['race_mode'] else asyncio.ALL_COMPLETED
+            # Execute parallel strikes with coordination
+            results = await self._execute_coordinated_strikes(
+                opportunity, profiles, strategy, strike_id
             )
             
-            # Check results
-            success = False
-            for task in done:
-                if not task.cancelled():
-                    try:
-                        result = task.result()
-                        if result:
-                            success = True
-                            break
-                    except Exception as e:
-                        logger.error(f"Task error: {e}")
+            # Evaluate results
+            success = any(results.values())
+            strike_time = time.time() - start_time
             
-            # Cancel pending if success and in race mode
-            if success and params['race_mode']:
-                logger.info(f"🎉 Success achieved, cancelling {len(pending)} pending strikes")
-                for task in pending:
-                    task.cancel()
-                    with suppress(asyncio.CancelledError):
-                        await task
+            # Update metrics
+            self._update_strike_metrics(strike_time, success, profiles)
             
             if success:
-                logger.critical(f"🎉 STRIKE SUCCESS: {opportunity.event_name} secured!")
+                logger.critical(f"🎉 STRIKE SUCCESSFUL in {strike_time:.2f}s!")
+                logger.critical(f"   Winning profile: {[p for p, r in results.items() if r][0]}")
             else:
-                logger.warning(f"⚠️ Strike failed for {opportunity.event_name}")
+                logger.warning(f"❌ Strike failed after {strike_time:.2f}s")
             
             return success
             
         except Exception as e:
-            logger.error(f"Coordinated strike error: {e}", exc_info=True)
+            logger.error(f"Strike execution failed: {e}", exc_info=True)
             return False
         finally:
             # Cleanup
-            if opportunity.id in self.active_strikes:
-                self.active_strikes[opportunity.id].clear()
+            if strike_id in self.active_strikes:
+                del self.active_strikes[strike_id]
     
-    def _get_strike_params(self, mode: OperationMode, opportunity: EnhancedTicketOpportunity) -> Dict[str, Any]:
-        """Get strike parameters based on mode"""
-        base_params = {
-            'profile_count': 1,
-            'timeout': self.strike_timeout,
-            'race_mode': True,
-            'retry_on_block': True,
-        }
+    async def _quantum_profile_selection(
+        self,
+        opportunity: EnhancedTicketOpportunity,
+        strategy: 'StrikeStrategy'
+    ) -> List[BrowserProfile]:
+        """Select optimal profiles using quantum optimization"""
         
-        if mode == OperationMode.BEAST:
-            base_params.update({
-                'profile_count': min(5, self.max_parallel),
-                'timeout': 20,
-                'min_quality': ProfileQuality.LOW,
-                'data_optimization': DataOptimizationLevel.MINIMAL
-            })
-        elif mode == OperationMode.ULTRA_STEALTH:
-            base_params.update({
-                'profile_count': 1,
-                'timeout': 60,
-                'race_mode': False,
-                'min_quality': ProfileQuality.HIGH,
-                'data_optimization': DataOptimizationLevel.AGGRESSIVE
-            })
-        elif mode == OperationMode.STEALTH:
-            base_params.update({
-                'profile_count': 2,
-                'timeout': 45,
-                'min_quality': ProfileQuality.MEDIUM,
-                'data_optimization': DataOptimizationLevel.BALANCED
-            })
-        elif mode == OperationMode.HYBRID:
-            base_params.update({
-                'profile_count': 3,
-                'timeout': 35,
-                'min_quality': ProfileQuality.MEDIUM,
-                'data_optimization': DataOptimizationLevel.BALANCED
-            })
-        elif mode == OperationMode.ADAPTIVE:
-            if opportunity.priority == PriorityLevel.CRITICAL:
-                base_params['profile_count'] = 3
-                base_params['min_quality'] = ProfileQuality.MEDIUM
-            
-            if hasattr(self.data_tracker, 'is_approaching_limit') and self.data_tracker.is_approaching_limit():
-                base_params['data_optimization'] = DataOptimizationLevel.AGGRESSIVE
-                base_params['profile_count'] = 1
+        # Get all available profiles
+        all_profiles = await self.profile_manager.get_healthy_profiles(
+            platform=opportunity.platform.value,
+            min_quality_tier=strategy.min_quality_tier
+        )
         
-        return base_params
+        # Filter by cooldown
+        available_profiles = [
+            p for p in all_profiles
+            if self._is_profile_ready(p.profile_id)
+        ]
+        
+        if not available_profiles:
+            return []
+        
+        # Quantum optimization for profile selection
+        scored_profiles = []
+        
+        for profile in available_profiles:
+            score = self.quantum_coordinator.calculate_profile_score(
+                profile, opportunity, self.strike_metrics
+            )
+            scored_profiles.append((score, profile))
+        
+        # Sort by quantum score
+        scored_profiles.sort(key=lambda x: x[0], reverse=True)
+        
+        # Select top profiles based on strategy
+        num_profiles = min(strategy.max_parallel_profiles, len(scored_profiles))
+        selected = [p[1] for p in scored_profiles[:num_profiles]]
+        
+        logger.info(f"Quantum selection: {len(selected)} profiles chosen from {len(available_profiles)}")
+        
+        return selected
     
-    async def _select_profiles_for_strike(self,
-                                        opportunity: EnhancedTicketOpportunity,
-                                        params: Dict[str, Any]) -> List[BrowserProfile]:
-        """Select optimal profiles with robust fallback logic"""
-        profile_count = params['profile_count']
-        profiles = []
-        used_profile_ids = set()
+    def _is_profile_ready(self, profile_id: str) -> bool:
+        """Check if profile is ready (not in cooldown)"""
+        if profile_id not in self.profile_cooldowns:
+            return True
         
-        try:
-            # Convert platform with fallback
-            core_platform = self._convert_platform_safe(opportunity.platform)
-            
-            logger.info(f"Selecting {profile_count} profiles for {core_platform}")
-            
-            # Method 1: Try advanced ProfileManager methods
-            for i in range(profile_count):
-                profile = None
-                
-                # Try get_profile_for_platform first (most likely to exist)
-                try:
-                    if hasattr(self.profile_manager, 'get_profile_for_platform'):
-                        profile = await self.profile_manager.get_profile_for_platform(
-                            platform=core_platform,
-                            require_session=False
-                        )
-                        
-                        # Check if already used
-                        if profile and hasattr(profile, 'profile_id') and profile.profile_id in used_profile_ids:
-                            profile = None
-                            
-                except Exception as e:
-                    logger.debug(f"get_profile_for_platform failed: {e}")
-                
-                # Try alternative get_profile method
-                if not profile:
-                    try:
-                        if hasattr(self.profile_manager, 'get_profile'):
-                            profile = await self.profile_manager.get_profile(
-                                platform=core_platform,
-                                quality_preference=params.get('min_quality', ProfileQuality.MEDIUM),
-                                exclude_profiles=list(used_profile_ids)
-                            )
-                    except Exception as e:
-                        logger.debug(f"get_profile failed: {e}")
-                
-                # Add profile if valid
-                if profile:
-                    profiles.append(profile)
-                    profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', f'profile_{i}'))
-                    used_profile_ids.add(profile_id)
-                    logger.info(f"Selected profile: {profile_id}")
-                else:
-                    logger.warning(f"Could not get profile {i+1}/{profile_count}")
-                    break
-            
-            # Fallback: Use any available profiles
-            if not profiles:
-                logger.warning("No profiles from ProfileManager, using fallback")
-                try:
-                    available_profiles = list(getattr(self.profile_manager, 'dynamic_profiles', []))
-                    if available_profiles:
-                        # Take up to profile_count profiles
-                        profiles = available_profiles[:profile_count]
-                        logger.info(f"Using {len(profiles)} fallback profiles")
-                    else:
-                        logger.error("No dynamic profiles available")
-                except Exception as e:
-                    logger.error(f"Fallback profile selection failed: {e}")
-            
-        except Exception as e:
-            logger.error(f"Profile selection error: {e}", exc_info=True)
-        
-        logger.info(f"Selected {len(profiles)} profiles for strike")
-        return profiles
+        return time.time() > self.profile_cooldowns[profile_id]
     
-    def _convert_platform_safe(self, platform: PlatformType):
-        """Safely convert PlatformType to CorePlatformEnum"""
-        try:
-            from ..profiles.consolidated_models import Platform as CorePlatformEnum
-            
-            # Platform mapping
-            mapping = {
-                PlatformType.FANSALE: CorePlatformEnum.FANSALE,
-                PlatformType.TICKETMASTER: CorePlatformEnum.TICKETMASTER,
-                PlatformType.VIVATICKET: CorePlatformEnum.VIVATICKET
-            }
-            
-            result = mapping.get(platform, CorePlatformEnum.GENERIC)
-            return result
-            
-        except Exception as e:
-            logger.warning(f"Platform conversion failed: {e}")
-            # Final fallback - just return the original platform value as string
-            return platform.value if hasattr(platform, 'value') else str(platform)
-    
-    async def _execute_single_strike(self,
-                                   opportunity: EnhancedTicketOpportunity,
-                                   profile: BrowserProfile,
-                                   task_id: str,
-                                   params: Dict[str, Any]) -> bool:
-        """Execute single strike attempt with robust error handling"""
-        start_time = time.time()
-        profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
+    async def _execute_coordinated_strikes(
+        self,
+        opportunity: EnhancedTicketOpportunity,
+        profiles: List[BrowserProfile],
+        strategy: 'StrikeStrategy',
+        strike_id: str
+    ) -> Dict[str, bool]:
+        """Execute coordinated strikes across multiple profiles"""
         
-        logger.info(f"🎯 Strike initiated: Profile {profile_id} -> {opportunity.event_name}")
+        tasks = []
+        results = {}
         
-        try:
-            # Get browser context
-            # Check if we have a temporary context from orchestrator
-            if hasattr(self, '_temp_context') and self._temp_context:
-                context = self._temp_context
-            else:
-                # Create new stealth context
-                legacy_profile = {
-                    'id': getattr(profile, 'profile_id', 'unknown'),
-                    'browser': getattr(profile, 'browser', 'Chrome'),
-                    'os': getattr(profile, 'os', 'Windows 11'),
-                    'viewport_width': getattr(profile, 'viewport_width', 1920),
-                    'viewport_height': getattr(profile, 'viewport_height', 1080),
-                    'user_agent': getattr(profile, 'user_agent', ''),
-                    'locale': getattr(profile, 'locale', 'en-US'),
-                    'timezone': getattr(profile, 'timezone', 'America/New_York')
-                }
-                # Import playwright here to avoid circular imports
-                from playwright.async_api import async_playwright
-                pw = await async_playwright().start()
-                browser = await pw.chromium.launch(headless=False)
-                context = await self.stealth_integration.create_stealth_browser_context(
-                    browser, legacy_profile, opportunity.platform.value
+        # Create coordination event for synchronized execution
+        coordination_event = asyncio.Event()
+        
+        for i, profile in enumerate(profiles):
+            # Stagger starts based on strategy
+            delay = strategy.get_stagger_delay(i, len(profiles))
+            
+            task = asyncio.create_task(
+                self._execute_single_profile_strike(
+                    opportunity, profile, strategy, coordination_event, delay
                 )
-            page = await context.new_page()
+            )
+            
+            tasks.append((profile.profile_id, task))
+        
+        # Signal coordinated start
+        await asyncio.sleep(0.1)  # Let all tasks initialize
+        coordination_event.set()
+        
+        # Wait for all strikes with timeout
+        timeout = strategy.strike_timeout
+        
+        try:
+            for profile_id, task in tasks:
+                try:
+                    result = await asyncio.wait_for(task, timeout=timeout)
+                    results[profile_id] = result
+                    
+                    # Early termination on success (for some strategies)
+                    if result and strategy.early_termination_on_success:
+                        logger.info(f"Early termination - success achieved by {profile_id}")
+                        # Cancel remaining tasks
+                        for _, remaining_task in tasks:
+                            if not remaining_task.done():
+                                remaining_task.cancel()
+                        break
+                        
+                except asyncio.TimeoutError:
+                    logger.warning(f"Strike timeout for profile {profile_id}")
+                    results[profile_id] = False
+                    task.cancel()
+                    
+        except Exception as e:
+            logger.error(f"Coordination error: {e}")
+        
+        return results
+    
+    async def _execute_single_profile_strike(
+        self,
+        opportunity: EnhancedTicketOpportunity,
+        profile: BrowserProfile,
+        strategy: 'StrikeStrategy',
+        coordination_event: asyncio.Event,
+        delay: float
+    ) -> bool:
+        """Execute strike with single profile"""
+        
+        try:
+            # Wait for coordination signal
+            await coordination_event.wait()
+            
+            # Apply stagger delay
+            if delay > 0:
+                await asyncio.sleep(delay)
+            
+            logger.debug(f"Profile {profile.profile_id} striking {opportunity.id}")
+            
+            # Create browser context
+            context = await self.browser_manager.create_context(profile)
             
             try:
-                # Execute platform strategy
-                strategy = self.platform_strategies.get(opportunity.platform)
-                if not strategy:
-                    logger.error(f"No strategy for {opportunity.platform}")
-                    return False
+                # Execute reservation attempt
+                success = await self.ticket_reserver.attempt_reservation(
+                    opportunity,
+                    browser_context=context
+                )
                 
-                success = await strategy(page, opportunity, profile)
+                # Update profile cooldown
+                cooldown_time = strategy.get_profile_cooldown(success)
+                self.profile_cooldowns[profile.profile_id] = time.time() + cooldown_time
                 
-                # Record usage if ProfileManager supports it
-                elapsed = (time.time() - start_time) * 1000
-                await self._record_usage_safe(profile, opportunity, success, elapsed, False)
-                
-                if success:
-                    logger.critical(f"✅ STRIKE SUCCESS: Profile {profile_id} secured {opportunity.event_name}!")
-                    
-                    # Store successful profile ID if opportunity supports it
-                    if hasattr(opportunity, 'selected_profile_id'):
-                        opportunity.selected_profile_id = profile_id
+                # Record profile feedback
+                await self._record_strike_feedback(profile, opportunity, success)
                 
                 return success
                 
             finally:
-                # Always close the page
+                # Always close context
                 try:
-                    await page.close()
-                except Exception as e:
-                    logger.debug(f"Error closing page: {e}")
-                
-        except BlockedError as e:
-            logger.warning(f"Strike blocked: Profile {profile_id} - {e}")
-            elapsed = (time.time() - start_time) * 1000
-            await self._record_usage_safe(profile, opportunity, False, elapsed, True)
-            return False
+                    await context.close()
+                except:
+                    pass
+                    
         except Exception as e:
-            logger.error(f"Strike error for profile {profile_id}: {e}", exc_info=True)
-            elapsed = (time.time() - start_time) * 1000
-            await self._record_usage_safe(profile, opportunity, False, elapsed, False)
+            logger.error(f"Profile strike failed: {e}")
             return False
     
-    async def _record_usage_safe(self, profile: BrowserProfile, opportunity: EnhancedTicketOpportunity,
-                               success: bool, elapsed_ms: float, detected: bool):
-        """Safely record profile usage with fallbacks"""
-        try:
-            profile_id = getattr(profile, 'profile_id', getattr(profile, 'id', 'unknown'))
-            core_platform = self._convert_platform_safe(opportunity.platform)
-            
-            # Try different record_usage method signatures
-            if hasattr(self.profile_manager, 'record_usage'):
-                try:
-                    # Try full signature
-                    await self.profile_manager.record_usage(
-                        profile_id=profile_id,
-                        platform=core_platform,
-                        success=success,
-                        response_time_ms=elapsed_ms,
-                        detected=detected
-                    )
-                except TypeError:
-                    # Try simpler signature
-                    try:
-                        await self.profile_manager.record_usage(
-                            profile_id=profile_id,
-                            success=success,
-                            response_time_ms=elapsed_ms
-                        )
-                    except TypeError:
-                        # Try basic signature
-                        await self.profile_manager.record_usage(
-                            profile_id=profile_id,
-                            success=success
-                        )
-            else:
-                logger.debug("ProfileManager doesn't have record_usage method")
-                
-        except Exception as e:
-            logger.debug(f"Could not record usage: {e}")
+    async def _record_strike_feedback(
+        self,
+        profile: BrowserProfile,
+        opportunity: EnhancedTicketOpportunity,
+        success: bool
+    ) -> None:
+        """Record strike feedback for profile optimization"""
+        
+        event_type = 'reservation_success' if success else 'reservation_failed'
+        
+        await self.profile_manager.record_feedback(
+            profile_id=profile.profile_id,
+            event=event_type,
+            platform=opportunity.platform.value,
+            metadata={
+                'opportunity_id': opportunity.id,
+                'price': opportunity.price,
+                'section': opportunity.section,
+                'timestamp': time.time()
+            }
+        )
     
-    async def _strike_fansale(self,
-                            page: 'PlaywrightPage',
-                            opportunity: EnhancedTicketOpportunity,
-                            profile: BrowserProfile) -> bool:
-        """Enhanced FanSale strike implementation"""
-        try:
-            logger.info(f"🎯 FanSale strike: {opportunity.event_name}")
-            
-            # Navigate with optimized loading
-            await page.goto(opportunity.offer_url, wait_until='domcontentloaded', timeout=30000)
-            
-            # Human-like delay
-            await asyncio.sleep(random.uniform(1.0, 2.5))
-            
-            # Log page info
-            title = await page.title()
-            logger.info(f"📄 FanSale page loaded: {title}")
-            
-            # Enhanced buy button selectors
-            buy_selectors = [
-                'button:has-text("Acquista")', 'button:has-text("Compra")',
-                'button:has-text("Buy")', 'button:has-text("Aggiungi al carrello")',
-                'input[type="submit"][value*="Acquista"]', 'input[type="submit"][value*="Compra"]',
-                'button.buy-button', 'button.purchase-button', 'button.btn-buy',
-                '#buy-button', '#purchase-button', '.btn-primary',
-                'a[href*="buy"]', 'a[href*="purchase"]', 'a[href*="acquista"]'
-            ]
-            
-            clicked = False
-            for selector in buy_selectors:
-                try:
-                    elements = await page.locator(selector).all()
-                    for element in elements:
-                        if await element.is_visible(timeout=2000):
-                            logger.info(f"🎯 Found FanSale buy button: {selector}")
-                            await element.hover()
-                            await asyncio.sleep(random.uniform(0.2, 0.5))
-                            await element.click()
-                            clicked = True
-                            logger.info(f"✅ Clicked FanSale button: {selector}")
-                            break
-                    if clicked:
-                        break
-                except Exception as e:
-                    logger.debug(f"Failed to interact with {selector}: {e}")
-                    continue
-            
-            if not clicked:
-                logger.warning("❌ Could not find FanSale buy button")
-                return False
-            
-            # Wait for result
-            await page.wait_for_load_state('networkidle', timeout=15000)
-            
-            # Enhanced success detection
-            success_indicators = [
-                'carrello', 'cart', 'checkout', 'conferma', 'confirmation',
-                'pagamento', 'payment', 'ordine', 'order', 'ticket'
-            ]
-            
-            current_url = page.url.lower()
-            page_content = (await page.content()).lower()
-            
-            success = any(indicator in current_url or indicator in page_content
-                         for indicator in success_indicators)
+    def _update_strike_metrics(
+        self,
+        strike_time: float,
+        success: bool,
+        profiles: List[BrowserProfile]
+    ) -> None:
+        """Update strike performance metrics"""
+        
+        self.strike_metrics.total_strikes += 1
+        
+        if success:
+            self.strike_metrics.successful_strikes += 1
+        else:
+            self.strike_metrics.failed_strikes += 1
+        
+        # Update average response time
+        total = self.strike_metrics.total_strikes
+        prev_avg = self.strike_metrics.avg_response_time
+        self.strike_metrics.avg_response_time = (prev_avg * (total - 1) + strike_time) / total
+        
+        # Update fastest strike
+        if success and strike_time < self.strike_metrics.fastest_strike:
+            self.strike_metrics.fastest_strike = strike_time
+        
+        # Update profile performance
+        for profile in profiles:
+            if profile.profile_id not in self.strike_metrics.profile_performance:
+                self.strike_metrics.profile_performance[profile.profile_id] = 0
             
             if success:
-                logger.critical(f"🎉 FanSale strike SUCCESS!")
-            else:
-                logger.warning(f"⚠️ FanSale strike unclear result")
-            
-            return success
-            
-        except Exception as e:
-            logger.error(f"❌ FanSale strike error: {e}")
-            return False
+                self.strike_metrics.profile_performance[profile.profile_id] += 1
     
-    async def _strike_ticketmaster(self,
-                                 page: 'PlaywrightPage',
-                                 opportunity: EnhancedTicketOpportunity,
-                                 profile: BrowserProfile) -> bool:
-        """Enhanced Ticketmaster strike implementation"""
-        try:
-            logger.info(f"🎯 Ticketmaster strike: {opportunity.event_name}")
-            
-            # Navigate to the opportunity URL
-            await page.goto(opportunity.offer_url, wait_until='domcontentloaded', timeout=30000)
-            
-            # Human-like delay
-            await asyncio.sleep(random.uniform(1.5, 3.0))
-            
-            # Log page title
-            title = await page.title()
-            logger.info(f"📄 Ticketmaster page: {title}")
-            
-            # Ticketmaster-specific selectors
-            buy_selectors = [
-                'button:has-text("Buy")', 'button:has-text("Purchase")',
-                'button:has-text("Get Tickets")', 'button:has-text("Buy Tickets")',
-                'button:has-text("Add to Cart")', 'button:has-text("Select")',
-                '.buy-button', '.purchase-button', '.btn-primary', '.btn-buy',
-                'input[value*="Buy"]', 'input[value*="Purchase"]', 'input[value*="Add"]',
-                'a[href*="purchase"]', 'a[href*="buy"]', 'a[href*="cart"]',
-                '[data-testid*="buy"]', '[data-testid*="purchase"]'
-            ]
-            
-            clicked = False
-            for selector in buy_selectors:
-                try:
-                    elements = await page.locator(selector).all()
-                    for element in elements:
-                        if await element.is_visible(timeout=3000):
-                            logger.info(f"🎯 Found Ticketmaster buy button: {selector}")
-                            await element.hover()
-                            await asyncio.sleep(random.uniform(0.3, 0.7))
-                            await element.click()
-                            clicked = True
-                            logger.info(f"✅ Clicked Ticketmaster button: {selector}")
-                            break
-                    if clicked:
-                        break
-                except Exception as e:
-                    logger.debug(f"Failed to interact with {selector}: {e}")
-                    continue
-            
-            if not clicked:
-                logger.warning("❌ Could not find Ticketmaster buy button")
-                return False
-            
-            # Wait for response
-            await page.wait_for_load_state('networkidle', timeout=20000)
-            
-            # Success detection
-            success_indicators = [
-                'cart', 'checkout', 'payment', 'order', 'confirmation',
-                'seat', 'ticket', 'purchase', 'billing', 'summary'
-            ]
-            
-            current_url = page.url.lower()
-            page_content = (await page.content()).lower()
-            
-            success = any(indicator in current_url or indicator in page_content
-                         for indicator in success_indicators)
-            
-            if success:
-                logger.critical(f"🎉 Ticketmaster strike SUCCESS!")
-            else:
-                logger.warning(f"⚠️ Ticketmaster strike unclear result")
-            
-            return success
-            
-        except Exception as e:
-            logger.error(f"❌ Ticketmaster strike error: {e}")
-            return False
+    def get_strike_stats(self) -> Dict[str, Any]:
+        """Get comprehensive strike statistics"""
+        
+        success_rate = 0
+        if self.strike_metrics.total_strikes > 0:
+            success_rate = self.strike_metrics.successful_strikes / self.strike_metrics.total_strikes
+        
+        # Get top performing profiles
+        top_profiles = sorted(
+            self.strike_metrics.profile_performance.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:5]
+        
+        return {
+            'total_strikes': self.strike_metrics.total_strikes,
+            'successful_strikes': self.strike_metrics.successful_strikes,
+            'success_rate': success_rate,
+            'avg_response_time': self.strike_metrics.avg_response_time,
+            'fastest_strike': self.strike_metrics.fastest_strike,
+            'top_profiles': top_profiles,
+            'active_strikes': len(self.active_strikes)
+        }
+
+
+class QuantumCoordinator:
+    """Quantum optimization for strike coordination"""
     
-    async def _strike_vivaticket(self,
-                               page: 'PlaywrightPage',
-                               opportunity: EnhancedTicketOpportunity,
-                               profile: BrowserProfile) -> bool:
-        """Enhanced Vivaticket strike implementation"""
-        try:
-            logger.info(f"🎯 Vivaticket strike: {opportunity.event_name}")
-            
-            # Navigate to the opportunity URL
-            await page.goto(opportunity.offer_url, wait_until='domcontentloaded', timeout=30000)
-            
-            # Human-like delay
-            await asyncio.sleep(random.uniform(1.0, 2.5))
-            
-            # Log page title
-            title = await page.title()
-            logger.info(f"📄 Vivaticket page: {title}")
-            
-            # Vivaticket-specific selectors
-            buy_selectors = [
-                'button:has-text("Acquista")', 'button:has-text("Compra")',
-                'button:has-text("Buy")', 'button:has-text("Aggiungi al carrello")',
-                'button:has-text("Seleziona")', 'button:has-text("Prenota")',
-                '.buy-button', '.purchase-button', '.btn-buy', '.btn-primary',
-                'input[value*="Acquista"]', 'input[value*="Compra"]', 'input[value*="Buy"]',
-                'a[href*="buy"]', 'a[href*="purchase"]', 'a[href*="acquista"]',
-                '[data-action*="buy"]', '[data-action*="purchase"]'
-            ]
-            
-            clicked = False
-            for selector in buy_selectors:
-                try:
-                    elements = await page.locator(selector).all()
-                    for element in elements:
-                        if await element.is_visible(timeout=3000):
-                            logger.info(f"🎯 Found Vivaticket buy button: {selector}")
-                            await element.hover()
-                            await asyncio.sleep(random.uniform(0.2, 0.5))
-                            await element.click()
-                            clicked = True
-                            logger.info(f"✅ Clicked Vivaticket button: {selector}")
-                            break
-                    if clicked:
-                        break
-                except Exception as e:
-                    logger.debug(f"Failed to interact with {selector}: {e}")
-                    continue
-            
-            if not clicked:
-                logger.warning("❌ Could not find Vivaticket buy button")
-                return False
-            
-            # Wait for response
-            await page.wait_for_load_state('networkidle', timeout=15000)
-            
-            # Success detection
-            success_indicators = [
-                'carrello', 'cart', 'checkout', 'pagamento', 'payment',
-                'conferma', 'confirmation', 'ordine', 'order', 'biglietto',
-                'ticket', 'riepilogo', 'summary'
-            ]
-            
-            current_url = page.url.lower()
-            page_content = (await page.content()).lower()
-            
-            success = any(indicator in current_url or indicator in page_content
-                         for indicator in success_indicators)
-            
-            if success:
-                logger.critical(f"🎉 Vivaticket strike SUCCESS!")
-            else:
-                logger.warning(f"⚠️ Vivaticket strike unclear result")
-            
-            return success
-            
-        except Exception as e:
-            logger.error(f"❌ Vivaticket strike error: {e}")
-            return False
+    def calculate_profile_score(
+        self,
+        profile: BrowserProfile,
+        opportunity: EnhancedTicketOpportunity,
+        metrics: StrikeMetrics
+    ) -> float:
+        """Calculate quantum-optimized profile score"""
+        
+        score = 0.0
+        
+        # Base quality score
+        quality_score = profile.quality.success_rate * 100
+        score += quality_score * 0.3
+        
+        # Platform compatibility
+        platform_stats = profile.platform_stats.get(opportunity.platform.value, {})
+        platform_success_rate = platform_stats.get('success_rate', 0)
+        score += platform_success_rate * 100 * 0.3
+        
+        # Historical performance
+        historical_score = metrics.profile_performance.get(profile.profile_id, 0)
+        score += min(historical_score * 10, 100) * 0.2
+        
+        # Fingerprint uniqueness
+        uniqueness_score = self._calculate_fingerprint_uniqueness(profile)
+        score += uniqueness_score * 0.2
+        
+        # Add quantum noise for diversity
+        quantum_noise = random.gauss(0, 5)
+        score += quantum_noise
+        
+        return max(0, min(100, score))
+    
+    def _calculate_fingerprint_uniqueness(self, profile: BrowserProfile) -> float:
+        """Calculate fingerprint uniqueness score"""
+        # Simplified uniqueness calculation
+        unique_factors = [
+            profile.user_agent,
+            profile.canvas_fingerprint,
+            f"{profile.screen_width}x{profile.screen_height}",
+            profile.timezone
+        ]
+        
+        # Hash to get uniqueness score
+        combined = ''.join(str(f) for f in unique_factors)
+        hash_value = hash(combined)
+        
+        # Normalize to 0-100
+        return (hash_value % 100)
+
+
+class StrikeStrategy:
+    """Base class for strike strategies"""
+    
+    max_parallel_profiles: int = 3
+    min_quality_tier: int = 2
+    strike_timeout: float = 30.0
+    early_termination_on_success: bool = True
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        """Get stagger delay for profile index"""
+        return 0.0
+    
+    def get_profile_cooldown(self, success: bool) -> float:
+        """Get cooldown time for profile"""
+        return 60.0 if success else 30.0
+
+
+class StealthStrikeStrategy(StrikeStrategy):
+    """Ultra-careful stealth strategy"""
+    
+    max_parallel_profiles = 1
+    min_quality_tier = 4
+    strike_timeout = 45.0
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        # No parallel execution in stealth mode
+        return index * 10.0
+    
+    def get_profile_cooldown(self, success: bool) -> float:
+        return 300.0 if success else 120.0
+
+
+class BeastStrikeStrategy(StrikeStrategy):
+    """Maximum aggression strategy"""
+    
+    max_parallel_profiles = 10
+    min_quality_tier = 1
+    strike_timeout = 20.0
+    early_termination_on_success = False
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        # Minimal stagger for maximum speed
+        return index * 0.1
+    
+    def get_profile_cooldown(self, success: bool) -> float:
+        return 30.0 if success else 10.0
+
+
+class UltraStealthStrikeStrategy(StrikeStrategy):
+    """Maximum stealth with adaptive timing"""
+    
+    max_parallel_profiles = 1
+    min_quality_tier = 5
+    strike_timeout = 60.0
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        # Add random delay for unpredictability
+        base_delay = index * 20.0
+        jitter = random.uniform(-5, 10)
+        return max(0, base_delay + jitter)
+    
+    def get_profile_cooldown(self, success: bool) -> float:
+        # Long random cooldown
+        base = 600.0 if success else 300.0
+        return base + random.uniform(0, 300)
+
+
+class AdaptiveStrikeStrategy(StrikeStrategy):
+    """Dynamically adapts based on conditions"""
+    
+    def __init__(self):
+        self.recent_success_rate = 0.5
+        self.detection_level = 0.0
+    
+    @property
+    def max_parallel_profiles(self) -> int:
+        # Adapt based on success rate
+        if self.recent_success_rate > 0.7:
+            return 5
+        elif self.recent_success_rate > 0.4:
+            return 3
+        else:
+            return 1
+    
+    @property
+    def min_quality_tier(self) -> int:
+        # Higher quality when detection is high
+        if self.detection_level > 0.7:
+            return 4
+        elif self.detection_level > 0.3:
+            return 3
+        else:
+            return 2
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        # Adaptive stagger based on detection
+        base = index * (1.0 + self.detection_level * 5.0)
+        return base + random.uniform(0, 1)
+
+
+class HybridStrikeStrategy(StrikeStrategy):
+    """Balanced approach between speed and stealth"""
+    
+    max_parallel_profiles = 3
+    min_quality_tier = 3
+    strike_timeout = 30.0
+    
+    def get_stagger_delay(self, index: int, total: int) -> float:
+        # Progressive stagger
+        return index ** 1.5 * 0.5
+    
+    def get_profile_cooldown(self, success: bool) -> float:
+        return 120.0 if success else 60.0

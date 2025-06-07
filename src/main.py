@@ -1,653 +1,338 @@
-# src/main.py - v4.0 - Ultra-Stealth High-Performance Edition
-from __future__ import annotations
+# src/main.py - StealthMaster AI v2.0
+"""
+Bruce Springsteen Ticket Hunter - Ultra-Stealth Edition
+Revolutionary ticket acquisition system with quantum efficiency
+"""
 
 import asyncio
 import logging
-import logging.handlers
 import signal
 import sys
 import os
 import yaml
 import time
 from pathlib import Path
-from typing import Dict, Optional, Any
-import threading
-import queue as thread_queue
 from datetime import datetime
-import hashlib
-import re
+import argparse
 
-# Ensure the project root is in the Python path
+# Project root setup
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
 
+# Environment setup
 from dotenv import load_dotenv
-# Load .env file if it exists (don't fail if it doesn't)
 env_file = PROJECT_ROOT / ".env"
 if env_file.exists():
     load_dotenv(env_file)
-else:
-    # Will log after logger is initialized
-    print("No .env file found, using system environment variables")
 
-# Playwright with stealth capabilities
-from playwright.async_api import async_playwright
-
-# Core Application Imports
-from src.core.orchestrator import UnifiedOrchestrator
+# Import enhanced orchestrator
+from src.core.orchestrator import UltimateOrchestrator
 from src.core.enums import OperationMode
 
-# Configuration paths
-DEFAULT_CONFIG_FILE = PROJECT_ROOT / "config" / "config.yaml"
-DEFAULT_BEAST_MODE_CONFIG_FILE = PROJECT_ROOT / "config" / "beast_mode_config.yaml"
+# Configuration
+DEFAULT_CONFIG = PROJECT_ROOT / "config" / "config.yaml"
 
-# Global state management with thread safety
-_orchestrator_instance: Optional[UnifiedOrchestrator] = None
-_stop_event_asyncio: Optional[asyncio.Event] = None
-_gui_stop_event_threading: Optional[threading.Event] = None
-_gui_bot_asyncio_loop: Optional[asyncio.AbstractEventLoop] = None
-_shutdown_lock = threading.Lock()
+# Global state
+_orchestrator_instance = None
+_stop_event = asyncio.Event()
 
 logger = logging.getLogger(__name__)
 
-class StealthLogger(logging.Logger):
-    """Custom logger that sanitizes sensitive information"""
-    
-    def _sanitize_message(self, msg: str) -> str:
-        """Remove sensitive data from log messages"""
-        # Remove URLs with tokens/sessions
-        msg = re.sub(r'(session|token|key)=[^&\s]+', r'\1=***', msg)
-        # Remove profile IDs in logs
-        msg = re.sub(r'profile_[a-f0-9]{8}', 'profile_***', msg)
-        # Remove proxy credentials from URLs
-        msg = re.sub(r'://[^:/@]+:[^:/@]+@', '://***:***@', msg)
-        # Remove standalone password patterns
-        msg = re.sub(r'(password|passwd|pwd)["\s]*[:=]["\s]*[^\s"&]+', r'\1=***', msg, flags=re.IGNORECASE)
-        return msg
-    
-    def _log(self, level, msg, args, **kwargs):
-        msg = self._sanitize_message(str(msg))
-        super()._log(level, msg, args, **kwargs)
-# Replace default logger class
-logging.setLoggerClass(StealthLogger)
 
-def signal_handler(sig, _):
-    """Enhanced signal handler with proper cleanup"""
-    signal_name = signal.Signals(sig).name
-    logger.warning(f"Received {signal_name}, initiating stealth shutdown...")
-    
-    with _shutdown_lock:
-        # Primary asyncio event
-        if _stop_event_asyncio and not _stop_event_asyncio.is_set():
-            _stop_event_asyncio.set()
-            logger.info("Primary asyncio stop event set.")
-        
-        # GUI threading event
-        if _gui_stop_event_threading and not _gui_stop_event_threading.is_set():
-            _gui_stop_event_threading.set()
-            logger.info("GUI threading stop event set.")
-        
-        # Force cleanup after delay if needed
-        def force_cleanup():
-            time.sleep(5)
-            if _orchestrator_instance and not _orchestrator_instance._shutdown_initiated:
-                logger.critical("Forcing immediate shutdown")
-                # Instead of os._exit, try to gracefully terminate
-                try:
-                    if _stop_event_asyncio:
-                        _stop_event_asyncio.set()
-                    if _gui_stop_event_threading:
-                        _gui_stop_event_threading.set()
-                    # Allow a bit more time for cleanup
-                    time.sleep(2)
-                except Exception as e:
-                    logger.error(f"Error during forced cleanup: {e}")
-                finally:
-                    # Only use os._exit as last resort
-                    if _orchestrator_instance and not _orchestrator_instance._shutdown_initiated:
-                        os._exit(1)
-        
-        threading.Thread(target=force_cleanup, daemon=True).start()
-
-def setup_logging(config: Dict[str, Any]) -> None:
-    """Enhanced logging with stealth considerations"""
+def setup_stealth_logging(config: dict) -> None:
+    """Configure ultra-stealth logging system"""
     log_config = config.get('logging', {})
-    log_level_str = log_config.get('level', 'INFO').upper()
-    log_level = getattr(logging, log_level_str, logging.INFO)
+    log_level = getattr(logging, log_config.get('level', 'INFO'))
     
-    # Stealth mode: reduce logging verbosity
-    if config.get('app_settings', {}).get('mode') in ['stealth', 'ultra_stealth']:
-        log_level = max(log_level, logging.WARNING)
+    # Create logs directory
+    log_dir = PROJECT_ROOT / log_config.get('log_directory', 'logs')
+    log_dir.mkdir(exist_ok=True)
     
-    log_dir_str = log_config.get('log_directory', 'logs')
-    log_dir = PROJECT_ROOT / log_dir_str
-    log_dir.mkdir(parents=True, exist_ok=True)
-    
+    # Configure root logger
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
     
-    # Clear existing handlers
-    for handler in list(root_logger.handlers):
-        root_logger.removeHandler(handler)
-    
-    # Enhanced formatters
-    detailed_formatter = logging.Formatter(
-        '%(asctime)s.%(msecs)03d | %(levelname)-8s | %(name)-30s | %(funcName)-20s | %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+    # Console handler with color coding
+    console_handler = logging.StreamHandler()
+    console_formatter = ColoredFormatter(
+        '%(asctime)s | %(levelname)-8s | %(name)s | %(message)s',
+        datefmt='%H:%M:%S'
     )
-    
-    # Console Handler with color support
-    console_handler = logging.StreamHandler(sys.stdout)
-    try:
-        import colorlog
-        color_formatter = colorlog.ColoredFormatter(
-            '%(log_color)s%(asctime)s | %(levelname)-8s | %(message)s%(reset)s',
-            datefmt='%H:%M:%S',
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'red,bg_white',
-            }
-        )
-        console_handler.setFormatter(color_formatter)
-    except ImportError:
-        console_handler.setFormatter(detailed_formatter)
-    
-    console_handler.setLevel(log_level)
+    console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
     
-    # Rotating file handlers with compression
-    main_log_file = log_dir / log_config.get('main_log_file', 'ticket_system.log')
-    file_handler = logging.handlers.RotatingFileHandler(
-        main_log_file, 
-        maxBytes=10*1024*1024, 
-        backupCount=5, 
-        encoding='utf-8'
+    # File handlers
+    from logging.handlers import RotatingFileHandler
+    
+    # Main log
+    main_log = log_dir / log_config.get('main_log_file', 'stealthmaster.log')
+    file_handler = RotatingFileHandler(
+        main_log, maxBytes=10*1024*1024, backupCount=5
     )
-    file_handler.setFormatter(detailed_formatter)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s | %(levelname)s | %(name)s | %(message)s'
+    ))
     root_logger.addHandler(file_handler)
     
-    # Error-only handler
-    error_log_file = log_dir / log_config.get('error_log_file', 'errors.log')
-    error_file_handler = logging.handlers.RotatingFileHandler(
-        error_log_file, 
-        maxBytes=5*1024*1024, 
-        backupCount=3, 
-        encoding='utf-8'
+    # Error log
+    error_log = log_dir / log_config.get('error_log_file', 'errors.log')
+    error_handler = RotatingFileHandler(
+        error_log, maxBytes=5*1024*1024, backupCount=3
     )
-    error_file_handler.setLevel(logging.ERROR)
-    error_file_handler.setFormatter(detailed_formatter)
-    root_logger.addHandler(error_file_handler)
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(logging.Formatter(
+        '%(asctime)s | %(levelname)s | %(name)s | %(message)s\n%(exc_info)s'
+    ))
+    root_logger.addHandler(error_handler)
     
-    # Suppress verbose third-party loggers for stealth
-    stealth_suppression = {
-        'httpx': logging.ERROR,
-        'httpcore': logging.ERROR,
-        'playwright': logging.ERROR,
-        'websockets': logging.ERROR,
-        'urllib3': logging.ERROR,
-        'selenium': logging.ERROR,
-    }
+    # Suppress noisy libraries
+    for lib in ['httpx', 'httpcore', 'playwright', 'websockets', 'urllib3']:
+        logging.getLogger(lib).setLevel(logging.ERROR)
     
-    for logger_name, level in stealth_suppression.items():
-        logging.getLogger(logger_name).setLevel(level)
-    
-    logger.info(f"Stealth logging initialized. Level: {log_level_str}")
+    logger.info("🛡️ StealthMaster AI logging initialized")
 
-def load_and_merge_configs(main_config_path: Path, beast_config_path: Optional[Path] = None) -> Dict[str, Any]:
-    """Enhanced config loading with validation and security"""
-    if not main_config_path.exists():
-        logger.critical(f"Main configuration file not found: {main_config_path}")
-        raise FileNotFoundError(f"Main configuration file not found: {main_config_path}")
+
+class ColoredFormatter(logging.Formatter):
+    """Colored console output for better visibility"""
     
-    # Load with safe loader to prevent code execution
-    with open(main_config_path, 'r', encoding='utf-8') as f:
+    COLORS = {
+        'DEBUG': '\033[36m',    # Cyan
+        'INFO': '\033[32m',     # Green
+        'WARNING': '\033[33m',  # Yellow
+        'ERROR': '\033[31m',    # Red
+        'CRITICAL': '\033[35m', # Magenta
+    }
+    RESET = '\033[0m'
+    
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelname, self.RESET)
+        record.levelname = f"{log_color}{record.levelname}{self.RESET}"
+        return super().format(record)
+
+
+def signal_handler(sig, frame):
+    """Handle shutdown signals gracefully"""
+    logger.warning(f"Received signal {sig} - initiating graceful shutdown...")
+    _stop_event.set()
+
+
+async def main(args):
+    """Main entry point for StealthMaster AI"""
+    global _orchestrator_instance
+    
+    # Load configuration
+    config = load_config(args.config)
+    
+    # Setup logging
+    setup_stealth_logging(config)
+    
+    # Print epic startup banner
+    print_startup_banner(config)
+    
+    # Validate configuration
+    if not validate_config(config):
+        logger.critical("Configuration validation failed!")
+        return 1
+    
+    # Initialize orchestrator
+    logger.info("🚀 Initializing Ultimate Orchestrator v2.0...")
+    
+    try:
+        orchestrator = UltimateOrchestrator(config, gui_queue=None)
+        _orchestrator_instance = orchestrator
+        
+        # Initialize subsystems
+        await orchestrator.initialize()
+        
+        # Start the hunt!
+        logger.critical("="*80)
+        logger.critical("🎸 STARTING THE HUNT FOR BRUCE SPRINGSTEEN TICKETS! 🎸")
+        logger.critical("="*80)
+        
+        # Start orchestrator
+        orchestrator_task = asyncio.create_task(orchestrator.start())
+        
+        # Wait for stop signal
+        await _stop_event.wait()
+        
+        # Graceful shutdown
+        logger.info("Initiating graceful shutdown...")
+        await orchestrator.stop()
+        
+        # Wait for tasks to complete
+        await asyncio.wait_for(orchestrator_task, timeout=10)
+        
+        # Print final stats
+        print_final_stats(orchestrator.get_stats())
+        
+    except Exception as e:
+        logger.critical(f"Fatal error: {e}", exc_info=True)
+        return 1
+    
+    logger.info("StealthMaster AI shutdown complete")
+    return 0
+
+
+def load_config(config_path: str) -> dict:
+    """Load and validate configuration"""
+    config_file = Path(config_path)
+    
+    if not config_file.exists():
+        logger.critical(f"Configuration file not found: {config_file}")
+        sys.exit(1)
+    
+    with open(config_file, 'r') as f:
         config = yaml.safe_load(f)
     
-    # Validate critical config sections
-    required_sections = ['app_settings', 'targets', 'monitoring_settings']
-    for section in required_sections:
-        if section not in config:
-            logger.warning(f"Missing required config section: {section}")
-            config[section] = {}
-    
-    # Merge beast mode config if applicable
-    if beast_config_path and beast_config_path.exists() and config.get('app_settings', {}).get('mode') == 'beast':
-        logger.info(f"Beast mode detected. Merging with: {beast_config_path}")
-        with open(beast_config_path, 'r', encoding='utf-8') as f:
-            beast_config = yaml.safe_load(f)
-        
-        # Deep merge with conflict resolution
-        def deep_merge(source, destination):
-            for key, value in source.items():
-                if isinstance(value, dict):
-                    node = destination.setdefault(key, {})
-                    deep_merge(value, node)
-                else:
-                    destination[key] = value
-            return destination
-        
-        config = deep_merge(beast_config, config)
-    
-    # Add runtime metadata
-    config["_metadata"] = {
-        "config_file_path": str(main_config_path.resolve()),
-        "loaded_at": datetime.now().isoformat(),
-        "config_hash": hashlib.sha256(str(config).encode()).hexdigest()[:8]
-    }
+    # Apply environment variable substitutions
+    config = substitute_env_vars(config)
     
     return config
 
-async def async_main_logic(config: Dict[str, Any], stop_event: asyncio.Event,
-                          gui_queue: Optional[thread_queue.Queue] = None) -> None:
-    """Enhanced core logic with stealth optimizations and fast startup"""
-    global _orchestrator_instance
-    
-    start_time = time.time()
-    
-    try:
-        from src.utils.live_status_logger import (
-            get_live_status_logger, 
-            update_operation_progress,
-            complete_operation,
-            print_status_dashboard
-        )
-        
-        live_logger = get_live_status_logger()
-        
-        # Initialize Playwright with stealth
-        async with async_playwright() as playwright:
-            
-            update_operation_progress("bot_startup", 30.0, "Initializing orchestrator...")
-            
-            _orchestrator_instance = UnifiedOrchestrator(
-                config, 
-                playwright, 
-                Path(config["_metadata"]["config_file_path"]),
-                gui_queue=gui_queue
-            )
-            
-            # Log startup time
-            startup_time = time.time() - start_time
-            logger.info(f"⚡ Fast startup completed in {startup_time:.2f}s")
-            
-            update_operation_progress("bot_startup", 60.0, "Pre-warming connections...")
-            
-            # Performance optimization: pre-warm connections (non-blocking)
-            asyncio.create_task(_orchestrator_instance.pre_warm_connections())
-            
-            update_operation_progress("bot_startup", 90.0, "Starting ticket monitoring...")
-            complete_operation("bot_startup", True, "Ticket hunting bot is now active!")
-            
-            # Periodic status dashboard updates
-            async def periodic_dashboard_update():
-                while not stop_event.is_set():
-                    try:
-                        await asyncio.sleep(30)  # Update every 30 seconds
-                        if not stop_event.is_set():
-                            print_status_dashboard()
-                    except Exception as e:
-                        logger.debug(f"Dashboard update error: {e}")
-            
-            # Start dashboard updates in background
-            dashboard_task = asyncio.create_task(periodic_dashboard_update())
-            
-            try:
-                # Run the orchestrator
-                await _orchestrator_instance.run(stop_event)
-            finally:
-                dashboard_task.cancel()
-                try:
-                    await dashboard_task
-                except asyncio.CancelledError:
-                    pass
-            
-    except Exception as e:
-        logger.critical(f"Fatal error in async_main_logic: {e}", exc_info=True)
-        if gui_queue:
-            gui_queue.put(("log", (f"FATAL BOT ERROR: {e}", "CRITICAL")))
-        raise
-    finally:
-        elapsed = time.time() - start_time
-        logger.info(f"Bot session duration: {elapsed:.2f} seconds")
-        
-        if _orchestrator_instance:
-            logger.info("Initiating secure shutdown sequence...")
-            await _orchestrator_instance.graceful_shutdown()
-            
-            # Clear sensitive data
-            _orchestrator_instance.clear_sensitive_data()
-        
-        logger.info("async_main_logic completed.")
 
-# GUI Bridge Functions with enhanced thread safety
-_gui_bot_thread: Optional[threading.Thread] = None
-_gui_asyncio_stop_event: Optional[asyncio.Event] = None
-
-def main_loop_for_gui(config_for_gui: Dict[str, Any],
-                     stop_event_from_gui: threading.Event,
-                     gui_q_ref: thread_queue.Queue):
-    """Enhanced GUI bot loop with better error handling"""
-    global _gui_bot_thread, _gui_asyncio_stop_event, _gui_bot_asyncio_loop, _gui_stop_event_threading
-    
-    logger.info("GUI initiated stealth bot start.")
-    _gui_stop_event_threading = stop_event_from_gui
-    _gui_asyncio_stop_event = asyncio.Event()
-    
-    def run_bot_in_thread():
-        global _gui_bot_asyncio_loop
-        
-        # Create isolated event loop for thread
-        _gui_bot_asyncio_loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(_gui_bot_asyncio_loop)
-        
-        try:
-            _gui_bot_asyncio_loop.run_until_complete(
-                async_main_logic(config_for_gui, _gui_asyncio_stop_event, gui_q_ref)
-            )
-        except Exception as e:
-            logger.error(f"GUI bot thread error: {e}", exc_info=True)
-            if gui_q_ref:
-                gui_q_ref.put(("log", (f"Bot Error: {str(e)[:100]}...", "ERROR")))
-        finally:
-            logger.info("GUI bot thread completed.")
-            if gui_q_ref:
-                gui_q_ref.put(("bot_stopped", "Status: Stopped"))
-            
-            # Cleanup
-            _gui_bot_asyncio_loop.close()
-            _gui_bot_asyncio_loop = None
-    
-    # Start bot thread with proper naming
-    thread_name = f"StealthBot-{datetime.now().strftime('%H%M%S')}"
-    _gui_bot_thread = threading.Thread(
-        target=run_bot_in_thread, 
-        daemon=True, 
-        name=thread_name
-    )
-    _gui_bot_thread.start()
-    
-    # Wait for stop signal with timeout checks
-    while not _gui_stop_event_threading.is_set():
-        if _gui_stop_event_threading.wait(timeout=1.0):
-            break
-        
-        # Health check
-        if _gui_bot_thread and not _gui_bot_thread.is_alive():
-            logger.warning("GUI bot thread died unexpectedly")
-            break
-    
-    logger.info("GUI stop signal received, initiating shutdown...")
-    
-    # Signal async stop
-    if _gui_bot_asyncio_loop and _gui_asyncio_stop_event:
-        _gui_bot_asyncio_loop.call_soon_threadsafe(_gui_asyncio_stop_event.set)
-    
-    # Wait for thread completion
-    if _gui_bot_thread and _gui_bot_thread.is_alive():
-        _gui_bot_thread.join(timeout=15.0)
-        if _gui_bot_thread.is_alive():
-            logger.error("GUI bot thread failed to terminate gracefully")
-    
-    _gui_bot_thread = None
-
-def load_app_config_for_gui(config_path_str: Optional[str] = None) -> Dict[str, Any]:
-    """Enhanced config loader for GUI with validation"""
-    path_to_load = Path(config_path_str) if config_path_str else DEFAULT_CONFIG_FILE
-    beast_path = path_to_load.parent / DEFAULT_BEAST_MODE_CONFIG_FILE.name
-    
-    logger.info(f"GUI loading config from: {path_to_load}")
-    
-    try:
-        config = load_and_merge_configs(path_to_load, beast_path)
-        
-        # Validate for GUI usage
-        if not config.get('targets'):
-            config['targets'] = []
-            logger.warning("No targets defined in config for GUI")
-        
+def substitute_env_vars(config: dict) -> dict:
+    """Recursively substitute environment variables in config"""
+    if isinstance(config, dict):
+        return {k: substitute_env_vars(v) for k, v in config.items()}
+    elif isinstance(config, list):
+        return [substitute_env_vars(item) for item in config]
+    elif isinstance(config, str) and config.startswith('${') and config.endswith('}'):
+        var_name = config[2:-1]
+        return os.environ.get(var_name, config)
+    else:
         return config
-        
-    except Exception as e:
-        logger.error(f"Config loading error: {e}", exc_info=True)
-        # Return minimal valid config
-        return {
-            "app_settings": {
-                "mode": "adaptive",
-                "logging": {"level": "INFO"}
-            },
-            "targets": [],
-            "monitoring_settings": {},
-            "_metadata": {
-                "config_file_path": str(path_to_load.resolve()),
-                "error": str(e)
-            }
-        }
 
-def main_cli():
-    """Enhanced CLI entry point with stealth features"""
-    global _stop_event_asyncio
-    
-    import argparse
-    
-    parser = argparse.ArgumentParser(
-        description="Ultra-Stealth Ticket Automation System v4.0",
-        formatter_class=argparse.RawTextHelpFormatter,
-        epilog="""
-Stealth Modes:
-  adaptive      - Dynamically adjusts strategy based on detection
-  stealth       - Prioritizes avoiding detection
-  ultra_stealth - Maximum anti-detection, minimal footprint
-  beast         - Maximum speed, accepts higher detection risk
-  hybrid        - Balanced approach
 
-Examples:
-  python src/main.py                          # Default mode from config
-  python src/main.py --mode ultra_stealth     # Force ultra stealth mode
-  python src/main.py --profiles 10            # Use 10 concurrent profiles
-  python src/main.py --gui                    # Launch GUI interface
-"""
-    )
+def validate_config(config: dict) -> bool:
+    """Validate configuration completeness"""
+    required_sections = ['app_settings', 'targets', 'monitoring_settings']
     
-    parser.add_argument(
-        '--mode', 
-        type=str, 
-        choices=[mode.value for mode in OperationMode],
-        help='Override operation mode'
-    )
-    parser.add_argument(
-        '--config', 
-        type=Path, 
-        default=DEFAULT_CONFIG_FILE,
-        help=f'Configuration file path (default: {DEFAULT_CONFIG_FILE})'
-    )
-    parser.add_argument(
-        '--beast-config', 
-        type=Path, 
-        default=DEFAULT_BEAST_MODE_CONFIG_FILE,
-        help=f'Beast mode config (default: {DEFAULT_BEAST_MODE_CONFIG_FILE})'
-    )
-    parser.add_argument(
-        '--gui', 
-        action='store_true', 
-        help='Launch GUI interface'
-    )
-    parser.add_argument(
-        '--profiles', 
-        type=int, 
-        help='Number of concurrent profiles to use'
-    )
-    parser.add_argument(
-        '--dry-run', 
-        action='store_true', 
-        help='Test mode without actual purchases'
-    )
-    parser.add_argument(
-        '--verbose', 
-        action='store_true', 
-        help='Enable verbose logging (reduces stealth)'
-    )
-    
-    args = parser.parse_args()
-    
-    # GUI mode
-    if args.gui:
-        print("Launching Stealth GUI mode...")
-        logging.basicConfig(
-            level=logging.INFO, 
-            format="%(asctime)s [%(levelname)s] %(message)s"
-        )
-        try:
-            from src.ui.gui_advanced import start_gui
-            start_gui()
-        except ImportError as e:
-            print(f"GUI dependencies missing: {e}", file=sys.stderr)
-            sys.exit(1)
-        except Exception as e:
-            print(f"GUI error: {e}", file=sys.stderr)
-            sys.exit(1)
-        return
-    
-    # Load configuration
-    try:
-        config = load_and_merge_configs(args.config, args.beast_config)
-    except Exception as e:
-        print(f"CRITICAL: Configuration error: {e}", file=sys.stderr)
-        sys.exit(1)
-    
-    # Apply CLI overrides
-    if args.mode:
-        config.setdefault('app_settings', {})['mode'] = args.mode
-    if args.profiles:
-        config.setdefault('profile_settings', {})['max_concurrent'] = args.profiles
-    if args.dry_run:
-        config.setdefault('app_settings', {})['dry_run'] = True
-    if args.verbose:
-        config.setdefault('logging', {})['level'] = 'DEBUG'
-    
-    # Setup logging
-    setup_logging(config)
-    
-    # Initialize live status logging
-    from src.utils.live_status_logger import (
-        init_live_status_logging, 
-        start_operation, 
-        update_operation_progress,
-        complete_operation,
-        StatusLevel
-    )
-    
-    live_logger = init_live_status_logging(enable_gui=False)
-    
-    # 🛡️ Initialize StealthMaster AI
-    from src.core.stealth.stealth_integration import init_bruce_stealth_integration
-    stealth_integration = init_bruce_stealth_integration(live_logger)
-    logger.critical("🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!")
-    
-    # Enhanced startup info with live status
-    start_operation("system_startup", "Initializing Bruce Springsteen Ticket Hunter", 10.0)
-    
-    logger.critical("="*80)
-    logger.critical("🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸")
-    logger.critical("="*80)
-    
-    update_operation_progress("system_startup", 20.0, "Loading configuration...")
-    
-    logger.critical(f"🎯 Mode: {config.get('app_settings', {}).get('mode', 'adaptive').upper()}")
-    logger.critical(f"📄 Config: {args.config}")
-    logger.critical(f"👤 Profiles: {config.get('profile_settings', {}).get('max_concurrent', 'auto')}")
-    logger.critical(f"🐍 Python: {sys.version.split()[0]}")
-    
-    update_operation_progress("system_startup", 40.0, "Checking browser configuration...")
-    
-    # Show browser visibility status
-    browser_headless = config.get('browser_options', {}).get('headless', True)
-    if browser_headless:
-        logger.error("⚠️  BROWSERS WILL BE HIDDEN (headless: true)")
-        logger.error("   💡 Change 'headless: false' in config to see browsers")
-        live_logger.log_status(StatusLevel.WARNING, "BROWSER", "Browsers will be HIDDEN - you won't see login process")
-    else:
-        logger.critical("👀 BROWSERS WILL BE VISIBLE (headless: false)")
-        logger.critical("   ✅ You will see browser windows during operation")
-        live_logger.log_status(StatusLevel.SUCCESS, "BROWSER", "Browsers will be VISIBLE - you can watch the login process")
-    
-    update_operation_progress("system_startup", 60.0, "Validating authentication...")
-    
-    # Show authentication status
-    auth_enabled = config.get('authentication', {}).get('enabled', False)
-    if auth_enabled:
-        logger.critical("🔐 AUTHENTICATION ENABLED")
-        fansale_auth = config.get('authentication', {}).get('platforms', {}).get('fansale')
-        if fansale_auth:
-            logger.critical("   ✅ FanSale credentials configured")
-            live_logger.log_status(StatusLevel.SUCCESS, "AUTH", "FanSale credentials configured - automatic login enabled")
-        else:
-            logger.error("   ❌ FanSale credentials missing")
-            live_logger.log_status(StatusLevel.ERROR, "AUTH", "FanSale credentials missing - login will fail")
-    else:
-        logger.error("⚠️  AUTHENTICATION DISABLED")
-        logger.error("   💡 Enable authentication in config.yaml")
-        live_logger.log_status(StatusLevel.WARNING, "AUTH", "Authentication DISABLED - manual login required")
-    
-    update_operation_progress("system_startup", 80.0, "Preparing to start hunting...")
-    
-    logger.critical("="*80)
-    
-    # Print initial status dashboard
-    live_logger.print_dashboard()
+    for section in required_sections:
+        if section not in config:
+            logger.error(f"Missing required config section: {section}")
+            return False
     
     # Validate targets
-    enabled_targets = [t for t in config.get('targets', []) if t.get('enabled')]
-    if not enabled_targets:
-        logger.critical("No enabled targets found. Exiting.")
-        sys.exit(1)
+    targets = config.get('targets', [])
+    if not any(t.get('enabled', True) for t in targets):
+        logger.error("No enabled targets found!")
+        return False
     
-    logger.info(f"Active targets: {len(enabled_targets)}")
+    # Validate authentication if enabled
+    if config.get('authentication', {}).get('enabled'):
+        platforms = config['authentication'].get('platforms', {})
+        for target in targets:
+            if target.get('enabled'):
+                platform = target['platform']
+                if platform not in platforms:
+                    logger.warning(f"No authentication configured for {platform}")
+    
+    return True
+
+
+def print_startup_banner(config: dict):
+    """Print epic startup banner"""
+    mode = config['app_settings']['mode'].upper()
+    
+    banner = f"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║     _____ _             _ _   _     ___  ___          _              ___     ║
+║    /  ___| |           | | | | |   |  \\/  |         | |            / _ \\    ║
+║    \\ `--.| |_ ___  __ _| | |_| |__ | .  . | __ _ ___| |_ ___ _ __ / /_\\ \\   ║
+║     `--. \\ __/ _ \\/ _` | | __| '_ \\| |\\/| |/ _` / __| __/ _ \\ '__||  _  |   ║
+║    /\\__/ / ||  __/ (_| | | |_| | | | |  | | (_| \\__ \\ ||  __/ |   | | | |   ║
+║    \\____/ \\__\\___|\\__,_|_|\\__|_| |_|_|  |_|\\__,_|___/\\__\\___|_|   \\_| |_/   ║
+║                                                                              ║
+║                        🎸 BRUCE SPRINGSTEEN TICKET HUNTER 🎸                 ║
+║                              Ultra-Stealth Edition v2.0                       ║
+║                                                                              ║
+║                             Mode: {mode:^10}                              ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+    """
+    
+    print("\033[35m" + banner + "\033[0m")  # Magenta color
+    
+    # Show enabled targets
+    print("\n📍 TARGETS:")
+    for target in config.get('targets', []):
+        if target.get('enabled'):
+            status = "✅" if target.get('enabled') else "❌"
+            print(f"   {status} {target['event_name']} - {target['platform'].upper()}")
+    print()
+
+
+def print_final_stats(stats: dict):
+    """Print final statistics"""
+    print("\n" + "="*80)
+    print("📊 FINAL STATISTICS")
+    print("="*80)
+    
+    uptime_hours = stats['uptime'] / 3600
+    print(f"⏱️  Uptime: {uptime_hours:.2f} hours")
+    print(f"🔍 Total Opportunities Found: {stats['quantum_metrics']['total_opportunities']}")
+    print(f"⚡ Total Strikes Executed: {stats['quantum_metrics']['total_strikes']}")
+    print(f"✅ Successful Strikes: {stats['quantum_metrics']['successful_strikes']}")
+    print(f"📈 Success Rate: {stats['success_rate']*100:.1f}%")
+    
+    if stats['strikes_executed']:
+        strike_stats = stats['strikes_executed']
+        print(f"\n🎯 STRIKE FORCE STATS:")
+        print(f"   Fastest Strike: {strike_stats.get('fastest_strike', 'N/A')}s")
+        print(f"   Average Response: {strike_stats.get('avg_response_time', 0):.2f}s")
+        
+        if strike_stats.get('top_profiles'):
+            print(f"\n🏆 TOP PERFORMING PROFILES:")
+            for i, (profile_id, wins) in enumerate(strike_stats['top_profiles'][:3], 1):
+                print(f"   {i}. {profile_id}: {wins} wins")
+    
+    print("="*80)
+
+
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(
+        description="StealthMaster AI - Bruce Springsteen Ticket Hunter"
+    )
+    
+    parser.add_argument(
+        '--config',
+        type=str,
+        default=str(DEFAULT_CONFIG),
+        help='Path to configuration file'
+    )
+    
+    parser.add_argument(
+        '--mode',
+        choices=['stealth', 'beast', 'ultra_stealth', 'adaptive', 'hybrid'],
+        help='Override operation mode'
+    )
+    
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Run without actually purchasing tickets'
+    )
+    
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    # Parse arguments
+    args = parse_arguments()
     
     # Setup signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    if hasattr(signal, 'SIGBREAK'):  # Windows
-        signal.signal(signal.SIGBREAK, signal_handler)
     
-    # Set event loop policy for Windows compatibility
-    if sys.platform == "win32":
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
-    _stop_event_asyncio = asyncio.Event()
-    
-    # Run main logic
+    # Run the async main
     try:
-        
-        # Pre-flight checks
-        logger.info("Running pre-flight stealth checks...")
-        
-        # Apply TLS fingerprint evasion patches BEFORE any network activity
-        # FIXED: The old pre-flight check for TLS fingerprinting is no longer needed.
-        # The new StealthEngine handles TLS on a per-profile, per-session basis,
-        # which is a more advanced and effective approach.
-        logger.info("Running pre-flight stealth checks...")
-        # (Old block removed)
-        
-        # The StealthMaster AI is already initialized and will handle all stealth aspects.
-        complete_operation("system_startup", True, "System ready for ticket hunting!")
-        
-        # Start the bot with live status tracking
-        start_operation("bot_startup", "Starting ticket hunting bot", 15.0)
-        asyncio.run(async_main_logic(config, _stop_event_asyncio))
-        
+        exit_code = asyncio.run(main(args))
+        sys.exit(exit_code)
     except KeyboardInterrupt:
-        logger.info("Keyboard interrupt received")
-        if _stop_event_asyncio:
-            _stop_event_asyncio.set()
+        print("\n\nShutdown requested... cleaning up.")
+        sys.exit(0)
     except Exception as e:
-        logger.critical(f"Fatal error: {e}", exc_info=True)
+        print(f"\nFatal error: {e}")
         sys.exit(1)
-    finally:
-        logger.info("🏁 Stealth system shutdown complete")
-
-if __name__ == "__main__":
-    main_cli()

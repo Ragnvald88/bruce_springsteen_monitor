@@ -6,6 +6,7 @@ app_settings:
   mode: "adaptive" # Options: "stealth", "beast", "hybrid", "adaptive", "ultra_stealth"
   version: "2.0.1"
   dry_run: false
+  browser_open_mode: "both" # Options: "default" (system browser), "automated" (playwright), "both"
 
   mode_configs:
     stealth:
@@ -257,5 +258,10 @@ logging:
   log_directory: "logs" # Overrides app_settings.logging.log_directory if main.py prioritizes this
   main_log_file: "ticket_system.log"
   error_log_file: "errors.log"
+  # Enhanced logging options
+  log_ticket_detections: true  # Log all ticket detections to separate file
+  ticket_log_file: "ticket_detections.log"
+  log_performance_metrics: true  # Log performance metrics periodically
+  performance_log_file: "performance.log"
   # log_max_file_size_mb: 10 # These could be here too
   # log_backup_count: 5

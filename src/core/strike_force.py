@@ -13,7 +13,7 @@ from datetime import datetime
 if TYPE_CHECKING:
     from playwright.async_api import Page as PlaywrightPage
     # SmartBrowserContextManager replaced by stealth_integration
-    from .stealth_integration import BruceStealthIntegration
+    from .stealth.stealth_integration import BruceStealthIntegration
 
 # FIXED: Imports from profiles package
 from ..profiles import (
@@ -298,7 +298,28 @@ class ProfileIntegratedStrikeForce:
         
         try:
             # Get browser context
-            context = await self.browser_manager.get_stealth_context(profile, force_new=False)
+            # Check if we have a temporary context from orchestrator
+            if hasattr(self, '_temp_context') and self._temp_context:
+                context = self._temp_context
+            else:
+                # Create new stealth context
+                legacy_profile = {
+                    'id': getattr(profile, 'profile_id', 'unknown'),
+                    'browser': getattr(profile, 'browser', 'Chrome'),
+                    'os': getattr(profile, 'os', 'Windows 11'),
+                    'viewport_width': getattr(profile, 'viewport_width', 1920),
+                    'viewport_height': getattr(profile, 'viewport_height', 1080),
+                    'user_agent': getattr(profile, 'user_agent', ''),
+                    'locale': getattr(profile, 'locale', 'en-US'),
+                    'timezone': getattr(profile, 'timezone', 'America/New_York')
+                }
+                # Import playwright here to avoid circular imports
+                from playwright.async_api import async_playwright
+                pw = await async_playwright().start()
+                browser = await pw.chromium.launch(headless=False)
+                context = await self.stealth_integration.create_stealth_browser_context(
+                    browser, legacy_profile, opportunity.platform.value
+                )
             page = await context.new_page()
             
             try:

@@ -19,17 +19,21 @@ if TYPE_CHECKING:
 
 # Profile system imports
 from ..profiles.manager import ProfileManager, BrowserProfile
-from ..profiles.enums import DataOptimizationLevel, Platform as CorePlatformEnum
+from ..models.enums import Platform as CorePlatformEnum, DataOptimizationLevel
 from ..profiles.utils import create_profile_manager_from_config
-from .stealth_engine import StealthEngine, StealthEngineIntegration
+from .stealth.stealth_engine import StealthEngine, StealthEngineIntegration
 
 # FIXED: Correct import for advanced_profile_system (it's in core, not profiles)
 from .advanced_profile_system import DetectionEvent
+
+# Import detection monitoring
+from .detection_monitor import get_detection_monitor, DetectionEventType
 
 # Core module imports (these are already correct as relative imports)
 from .enums import OperationMode, PlatformType, PriorityLevel
 from .models import EnhancedTicketOpportunity, DataUsageTracker
 from .managers import ConnectionPoolManager, ResponseCache
+from .ticket_reserver import TicketReserver
 # SmartBrowserContextManager removed - replaced by stealth_engine.py integration
 from .components import ProfileAwareLightweightMonitor
 from .strike_force import ProfileIntegratedStrikeForce
@@ -97,6 +101,10 @@ class UnifiedOrchestrator:
         self.stealth_integration = None
         self.monitor: Optional[ProfileAwareLightweightMonitor] = None
         self.strike_force: Optional[ProfileIntegratedStrikeForce] = None
+        self.ticket_reserver: Optional[TicketReserver] = None
+        
+        # Detection monitoring
+        self.detection_monitor = get_detection_monitor()
         
         # Opportunity management with bounded collections to prevent memory leaks
         self.opportunity_queue: asyncio.PriorityQueue = asyncio.PriorityQueue(maxsize=500)  # Reduced from 1000
@@ -194,7 +202,7 @@ class UnifiedOrchestrator:
             logger.info(f"✅ ResponseCache: {cache_size_mb}MB capacity")
             
             # 4. Ultra-Stealth Integration (70% less code, 100% effectiveness)
-            from .ultra_stealth import create_ultra_stealth_engine, get_ultra_stealth_integration
+            from .stealth.ultra_stealth import create_ultra_stealth_engine, get_ultra_stealth_integration
             
             self.stealth_engine = create_ultra_stealth_engine()
             self.stealth_integration = get_ultra_stealth_integration()
@@ -212,6 +220,11 @@ class UnifiedOrchestrator:
                 self.stealth_integration, self.profile_manager, self.data_tracker, self.config
             )
             logger.info("✅ ProfileIntegratedStrikeForce: Armed with StealthEngine")
+            
+            # 7. Ticket Reserver for immediate browser opening
+            browser_mode = self.config.get('app_settings', {}).get('browser_open_mode', 'both')
+            self.ticket_reserver = TicketReserver(open_browser_mode=browser_mode)
+            logger.info(f"✅ TicketReserver: Ready to open tickets in {browser_mode} mode")
             
             self.is_initialized = True
             logger.info("✨ All subsystems initialized successfully")
@@ -246,12 +259,30 @@ class UnifiedOrchestrator:
                 opportunity.platform.value
             )
             
-            # Context is now ready for strike force operation
-            # TODO: Implement actual strike logic here
-            logger.info(f"Strike context ready for opportunity {opportunity.id}")
+            # Context is now ready - pass it to strike force for execution
+            # The strike force expects browser_manager, so we need to adapt
+            # Temporarily store the context in strike force
+            self.strike_force._temp_context = stealth_context
+            
+            # Let strike force handle the actual strike execution
+            success = await self.strike_force._execute_single_strike(
+                opportunity, profile, task_id, params
+            )
+            
+            # Clean up temporary context reference
+            self.strike_force._temp_context = None
+            
+            # Close context after strike completion
+            try:
+                await stealth_context.close()
+            except Exception as e:
+                logger.debug(f"Error closing stealth context: {e}")
+                
+            return success
             
         except Exception as e:
             logger.error(f"Strike execution failed: {e}", exc_info=True)
+            return False
 
     async def _validate_profile_manager(self) -> bool:
         """Enhanced profile manager validation"""
@@ -530,6 +561,23 @@ class UnifiedOrchestrator:
             self.metrics['opportunities_queued_total'] += 1
             
             logger.info(f"🎯 Queued opportunity: {opportunity.event_name} (Score: {score:.2f})")
+            
+            # IMMEDIATELY open browser for high-priority tickets
+            if opportunity.priority == PriorityLevel.CRITICAL or score > 100:
+                logger.critical(f"🚨 HIGH PRIORITY TICKET - OPENING BROWSER IMMEDIATELY!")
+                # Convert opportunity to dict for ticket reserver
+                ticket_info = {
+                    'id': opportunity.id,
+                    'event_name': opportunity.event_name,
+                    'platform': opportunity.platform.value,
+                    'url': getattr(opportunity, 'url', ''),
+                    'price': opportunity.price,
+                    'section': opportunity.section,
+                    'quantity': getattr(opportunity, 'quantity', 1)
+                }
+                # Open browser immediately (non-blocking)
+                if self.ticket_reserver:
+                    asyncio.create_task(self.ticket_reserver.reserve_ticket(ticket_info))
             
             # Notify GUI
             if self.gui_queue:

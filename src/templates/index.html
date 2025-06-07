@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎸 StealthMaster AI - Bruce Springsteen Ticket Hunter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffd700;
+            text-align: center;
+        }
+        .status {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4488ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #5599ff;
+        }
+        button.stop {
+            background-color: #ff4444;
+        }
+        button.stop:hover {
+            background-color: #ff5555;
+        }
+        #log-output {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .metric {
+            display: inline-block;
+            background-color: #2a2a2a;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            min-width: 150px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #cccccc;
+        }
+    </style>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎸 StealthMaster AI - Bruce Springsteen Ticket Hunter v2.0</h1>
+        
+        <div class="status" id="status-panel">
+            <h2>System Status</h2>
+            <div id="status-content">
+                <div class="metric">
+                    <div class="metric-value" id="bot-status">Stopped</div>
+                    <div class="metric-label">Bot Status</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="success-rate">0%</div>
+                    <div class="metric-label">Success Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="requests-count">0</div>
+                    <div class="metric-label">Total Requests</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="detections">0</div>
+                    <div class="metric-label">Ticket Detections</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="startBot()">▶️ Start Bot</button>
+            <button onclick="stopBot()" class="stop">⏹️ Stop Bot</button>
+            <button onclick="clearLogs()">🧹 Clear Logs</button>
+        </div>
+        
+        <div class="status">
+            <h2>Live Logs</h2>
+            <div id="log-output"></div>
+        </div>
+    </div>
+    
+    <script>
+        const socket = io();
+        
+        socket.on('connect', function() {
+            log('✅ Connected to StealthMaster AI server');
+        });
+        
+        socket.on('disconnect', function() {
+            log('❌ Disconnected from server');
+        });
+        
+        socket.on('status_update', function(data) {
+            document.getElementById('bot-status').textContent = data.status;
+            document.getElementById('success-rate').textContent = data.success_rate + '%';
+            document.getElementById('requests-count').textContent = data.total_requests;
+            document.getElementById('detections').textContent = data.ticket_detections;
+        });
+        
+        socket.on('log_message', function(data) {
+            log(data.message, data.level);
+        });
+        
+        function startBot() {
+            fetch('/start', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    log('🚀 ' + data.message);
+                });
+        }
+        
+        function stopBot() {
+            fetch('/stop', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    log('⏹️ ' + data.message);
+                });
+        }
+        
+        function clearLogs() {
+            document.getElementById('log-output').innerHTML = '';
+            log('🧹 Logs cleared');
+        }
+        
+        function log(message, level = 'INFO') {
+            const logOutput = document.getElementById('log-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            logOutput.insertAdjacentHTML('beforeend', logEntry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        // Initial status check
+        fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('bot-status').textContent = data.bot_running ? 'Running' : 'Stopped';
+            });
+    </script>
+</body>
+</html>

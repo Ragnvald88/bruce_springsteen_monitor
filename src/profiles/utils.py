@@ -11,8 +11,68 @@ from collections import defaultdict
 
 from .consolidated_models import Platform, ProfileQuality, ProxyConfig
 from .manager import ProfileManager
+from dataclasses import dataclass, field
+from ..core.advanced_profile_system import ProfileState
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class ProfileScoringConfig:
+    """Enhanced scoring configuration for profile selection."""
+    base_score: float = 100.0
+    
+    # State-based modifiers
+    state_modifiers: Dict[ProfileState, float] = field(default_factory=lambda: {
+        ProfileState.PRISTINE: 20.0,
+        ProfileState.HEALTHY: 30.0,
+        ProfileState.SUSPICIOUS: -40.0,
+        ProfileState.DORMANT: -20.0,
+        ProfileState.COMPROMISED: -1000.0,
+        ProfileState.EVOLVING: -500.0
+    })
+    
+    # Platform-specific bonuses
+    platform_bonuses: Dict[str, float] = field(default_factory=lambda: {
+        'fansale': 10.0,
+        'ticketmaster': 15.0,
+        'vivaticket': 12.0
+    })
+    
+    # Session-based scoring
+    has_valid_session_bonus: float = 50.0
+    session_age_penalty_per_hour: float = 0.5
+    
+    # Performance metrics
+    success_rate_weight: float = 40.0
+    avg_response_time_weight: float = 20.0
+    consecutive_failure_penalty: float = 10.0
+    captcha_penalty: float = 30.0
+    
+    # Risk assessment
+    avg_risk_score_penalty_weight: float = 25.0
+    drift_penalty: float = 50.0
+    
+    # Time-based factors
+    recency_bonus_max: float = 25.0
+    recency_threshold_hours: float = 12.0
+    peak_time_bonus: float = 20.0
+    proxy_rotation_bonus: float = 10.0
+    
+    # Quality multipliers  
+    quality_multipliers: Dict[ProfileQuality, float] = field(default_factory=lambda: {
+        ProfileQuality.PREMIUM: 2.0,
+        ProfileQuality.HIGH: 1.5,
+        ProfileQuality.MEDIUM: 1.0,
+        ProfileQuality.LOW: 0.5
+    })
+    
+    # Cooldown periods
+    cooldown_periods: Dict[str, int] = field(default_factory=lambda: {
+        'failure': 300,
+        'captcha': 600,
+        'success': 60
+    })
 
 def parse_proxy_configs(proxy_data: List[Dict[str, Any]]) -> List[ProxyConfig]:
     """Parse list of ProxyConfig from data, resolving environment variables."""

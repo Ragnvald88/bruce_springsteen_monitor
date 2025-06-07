@@ -14241,3 +14241,235 @@ NameError: name 'StealthSSLContext' is not defined
 2025-06-06 22:23:34.346 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
 2025-06-06 22:23:34.346 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
 2025-06-06 22:23:34.346 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:33:57.317 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 07:33:57.329 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 07:33:57.330 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:33:57.617 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: type object 'ProfileQuality' has no attribute 'ECONOMY'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 173, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 557, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 138, in parse_profile_manager_config
+    scoring_config = parse_scoring_config(pm_settings.get('scoring', {}))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 219, in parse_scoring_config
+    config = ProfileScoringConfig()
+  File "<string>", line 18, in __init__
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 67, in <lambda>
+    ProfileQuality.ECONOMY: 0.5
+    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ProfileQuality' has no attribute 'ECONOMY'
+2025-06-07 07:33:57.618 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-07 07:34:16.534 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 07:34:16.535 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:34:16.710 | CRITICAL | src.core.orchestrator          | initialize_subsystems | Subsystem initialization failed: type object 'ProfileQuality' has no attribute 'TIER_5'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/core/orchestrator.py", line 173, in initialize_subsystems
+    self.profile_manager = create_profile_manager_from_config(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        str(self.config_file_path),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        config_overrides=profile_settings
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 558, in create_profile_manager_from_config
+    pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 139, in parse_profile_manager_config
+    scoring_config = parse_scoring_config(pm_settings.get('scoring', {}))
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 220, in parse_scoring_config
+    config = ProfileScoringConfig()
+  File "<string>", line 18, in __init__
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 64, in <lambda>
+    ProfileQuality.TIER_5: 2.5,
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ProfileQuality' has no attribute 'TIER_5'
+2025-06-07 07:34:16.711 | CRITICAL | src.core.orchestrator          | run                  | Cannot run - initialization failed
+2025-06-07 07:35:13.935 | CRITICAL | __main__                       | main_cli             | 🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 🎸 BRUCE SPRINGSTEEN TICKET HUNTER v4.0 STARTING 🎸
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 🎯 Mode: ADAPTIVE
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 📄 Config: /Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/config/config.yaml
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 👤 Profiles: auto
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 🐍 Python: 3.13.2
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 👀 BROWSERS WILL BE VISIBLE (headless: false)
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             |    ✅ You will see browser windows during operation
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | 🔐 AUTHENTICATION ENABLED
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             |    ✅ FanSale credentials configured
+2025-06-07 07:35:13.936 | CRITICAL | __main__                       | main_cli             | ================================================================================
+2025-06-07 07:35:14.192 | ERROR    | src.profiles.utils             | parse_proxy_configs  | TypeError during ProxyConfig instantiation for entry: {'proxy_type': 'http', 'host': '${IPROYAL_HOSTNAME}', 'port': '${IPROYAL_PORT}', 'username': '${IPROYAL_USERNAME}', 'password': '${IPROYAL_PASSWORD}', 'country_code': 'IT', 'sticky_session': True, 'provider': 'iproyal'}. Error: ProxyConfig.__init__() got an unexpected keyword argument 'rotation_endpoint'. Ensure ProxyConfig fields match arguments.
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/utils.py", line 107, in parse_proxy_configs
+    config_instance = ProxyConfig(
+        proxy_type=proxy_dict.get('type', 'http'),
+    ...<7 lines>...
+        proxy_provider=proxy_dict.get('provider')  # Corrected: maps 'provider' from YAML
+    )
+TypeError: ProxyConfig.__init__() got an unexpected keyword argument 'rotation_endpoint'
+2025-06-07 07:35:14.193 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.194 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.194 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.212 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.213 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.213 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.213 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.213 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.213 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.318 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.319 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.319 | ERROR    | src.profiles.manager           | _create_platform_optimized_profile | Failed to create platform profile: 'Platform' object has no attribute 'stealth_requirements'
+Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/bruce_springsteen_monitor/src/profiles/manager.py", line 491, in _create_platform_optimized_profile
+    requirements = platform.stealth_requirements
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Platform' object has no attribute 'stealth_requirements'
+2025-06-07 07:35:14.319 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
+2025-06-07 07:35:14.320 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
+2025-06-07 07:35:14.320 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'
+2025-06-07 07:35:44.321 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
+2025-06-07 07:35:44.323 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
+2025-06-07 07:35:44.323 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'
+2025-06-07 07:36:14.324 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
+2025-06-07 07:36:14.326 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
+2025-06-07 07:36:14.326 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'
+2025-06-07 07:36:44.327 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Milano 2025 (FS): No module named 'src.profiles.enums'
+2025-06-07 07:36:44.329 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen San Siro 2025 (TM): No module named 'src.profiles.enums'
+2025-06-07 07:36:44.329 | ERROR    | src.core.orchestrator          | _monitor_single_target_loop | Monitor error for Bruce Springsteen Resale (VT): No module named 'src.profiles.enums'

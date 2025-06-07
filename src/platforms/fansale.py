@@ -159,6 +159,10 @@ class FansaleMonitor:
             live_logger = get_live_status_logger()
             self.stealth_integration = get_bruce_stealth_integration(live_logger)
             
+            # Initialize detection monitoring
+            from ..core.detection_monitor import get_detection_monitor, DetectionEventType
+            self.detection_monitor = get_detection_monitor()
+            
             start_operation("fansale_stealthmaster_init", f"🛡️ StealthMaster AI: Initializing FanSale for {self.event_name}", 25.0)
             
             logger.critical("🚀 STEALTHMASTER AI FANSALE INITIALIZATION STARTING")
@@ -658,15 +662,61 @@ class FansaleMonitor:
                 return False
             
             # Try to access a simple FanSale page
+            start_time = time.time()
             response = await self.page.goto("https://www.fansale.it/", 
                                           wait_until='domcontentloaded',
                                           timeout=15000)
+            load_time = (time.time() - start_time) * 1000
             
             if response and response.status < 400:
                 # Check page content for blocking indicators
                 content = await self.page.content()
-                is_accessible = not any(indicator in content.lower() 
-                                      for indicator in ['blocked', 'forbidden', 'captcha'])
+                
+                # Check for various blocking indicators
+                blocked_indicators = ['blocked', 'forbidden', 'access denied', 'bot detected']
+                captcha_indicators = ['captcha', 'recaptcha', 'challenge']
+                queue_indicators = ['queue', 'waiting room', 'please wait']
+                
+                is_blocked = any(indicator in content.lower() for indicator in blocked_indicators)
+                has_captcha = any(indicator in content.lower() for indicator in captcha_indicators)
+                in_queue = any(indicator in content.lower() for indicator in queue_indicators)
+                
+                # Log detection event
+                if is_blocked:
+                    self.detection_monitor.log_event(
+                        event_type=DetectionEventType.ACCESS_DENIED,
+                        platform="fansale",
+                        profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                        success=False,
+                        details={"reason": "blocked", "status_code": response.status, "load_time_ms": load_time}
+                    )
+                elif has_captcha:
+                    self.detection_monitor.log_event(
+                        event_type=DetectionEventType.CAPTCHA_TRIGGERED,
+                        platform="fansale",
+                        profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                        success=False,
+                        details={"status_code": response.status, "load_time_ms": load_time}
+                    )
+                elif in_queue:
+                    self.detection_monitor.log_event(
+                        event_type=DetectionEventType.QUEUE_ENTERED,
+                        platform="fansale",
+                        profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                        success=False,
+                        details={"status_code": response.status, "load_time_ms": load_time}
+                    )
+                else:
+                    # Successful access
+                    self.detection_monitor.log_event(
+                        event_type=DetectionEventType.ACCESS_GRANTED,
+                        platform="fansale",
+                        profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                        success=True,
+                        details={"status_code": response.status, "load_time_ms": load_time}
+                    )
+                
+                is_accessible = not (is_blocked or has_captcha or in_queue)
                 return is_accessible
             
             return False
@@ -696,7 +746,8 @@ class FansaleMonitor:
                     if await element.count() > 0:
                         logger.warning(f"🤖 FanSale captcha/verification detected: {selector}")
                         return True
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
             
             # Check page title and content
@@ -705,7 +756,8 @@ class FansaleMonitor:
                 if any(word in title.lower() for word in ['captcha', 'verification', 'security']):
                     logger.warning(f"🤖 FanSale verification in title: {title}")
                     return True
-            except:
+            except Exception as e:
+                logger.debug(f"Error in exception handler: {e}")
                 pass
             
             return False
@@ -1046,13 +1098,29 @@ class FansaleMonitor:
                 try:
                     if await self.page.locator(indicator).count() > 0:
                         logger.info(f"Login success indicator found: {indicator}")
+                        # Log successful login
+                        self.detection_monitor.log_event(
+                            event_type=DetectionEventType.LOGIN_SUCCESS,
+                            platform="fansale",
+                            profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                            success=True,
+                            details={"indicator": indicator, "url": current_url}
+                        )
                         return True
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {indicator}: {e}")
                     continue
             
             # Check if we're redirected to a different page (likely success)
             if not any(term in current_url for term in ['login', 'accedi', 'signin']):
                 logger.info("Redirected away from login page - likely successful")
+                self.detection_monitor.log_event(
+                    event_type=DetectionEventType.LOGIN_SUCCESS,
+                    platform="fansale",
+                    profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                    success=True,
+                    details={"method": "redirect", "url": current_url}
+                )
                 return True
             
             # Try to navigate to the target event page to test access
@@ -1065,14 +1133,31 @@ class FansaleMonitor:
                 if 'login' not in final_url:
                     logger.info("Successfully accessed target page after login")
                     return True
-            except:
+            except Exception as e:
+                logger.debug(f"Error in exception handler: {e}")
                 pass
             
             logger.warning("Could not verify login success definitively")
+            # Log login failure
+            self.detection_monitor.log_event(
+                event_type=DetectionEventType.LOGIN_FAILED,
+                platform="fansale",
+                profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                success=False,
+                details={"reason": "verification_failed", "url": current_url}
+            )
             return False
             
         except Exception as e:
             logger.error(f"Error verifying login success: {e}")
+            # Log login error
+            self.detection_monitor.log_event(
+                event_type=DetectionEventType.LOGIN_FAILED,
+                platform="fansale",
+                profile_id=getattr(self.profile, 'profile_id', 'unknown'),
+                success=False,
+                details={"error": str(e)}
+            )
             return False
 
     async def check_opportunities(self) -> List[EnhancedTicketOpportunity]:
@@ -1370,7 +1455,8 @@ class FansaleMonitor:
                     offer_found = True
                     logger.debug(f"Found offers with selector: {selector}")
                     break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
             
             if not offer_found:
@@ -1454,7 +1540,8 @@ class FansaleMonitor:
                 offer_id_attr = await container.get_attribute('data-offer-id')
                 if offer_id_attr:
                     offer_data['offer_id'] = offer_id_attr
-            except:
+            except Exception as e:
+                logger.debug(f"Error in exception handler: {e}")
                 pass
             
             # Extract price with multiple strategies
@@ -1487,7 +1574,8 @@ class FansaleMonitor:
                         if currency_text.strip():
                             offer_data['currency'] = currency_text.strip()
                             break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Extract section/seat description
@@ -1499,7 +1587,8 @@ class FansaleMonitor:
                         if section_text.strip():
                             offer_data['section'] = section_text.strip()
                             break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Extract quantity
@@ -1512,7 +1601,8 @@ class FansaleMonitor:
                         if quantity_match:
                             offer_data['quantity'] = int(quantity_match.group(1))
                             break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Extract offer type
@@ -1524,7 +1614,8 @@ class FansaleMonitor:
                         if type_text.strip():
                             offer_data['offer_type'] = type_text.strip()
                             break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Check Fair Deal status
@@ -1534,7 +1625,8 @@ class FansaleMonitor:
                     if await fair_deal_element.count():
                         offer_data['is_fair_deal'] = True
                         break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Check certified status
@@ -1544,7 +1636,8 @@ class FansaleMonitor:
                     if await certified_element.count():
                         offer_data['is_certified'] = True
                         break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             # Extract buy URL
@@ -1557,7 +1650,8 @@ class FansaleMonitor:
                             # Convert relative URL to absolute
                             offer_data['buy_url'] = urljoin(self.page.url, href)
                             break
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
 
             return offer_data
@@ -2119,7 +2213,8 @@ class FansaleMonitor:
                     if await self.page.locator(indicator).count() > 0:
                         logger.info(f"Fansale purchase indicator found: {indicator}")
                         return True
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
             
             # Check URL for purchase flow
@@ -2144,7 +2239,8 @@ class FansaleMonitor:
                     if await self.page.locator(selector).count() > 0:
                         logger.info(f"Fansale confirmation element: {selector}")
                         return True
-                except:
+                except Exception as e:
+                    logger.debug(f"Error checking selector {selector}: {e}")
                     continue
             
             return False

@@ -23,7 +23,13 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from dotenv import load_dotenv
-load_dotenv(PROJECT_ROOT / ".env")
+# Load .env file if it exists (don't fail if it doesn't)
+env_file = PROJECT_ROOT / ".env"
+if env_file.exists():
+    load_dotenv(env_file)
+else:
+    # Will log after logger is initialized
+    print("No .env file found, using system environment variables")
 
 # Playwright with stealth capabilities
 from playwright.async_api import async_playwright
@@ -87,7 +93,20 @@ def signal_handler(sig, _):
             time.sleep(5)
             if _orchestrator_instance and not _orchestrator_instance._shutdown_initiated:
                 logger.critical("Forcing immediate shutdown")
-                os._exit(1)
+                # Instead of os._exit, try to gracefully terminate
+                try:
+                    if _stop_event_asyncio:
+                        _stop_event_asyncio.set()
+                    if _gui_stop_event_threading:
+                        _gui_stop_event_threading.set()
+                    # Allow a bit more time for cleanup
+                    time.sleep(2)
+                except Exception as e:
+                    logger.error(f"Error during forced cleanup: {e}")
+                finally:
+                    # Only use os._exit as last resort
+                    if _orchestrator_instance and not _orchestrator_instance._shutdown_initiated:
+                        os._exit(1)
         
         threading.Thread(target=force_cleanup, daemon=True).start()
 
@@ -482,7 +501,7 @@ Examples:
             format="%(asctime)s [%(levelname)s] %(message)s"
         )
         try:
-            from src.gui import start_gui
+            from src.ui.gui_advanced import start_gui
             start_gui()
         except ImportError as e:
             print(f"GUI dependencies missing: {e}", file=sys.stderr)
@@ -524,7 +543,7 @@ Examples:
     live_logger = init_live_status_logging(enable_gui=False)
     
     # 🛡️ Initialize StealthMaster AI
-    from src.core.stealth_integration import init_bruce_stealth_integration
+    from src.core.stealth.stealth_integration import init_bruce_stealth_integration
     stealth_integration = init_bruce_stealth_integration(live_logger)
     logger.critical("🛡️ STEALTHMASTER AI INITIALIZED - Ultimate anti-detection active!")
     

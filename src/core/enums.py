@@ -2,14 +2,12 @@
 from __future__ import annotations
 from enum import Enum, auto
 
-# Import CorePlatformEnum from your profiles package to be used by PlatformType
+# Import CorePlatformEnum from models.enums
 try:
-    from src.profiles.enums import Platform as CorePlatformEnum
+    from ..models.enums import Platform as CorePlatformEnum
 except ImportError:
-    # Fallback or error handling if src.profiles.enums.Platform cannot be imported
-    # This is critical for PlatformType.to_core_platform()
-    print("CRITICAL ERROR: Could not import CorePlatformEnum from src.profiles.enums in core.enums")
-    # Define a dummy if needed for the script to be parsable, but this indicates a setup issue
+    # Fallback or error handling if Platform cannot be imported
+    print("CRITICAL ERROR: Could not import CorePlatformEnum from models.enums in core.enums")
     class CorePlatformEnum(Enum):
         DUMMY = "dummy_platform"
 

@@ -10,7 +10,7 @@ from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 from playwright.async_api import BrowserContext, Page
-from src.core.stealth_engine import (
+from .stealth_engine import (
     StealthEngine, 
     DeviceProfile, 
     create_stealth_engine,

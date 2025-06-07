@@ -12,9 +12,9 @@ import zstandard as zstd
 from cryptography.fernet import Fernet
 from playwright.async_api import BrowserContext
 
-from .enums import Platform
+from ..models.enums import Platform
 from .models import BrowserProfile
-from .types import SessionData
+from ..models.browser import SessionData
 
 logger = logging.getLogger(__name__)
 

@@ -28,6 +28,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # Import the main bot functionality
 from src.main import load_app_config_for_gui, main_loop_for_gui
 
+# Import detection monitoring
+from src.ui.detection_dashboard import DetectionDashboard
+
 class StealthMasterGUI:
     """🎸 Bruce Springsteen Ticket Hunter - Command Center GUI"""
     
@@ -489,6 +492,11 @@ class StealthMasterGUI:
                   style='Action.TButton',
                   command=self.toggle_test_mode).pack(side='left', padx=5)
         
+        ttk.Button(main_controls,
+                  text="🛡️ Detection Monitor",
+                  style='Action.TButton',
+                  command=self.open_detection_dashboard).pack(side='left', padx=5)
+        
         # Status display
         status_display = tk.Frame(main_controls, bg=self.colors['bg_secondary'])
         status_display.pack(side='right', padx=20)
@@ -830,6 +838,20 @@ class StealthMasterGUI:
         self.log_message("🧪 Test mode toggled")
         messagebox.showinfo("Test Mode", "Test mode feature coming soon!")
     
+    def open_detection_dashboard(self):
+        """Open the detection monitoring dashboard in a new window"""
+        try:
+            self.log_message("🛡️ Opening Detection Monitor Dashboard...")
+            
+            # Create new window for detection dashboard
+            dashboard_window = tk.Toplevel(self.root)
+            dashboard = DetectionDashboard(dashboard_window)
+            
+            self.log_message("✅ Detection Monitor Dashboard opened")
+        except Exception as e:
+            self.log_message(f"❌ Error opening detection dashboard: {str(e)}")
+            messagebox.showerror("Error", f"Failed to open detection dashboard: {str(e)}")
+    
     def run(self):
         """Run the GUI application"""
         try:
@@ -857,6 +879,10 @@ def main():
     except Exception as e:
         print(f"Failed to start GUI: {e}")
         sys.exit(1)
+
+def start_gui():
+    """Entry point for GUI when called from main.py"""
+    main()
 
 if __name__ == "__main__":
     main()

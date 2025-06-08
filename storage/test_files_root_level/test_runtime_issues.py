@@ -32,7 +32,7 @@ async def test_minimal_run():
         
         # Test orchestrator creation
         print("3. Testing orchestrator import...")
-        from src.core.orchestrator import UnifiedOrchestrator
+        from src.core.enhanced_orchestrator_v3 import UnifiedOrchestrator
         print("   ✓ Orchestrator imported")
         
         # Test playwright

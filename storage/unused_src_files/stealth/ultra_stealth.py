@@ -1,10 +1,14 @@
-# src/stealth/ultra_stealth.py
 """
 Ultra Stealth Mode - Advanced Anti-Detection System
 Implements cutting-edge techniques to bypass all known detection methods
 """
 
-from playwright.async_api import Page
+import asyncio
+import random
+import json
+import time
+from typing import Dict, Any, Optional
+from playwright.async_api import Page, BrowserContext, Browser
 
 import logging
 logger = logging.getLogger(__name__)
@@ -29,6 +33,15 @@ class UltraStealthEngine:
                 get: () => undefined,
                 configurable: false,
                 enumerable: false
+            });
+            
+            // Also handle the new CDP webdriver detection
+            Object.defineProperty(navigator, 'webdriver', {
+                get: new Proxy(Object.getOwnPropertyDescriptor(navigator, 'webdriver').get, {
+                    apply: (target, thisArg, args) => {
+                        return undefined;
+                    }
+                })
             });
         })();
         """)
@@ -224,23 +237,13 @@ class UltraStealthEngine:
             // Add noise to canvas
             const injectNoise = (canvas) => {
                 const ctx = canvas.getContext('2d');
-                if (!ctx) return;
-                
-                const width = canvas.width;
-                const height = canvas.height;
-                if (width * height === 0) return;
-                
-                try {
-                    const imageData = ctx.getImageData(0, 0, width, height);
-                    for (let i = 0; i < imageData.data.length; i += 4) {
-                        imageData.data[i] = Math.min(255, Math.max(0, imageData.data[i] + (Math.random() * 2 - 1)));
-                        imageData.data[i + 1] = Math.min(255, Math.max(0, imageData.data[i + 1] + (Math.random() * 2 - 1)));
-                        imageData.data[i + 2] = Math.min(255, Math.max(0, imageData.data[i + 2] + (Math.random() * 2 - 1)));
-                    }
-                    ctx.putImageData(imageData, 0, 0);
-                } catch (e) {
-                    // Ignore errors
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < imageData.data.length; i += 4) {
+                    imageData.data[i] = imageData.data[i] + (Math.random() * 2 - 1); // R
+                    imageData.data[i + 1] = imageData.data[i + 1] + (Math.random() * 2 - 1); // G
+                    imageData.data[i + 2] = imageData.data[i + 2] + (Math.random() * 2 - 1); // B
                 }
+                ctx.putImageData(imageData, 0, 0);
             };
             
             HTMLCanvasElement.prototype.toDataURL = function() {
@@ -259,8 +262,6 @@ class UltraStealthEngine:
         await page.add_init_script("""
         (() => {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            
             const originalCreateOscillator = AudioContext.prototype.createOscillator;
             const originalCreateAnalyser = AudioContext.prototype.createAnalyser;
             
@@ -297,52 +298,151 @@ class UltraStealthEngine:
                 configurable: false,
                 enumerable: true
             });
-            
-            Object.defineProperty(navigator, 'language', {
-                get: () => 'en-US',
-                configurable: false,
-                enumerable: true
-            });
         })();
         """)
         
-        # 9. Override platform info
+        # 9. Fix timezone fingerprinting
         await page.add_init_script("""
         (() => {
-            const platform = 'Win32';
-            const userAgent = navigator.userAgent;
-            
-            Object.defineProperty(navigator, 'platform', {
-                get: () => platform,
-                configurable: false,
-                enumerable: true
+            const originalDateTimeFormat = Intl.DateTimeFormat;
+            window.Intl.DateTimeFormat = new Proxy(originalDateTimeFormat, {
+                construct(target, args) {
+                    if (args.length > 1 && args[1] && args[1].timeZone) {
+                        args[1].timeZone = 'America/New_York';
+                    }
+                    return new target(...args);
+                }
             });
             
-            Object.defineProperty(navigator, 'appVersion', {
-                get: () => userAgent.substring(userAgent.indexOf('/') + 1),
-                configurable: false,
-                enumerable: true
-            });
+            const originalResolvedOptions = Intl.DateTimeFormat.prototype.resolvedOptions;
+            Intl.DateTimeFormat.prototype.resolvedOptions = function() {
+                const options = originalResolvedOptions.apply(this, arguments);
+                options.timeZone = 'America/New_York';
+                return options;
+            };
         })();
         """)
         
-        # 10. Fix touch support detection
+        # 10. Remove automation indicators
         await page.add_init_script("""
         (() => {
-            Object.defineProperty(navigator, 'maxTouchPoints', {
-                get: () => 0,
-                configurable: false,
-                enumerable: true
-            });
+            // Remove Playwright specific
+            delete window.__playwright;
+            delete window.__pw_manual;
+            delete window.__PW_inspect;
             
-            // Remove touch events on desktop
-            if (window.TouchEvent) {
-                delete window.TouchEvent;
-            }
-            if (window.Touch) {
-                delete window.Touch;
-            }
+            // Remove Puppeteer specific
+            delete window.__puppeteer_evaluation_script__;
+            delete window.puppeteer;
+            
+            // Remove Selenium specific
+            delete window.__selenium_evaluate;
+            delete window.__selenium_unwrap;
+            delete window.__webdriver_evaluate;
+            delete window.__driver_evaluate;
+            delete window.__webdriver_unwrap;
+            delete window.__driver_unwrap;
+            delete window.__selenium_unwrap;
+            delete window.__fxdriver_evaluate;
+            delete window.__fxdriver_unwrap;
+            delete window._Selenium_IDE_Recorder;
+            delete window._selenium;
+            delete window.calledSelenium;
+            delete window.$cdc_asdjflasutopfhvcZLmcfl_;
+            delete window.$chrome_asyncScriptInfo;
+            delete window.__$webdriverAsyncExecutor;
+            
+            // Remove common automation properties
+            delete document.$cdc_asdjflasutopfhvcZLmcfl_;
+            delete document.__selenium_unwrapped;
+            delete document.__webdriver_evaluate;
+            delete document.__driver_evaluate;
+            delete document.__webdriver_unwrapped;
+            delete document.__driver_unwrapped;
+            delete document.__selenium_evaluate;
+            delete document.__fxdriver_evaluate;
+            delete document.__fxdriver_unwrapped;
         })();
         """)
         
-        logger.info("Ultra Stealth measures applied successfully")
+        logger.info("✅ Ultra Stealth measures applied successfully")
+        
+    @staticmethod
+    async def create_stealth_context(browser: Browser, proxy_config: Optional[Dict] = None) -> BrowserContext:
+        """Create a browser context with maximum stealth"""
+        
+        context_options = {
+            'viewport': {'width': 1920, 'height': 1080},
+            'screen': {'width': 1920, 'height': 1080},
+            'user_agent': UltraStealthEngine._get_random_user_agent(),
+            'locale': 'en-US',
+            'timezone_id': 'America/New_York',
+            'permissions': ['geolocation'],
+            'geolocation': {'latitude': 40.7128, 'longitude': -74.0060},  # New York
+            'color_scheme': 'light',
+            'reduced_motion': 'no-preference',
+            'forced_colors': 'none',
+            'bypass_csp': True,
+            'ignore_https_errors': True,
+            'extra_http_headers': {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Sec-Ch-Ua': '"Chromium";v="120", "Google Chrome";v="120", "Not-A.Brand";v="99"',
+                'Sec-Ch-Ua-Mobile': '?0',
+                'Sec-Ch-Ua-Platform': '"Windows"',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'Upgrade-Insecure-Requests': '1',
+            }
+        }
+        
+        if proxy_config:
+            context_options['proxy'] = proxy_config
+            
+        context = await browser.new_context(**context_options)
+        
+        # Apply stealth to all new pages
+        async def on_page(page):
+            await UltraStealthEngine.apply_ultra_stealth(page)
+            
+        context.on('page', on_page)
+        
+        return context
+        
+    @staticmethod
+    def _get_random_user_agent() -> str:
+        """Get a random realistic user agent"""
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/120.0',
+        ]
+        return random.choice(user_agents)
+        
+    @staticmethod
+    async def simulate_human_behavior(page: Page) -> None:
+        """Simulate realistic human behavior on page"""
+        
+        # Random mouse movements
+        for _ in range(random.randint(2, 5)):
+            x = random.randint(100, 1800)
+            y = random.randint(100, 900)
+            await page.mouse.move(x, y, steps=random.randint(10, 30))
+            await asyncio.sleep(random.uniform(0.1, 0.5))
+            
+        # Random scrolls
+        for _ in range(random.randint(1, 3)):
+            await page.evaluate(f"window.scrollTo(0, {random.randint(100, 500)})")
+            await asyncio.sleep(random.uniform(0.5, 1.5))
+            
+        # Random viewport interactions
+        if random.random() < 0.3:
+            await page.mouse.wheel(0, random.randint(50, 200))
+            await asyncio.sleep(random.uniform(0.2, 0.5))

@@ -27,7 +27,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
     logger.warning("Playwright not available - will use mocks")
 
-from src.core.orchestrator import UnifiedOrchestrator
+from src.core.enhanced_orchestrator_v3 import UnifiedOrchestrator
 from src.core.enums import OperationMode, PlatformType, PriorityLevel
 from src.core.models import EnhancedTicketOpportunity
 

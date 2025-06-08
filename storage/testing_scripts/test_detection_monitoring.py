@@ -14,7 +14,7 @@ from datetime import datetime
 PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.core.detection_monitor import get_detection_monitor, DetectionEventType
+from src.core.enhanced_detection_monitor import get_detection_monitor, DetectionEventType
 from src.utils.stealth_tester import StealthTester
 from src.core.stealth.stealth_integration import init_bruce_stealth_integration
 from src.utils.live_status_logger import init_live_status_logging

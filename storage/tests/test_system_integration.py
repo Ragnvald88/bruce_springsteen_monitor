@@ -60,7 +60,7 @@ async def test_system_integration():
     # Test 2: Orchestrator Integration
     print(f"\n{Fore.YELLOW}2. Testing Orchestrator Integration...")
     try:
-        from src.core.orchestrator import UltimateOrchestrator
+        from src.core.enhanced_orchestrator_v3 import UltimateOrchestrator
         
         # Load config
         config_path = Path(__file__).parent / "config" / "config.yaml"

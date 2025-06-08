@@ -1,7 +1,8 @@
+# src/main.py
 #!/usr/bin/env python3
 """
 StealthMaster AI v3.0 - Main Entry Point
-Revolutionary ticket monitoring system with maximum stealth
+Example of how your main.py should look after v3.0 update
 """
 
 import asyncio
@@ -23,15 +24,17 @@ env_file = PROJECT_ROOT / ".env"
 if env_file.exists():
     load_dotenv(env_file)
 
-# Import v3 orchestrator
-from src.core.orchestrator import Orchestrator
+# Import v3 orchestrator - UPDATED IMPORT
+from src.core.enhanced_orchestrator_v3 import EnhancedOrchestrator as Orchestrator
+# OR if your code expects UltimateOrchestrator:
+# from src.core.orchestrator_v3 import UltimateOrchestrator
 
 # Configuration
 DEFAULT_CONFIG = PROJECT_ROOT / "config" / "config.yaml"
 
 
 def setup_logging(config: dict) -> None:
-    """Configure streamlined logging for v3"""
+    """Configure logging for v3"""
     
     log_config = config.get('logging', {})
     log_level = getattr(logging, log_config.get('level', 'INFO'))
@@ -47,12 +50,37 @@ def setup_logging(config: dict) -> None:
     # Clear existing handlers
     root_logger.handlers.clear()
     
-    # Console handler with simple format
+    # Console handler with color support
+    try:
+        from colorama import init, Fore, Style
+        init(autoreset=True)
+        
+        class ColoredFormatter(logging.Formatter):
+            COLORS = {
+                'DEBUG': Fore.CYAN,
+                'INFO': Fore.GREEN,
+                'WARNING': Fore.YELLOW,
+                'ERROR': Fore.RED,
+                'CRITICAL': Fore.RED + Style.BRIGHT
+            }
+            
+            def format(self, record):
+                levelname = record.levelname
+                if levelname in self.COLORS:
+                    record.levelname = f"{self.COLORS[levelname]}{levelname}{Style.RESET_ALL}"
+                return super().format(record)
+        
+        console_formatter = ColoredFormatter(
+            '%(asctime)s | %(levelname)-8s | %(message)s',
+            datefmt='%H:%M:%S'
+        )
+    except ImportError:
+        console_formatter = logging.Formatter(
+            '%(asctime)s | %(levelname)-8s | %(message)s',
+            datefmt='%H:%M:%S'
+        )
+    
     console_handler = logging.StreamHandler()
-    console_formatter = logging.Formatter(
-        '%(asctime)s | %(levelname)-8s | %(message)s',
-        datefmt='%H:%M:%S'
-    )
     console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
     
@@ -72,68 +100,45 @@ def setup_logging(config: dict) -> None:
     for lib in ['httpx', 'httpcore', 'playwright._impl', 'websockets', 'urllib3']:
         logging.getLogger(lib).setLevel(logging.WARNING)
     
-    logging.info("🛡️ StealthMaster AI logging initialized")
+    logging.info("🛡️ StealthMaster AI v3.0 logging configured")
 
 
 def load_config(config_path: Path) -> dict:
-    """Load and process configuration"""
+    """Load configuration from YAML file"""
+    
+    if not config_path.exists():
+        raise FileNotFoundError(f"Configuration file not found: {config_path}")
     
     with open(config_path, 'r') as f:
         config = yaml.safe_load(f)
     
-    # Substitute environment variables
-    config = substitute_env_vars(config)
+    # Process environment variables
+    def replace_env_vars(obj):
+        if isinstance(obj, str) and obj.startswith('${') and obj.endswith('}'):
+            env_var = obj[2:-1]
+            return os.getenv(env_var, obj)
+        elif isinstance(obj, dict):
+            return {k: replace_env_vars(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [replace_env_vars(item) for item in obj]
+        return obj
     
-    return config
-
-
-def substitute_env_vars(config: dict) -> dict:
-    """Recursively substitute environment variables in config"""
-    
-    if isinstance(config, dict):
-        return {k: substitute_env_vars(v) for k, v in config.items()}
-    elif isinstance(config, list):
-        return [substitute_env_vars(item) for item in config]
-    elif isinstance(config, str):
-        # Check for environment variable pattern ${VAR_NAME}
-        if config.startswith('${') and config.endswith('}'):
-            var_name = config[2:-1]
-            value = os.getenv(var_name)
-            if value is None:
-                logging.warning(f"Environment variable {var_name} not set")
-                return config
-            # Convert numeric strings to numbers
-            try:
-                if '.' in value:
-                    return float(value)
-                else:
-                    return int(value)
-            except ValueError:
-                return value
-    return config
+    return replace_env_vars(config)
 
 
 def print_banner():
-    """Print the v3 banner"""
-    
+    """Print StealthMaster AI banner"""
     banner = """
     ╔══════════════════════════════════════════════════════════════════════╗
     ║                                                                      ║
-    ║  ███████╗████████╗███████╗ █████╗ ██╗  ████████╗██╗  ██╗ ██╗   ██╗ ║
-    ║  ██╔════╝╚══██╔══╝██╔════╝██╔══██╗██║  ╚══██╔══╝██║  ██║ ██║   ██║ ║
-    ║  ███████╗   ██║   █████╗  ███████║██║     ██║   ███████║ ██║   ██║ ║
-    ║  ╚════██║   ██║   ██╔══╝  ██╔══██║██║     ██║   ██╔══██║ ╚██╗ ██╔╝ ║
-    ║  ███████║   ██║   ███████╗██║  ██║███████╗██║   ██║  ██║  ╚████╔╝  ║
-    ║  ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝   ╚═╝  ╚═╝   ╚═══╝   ║
+    ║        🎸 STEALTHMASTER AI v3.0 - ULTIMATE EDITION 🎸               ║
     ║                                                                      ║
-    ║             M A S T E R   A I   v 3 . 0                              ║
+    ║     Undetectable • Ultra-Efficient • Unstoppable                    ║
     ║                                                                      ║
-    ║        🎸 BRUCE SPRINGSTEEN TICKET HUNTER 🎸                         ║
-    ║           Maximum Stealth • Minimum Data • Maximum Results          ║
+    ║     CDP Bypass: ✅  Data Optimization: ✅  Stealth: ✅              ║
     ║                                                                      ║
     ╚══════════════════════════════════════════════════════════════════════╝
     """
-    
     print(banner)
 
 
@@ -153,12 +158,6 @@ def validate_config(config: dict) -> bool:
         if not proxy_config.get('primary_pool'):
             logging.error("Proxy enabled but no proxies configured")
             return False
-            
-        # Check for proxy credentials
-        proxy = proxy_config['primary_pool'][0]
-        if not all(k in proxy for k in ['host', 'port']):
-            logging.error("Invalid proxy configuration")
-            return False
     
     # Check targets
     targets = config.get('targets', [])
@@ -173,15 +172,32 @@ def validate_config(config: dict) -> bool:
 
 
 async def main():
-    """Main entry point for StealthMaster AI"""
+    """Main entry point for StealthMaster AI v3.0"""
     
-    parser = argparse.ArgumentParser(description='StealthMaster AI v3.0 - Ticket Hunter')
-    parser.add_argument('-c', '--config', type=Path, default=DEFAULT_CONFIG,
-                        help='Configuration file path')
-    parser.add_argument('--test', action='store_true',
-                        help='Run in test mode (single check then exit)')
-    parser.add_argument('--no-gui', action='store_true',
-                        help='Run without detection monitor GUI')
+    parser = argparse.ArgumentParser(
+        description='StealthMaster AI v3.0 - Ultimate Ticket Hunter'
+    )
+    parser.add_argument(
+        '-c', '--config', 
+        type=Path, 
+        default=DEFAULT_CONFIG,
+        help='Configuration file path'
+    )
+    parser.add_argument(
+        '--gui',
+        action='store_true',
+        help='Launch with GUI interface'
+    )
+    parser.add_argument(
+        '--test',
+        action='store_true',
+        help='Run in test mode'
+    )
+    parser.add_argument(
+        '--benchmark',
+        action='store_true',
+        help='Run performance benchmark'
+    )
     
     args = parser.parse_args()
     
@@ -197,6 +213,26 @@ async def main():
     
     # Print banner
     print_banner()
+    
+    # Run benchmark if requested
+    if args.benchmark:
+        from src.testing.stealth_test_framework import StealthTestFramework
+        logging.info("🧪 Running v3.0 benchmark tests...")
+        
+        framework = StealthTestFramework()
+        report = await framework.run_all_tests()
+        
+        print(f"\n✅ Benchmark complete! Grade: {report['summary']['grade']}")
+        return
+    
+    # Launch GUI if requested
+    if args.gui:
+        logging.info("🎮 Launching StealthMaster AI GUI...")
+        
+        from src.ui.stealth_gui_v3 import StealthMasterGUI
+        app = StealthMasterGUI()
+        app.run()
+        return
     
     # Validate configuration
     if not validate_config(config):
@@ -216,25 +252,43 @@ async def main():
     for target in enabled_targets:
         logging.info(f"   ✅ {target['event_name']} - {target['platform'].upper()}")
     
-    # Create orchestrator
+    # Create orchestrator with v3.0
     orchestrator = Orchestrator(config)
     
     try:
-        # Initialize subsystems
+        # Initialize all v3.0 subsystems
         await orchestrator.initialize()
         
-        # Start monitoring
+        # Test mode
         if args.test:
             logging.info("🧪 Running in test mode - single check only")
+            
             # Run single check for each monitor
             for monitor_id, monitor in orchestrator.monitors.items():
                 try:
                     opportunities = await monitor.handler.check_tickets()
-                    logging.info(f"Test result for {monitor.handler.platform}: {len(opportunities)} tickets found")
+                    logging.info(
+                        f"Test result for {monitor.platform}: "
+                        f"{len(opportunities)} tickets found"
+                    )
                 except Exception as e:
-                    logging.error(f"Test failed for {monitor.handler.platform}: {e}")
+                    logging.error(f"Test failed for {monitor.platform}: {e}")
+            
+            # Show v3.0 stats
+            stats = orchestrator.get_status()
+            logging.info("\n📊 V3.0 System Status:")
+            logging.info(f"   CDP Protection: {stats['system']['cdp_status']}")
+            logging.info(f"   Behavior Pattern: {stats['system']['behavior_pattern']}")
+            logging.info(f"   Data Saved: {stats['system']['data_saved_mb']} MB")
+            
         else:
-            # Normal operation
+            # Normal operation with v3.0 enhancements
+            logging.info("\n🎯 Starting ticket hunt with v3.0 enhancements...")
+            logging.info("   • CDP Bypass: ACTIVE")
+            logging.info("   • Data Optimization: ACTIVE")
+            logging.info("   • Adaptive Behavior: ACTIVE")
+            logging.info("   • Detection Monitor: ACTIVE")
+            
             await orchestrator.start()
             
     except KeyboardInterrupt:
@@ -242,12 +296,17 @@ async def main():
     except Exception as e:
         logging.error(f"❌ Fatal error: {e}", exc_info=True)
     finally:
-        # Cleanup
+        # Cleanup v3.0 resources
         await orchestrator.shutdown()
-        logging.info("🏁 StealthMaster AI stopped")
+        logging.info("🏁 StealthMaster AI v3.0 stopped")
 
 
 if __name__ == "__main__":
+    # Check Python version
+    if sys.version_info < (3, 8):
+        print("❌ Python 3.8+ required")
+        sys.exit(1)
+    
     # Run the async main
     try:
         asyncio.run(main())

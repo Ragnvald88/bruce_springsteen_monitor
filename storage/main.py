@@ -26,7 +26,7 @@ if env_file.exists():
     load_dotenv(env_file)
 
 # Import enhanced orchestrator
-from src.core.orchestrator import UltimateOrchestrator
+from src.core.enhanced_orchestrator_v3 import UltimateOrchestrator
 from src.core.enums import OperationMode
 
 # Configuration

@@ -35,13 +35,19 @@ class UnifiedHandler:
         browser: Browser,
         behavior_engine: HumanBehaviorEngine,
         fingerprint: Dict[str, Any],
+        page: Optional[Page] = None,
+        context: Optional[BrowserContext] = None,
         detection_callback: Optional[Callable] = None
     ):
         self.config = config
         self.browser = browser
         self.behavior_engine = behavior_engine
         self.fingerprint = fingerprint
+        self.page = page
+        self.context = context
         self.detection_callback = detection_callback
+        
+        logger.debug(f"UnifiedHandler.__init__ - page: {page is not None}, context: {context is not None}")
         
         # Platform detection
         self.url = config['url']
@@ -54,9 +60,8 @@ class UnifiedHandler:
         self.min_quantity = config.get('min_ticket_quantity', 1)
         self.max_quantity = config.get('max_ticket_quantity', 4)
         
-        # Browser state
-        self.context: Optional[BrowserContext] = None
-        self.page: Optional[Page] = None
+        # Browser state is already set in __init__ parameters
+        # Don't reset them here!
         
         # Resource optimization
         self.blocked_resources = {
@@ -87,21 +92,13 @@ class UnifiedHandler:
     async def initialize(self):
         """Initialize browser context and page"""
         
-        # Create context from launcher
-        from ..core.stealth_browser_launcher import StealthBrowserLauncher
-        launcher = StealthBrowserLauncher()
-        
-        self.context = await launcher.create_stealth_context(
-            self.browser,
-            self.fingerprint,
-            locale='it-IT' if self.platform == 'fansale' else 'en-US'
-        )
+        # If page and context not provided, error
+        if not self.page or not self.context:
+            logger.error(f"Page: {self.page}, Context: {self.context}")
+            raise ValueError("Page and context must be provided to UnifiedHandler")
         
         # Set up request interception for resource blocking
         await self.context.route('**/*', self._resource_handler)
-        
-        # Create page
-        self.page = await self.context.new_page()
         
         # Set up response monitoring
         self.page.on('response', self._response_monitor)

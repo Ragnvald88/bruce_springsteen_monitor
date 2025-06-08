@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from contextlib import asynccontextmanager
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright, Playwright
 import psutil
+from ..stealth.cdp_stealth import CDPStealthEngine
 
 logger = logging.getLogger(__name__)
 
@@ -52,11 +53,12 @@ class BrowserPool:
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
         
-        # Pool settings
+        # Pool settings - reduced lifetimes for better stealth
         self.min_size = self.config.get('min_size', 2)
         self.max_size = self.config.get('max_size', 5)
-        self.max_age_seconds = self.config.get('max_age_seconds', 3600)  # 1 hour
-        self.max_idle_seconds = self.config.get('max_idle_seconds', 300)  # 5 minutes
+        self.max_age_seconds = self.config.get('max_age_seconds', 600)  # 10 minutes (reduced from 1 hour)
+        self.max_idle_seconds = self.config.get('max_idle_seconds', 180)  # 3 minutes (reduced from 5)
+        self.max_requests_per_browser = self.config.get('max_requests_per_browser', 20)  # New limit
         self.health_check_interval = self.config.get('health_check_interval', 60)
         
         # Browser options
@@ -153,19 +155,17 @@ class BrowserPool:
         try:
             instance = await self._get_browser_instance()
             
-            # Create fresh context with stealth settings
-            context = await instance.browser.new_context(
-                viewport={'width': 1920, 'height': 1080},
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-                locale='en-US',
-                timezone_id='America/New_York',
-            )
+            # Create fresh context with randomized stealth settings via CDP
+            context = await CDPStealthEngine.create_stealth_context(instance.browser)
             
             # Track context
             instance.contexts.append(context)
             
             # Create page
             page = await context.new_page()
+            
+            # Apply CDP stealth to page
+            await CDPStealthEngine.apply_page_stealth(page)
             
             # Update acquisition stats
             acquisition_time = time.time() - start_time
@@ -236,8 +236,9 @@ class BrowserPool:
             # Check if browser should be recycled
             if (instance.age_seconds > self.max_age_seconds or 
                 instance.health_check_failures > 3 or
-                not instance.is_healthy):
-                logger.info(f"♻️  Recycling browser (age={instance.age_seconds:.0f}s, failures={instance.health_check_failures})")
+                not instance.is_healthy or
+                instance.usage_count > self.max_requests_per_browser):
+                logger.info(f"♻️  Recycling browser (age={instance.age_seconds:.0f}s, usage={instance.usage_count}, failures={instance.health_check_failures})")
                 await self._close_browser(instance)
                 self.stats['browsers_recycled'] += 1
             else:

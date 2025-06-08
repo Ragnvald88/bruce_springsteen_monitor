@@ -18486,3 +18486,113 @@ None
 None
 2025-06-08 17:13:34,559 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
 None
+2025-06-08 17:51:33,976 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 17:51:33,976 | [35mCRITICAL[0m | __main__ | 🎸 STARTING THE HUNT FOR BRUCE SPRINGSTEEN TICKETS! 🎸
+None
+2025-06-08 17:51:33,976 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 17:51:33,976 | [35mCRITICAL[0m | src.core.orchestrator | ⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡
+None
+2025-06-08 17:51:33,976 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
+None
+2025-06-08 17:51:36,745 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:39,220 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:41,162 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:42,399 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:43,706 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:44,017 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:45,680 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:48,343 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:50,298 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:50,459 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:53,151 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:55,216 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:57,791 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:51:57,972 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:00,354 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:01,532 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:06,509 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:11,767 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:13,686 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:14,696 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:14,899 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:17,187 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:18,822 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:20,726 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:21,364 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:23,193 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:24,976 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:27,088 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:27,611 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:29,185 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:31,177 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:33,201 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:35,078 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:35,238 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:37,610 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:39,101 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:41,184 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:41,780 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:42,508 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:44,501 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:47,205 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:48,462 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:48,662 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:50,985 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 17:52:53,236 | [31mERROR[0m | src.platforms.unified_handler | Check failed: 'UnifiedTicketingHandler' object has no attribute '_api_responses'
+None
+2025-06-08 18:34:01,223 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 18:34:01,224 | [35mCRITICAL[0m | __main__ | 🎸 STARTING THE HUNT FOR BRUCE SPRINGSTEEN TICKETS! 🎸
+None
+2025-06-08 18:34:01,224 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 18:34:01,224 | [35mCRITICAL[0m | src.core.orchestrator | ⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡
+None
+2025-06-08 18:34:01,224 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
+None

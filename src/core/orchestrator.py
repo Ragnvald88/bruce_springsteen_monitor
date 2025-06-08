@@ -29,6 +29,7 @@ from .proxy_manager import get_proxy_manager
 from ..platforms.unified_handler import UnifiedTicketingHandler
 from ..profiles.manager import ProfileManager, BrowserProfile
 from .browser_pool import get_browser_pool, shutdown_browser_pool
+from .rate_limiter import get_rate_limiter, RateLimitConfig
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,9 @@ class UltimateOrchestrator:
         
         # Quantum metrics
         self.quantum_metrics = QuantumMetrics()
+        
+        # Initialize rate limiter
+        self.rate_limiter = get_rate_limiter(RateLimitConfig())
         
         logger.info(f"🚀 Ultimate Orchestrator v2.0 initialized in {self.mode.value} mode")
     
@@ -278,17 +282,23 @@ class UltimateOrchestrator:
             raise
     
     async def _monitor_loop(self, monitor_id: str, monitor: UnifiedTicketingHandler) -> None:
-        """Enhanced monitoring loop with adaptive timing"""
+        """Enhanced monitoring loop with adaptive timing and rate limiting"""
         
         while self.running:
             try:
-                # Calculate adaptive interval
-                interval = self._calculate_adaptive_interval(monitor)
+                # Apply intelligent rate limiting
+                await self.rate_limiter.wait_if_needed(
+                    monitor.platform.value,
+                    monitor.priority.value
+                )
                 
                 # Check for tickets
                 start_time = time.time()
                 opportunities = await monitor.check_tickets()
                 check_time = time.time() - start_time
+                
+                # Record request for rate limiting
+                self.rate_limiter.record_request(monitor.platform.value, success=True)
                 
                 # Update quantum metrics
                 self.quantum_metrics.record_scan(monitor_id, check_time, len(opportunities))
@@ -313,10 +323,13 @@ class UltimateOrchestrator:
                 
             except BlockedError:
                 logger.warning(f"Monitor {monitor_id} blocked - entering stealth mode")
+                self.rate_limiter.record_detection(monitor.platform.value, "blocked")
                 await self._handle_monitor_block(monitor_id, monitor)
                 
             except Exception as e:
                 error_msg = str(e)
+                # Record failed request
+                self.rate_limiter.record_request(monitor.platform.value, success=False)
                 # Check for proxy-related errors
                 if any(err in error_msg for err in ['ERR_HTTP2_PROTOCOL_ERROR', 'ERR_TUNNEL_CONNECTION_FAILED', 'ERR_PROXY_CONNECTION_FAILED']):
                     logger.warning(f"Proxy error detected for {monitor_id}: {error_msg}")

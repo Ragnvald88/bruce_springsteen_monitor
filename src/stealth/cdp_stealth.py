@@ -7,6 +7,7 @@ import asyncio
 import logging
 from typing import Optional, Dict, Any
 from playwright.async_api import Browser, BrowserContext, Page
+from .advanced_fingerprint import AdvancedFingerprint
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,13 @@ class CDPStealthEngine:
                 '--disable-features=IsolateOrigins',
                 '--disable-features=site-per-process',
                 
+                # Additional anti-detection flags
+                '--disable-features=ChromeWhatsNewUI',
+                '--disable-features=OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction,OptimizationHints',
+                '--disable-features=ChromePasswordManagerOnboardingAndroid',
+                '--disable-features=FlashDeprecationWarning',
+                '--disable-features=EnablePasswordsAccountStorage',
+                
                 # Important: Use a real Chrome executable if available
                 # '--executable-path=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
             ],
@@ -81,18 +89,21 @@ class CDPStealthEngine:
         
     @staticmethod
     async def create_stealth_context(browser: Browser, proxy_config: Optional[Dict] = None) -> BrowserContext:
-        """Create a stealth browser context"""
+        """Create a stealth browser context with randomized fingerprint"""
+        
+        # Generate random fingerprint
+        fingerprint = AdvancedFingerprint.generate_fingerprint()
         
         context_options = {
-            'viewport': {'width': 1920, 'height': 1080},
-            'screen': {'width': 1920, 'height': 1080},
-            'device_scale_factor': 1,
+            'viewport': fingerprint['viewport'],
+            'screen': fingerprint['screen'],
+            'device_scale_factor': fingerprint['device_scale_factor'],
             'is_mobile': False,
             'has_touch': False,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'user_agent': fingerprint['user_agent'],
             'accept_downloads': True,
-            'locale': 'en-US',
-            'timezone_id': 'America/New_York',
+            'locale': fingerprint['language'],
+            'timezone_id': fingerprint['timezone'],
             'permissions': ['geolocation', 'notifications'],
             'geolocation': {'latitude': 40.7128, 'longitude': -74.0060},
             'color_scheme': 'light',
@@ -126,7 +137,13 @@ class CDPStealthEngine:
             
         context = await browser.new_context(**context_options)
         
-        # Add init script to context
+        # Store fingerprint for later use
+        context._fingerprint = fingerprint
+        
+        # Add advanced stealth script
+        await context.add_init_script(AdvancedFingerprint.get_stealth_script(fingerprint))
+        
+        # Add additional CDP-specific script
         await context.add_init_script("""
         // Remove webdriver before anything else loads
         delete Object.getPrototypeOf(navigator).webdriver;
@@ -282,38 +299,67 @@ class CDPStealthEngine:
     async def apply_page_stealth(page: Page) -> None:
         """Apply additional stealth measures to a page"""
         
-        # Use CDP to remove webdriver property
-        client = await page.context.new_cdp_session(page)
-        
-        # Override navigator.webdriver using CDP
-        await client.send('Page.addScriptToEvaluateOnNewDocument', {
-            'source': """
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-            """
-        })
-        
-        # Remove automation header
-        await client.send('Network.setUserAgentOverride', {
-            'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'acceptLanguage': 'en-US,en;q=0.9',
-            'platform': 'Win32'
-        })
-        
-        # Enable stealth mode for runtime
-        await client.send('Runtime.enable')
-        
-        # Emulate human-like behavior
-        await client.send('Emulation.setIdleOverride', {'isUserActive': True, 'isScreenUnlocked': True})
-        
-        # Set touch enabled to false (desktop)
-        await client.send('Emulation.setTouchEmulationEnabled', {'enabled': False})
-        
-        # Set hardware concurrency
-        await client.send('Emulation.setHardwareConcurrencyOverride', {'hardwareConcurrency': 8})
-        
-        logger.info("✅ CDP stealth measures applied")
+        try:
+            # Use CDP to remove webdriver property
+            client = await page.context.new_cdp_session(page)
+            
+            # Override navigator.webdriver using CDP with multiple methods
+            await client.send('Page.addScriptToEvaluateOnNewDocument', {
+                'source': """
+                // Remove webdriver
+                delete Object.getPrototypeOf(navigator).webdriver;
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined
+                });
+                
+                // Remove CDP runtime detection
+                (function() {
+                    const originalCall = Function.prototype.call;
+                    Function.prototype.call = function(...args) {
+                        if (args[1] && args[1].includes && args[1].includes('Runtime.')) {
+                            return undefined;
+                        }
+                        return originalCall.apply(this, args);
+                    };
+                })();
+                
+                // Hide automation indicators
+                window.chrome = window.chrome || {};
+                window.chrome.runtime = window.chrome.runtime || {};
+                """
+            })
+            
+            # Get current context user agent
+            user_agent = page.context._options.get('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
+            
+            # Remove automation header
+            await client.send('Network.setUserAgentOverride', {
+                'userAgent': user_agent,
+                'acceptLanguage': 'en-US,en;q=0.9',
+                'platform': 'Win32'
+            })
+            
+            # Enable stealth mode for runtime
+            await client.send('Runtime.enable')
+            
+            # Emulate human-like behavior
+            await client.send('Emulation.setIdleOverride', {'isUserActive': True, 'isScreenUnlocked': True})
+            
+            # Set touch enabled to false (desktop)
+            await client.send('Emulation.setTouchEmulationEnabled', {'enabled': False})
+            
+            # Set hardware concurrency based on fingerprint
+            if hasattr(page.context, '_fingerprint'):
+                hardware_concurrency = page.context._fingerprint.get('hardware_concurrency', 8)
+            else:
+                hardware_concurrency = 8
+            await client.send('Emulation.setHardwareConcurrencyOverride', {'hardwareConcurrency': hardware_concurrency})
+            
+            logger.info("✅ CDP stealth measures applied")
+            
+        except Exception as e:
+            logger.debug(f"CDP stealth application warning: {e}")
+            # Continue even if CDP fails - page might still work
         
     @staticmethod
     async def simulate_human_mouse(page: Page) -> None:

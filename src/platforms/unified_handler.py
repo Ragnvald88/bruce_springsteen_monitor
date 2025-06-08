@@ -55,6 +55,7 @@ class UnifiedTicketingHandler:
         self.browser_context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
         self.detected_opportunities = set()
+        self._api_responses = []  # Initialize here to prevent AttributeError
         
         # Browser pool for performance
         self.browser_pool = None

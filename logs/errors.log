@@ -18472,3 +18472,17 @@ None
 None
 2025-06-08 10:12:30,348 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
 None
+2025-06-08 17:13:34,537 | [31mERROR[0m | src.core.orchestrator | Failed to initialize monitor for Bruce Springsteen Milano 2025: 'NoneType' object has no attribute 'new_context'
+None
+2025-06-08 17:13:34,558 | [31mERROR[0m | src.core.orchestrator | Failed to initialize monitor for Bruce Springsteen San Siro 2025: 'NoneType' object has no attribute 'new_context'
+None
+2025-06-08 17:13:34,558 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 17:13:34,558 | [35mCRITICAL[0m | __main__ | 🎸 STARTING THE HUNT FOR BRUCE SPRINGSTEEN TICKETS! 🎸
+None
+2025-06-08 17:13:34,558 | [35mCRITICAL[0m | __main__ | ================================================================================
+None
+2025-06-08 17:13:34,559 | [35mCRITICAL[0m | src.core.orchestrator | ⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡
+None
+2025-06-08 17:13:34,559 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
+None

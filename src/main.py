@@ -198,7 +198,11 @@ def substitute_env_vars(config: dict) -> dict:
         return [substitute_env_vars(item) for item in config]
     elif isinstance(config, str) and config.startswith('${') and config.endswith('}'):
         var_name = config[2:-1]
-        return os.environ.get(var_name, config)
+        value = os.environ.get(var_name, config)
+        # If the value looks like a number, convert it to int
+        if value != config and value.isdigit():
+            return int(value)
+        return value
     else:
         return config
 

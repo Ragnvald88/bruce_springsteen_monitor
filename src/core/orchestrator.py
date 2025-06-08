@@ -28,6 +28,7 @@ from .strike_force import EnhancedStrikeForce
 from .proxy_manager import get_proxy_manager
 from ..platforms.unified_handler import UnifiedTicketingHandler
 from ..profiles.manager import ProfileManager, BrowserProfile
+from .browser_pool import get_browser_pool, shutdown_browser_pool
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,7 @@ class UltimateOrchestrator:
         self.response_cache: Optional[ResponseCache] = None
         self.ticket_reserver: Optional[TicketReserver] = None
         self.strike_force: Optional[EnhancedStrikeForce] = None
+        self.browser_pool = None  # Browser pool for performance
         
         # StealthMaster AI Engine
         self.stealth_engine = get_stealthmaster_engine()
@@ -97,6 +99,18 @@ class UltimateOrchestrator:
         try:
             # Initialize Playwright
             self.playwright = await async_playwright().start()
+            
+            # Initialize browser pool for performance
+            pool_config = {
+                'headless': self.config['browser_options'].get('headless', False),
+                'channel': self.config['browser_options'].get('channel', 'chrome'),
+                'min_size': 2,
+                'max_size': min(self.max_concurrent_monitors + 2, 8),
+                'max_age_seconds': 3600,
+                'max_idle_seconds': 300
+            }
+            self.browser_pool = await get_browser_pool(pool_config)
+            logger.info("🏊 Browser pool initialized")
             
             # Initialize proxy manager
             self.proxy_manager = get_proxy_manager(self.config)
@@ -157,6 +171,9 @@ class UltimateOrchestrator:
                 if not profile:
                     logger.error(f"No suitable profile for {target['event_name']}")
                     continue
+                
+                # Add browser pool config to target
+                target['use_browser_pool'] = True
                 
                 # Create unified handler
                 monitor = UnifiedTicketingHandler(
@@ -561,9 +578,14 @@ class UltimateOrchestrator:
         # Close all monitors
         for monitor in self.monitors.values():
             try:
-                await monitor.browser_context.close()
-            except:
-                pass
+                await monitor.cleanup()
+            except Exception as e:
+                logger.error(f"Error cleaning up monitor: {e}")
+        
+        # Shutdown browser pool
+        if self.browser_pool:
+            await shutdown_browser_pool()
+            logger.info("🏊 Browser pool shut down")
         
         # Cleanup
         if self.playwright:

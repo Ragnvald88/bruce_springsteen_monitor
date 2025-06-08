@@ -207,10 +207,7 @@ class StealthProxyManager:
             start_time = time.time()
             
             async with httpx.AsyncClient(
-                proxies={
-                    "http://": proxy.url,
-                    "https://": proxy.url
-                },
+                proxy=proxy.url,
                 timeout=timeout
             ) as client:
                 response = await client.get(test_url)

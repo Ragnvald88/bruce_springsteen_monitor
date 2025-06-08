@@ -1,0 +1,120 @@
+{
+  "timestamp": "2025-06-08T16:26:51.772052",
+  "summary": {
+    "total_tests": 7,
+    "passed": 5,
+    "failed": 2,
+    "duration": 21.311389207839966,
+    "memory_delta": 38.4375
+  },
+  "performance_metrics": {
+    "browser_launch_time": 0.1789250373840332,
+    "context_creation_time": 0.002710103988647461,
+    "page_setup_time": 0.10291719436645508,
+    "navigation_time": 0.8328981399536133,
+    "memory_usage_mb": 29.859375,
+    "cpu_percent": 0.0,
+    "concurrent_performance": {}
+  },
+  "results": [
+    {
+      "test_name": "Core Imports",
+      "category": "functionality",
+      "passed": true,
+      "duration": 0.1467902660369873,
+      "memory_delta": 30.78125,
+      "error": null,
+      "metrics": {}
+    },
+    {
+      "test_name": "Browser Operations",
+      "category": "performance",
+      "passed": true,
+      "duration": 1.3944971561431885,
+      "memory_delta": 3.46875,
+      "error": null,
+      "metrics": {
+        "browser_launch": 0.1789250373840332,
+        "context_creation": 0.002710103988647461,
+        "page_setup": 0.10291719436645508,
+        "navigation": 0.8328981399536133
+      }
+    },
+    {
+      "test_name": "Stealth Effectiveness",
+      "category": "security",
+      "passed": false,
+      "duration": 0.26192688941955566,
+      "memory_delta": 0.390625,
+      "error": null,
+      "metrics": {}
+    },
+    {
+      "test_name": "Concurrent Performance",
+      "category": "performance",
+      "passed": true,
+      "duration": 8.075431108474731,
+      "memory_delta": 3.5625,
+      "error": null,
+      "metrics": {
+        "1_browsers": {
+          "total_time": 1.6323492527008057,
+          "avg_time": 1.63228178024292,
+          "efficiency": 0.9999586654278954
+        },
+        "3_browsers": {
+          "total_time": 2.396958112716675,
+          "avg_time": 1.9791523615519206,
+          "efficiency": 0.8256933448489763
+        },
+        "5_browsers": {
+          "total_time": 4.045682907104492,
+          "avg_time": 2.538624620437622,
+          "efficiency": 0.6274897659378164
+        }
+      }
+    },
+    {
+      "test_name": "Memory Leak Detection",
+      "category": "stability",
+      "passed": true,
+      "duration": 8.298187971115112,
+      "memory_delta": 0.125,
+      "error": null,
+      "metrics": {
+        "iterations": 5,
+        "avg_delta": 0.125,
+        "max_delta": 0.484375,
+        "readings": [
+          0.484375,
+          0.078125,
+          0.03125,
+          0.03125,
+          0.0
+        ]
+      }
+    },
+    {
+      "test_name": "Error Recovery",
+      "category": "stability",
+      "passed": true,
+      "duration": 2.865557909011841,
+      "memory_delta": 0.03125,
+      "error": null,
+      "metrics": {
+        "invalid_url": true,
+        "timeout": true
+      }
+    },
+    {
+      "test_name": "Platform Access",
+      "category": "functionality",
+      "passed": false,
+      "duration": 0.2689979076385498,
+      "memory_delta": 0.078125,
+      "error": null,
+      "metrics": {}
+    }
+  ],
+  "issues": []
+}

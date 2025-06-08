@@ -1,7 +1,8 @@
 # src/platforms/unified_handler.py
 """
-Unified Platform Handler - StealthMaster AI v2.0
+Unified Platform Handler - StealthMaster AI v3.0
 Single powerful engine handling all ticketing platforms with maximum efficiency
+Now with browser pooling for improved performance
 """
 
 import asyncio
@@ -14,13 +15,15 @@ from typing import Dict, List, Optional, Any, Tuple
 from datetime import datetime
 from abc import ABC, abstractmethod
 
-from playwright.async_api import Page, BrowserContext, Response
+from playwright.async_api import Page, BrowserContext, Response, Browser
 from ..core.models import EnhancedTicketOpportunity
 from ..core.enums import PlatformType, PriorityLevel
 from ..profiles.models import BrowserProfile
 from ..core.errors import BlockedError, PlatformError
 from ..stealth.stealth_engine import get_stealthmaster_engine
 from ..stealth.cdp_stealth import CDPStealthEngine
+from ..core.browser_pool import get_browser_pool
+from ..utils.retry_utils import retry, retry_on_network_error, CircuitBreaker
 
 logger = logging.getLogger(__name__)
 
@@ -48,13 +51,24 @@ class UnifiedTicketingHandler:
         self.desired_sections = config.get('desired_sections', [])
         
         # State management
-        self.browser: Optional[Any] = None
+        self.browser: Optional[Browser] = None
         self.browser_context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
         self.detected_opportunities = set()
         
+        # Browser pool for performance
+        self.browser_pool = None
+        self.uses_browser_pool = config.get('use_browser_pool', True)
+        
         # StealthMaster AI Engine
         self.stealth_engine = get_stealthmaster_engine()
+        
+        # Circuit breaker for platform protection
+        self.circuit_breaker = CircuitBreaker(
+            failure_threshold=3,
+            recovery_timeout=300,  # 5 minutes
+            expected_exception=BlockedError
+        )
         
         # Performance tracking
         self.scan_metrics = {
@@ -88,18 +102,85 @@ class UnifiedTicketingHandler:
         
         return adapters.get(self.platform, DefaultAdapter())
     
+    async def _create_browser_context(self) -> None:
+        """Create browser context without pool (fallback method)"""
+        logger.info("Creating browser context without pool")
+        
+        # Create browser
+        self.browser = await CDPStealthEngine.create_undetectable_browser(self.browser_manager)
+        
+        # Get proxy configuration from profile
+        proxy_config = None
+        if self.profile.proxy_config:
+            if isinstance(self.profile.proxy_config, dict) and 'server' in self.profile.proxy_config:
+                proxy_config = self.profile.proxy_config
+                logger.info(f"🔐 Using proxy: {proxy_config['server']}")
+            elif hasattr(self.profile.proxy_config, 'server'):
+                # Handle ProxyConfig object
+                proxy_config = {
+                    'server': self.profile.proxy_config.server,
+                    'username': self.profile.proxy_config.username,
+                    'password': self.profile.proxy_config.password
+                }
+                logger.info(f"🔐 Using proxy: {proxy_config['server']}")
+        
+        # Create stealth context with CDP
+        self.browser_context = await CDPStealthEngine.create_stealth_context(
+            self.browser, 
+            proxy_config
+        )
+        
+        # Create page and apply CDP stealth
+        self.page = await self.browser_context.new_page()
+        await CDPStealthEngine.apply_page_stealth(self.page)
+        
+        # Apply additional stealth measures
+        await self.stealth_engine.apply_ultimate_stealth(
+            self.browser,
+            self.browser_context,
+            self.page,
+            self.platform.value
+        )
+        
+        # Platform-specific initialization
+        await self.platform_adapter.initialize(self.page, self.config)
+        
+        # Set up intelligent request interception
+        await self._setup_intelligent_networking()
+    
+    async def cleanup(self) -> None:
+        """Cleanup browser resources"""
+        if not self.uses_browser_pool:
+            # Only cleanup if not using pool
+            try:
+                if self.page:
+                    await self.page.close()
+                if self.browser_context:
+                    await self.browser_context.close()
+                if self.browser:
+                    await self.browser.close()
+            except Exception as e:
+                logger.error(f"Cleanup error: {e}")
+            finally:
+                self.page = None
+                self.browser_context = None
+                self.browser = None
+    
     async def initialize(self) -> None:
         """Initialize unified handler with StealthMaster AI protection"""
         logger.info(f"🚀 Initializing Unified Handler for {self.platform.value}")
         
-        # Create undetectable browser using CDP stealth
-        # Use headless=False for Ticketmaster, True for others
-        headless = self.config.get('headless', True)
-        if self.platform == PlatformType.TICKETMASTER:
-            headless = False  # Ticketmaster requires headful mode
-            logger.info("🖥️ Using headful mode for Ticketmaster")
-        
-        self.browser = await CDPStealthEngine.create_undetectable_browser(self.browser_manager)
+        # Initialize browser pool if not already done
+        if self.uses_browser_pool and not self.browser_pool:
+            pool_config = {
+                'headless': self.config.get('headless', False),
+                'channel': 'chrome',
+                'min_size': 2,
+                'max_size': 5,
+                'max_age_seconds': 3600,
+                'max_idle_seconds': 300
+            }
+            self.browser_pool = await get_browser_pool(pool_config)
         
         # Get proxy configuration from profile
         proxy_config = None
@@ -118,54 +199,50 @@ class UnifiedTicketingHandler:
         else:
             logger.warning("⚠️ No proxy configured for this profile")
         
-        # Create stealth context with CDP
-        self.browser_context = await CDPStealthEngine.create_stealth_context(
-            self.browser, 
-            proxy_config
-        )
+        # If not using browser pool, create browser context immediately
+        if not self.uses_browser_pool:
+            await self._create_browser_context()
         
-        # Create page and apply CDP stealth
-        self.page = await self.browser_context.new_page()
-        await CDPStealthEngine.apply_page_stealth(self.page)
-        
-        # Apply additional stealth measures from StealthMaster AI
-        # CDP stealth is already applied, this adds extra protection
-        await self.stealth_engine.apply_ultimate_stealth(
-            self.browser,
-            self.browser_context,
-            self.page,
-            self.platform.value
-        )
-        
-        # Platform-specific locale adjustments
-        if self.platform == PlatformType.FANSALE:
-            logger.info("🇮🇹 Setting Italian locale for Fansale")
-            await self.page.evaluate("""
-                Object.defineProperty(navigator, 'language', {
-                    get: () => 'it-IT'
-                });
-                Object.defineProperty(navigator, 'languages', {
-                    get: () => ['it-IT', 'it', 'en-US', 'en']
-                });
-            """)
-        
-        # Platform-specific initialization
-        await self.platform_adapter.initialize(self.page, self.config)
-        
-        # Set up intelligent request interception
-        await self._setup_intelligent_networking()
-        
-        # Perform authentication if needed
-        if self.config.get('authentication', {}).get('enabled'):
-            await self._perform_unified_authentication()
-        
-        logger.info(f"✅ Unified Handler ready for {self.event_name}")
+        # Initialize browser context on first use
+        # Browser will be acquired from pool when needed
+        logger.info(f"✅ Unified Handler ready for {self.event_name} (pool mode: {self.uses_browser_pool})")
     
+    @retry(max_attempts=3, exceptions=(TimeoutError, ConnectionError), base_delay=2.0)
     async def check_tickets(self) -> List[EnhancedTicketOpportunity]:
-        """Unified ticket checking with platform adaptation"""
+        """Unified ticket checking with platform adaptation and retry logic"""
         start_time = time.time()
         self.scan_metrics['scans'] += 1
         
+        if self.uses_browser_pool:
+            # Use browser pool for better performance
+            async with self.browser_pool.acquire_browser() as (browser, context, page):
+                self.browser = browser
+                self.browser_context = context
+                self.page = page
+                
+                # Apply stealth to the page
+                await CDPStealthEngine.apply_page_stealth(self.page)
+                await self.stealth_engine.apply_ultimate_stealth(
+                    self.browser,
+                    self.browser_context,
+                    self.page,
+                    self.platform.value
+                )
+                
+                # Configure proxy if needed
+                if self.profile.proxy_config:
+                    logger.debug(f"Using proxy for scan: {self.profile.proxy_config}")
+                
+                return await self._perform_ticket_check(start_time)
+        else:
+            # Use traditional approach if pool is disabled
+            if not self.page:
+                await self._create_browser_context()
+            
+            return await self._perform_ticket_check(start_time)
+    
+    async def _perform_ticket_check(self, start_time: float) -> List[EnhancedTicketOpportunity]:
+        """Perform the actual ticket checking logic"""
         try:
             # Navigate if needed
             if self.page.url != self.url:
@@ -199,8 +276,9 @@ class UnifiedTicketingHandler:
             logger.error(f"Check failed: {e}")
             raise
     
+    @retry_on_network_error
     async def _navigate_with_stealth(self) -> None:
-        """Navigate to URL with human-like behavior"""
+        """Navigate to URL with human-like behavior and retry logic"""
         logger.info(f"Navigating to {self.url}")
         
         # Random pre-navigation delay
@@ -225,7 +303,7 @@ class UnifiedTicketingHandler:
                 await self.page.goto(self.url, wait_until='commit', timeout=30000)
             elif 'net::ERR_TUNNEL_CONNECTION_FAILED' in error_msg:
                 logger.error("Proxy connection failed - may need new proxy")
-                raise
+                raise ConnectionError("Proxy tunnel failed")
             else:
                 raise
     

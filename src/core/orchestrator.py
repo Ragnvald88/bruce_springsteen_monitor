@@ -73,6 +73,13 @@ class UltimateOrchestrator:
         self.start_time = datetime.now()
         self._performance_monitor_task: Optional[asyncio.Task] = None
         
+        # Enhanced monitoring stats
+        self.total_scans = 0
+        self.total_tickets_found = 0
+        self.total_errors = 0
+        self.last_status_log = time.time()
+        self.platform_stats = defaultdict(lambda: {'scans': 0, 'tickets': 0, 'errors': 0})
+        
         # Quantum metrics
         self.quantum_metrics = QuantumMetrics()
         
@@ -217,6 +224,14 @@ class UltimateOrchestrator:
     async def start(self) -> None:
         """Start orchestrator with quantum activation"""
         logger.critical("⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡")
+        logger.critical("🚀 All systems operational - Hunting for tickets!")
+        
+        # Log initial configuration
+        logger.info(f"Configuration:")
+        logger.info(f"  Targets: {len(self.monitors)}")
+        logger.info(f"  Mode: {self.mode.value}")
+        logger.info(f"  Proxies: {'Enabled' if hasattr(self, 'proxy_manager') and self.proxy_manager and self.proxy_manager.enabled else 'Disabled'}")
+        
         self.running = True
         
         try:
@@ -234,7 +249,8 @@ class UltimateOrchestrator:
             # Start quantum optimizer
             asyncio.create_task(self._quantum_optimization_loop())
             
-            logger.critical("🚀 All systems operational - Hunting for tickets!")
+            # Start enhanced status logger
+            asyncio.create_task(self._enhanced_status_logger())
             
             # Keep running
             while self.running:
@@ -260,9 +276,15 @@ class UltimateOrchestrator:
                 # Update quantum metrics
                 self.quantum_metrics.record_scan(monitor_id, check_time, len(opportunities))
                 
+                # Update stats
+                self.total_scans += 1
+                self.platform_stats[monitor.platform.value]['scans'] += 1
+                
                 # Process opportunities
                 if opportunities:
                     logger.critical(f"🎯 {len(opportunities)} opportunities detected!")
+                    self.total_tickets_found += len(opportunities)
+                    self.platform_stats[monitor.platform.value]['tickets'] += len(opportunities)
                     
                     for opportunity in opportunities:
                         # Queue for processing
@@ -298,6 +320,8 @@ class UltimateOrchestrator:
                 
             except Exception as e:
                 logger.error(f"Monitor loop error: {e}")
+                self.total_errors += 1
+                self.platform_stats[monitor.platform.value]['errors'] += 1
                 await asyncio.sleep(30)  # Error cooldown
     
     def _calculate_adaptive_interval(self, monitor: UnifiedTicketingHandler) -> float:
@@ -446,6 +470,81 @@ class UltimateOrchestrator:
             except Exception as e:
                 logger.error(f"Quantum optimization error: {e}")
                 await asyncio.sleep(300)
+    
+    async def _enhanced_status_logger(self) -> None:
+        """Log comprehensive monitoring status"""
+        while self.running:
+            try:
+                # Wait for 5 minutes
+                await asyncio.sleep(300)
+                
+                # Log enhanced status
+                self._log_enhanced_status()
+                
+            except Exception as e:
+                logger.error(f"Status logger error: {e}")
+    
+    def _log_enhanced_status(self) -> None:
+        """Log comprehensive monitoring status"""
+        uptime = (datetime.now() - self.start_time).total_seconds()
+        uptime_str = self._format_duration(uptime)
+        scan_rate = self.total_scans / (uptime / 60) if uptime > 0 else 0
+        
+        # Get current system metrics
+        cpu_percent = psutil.cpu_percent(interval=0.1)
+        memory = psutil.virtual_memory()
+        memory_mb = psutil.Process().memory_info().rss / 1024 / 1024
+        
+        # Build status box
+        status_lines = [
+            "╔══════════════════════════════════════════════╗",
+            "║           MONITORING STATUS                  ║",
+            "╠══════════════════════════════════════════════╣",
+            f"║ Uptime: {uptime_str:<36} ║",
+            f"║ Total Scans: {self.total_scans:<31} ║",
+            f"║ Scan Rate: {scan_rate:.1f}/min{' '*(31-len(f'{scan_rate:.1f}/min'))} ║",
+            f"║ Tickets Found: {self.total_tickets_found:<29} ║",
+            f"║ Errors: {self.total_errors:<36} ║",
+            f"║ Active Monitors: {len(self.monitor_tasks):<27} ║",
+            f"║ System Health: {self._calculate_health_score(cpu_percent, memory.percent):.1f}%{' '*(28-len(f'{self._calculate_health_score(cpu_percent, memory.percent):.1f}%'))} ║",
+            "╠══════════════════════════════════════════════╣",
+            f"║ CPU: {cpu_percent:.1f}%{' '*(39-len(f'{cpu_percent:.1f}%'))} ║",
+            f"║ Memory: {memory_mb:.1f} MB{' '*(33-len(f'{memory_mb:.1f} MB'))} ║",
+        ]
+        
+        # Platform breakdown
+        if self.platform_stats:
+            status_lines.extend([
+                "╠══════════════════════════════════════════════╣",
+                "║ Platform Stats:                              ║",
+            ])
+            for platform, stats in self.platform_stats.items():
+                line = f"  {platform}: {stats['scans']} scans, {stats['tickets']} tickets"
+                status_lines.append(f"║ {line:<44} ║")
+                
+        status_lines.append("╚══════════════════════════════════════════════╝")
+        
+        # Log the status box
+        for line in status_lines:
+            logger.info(line)
+            
+        # Log any recent tickets
+        if self.total_tickets_found > 0:
+            logger.info("\n🎫 Recent Tickets Found:")
+            logger.info(f"  Check opportunity processor for details")
+                    
+    def _format_duration(self, seconds: float) -> str:
+        """Format duration in human-readable format"""
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        secs = int(seconds % 60)
+        
+        if hours > 0:
+            return f"{hours}h {minutes}m {secs}s"
+        elif minutes > 0:
+            return f"{minutes}m {secs}s"
+        else:
+            return f"{secs}s"
     
     async def stop(self) -> None:
         """Gracefully stop orchestrator"""

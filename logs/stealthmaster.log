@@ -7478,3 +7478,584 @@ Call log:
 2025-06-08 09:41:59,982 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.36%
 2025-06-08 09:42:02,426 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.07%
 2025-06-08 09:42:05,987 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.260000000000005%
+2025-06-08 09:42:08,432 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.38%
+2025-06-08 09:42:08,435 | [31mERROR[0m | src.platforms.unified_handler | Check failed: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-08 09:42:08,436 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-08 09:42:11,990 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.029999999999994%
+2025-06-08 09:42:14,437 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.419999999999995%
+2025-06-08 09:42:17,992 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.79%
+2025-06-08 09:42:20,443 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.5%
+2025-06-08 09:42:23,995 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.48%
+2025-06-08 09:42:26,446 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.47%
+2025-06-08 09:42:30,000 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.98%
+2025-06-08 09:42:32,451 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.08%
+2025-06-08 09:42:36,007 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.04%
+2025-06-08 09:42:36,007 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:42:38,457 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.050000000000004%
+2025-06-08 09:42:39,971 | [31mERROR[0m | src.platforms.unified_handler | Check failed: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-08 09:42:39,972 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-08 09:42:42,011 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.06%
+2025-06-08 09:42:44,464 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.71%
+2025-06-08 09:42:48,017 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.83%
+2025-06-08 09:42:48,044 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:42:50,471 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.7%
+2025-06-08 09:42:50,498 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:42:54,051 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.61%
+2025-06-08 09:42:54,068 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:42:56,503 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.58%
+2025-06-08 09:42:56,523 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:00,075 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.120000000000005%
+2025-06-08 09:43:00,087 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:02,529 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.81999999999999%
+2025-06-08 09:43:02,554 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:06,092 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.209999999999994%
+2025-06-08 09:43:06,100 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:08,560 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.78%
+2025-06-08 09:43:08,578 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:10,865 | [31mERROR[0m | src.platforms.unified_handler | Check failed: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-08 09:43:10,867 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-08 09:43:12,104 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.010000000000005%
+2025-06-08 09:43:12,110 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:18,112 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.78%
+2025-06-08 09:43:18,152 | [32mINFO[0m | __main__ | 🛡️ StealthMaster AI logging initialized
+2025-06-08 09:43:18,152 | [33mWARNING[0m | __main__ | No authentication configured for ticketmaster
+2025-06-08 09:43:18,152 | [32mINFO[0m | __main__ | 🚀 Initializing Ultimate Orchestrator v2.0...
+2025-06-08 09:43:18,152 | [32mINFO[0m | src.core.orchestrator | 🚀 Ultimate Orchestrator v2.0 initialized in adaptive mode
+2025-06-08 09:43:18,152 | [32mINFO[0m | src.core.orchestrator | 🔧 Initializing Ultimate Orchestrator subsystems...
+2025-06-08 09:43:18,422 | [32mINFO[0m | src.core.proxy_manager | 🌐 Proxy Manager initialized with 1 primary proxies
+2025-06-08 09:43:18,422 | [32mINFO[0m | src.core.proxy_manager | 🔍 Validating all proxies...
+2025-06-08 09:43:18,422 | [33mWARNING[0m | src.core.proxy_manager | ❌ Proxy geo.iproyal.com:12321 failed validation
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.profiles.manager | Loaded 15 existing profiles
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.profiles.manager | ProfileManager initialized with 15 profiles
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.profiles.manager | ProfileManager initialized
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.core.managers | ConnectionPoolManager initialized with max_connections=20, max_keepalive=10
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.core.strike_force | ⚡ Enhanced Strike Force v2.0 initialized
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.core.orchestrator | Initializing 2 target monitors
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.core.orchestrator | Assigned proxy to profile Profile_dc9640a3
+2025-06-08 09:43:18,423 | [32mINFO[0m | src.platforms.unified_handler | 🚀 Initializing Unified Handler for fansale
+2025-06-08 09:43:19,116 | [32mINFO[0m | src.platforms.unified_handler | 🔐 Using proxy: http://Doqe2Sm9Yjl1MrZd:Xqw3HOkEcUw7Vv3i_country-it@geo.iproyal.com:12321
+2025-06-08 09:43:19,758 | [32mINFO[0m | src.stealth.cdp_stealth | ✅ CDP stealth measures applied
+2025-06-08 09:43:19,758 | [32mINFO[0m | src.stealth.stealth_engine | 🛡️ Initializing StealthMaster AI v2.0 for fansale
+2025-06-08 09:43:19,769 | [32mINFO[0m | src.stealth.stealth_engine | ✅ StealthMaster AI v2.0 fully activated - Undetectable mode engaged
+2025-06-08 09:43:19,769 | [32mINFO[0m | src.platforms.unified_handler | 🇮🇹 Setting Italian locale for Fansale
+2025-06-08 09:43:19,772 | [32mINFO[0m | src.platforms.unified_handler | ✅ Unified Handler ready for Bruce Springsteen Milano 2025
+2025-06-08 09:43:19,772 | [32mINFO[0m | src.core.orchestrator | ✅ Monitor initialized: Bruce Springsteen Milano 2025
+2025-06-08 09:43:19,772 | [32mINFO[0m | src.core.orchestrator | Assigned proxy to profile Profile_dc9640a3
+2025-06-08 09:43:19,772 | [32mINFO[0m | src.platforms.unified_handler | 🚀 Initializing Unified Handler for ticketmaster
+2025-06-08 09:43:19,772 | [32mINFO[0m | src.platforms.unified_handler | 🖥️ Using headful mode for Ticketmaster
+2025-06-08 09:43:19,964 | [32mINFO[0m | src.platforms.unified_handler | 🔐 Using proxy: http://Doqe2Sm9Yjl1MrZd:Xqw3HOkEcUw7Vv3i_country-it@geo.iproyal.com:12321
+2025-06-08 09:43:20,530 | [32mINFO[0m | src.stealth.cdp_stealth | ✅ CDP stealth measures applied
+2025-06-08 09:43:20,530 | [32mINFO[0m | src.stealth.stealth_engine | 🛡️ Initializing StealthMaster AI v2.0 for ticketmaster
+2025-06-08 09:43:20,542 | [32mINFO[0m | src.stealth.stealth_engine | ✅ StealthMaster AI v2.0 fully activated - Undetectable mode engaged
+2025-06-08 09:43:20,544 | [32mINFO[0m | src.platforms.unified_handler | ✅ Unified Handler ready for Bruce Springsteen San Siro 2025
+2025-06-08 09:43:20,544 | [32mINFO[0m | src.core.orchestrator | ✅ Monitor initialized: Bruce Springsteen San Siro 2025
+2025-06-08 09:43:20,544 | [32mINFO[0m | src.core.orchestrator | ✅ All subsystems initialized successfully
+2025-06-08 09:43:20,544 | [35mCRITICAL[0m | __main__ | ================================================================================
+2025-06-08 09:43:20,545 | [35mCRITICAL[0m | __main__ | 🎸 STARTING THE HUNT FOR BRUCE SPRINGSTEEN TICKETS! 🎸
+2025-06-08 09:43:20,545 | [35mCRITICAL[0m | __main__ | ================================================================================
+2025-06-08 09:43:20,545 | [35mCRITICAL[0m | src.core.orchestrator | ⚡ ULTIMATE ORCHESTRATOR V2.0 STARTING ⚡
+2025-06-08 09:43:20,545 | [35mCRITICAL[0m | src.core.orchestrator | 🚀 All systems operational - Hunting for tickets!
+2025-06-08 09:43:20,546 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-08 09:43:20,546 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+2025-06-08 09:43:21,548 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.78%
+2025-06-08 09:43:21,556 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:21,556 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:43:24,119 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.709999999999994%
+2025-06-08 09:43:24,141 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:25,253 | [33mWARNING[0m | src.platforms.unified_handler | Potential block detected: 403
+2025-06-08 09:43:27,558 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.550000000000004%
+2025-06-08 09:43:30,147 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.900000000000006%
+2025-06-08 09:43:30,154 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:33,565 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.36%
+2025-06-08 09:43:33,604 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:36,160 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.870000000000005%
+2025-06-08 09:43:36,167 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:36,167 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:43:39,607 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.089999999999996%
+2025-06-08 09:43:39,645 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:42,169 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.36%
+2025-06-08 09:43:42,176 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:45,649 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.73%
+2025-06-08 09:43:45,686 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:48,179 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.72%
+2025-06-08 09:43:48,190 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:51,690 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.309999999999995%
+2025-06-08 09:43:51,730 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:52,070 | [32mINFO[0m | src.platforms.unified_handler | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-08 09:43:54,195 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.85000000000001%
+2025-06-08 09:43:54,201 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:43:56,122 | [33mWARNING[0m | src.platforms.unified_handler | Potential block detected: 403
+2025-06-08 09:43:57,733 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.839999999999996%
+2025-06-08 09:43:57,783 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:00,207 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.089999999999996%
+2025-06-08 09:44:00,214 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:03,788 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.19%
+2025-06-08 09:44:06,220 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.540000000000006%
+2025-06-08 09:44:06,236 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:09,793 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.31%
+2025-06-08 09:44:09,833 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:12,239 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.50999999999999%
+2025-06-08 09:44:12,258 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:15,837 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.36%
+2025-06-08 09:44:18,263 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.46%
+2025-06-08 09:44:18,278 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:21,840 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.849999999999994%
+2025-06-08 09:44:21,885 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:21,886 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:44:24,283 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.440000000000005%
+2025-06-08 09:44:24,302 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:27,888 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.85999999999999%
+2025-06-08 09:44:30,307 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.269999999999996%
+2025-06-08 09:44:30,324 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:33,893 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.92%
+2025-06-08 09:44:33,950 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:36,329 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.72%
+2025-06-08 09:44:36,330 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:44:39,953 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.67%
+2025-06-08 09:44:39,991 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:42,336 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.60999999999999%
+2025-06-08 09:44:42,346 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:45,996 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.82000000000001%
+2025-06-08 09:44:46,034 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:48,353 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.239999999999995%
+2025-06-08 09:44:48,363 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:52,039 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.96%
+2025-06-08 09:44:52,073 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:54,370 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.2%
+2025-06-08 09:44:54,381 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:44:58,076 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.24%
+2025-06-08 09:44:58,135 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:00,385 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.32%
+2025-06-08 09:45:00,393 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:04,140 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.53999999999999%
+2025-06-08 09:45:04,189 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:06,399 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.01%
+2025-06-08 09:45:06,418 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:10,195 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.900000000000006%
+2025-06-08 09:45:10,239 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:12,422 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.31%
+2025-06-08 09:45:12,438 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:16,245 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.0%
+2025-06-08 09:45:16,280 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:18,440 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.91%
+2025-06-08 09:45:18,448 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:22,285 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.56%
+2025-06-08 09:45:22,342 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:22,343 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:45:24,453 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.89999999999999%
+2025-06-08 09:45:24,472 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:28,347 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.00999999999999%
+2025-06-08 09:45:28,398 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:30,479 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.79%
+2025-06-08 09:45:30,496 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:34,403 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.31999999999999%
+2025-06-08 09:45:34,435 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:36,502 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.370000000000005%
+2025-06-08 09:45:36,509 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:36,509 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:45:40,438 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.71%
+2025-06-08 09:45:40,488 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:42,512 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.61%
+2025-06-08 09:45:46,490 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.44%
+2025-06-08 09:45:46,518 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:48,518 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.16%
+2025-06-08 09:45:48,535 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:52,525 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.379999999999995%
+2025-06-08 09:45:52,558 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:54,541 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.96%
+2025-06-08 09:45:54,549 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:45:58,561 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.769999999999996%
+2025-06-08 09:46:00,555 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.760000000000005%
+2025-06-08 09:46:00,561 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:04,567 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.47%
+2025-06-08 09:46:06,567 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.58%
+2025-06-08 09:46:10,571 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.06%
+2025-06-08 09:46:10,608 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:12,570 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.01%
+2025-06-08 09:46:12,585 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:16,613 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.959999999999994%
+2025-06-08 09:46:18,587 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.37%
+2025-06-08 09:46:22,618 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.379999999999995%
+2025-06-08 09:46:24,592 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.14%
+2025-06-08 09:46:24,605 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:28,624 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.0%
+2025-06-08 09:46:30,611 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.269999999999996%
+2025-06-08 09:46:30,629 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:34,630 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.88%
+2025-06-08 09:46:34,659 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:36,634 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.91%
+2025-06-08 09:46:36,640 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:36,640 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:46:40,660 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.72%
+2025-06-08 09:46:42,646 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.96%
+2025-06-08 09:46:46,666 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.33%
+2025-06-08 09:46:46,726 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:46:48,651 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.18%
+2025-06-08 09:46:52,732 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.379999999999995%
+2025-06-08 09:46:54,658 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.010000000000005%
+2025-06-08 09:46:58,735 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.3%
+2025-06-08 09:46:58,768 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:00,662 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.4%
+2025-06-08 09:47:00,677 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:04,773 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.56%
+2025-06-08 09:47:06,684 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.3%
+2025-06-08 09:47:06,701 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:10,774 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.529999999999994%
+2025-06-08 09:47:10,811 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:12,707 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.41%
+2025-06-08 09:47:12,714 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:16,817 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.239999999999995%
+2025-06-08 09:47:16,851 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:18,720 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.17999999999999%
+2025-06-08 09:47:18,736 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:22,856 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.60999999999999%
+2025-06-08 09:47:22,889 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:24,742 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.519999999999996%
+2025-06-08 09:47:24,751 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:28,895 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.5%
+2025-06-08 09:47:28,959 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:30,757 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.31%
+2025-06-08 09:47:30,774 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:34,962 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.14999999999999%
+2025-06-08 09:47:35,009 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:36,779 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.15%
+2025-06-08 09:47:36,785 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:36,785 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:47:41,015 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.17%
+2025-06-08 09:47:41,069 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:42,791 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.96%
+2025-06-08 09:47:42,808 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:47,074 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.42%
+2025-06-08 09:47:48,811 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.84%
+2025-06-08 09:47:48,820 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:47:53,080 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.6%
+2025-06-08 09:47:54,825 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.769999999999996%
+2025-06-08 09:47:59,086 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.269999999999996%
+2025-06-08 09:48:00,829 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.85999999999999%
+2025-06-08 09:48:05,090 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.11%
+2025-06-08 09:48:06,836 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.050000000000004%
+2025-06-08 09:48:06,849 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:48:11,094 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.870000000000005%
+2025-06-08 09:48:12,853 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.33%
+2025-06-08 09:48:17,099 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.089999999999996%
+2025-06-08 09:48:18,859 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.699999999999996%
+2025-06-08 09:48:23,106 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.28%
+2025-06-08 09:48:24,865 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.46%
+2025-06-08 09:48:29,112 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.160000000000004%
+2025-06-08 09:48:30,872 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.910000000000004%
+2025-06-08 09:48:35,114 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.43%
+2025-06-08 09:48:36,877 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.339999999999996%
+2025-06-08 09:48:36,878 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:48:41,119 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.35000000000001%
+2025-06-08 09:48:41,157 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:48:42,881 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.39999999999999%
+2025-06-08 09:48:47,164 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.2%
+2025-06-08 09:48:48,888 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.55%
+2025-06-08 09:48:53,169 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.769999999999996%
+2025-06-08 09:48:54,892 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.14%
+2025-06-08 09:48:59,175 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.400000000000006%
+2025-06-08 09:49:00,896 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.82%
+2025-06-08 09:49:05,178 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.04%
+2025-06-08 09:49:06,902 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.13999999999999%
+2025-06-08 09:49:09,068 | [32mINFO[0m | src.platforms.unified_handler | Performance: 10 scans, avg 2.21s, 0 opportunities found
+2025-06-08 09:49:11,184 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.559999999999995%
+2025-06-08 09:49:12,908 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.06999999999999%
+2025-06-08 09:49:17,185 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.26%
+2025-06-08 09:49:18,913 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.36%
+2025-06-08 09:49:23,189 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.17999999999999%
+2025-06-08 09:49:24,917 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.08%
+2025-06-08 09:49:29,195 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.98%
+2025-06-08 09:49:30,922 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.650000000000006%
+2025-06-08 09:49:35,199 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.45%
+2025-06-08 09:49:36,928 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.21%
+2025-06-08 09:49:36,929 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:49:41,206 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.78%
+2025-06-08 09:49:42,930 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.769999999999996%
+2025-06-08 09:49:47,211 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.129999999999995%
+2025-06-08 09:49:48,934 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.059999999999995%
+2025-06-08 09:49:48,949 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:49:53,218 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.63999999999999%
+2025-06-08 09:49:54,953 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.37%
+2025-06-08 09:49:59,224 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.489999999999995%
+2025-06-08 09:50:00,956 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.169999999999995%
+2025-06-08 09:50:05,229 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.24%
+2025-06-08 09:50:06,962 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.540000000000006%
+2025-06-08 09:50:11,231 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.31%
+2025-06-08 09:50:12,968 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.89%
+2025-06-08 09:50:17,235 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.45%
+2025-06-08 09:50:18,969 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.07%
+2025-06-08 09:50:20,698 | [32mINFO[0m | src.platforms.unified_handler | Performance: 10 scans, avg 0.23s, 0 opportunities found
+2025-06-08 09:50:23,240 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.46%
+2025-06-08 09:50:23,290 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:50:24,975 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.15%
+2025-06-08 09:50:24,981 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:50:29,296 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.57%
+2025-06-08 09:50:29,330 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:50:30,985 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.779999999999994%
+2025-06-08 09:50:35,336 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.44%
+2025-06-08 09:50:35,377 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:50:36,991 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.22%
+2025-06-08 09:50:36,992 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:50:41,382 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.169999999999995%
+2025-06-08 09:50:42,996 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.230000000000004%
+2025-06-08 09:50:47,386 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.68%
+2025-06-08 09:50:49,003 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.870000000000005%
+2025-06-08 09:50:53,391 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.89%
+2025-06-08 09:50:55,010 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.730000000000004%
+2025-06-08 09:51:01,020 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.300000000000004%
+2025-06-08 09:51:07,027 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.73%
+2025-06-08 09:51:13,036 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.7%
+2025-06-08 09:51:19,039 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.63999999999999%
+2025-06-08 09:51:25,046 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.7%
+2025-06-08 09:51:31,053 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.61%
+2025-06-08 09:51:37,057 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.61%
+2025-06-08 09:51:37,057 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:51:43,063 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.879999999999995%
+2025-06-08 09:51:49,068 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.39%
+2025-06-08 09:51:55,074 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.239999999999995%
+2025-06-08 09:52:01,078 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.49999999999999%
+2025-06-08 09:52:07,083 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.46%
+2025-06-08 09:52:13,088 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.79%
+2025-06-08 09:52:19,096 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.95%
+2025-06-08 09:52:19,122 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:52:25,125 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.59%
+2025-06-08 09:52:31,131 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.74999999999999%
+2025-06-08 09:52:37,138 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.34%
+2025-06-08 09:52:37,139 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:52:43,145 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.209999999999994%
+2025-06-08 09:52:43,158 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:52:49,162 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.2%
+2025-06-08 09:52:55,169 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.61%
+2025-06-08 09:53:01,177 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.35%
+2025-06-08 09:53:07,181 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.11999999999999%
+2025-06-08 09:53:13,189 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 34.72%
+2025-06-08 09:53:13,197 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:53:19,203 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.8%
+2025-06-08 09:53:25,210 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.239999999999995%
+2025-06-08 09:53:25,216 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:53:31,222 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.779999999999994%
+2025-06-08 09:53:37,228 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.07%
+2025-06-08 09:53:37,242 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:53:37,243 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:53:43,248 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 33.519999999999996%
+2025-06-08 09:53:43,259 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:53:49,264 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.349999999999994%
+2025-06-08 09:53:49,281 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:53:55,288 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.6%
+2025-06-08 09:53:55,306 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:54:01,312 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.26%
+2025-06-08 09:54:01,328 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:54:07,335 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.18%
+2025-06-08 09:54:13,342 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.93%
+2025-06-08 09:54:13,360 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:54:19,367 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.79%
+2025-06-08 09:54:19,384 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:54:25,390 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.09%
+2025-06-08 09:54:25,396 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:54:31,402 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.839999999999996%
+2025-06-08 09:54:37,406 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.94%
+2025-06-08 09:54:37,406 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:54:43,410 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.57%
+2025-06-08 09:54:49,416 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.519999999999996%
+2025-06-08 09:54:55,420 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.86%
+2025-06-08 09:54:55,438 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:55:01,443 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.35%
+2025-06-08 09:55:07,446 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.339999999999996%
+2025-06-08 09:55:13,452 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.76%
+2025-06-08 09:55:19,453 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.269999999999996%
+2025-06-08 09:55:25,459 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.379999999999995%
+2025-06-08 09:55:31,463 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.97%
+2025-06-08 09:55:37,471 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.78999999999999%
+2025-06-08 09:55:37,471 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:55:43,473 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.910000000000004%
+2025-06-08 09:55:49,479 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.14%
+2025-06-08 09:55:55,485 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.50999999999999%
+2025-06-08 09:56:01,491 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.400000000000006%
+2025-06-08 09:56:07,496 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.47%
+2025-06-08 09:56:13,502 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.41%
+2025-06-08 09:56:19,509 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.54999999999999%
+2025-06-08 09:56:25,515 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.13999999999999%
+2025-06-08 09:56:31,519 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.13999999999999%
+2025-06-08 09:56:37,525 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 35.2%
+2025-06-08 09:56:37,525 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:56:43,531 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.33%
+2025-06-08 09:56:49,533 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.620000000000005%
+2025-06-08 09:56:55,538 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.15%
+2025-06-08 09:57:01,540 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.42%
+2025-06-08 09:57:07,545 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.71%
+2025-06-08 09:57:13,552 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.49999999999999%
+2025-06-08 09:57:19,559 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.01%
+2025-06-08 09:57:25,565 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.269999999999996%
+2025-06-08 09:57:31,570 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.5%
+2025-06-08 09:57:37,574 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.07%
+2025-06-08 09:57:37,574 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:57:43,580 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.68%
+2025-06-08 09:57:49,586 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.94%
+2025-06-08 09:57:55,594 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.47%
+2025-06-08 09:58:01,597 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.06999999999999%
+2025-06-08 09:58:07,602 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.900000000000006%
+2025-06-08 09:58:13,609 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.3%
+2025-06-08 09:58:19,612 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.849999999999994%
+2025-06-08 09:58:25,615 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.69%
+2025-06-08 09:58:31,621 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.75%
+2025-06-08 09:58:37,625 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.78999999999999%
+2025-06-08 09:58:37,626 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:58:43,631 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.589999999999996%
+2025-06-08 09:58:49,645 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 23.200000000000003%
+2025-06-08 09:58:49,723 | [32mINFO[0m | src.core.orchestrator | Performed garbage collection
+2025-06-08 09:58:55,729 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 36.400000000000006%
+2025-06-08 09:59:01,736 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.58%
+2025-06-08 09:59:07,740 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.08999999999999%
+2025-06-08 09:59:13,745 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.669999999999995%
+2025-06-08 09:59:19,750 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.6%
+2025-06-08 09:59:25,754 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.209999999999994%
+2025-06-08 09:59:31,760 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.8%
+2025-06-08 09:59:37,766 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.989999999999995%
+2025-06-08 09:59:37,767 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 09:59:43,773 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.97%
+2025-06-08 09:59:49,778 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.53%
+2025-06-08 09:59:55,784 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.71%
+2025-06-08 10:00:01,791 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.94999999999999%
+2025-06-08 10:00:07,799 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.01%
+2025-06-08 10:00:13,803 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.34%
+2025-06-08 10:00:19,805 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.12%
+2025-06-08 10:00:25,812 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.29999999999999%
+2025-06-08 10:00:31,819 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.57%
+2025-06-08 10:00:37,824 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 38.78%
+2025-06-08 10:00:37,826 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:00:43,831 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.95%
+2025-06-08 10:00:49,838 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.31999999999999%
+2025-06-08 10:00:55,846 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.059999999999995%
+2025-06-08 10:01:01,853 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.09%
+2025-06-08 10:01:07,857 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.14%
+2025-06-08 10:01:13,862 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.8%
+2025-06-08 10:01:19,866 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.27%
+2025-06-08 10:01:25,871 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.89%
+2025-06-08 10:01:31,877 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.080000000000005%
+2025-06-08 10:01:37,886 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.08%
+2025-06-08 10:01:37,887 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:01:43,893 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.67%
+2025-06-08 10:01:49,899 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.3%
+2025-06-08 10:01:55,906 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.769999999999996%
+2025-06-08 10:02:01,909 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.6%
+2025-06-08 10:02:07,918 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.33%
+2025-06-08 10:02:13,925 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.79%
+2025-06-08 10:02:19,932 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.019999999999996%
+2025-06-08 10:02:25,939 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.42%
+2025-06-08 10:02:31,946 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.14999999999999%
+2025-06-08 10:02:37,948 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.349999999999994%
+2025-06-08 10:02:37,949 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:02:43,955 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.540000000000006%
+2025-06-08 10:02:49,962 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.37%
+2025-06-08 10:02:55,967 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.099999999999994%
+2025-06-08 10:03:01,970 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.489999999999995%
+2025-06-08 10:03:07,976 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.209999999999994%
+2025-06-08 10:03:13,980 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.35000000000001%
+2025-06-08 10:03:19,986 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.67%
+2025-06-08 10:03:25,992 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.269999999999996%
+2025-06-08 10:03:31,998 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.519999999999996%
+2025-06-08 10:03:38,006 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.44%
+2025-06-08 10:03:38,007 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:03:44,012 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.61999999999999%
+2025-06-08 10:03:50,018 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.01%
+2025-06-08 10:03:56,020 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.92%
+2025-06-08 10:04:02,026 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.09%
+2025-06-08 10:04:08,029 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.97%
+2025-06-08 10:04:14,035 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.76%
+2025-06-08 10:04:20,042 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.36%
+2025-06-08 10:04:26,050 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.55%
+2025-06-08 10:04:32,057 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.71999999999999%
+2025-06-08 10:04:38,062 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.510000000000005%
+2025-06-08 10:04:38,062 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:04:44,065 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.040000000000006%
+2025-06-08 10:04:50,072 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.440000000000005%
+2025-06-08 10:04:56,077 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.53%
+2025-06-08 10:05:02,080 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.010000000000005%
+2025-06-08 10:05:08,087 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.95%
+2025-06-08 10:05:14,094 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.47%
+2025-06-08 10:05:20,100 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.8%
+2025-06-08 10:05:26,106 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.18%
+2025-06-08 10:05:32,111 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.650000000000006%
+2025-06-08 10:05:38,118 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.66%
+2025-06-08 10:05:38,119 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:05:44,121 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 37.97%
+2025-06-08 10:05:50,127 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.12%
+2025-06-08 10:05:56,132 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 41.75%
+2025-06-08 10:06:02,139 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.05%
+2025-06-08 10:06:08,145 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.24%
+2025-06-08 10:06:14,148 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 42.08%
+2025-06-08 10:06:20,154 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.05999999999999%
+2025-06-08 10:06:26,160 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.3%
+2025-06-08 10:06:32,164 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.68%
+2025-06-08 10:06:38,168 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 44.059999999999995%
+2025-06-08 10:06:38,169 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:06:44,173 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.03999999999999%
+2025-06-08 10:06:50,180 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.61%
+2025-06-08 10:06:56,187 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 45.3%
+2025-06-08 10:07:02,193 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 39.78%
+2025-06-08 10:07:08,200 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.11%
+2025-06-08 10:07:14,205 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 46.13999999999999%
+2025-06-08 10:07:20,211 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.760000000000005%
+2025-06-08 10:07:26,214 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.49%
+2025-06-08 10:07:32,218 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.88%
+2025-06-08 10:07:38,223 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 52.1%
+2025-06-08 10:07:38,224 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:07:44,229 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 52.019999999999996%
+2025-06-08 10:07:50,233 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 51.699999999999996%
+2025-06-08 10:07:56,240 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 52.64%
+2025-06-08 10:08:02,244 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 46.56%
+2025-06-08 10:08:08,250 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 51.35%
+2025-06-08 10:08:14,256 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 51.28%
+2025-06-08 10:08:20,261 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.730000000000004%
+2025-06-08 10:08:26,276 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 51.8%
+2025-06-08 10:08:32,288 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.739999999999995%
+2025-06-08 10:08:38,299 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 52.01%
+2025-06-08 10:08:38,300 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:08:44,308 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.66%
+2025-06-08 10:08:50,316 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.33%
+2025-06-08 10:08:56,324 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.94%
+2025-06-08 10:09:02,328 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.94%
+2025-06-08 10:09:08,334 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.34%
+2025-06-08 10:09:14,340 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.31%
+2025-06-08 10:09:20,347 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.54%
+2025-06-08 10:09:26,353 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.22%
+2025-06-08 10:09:32,359 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.47999999999999%
+2025-06-08 10:09:38,366 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.269999999999996%
+2025-06-08 10:09:38,366 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:09:44,370 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.98%
+2025-06-08 10:09:50,377 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.23%
+2025-06-08 10:09:56,384 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.53%
+2025-06-08 10:10:02,391 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.7%
+2025-06-08 10:10:08,397 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.71999999999999%
+2025-06-08 10:10:14,404 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 47.489999999999995%
+2025-06-08 10:10:20,411 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.3%
+2025-06-08 10:10:26,416 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.449999999999996%
+2025-06-08 10:10:32,420 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.849999999999994%
+2025-06-08 10:10:38,425 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.94999999999999%
+2025-06-08 10:10:38,426 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:10:44,429 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 46.769999999999996%
+2025-06-08 10:10:50,433 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 46.120000000000005%
+2025-06-08 10:10:56,441 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.95%
+2025-06-08 10:11:02,443 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 47.71%
+2025-06-08 10:11:08,448 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 40.85999999999999%
+2025-06-08 10:11:14,453 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.459999999999994%
+2025-06-08 10:11:20,455 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 43.41%
+2025-06-08 10:11:26,461 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 47.72999999999999%
+2025-06-08 10:11:32,468 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.660000000000004%
+2025-06-08 10:11:38,475 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 50.129999999999995%
+2025-06-08 10:11:38,477 | [32mINFO[0m | src.core.orchestrator | Quantum optimizer: Entering low-power mode
+2025-06-08 10:11:44,479 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.28%
+2025-06-08 10:11:50,484 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 46.86999999999999%
+2025-06-08 10:11:56,489 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.78%
+2025-06-08 10:12:02,494 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 47.730000000000004%
+2025-06-08 10:12:08,500 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 48.58%
+2025-06-08 10:12:14,505 | [33mWARNING[0m | src.core.orchestrator | System health degraded: 49.24999999999999%

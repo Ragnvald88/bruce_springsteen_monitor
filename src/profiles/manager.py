@@ -1,776 +1,350 @@
-# src/profiles/manager.py
-"""Main profile manager implementation."""
-import asyncio
-import copy
-import logging
+# src/profiles/manager.py - Simplified but Powerful Version
+"""
+StealthMaster AI Profile Manager v2.0
+Simplified for immediate use while maintaining core functionality
+"""
+
+import json
 import random
-import uuid
-from collections import defaultdict
-from datetime import datetime, timedelta
+import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple, Any, Callable
+from typing import Dict, List, Optional, Any
+from datetime import datetime
+from dataclasses import asdict
 
-import numpy as np
-
-from .consolidated_models import Platform, ProfileQuality, BrowserProfile, ProxyConfig
-from .persistence import ProfilePersistence
-from .scoring import ProfileScorer
-from .session_manager import SessionManager
-from ..core.advanced_profile_system import (
-    DynamicProfile,
-    MutationStrategy,
-    ProfileState,
-    DetectionEvent
-)
+from .models import BrowserProfile, ProfileQuality, Platform
+from .utils import generate_random_profile
 
 logger = logging.getLogger(__name__)
 
 
 class ProfileManager:
-    """Advanced profile manager with session and platform management."""
+    """Simplified but effective profile manager for StealthMaster AI"""
     
-    def __init__(
-        self,
-        config: Optional[Dict[str, Any]] = None,
-        base_profile_template: Optional[Dict] = None
-    ):
-        self.config = config or self._get_default_config()
-        self.dynamic_profiles: List[DynamicProfile] = []
-        self.static_profiles: Dict[str, BrowserProfile] = {}
-        self.mutation_strategy = MutationStrategy()
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or {}
+        self.profiles: Dict[str, BrowserProfile] = {}
+        self.profile_stats: Dict[str, Dict] = {}
         
-        # Initialize components
-        self.scorer = ProfileScorer(self.config.get('scoring_config', {}))
-        self.session_manager = SessionManager(self.config.get('session_backup_dir', 'session_backups'))
-        self.persistence = ProfilePersistence(
-            self.config.get('persistence_filepath', 'storage/browser_profiles.yaml'),
-            enable_encryption=self.config.get('enable_encrypted_storage', False)
-        )
+        # Storage location
+        self.storage_path = Path("data/profiles/profiles.json")
+        self.storage_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Cooldown management
-        self.profile_cooldowns: Dict[str, datetime] = {}
+        # Load existing profiles or create new ones
+        self._load_or_create_profiles()
         
-        # Platform session pools
-        self.platform_pools: Dict[str, List[str]] = defaultdict(list)
-        
-        # Base template
-        self.base_profile_template = base_profile_template or self._get_default_base_template()
-        
-        # Task management
-        self._evolution_task: Optional[asyncio.Task] = None
-        self._session_validation_task: Optional[asyncio.Task] = None
-        self._shutdown_event = asyncio.Event()
-        self._initialized = False
-        
-        # Locks
-        self._profiles_lock = asyncio.Lock()
-        self._cooldown_lock = asyncio.Lock()
-        
-        # TLS fingerprint rotation
-        self._tls_fingerprints = self._load_tls_fingerprints()
-        self._current_tls_index = 0
-        
-        logger.info(
-            f"ProfileManager initialized. Target: {self.config.get('num_target_profiles', 10)} profiles, "
-            f"{self.config.get('profiles_per_platform', 3)} per platform"
-        )
+        logger.info(f"ProfileManager initialized with {len(self.profiles)} profiles")
     
-    def _get_default_config(self) -> Dict[str, Any]:
-        """Get default configuration for ProfileManager"""
-        return {
-            'num_target_profiles': 10,
-            'profiles_per_platform': 3,
-            'scoring_config': {},
-            'session_backup_dir': 'session_backups',
-            'persistence_filepath': 'storage/browser_profiles.yaml',
-            'enable_encrypted_storage': False,
-            'cooldowns_seconds': {
-                'task_selection': (10, 0.2),
-                'success': (30, 0.1),
-                'hard_block': (3600, 0.3),
-                'captcha_challenge': (600, 0.2)
-            },
-            'enable_behavioral_warmup': True,
-            'warmup_sites': ['https://google.it', 'https://repubblica.it'],
-            'max_session_age_hours': 24,
-            'evolution_interval_seconds': 1800,
-            'evolution_interval_jitter_factor': 0.3,
-            'session_validation_interval_seconds': 3600,
-            'compromise_threshold_pct': 0.3,
-            'enable_session_preloading': True,
-            'enable_tls_rotation': True
-        }
-    
-    async def initialize(self, lazy_load: bool = True):
-        """Initialize the profile manager with optional lazy loading."""
-        if self._initialized:
-            return
-        
-        if lazy_load:
-            # Fast initialization - defer profile pool creation
-            logger.info("ProfileManager fast initialization (lazy mode)")
-            self._initialized = True
-            # Start background tasks immediately for responsiveness
-            await self.start_background_tasks()
-            # Initialize profile pool in background
-            asyncio.create_task(self._lazy_initialize_profile_pool())
+    def _load_or_create_profiles(self) -> None:
+        """Load existing profiles or create new ones"""
+        if self.storage_path.exists():
+            try:
+                self._load_profiles()
+                logger.info(f"Loaded {len(self.profiles)} existing profiles")
+            except Exception as e:
+                logger.error(f"Failed to load profiles: {e}")
+                self._create_initial_profiles()
         else:
-            # Full initialization (original behavior)
-            await self._initialize_profile_pool()
-            await self.start_background_tasks()
-            self._initialized = True
-            logger.info("ProfileManager fully initialized")
+            self._create_initial_profiles()
     
-    async def _lazy_initialize_profile_pool(self):
-        """Initialize profile pool in background without blocking startup."""
-        try:
-            logger.info("Starting background profile pool initialization...")
-            await self._initialize_profile_pool()
-            logger.info("Background profile pool initialization complete")
-        except Exception as e:
-            logger.error(f"Background profile pool initialization failed: {e}")
-            # Fallback to minimal profile creation
-            await self._create_minimal_profile_pool()
-    
-    async def _create_minimal_profile_pool(self):
-        """Create a minimal profile pool for immediate functionality."""
-        try:
-            from .consolidated_models import Platform
-            platforms = [Platform.TICKETMASTER, Platform.FANSALE, Platform.VIVATICKET]
+    def _create_initial_profiles(self) -> None:
+        """Create initial set of profiles"""
+        num_profiles = self.config.get('num_target_profiles', 15)
+        
+        logger.info(f"Creating {num_profiles} initial profiles...")
+        
+        for i in range(num_profiles):
+            # Create profile with quality distribution
+            if i < 3:
+                quality = ProfileQuality.PREMIUM
+            elif i < 8:
+                quality = ProfileQuality.HIGH
+            elif i < 12:
+                quality = ProfileQuality.MEDIUM
+            else:
+                quality = ProfileQuality.LOW
             
-            # Create just one profile per platform for immediate functionality
-            for platform in platforms:
-                profile_id = f"{platform.value}_{random.randint(10000000, 99999999):08x}"
-                
-                # Create a basic dynamic profile
-                from ..core.advanced_profile_system import DynamicProfile, ProfileState
-                profile = DynamicProfile(
-                    profile_id=profile_id,
-                    platform=platform.value,
-                    state=ProfileState.PRISTINE,
-                    base_template=self._get_default_base_template()
-                )
-                
-                self.dynamic_profiles.append(profile)
-                
-                # Add to platform pools
-                if platform.value not in self.platform_pools:
-                    self.platform_pools[platform.value] = []
-                self.platform_pools[platform.value].append(profile_id)
-            
-            logger.info(f"Created minimal profile pool: {len(self.dynamic_profiles)} profiles")
-            
-        except Exception as e:
-            logger.error(f"Failed to create minimal profile pool: {e}")
+            profile = self._create_profile(quality)
+            self.profiles[profile.profile_id] = profile
+        
+        self._save_profiles()
     
-    async def shutdown(self):
-        """Shutdown the profile manager."""
-        await self.stop_background_tasks()
-        logger.info("ProfileManager shutdown complete")
-    
-    def _get_default_base_template(self) -> Dict[str, Any]:
-        """Get Italian-focused default template."""
-        return {
-            "os_name": "Windows",
-            "browser_name": "Chrome",
-            "device_class": "mid_range_desktop",
-            "country": "IT",
-            "language": "it-IT"
-        }
-    
-    def _load_tls_fingerprints(self) -> List[Dict[str, Any]]:
-        """Load realistic TLS fingerprints."""
-        # In production, load from a comprehensive database
-        return [
-            {
-                "ja3": "771,4865-4867-4866-49195-49199-52393-52392-49196-49200-49162-49161-49171-49172-51-57-47-53-10,0-23-65281-10-11-35-16-5-51-43-13-45-28-21,29-23-24-25-256-257,0",
-                "h2_settings": "1:65536,2:0,3:1000,4:6291456,6:262144",
-                "h2_window_update": 15663105,
-                "h2_priority": {"stream_id": 3, "exclusive": 1, "parent_stream_id": 0, "weight": 201}
-            },
-            {
-                "ja3": "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-21,29-23-24,0",
-                "h2_settings": "1:65536,3:1000,4:6291456,6:262144",
-                "h2_window_update": 15728640,
-                "h2_priority": {"stream_id": 3, "exclusive": 1, "parent_stream_id": 0, "weight": 220}
+    def _create_profile(self, quality: ProfileQuality) -> BrowserProfile:
+        """Create a single profile with specified quality"""
+        # Use your existing profile generation
+        profile_data = generate_random_profile()
+        
+        # Enhance based on quality
+        if quality == ProfileQuality.PREMIUM:
+            profile_data['user_agent'] = self._get_premium_user_agent()
+            profile_data['viewport_width'] = random.choice([1920, 2560])
+            profile_data['viewport_height'] = random.choice([1080, 1440])
+        
+        profile = BrowserProfile(**profile_data)
+        profile.quality = quality
+        
+        # Initialize platform stats
+        for platform in ['fansale', 'ticketmaster', 'vivaticket']:
+            profile.platform_stats[platform] = {
+                'attempts': 0,
+                'successes': 0,
+                'failures': 0,
+                'last_success': None,
+                'last_failure': None,
+                'success_rate': 0.0
             }
+        
+        return profile
+    
+    def _get_premium_user_agent(self) -> str:
+        """Get a premium user agent string"""
+        agents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
         ]
+        return random.choice(agents)
     
-    async def _initialize_profile_pool(self):
-        """Initialize profile pool with platform distribution."""
-        async with self._profiles_lock:
-            # Try loading from disk first
-            loaded = await self.persistence.load_profiles(
-                self.dynamic_profiles,
-                self.static_profiles,
-                self.mutation_strategy
+    async def get_healthy_profiles(
+        self, 
+        platform: str = None,
+        min_quality_tier: int = 1,
+        limit: int = None
+    ) -> List[BrowserProfile]:
+        """Get healthy profiles for use"""
+        healthy = []
+        
+        for profile in self.profiles.values():
+            # Check quality tier
+            if profile.quality.tier < min_quality_tier:
+                continue
+            
+            # Check if not compromised
+            if hasattr(profile, 'state') and profile.state == 'compromised':
+                continue
+            
+            # Check platform performance if specified
+            if platform:
+                stats = profile.platform_stats.get(platform, {})
+                if stats.get('failures', 0) > stats.get('successes', 0) * 2:
+                    continue  # Too many failures
+            
+            healthy.append(profile)
+        
+        # Sort by success rate
+        if platform:
+            healthy.sort(
+                key=lambda p: p.platform_stats.get(platform, {}).get('success_rate', 0),
+                reverse=True
             )
-            
-            if loaded:
-                logger.info(f"Loaded {len(self.dynamic_profiles)} profiles from disk")
-                # Rebuild platform pools
-                for dp in self.dynamic_profiles:
-                    sp = self.static_profiles.get(dp.id)
-                    if sp:
-                        for platform in Platform:
-                            if platform.value in sp.sessions:
-                                self.platform_pools[platform.value].append(dp.id)
-                                if sp.sessions[platform.value].get('is_valid'):
-                                    self.session_manager.session_ready_profiles[platform.value].add(dp.id)
-            
-            # Create new profiles if needed
-            profiles_needed = self.config.get('num_target_profiles', 10) - len(self.dynamic_profiles)
-            
-            if profiles_needed > 0:
-                logger.info(f"Creating {profiles_needed} new profiles")
-                
-                for i in range(profiles_needed):
-                    platform_index = i % len(Platform)
-                    platform = list(Platform)[platform_index]
-                    
-                    profile = await self._create_platform_optimized_profile(platform)
-                    if profile:
-                        self.dynamic_profiles.append(profile['dynamic'])
-                        self.static_profiles[profile['dynamic'].id] = profile['static']
-                        self.platform_pools[platform.value].append(profile['dynamic'].id)
-            
-            logger.info(f"Profile pool initialized. Distribution: {dict(self.platform_pools)}")
-    
-    async def get_profile_for_platform(
-        self,
-        platform: Platform,
-        require_session: bool = True
-    ) -> Optional[BrowserProfile]:
-        """Get best profile for specific platform."""
-        async with self._profiles_lock:
-            async with self._cooldown_lock:
-                now = datetime.utcnow()
-                candidates = []
-                
-                # Get profiles assigned to this platform
-                platform_profile_ids = self.platform_pools.get(platform.value, [])
-                
-                for profile_id in platform_profile_ids:
-                    # Check if on cooldown
-                    if profile_id in self.profile_cooldowns:
-                        if now < self.profile_cooldowns[profile_id]:
-                            continue
-                    
-                    dynamic_profile = next((p for p in self.dynamic_profiles if p.id == profile_id), None)
-                    static_profile = self.static_profiles.get(profile_id)
-                    
-                    if not dynamic_profile or not static_profile:
-                        continue
-                    
-                    # Skip compromised/evolving profiles
-                    if dynamic_profile.state in [ProfileState.COMPROMISED, ProfileState.EVOLVING]:
-                        continue
-                    
-                    # Calculate score
-                    score = self.scorer.calculate_score(
-                        dynamic_profile, static_profile, platform, require_session
-                    )
-                    
-                    if score > 0:
-                        candidates.append((score, static_profile))
-                
-                if not candidates:
-                    logger.warning(f"No suitable profiles for {platform.value}")
-                    # Try creating a new profile
-                    new_profile = await self._create_platform_optimized_profile(platform)
-                    if new_profile:
-                        self.dynamic_profiles.append(new_profile['dynamic'])
-                        self.static_profiles[new_profile['dynamic'].id] = new_profile['static']
-                        self.platform_pools[platform.value].append(new_profile['dynamic'].id)
-                        return new_profile['static']
-                    return None
-                
-                # Select best profile
-                candidates.sort(key=lambda x: x[0], reverse=True)
-                selected_profile = candidates[0][1]
-                
-                # Apply cooldown
-                cooldown_base, variance = self.config.get('cooldowns_seconds', {}).get('task_selection', (10, 0.2))
-                cooldown_seconds = self._calculate_cooldown_with_jitter(cooldown_base, variance)
-                self.profile_cooldowns[selected_profile.profile_id] = now + timedelta(seconds=cooldown_seconds)
-                
-                # Update last used
-                selected_profile.last_used = now
-                
-                logger.info(
-                    f"Selected profile {selected_profile.profile_id} for {platform.value} "
-                    f"(score: {candidates[0][0]:.2f}, has_session: {platform.value in selected_profile.sessions})"
-                )
-                
-                return selected_profile
+        
+        if limit:
+            healthy = healthy[:limit]
+        
+        return healthy
     
     async def record_feedback(
         self,
         profile_id: str,
-        event: DetectionEvent,
+        event: str,
         platform: str,
-        metadata: Optional[Dict] = None,
-        invalidate_session: bool = False
-    ):
-        """Record profile feedback with session management."""
-        async with self._profiles_lock:
-            async with self._cooldown_lock:
-                # Update dynamic profile
-                dynamic_profile = next((p for p in self.dynamic_profiles if p.id == profile_id), None)
-                if dynamic_profile:
-                    dynamic_profile.record_detection_event(event, metadata or {})
-                
-                # Update static profile
-                static_profile = self.static_profiles.get(profile_id)
-                if static_profile:
-                    # Record usage
-                    success = (event == DetectionEvent.SUCCESS)
-                    static_profile.record_attempt(success, Platform(platform))
-                    
-                    # Invalidate session if needed
-                    if invalidate_session:
-                        self.session_manager.invalidate_session(
-                            static_profile,
-                            Platform(platform)
-                        )
-                
-                # Apply cooldown based on event
-                now = datetime.utcnow()
-                cooldown_params = self.config.get('cooldowns_seconds', {}).get(event.value)
-                
-                if cooldown_params:
-                    base_duration, variance = cooldown_params
-                    cooldown_seconds = self._calculate_cooldown_with_jitter(base_duration, variance)
-                    self.profile_cooldowns[profile_id] = now + timedelta(seconds=cooldown_seconds)
-                    logger.debug(
-                        f"Profile {profile_id} on cooldown for {cooldown_seconds/60:.1f} minutes "
-                        f"after {event.value}"
-                    )
-    
-    async def warm_up_profile(
-        self,
-        profile: BrowserProfile,
-        browser_manager: Any
-    ) -> bool:
-        """Warm up profile with realistic browsing."""
-        if not self.config.get('enable_behavioral_warmup', True):
-            return True
-        
-        logger.info(f"Warming up profile {profile.profile_id}")
-        
-        try:
-            # Get context from browser manager
-            context = await browser_manager.get_persistent_context_for_profile(profile)
-            
-            # Visit Italian sites
-            warmup_sites = self.config.get('warmup_sites', ['https://google.it', 'https://repubblica.it'])
-            sites_to_visit = random.sample(
-                warmup_sites,
-                k=min(3, len(warmup_sites))
-            )
-            
-            for site in sites_to_visit:
-                try:
-                    page = await context.new_page()
-                    
-                    # Set realistic viewport
-                    await page.set_viewport_size({
-                        'width': profile.viewport_width,
-                        'height': profile.viewport_height
-                    })
-                    
-                    await page.goto(site, wait_until='domcontentloaded', timeout=30000)
-                    
-                    # Simulate human behavior
-                    await asyncio.sleep(random.uniform(2, 5))
-                    
-                    # Random scrolling
-                    for _ in range(random.randint(1, 3)):
-                        scroll_amount = random.uniform(0.1, 0.5)
-                        await page.evaluate(
-                            f"window.scrollTo(0, document.body.scrollHeight * {scroll_amount})"
-                        )
-                        await asyncio.sleep(random.uniform(0.5, 2))
-                    
-                    # Maybe click something
-                    if random.random() > 0.5:
-                        links = await page.query_selector_all('a')
-                        if links and len(links) > 5:
-                            link = random.choice(links[:10])
-                            try:
-                                await link.click(timeout=5000)
-                                await asyncio.sleep(random.uniform(1, 3))
-                            except:
-                                pass
-                    
-                    await page.close()
-                    
-                except Exception as e:
-                    logger.warning(f"Warmup site {site} failed: {e}")
-            
-            # Mark profile as warmed up
-            dynamic_profile = next(
-                (p for p in self.dynamic_profiles if p.id == profile.profile_id),
-                None
-            )
-            if dynamic_profile and dynamic_profile.state == ProfileState.PRISTINE:
-                dynamic_profile.state = ProfileState.HEALTHY
-            
-            logger.info(f"Profile {profile.profile_id} warmed up successfully")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Profile warmup failed: {e}", exc_info=True)
-            return False
-        finally:
-            if 'context' in locals():
-                await context.close()
-    
-    async def ensure_platform_session(
-        self,
-        profile: BrowserProfile,
-        platform: Platform,
-        login_callback: Optional[Callable] = None
-    ) -> bool:
-        """Ensure profile has valid session for platform."""
-        # Check existing session
-        session = profile.sessions.get(platform.value)
-        if session and session.get('is_valid'):
-            # Validate age
-            session_age = (
-                datetime.utcnow() - datetime.fromisoformat(session['last_updated'])
-            ).total_seconds() / 3600
-            if session_age < self.config.get('max_session_age_hours', 24):
-                return True
-        
-        # Need to login
-        if not login_callback:
-            logger.warning(f"No login callback provided for {platform.value}")
-            return False
-        
-        logger.info(f"Profile {profile.profile_id} needs login for {platform.value}")
-        
-        try:
-            # Execute login
-            success = await login_callback(profile, platform)
-            
-            if success:
-                self.session_manager.session_ready_profiles[platform.value].add(profile.profile_id)
-                logger.info(
-                    f"Profile {profile.profile_id} successfully logged into {platform.value}"
-                )
-            
-            return success
-            
-        except Exception as e:
-            logger.error(
-                f"Login failed for profile {profile.profile_id} on {platform.value}: {e}"
-            )
-            return False
-    
-    async def _create_platform_optimized_profile(
-        self,
-        platform: Platform
-    ) -> Optional[Dict[str, Any]]:
-        """Create profile optimized for specific platform."""
-        try:
-            # Ensure we have the right Platform enum
-            if not hasattr(platform, 'stealth_requirements'):
-                logger.warning(f"Invalid Platform enum passed: {platform}, {type(platform)}")
-                # Convert to proper Platform if needed
-                from .consolidated_models import Platform as ConsolidatedPlatform
-                platform_value = platform.value if hasattr(platform, 'value') else str(platform)
-                platform = ConsolidatedPlatform(platform_value)
-            
-            # Platform-specific optimizations
-            base_template = copy.deepcopy(self.base_profile_template)
-            requirements = platform.stealth_requirements
-            
-            # Browser selection based on platform requirements
-            browser_prefs = requirements.get('browser_preferences', ['Chrome'])
-            base_template['browser_name'] = random.choice(browser_prefs)
-            
-            # Device class selection
-            if requirements.get('aggressive_stealth'):
-                base_template['device_class'] = random.choice(['high_end_desktop', 'high_end_laptop'])
-            else:
-                base_template['device_class'] = random.choice(['mid_range_desktop', 'mid_range_laptop'])
-            
-            # Create dynamic profile
-            profile_id = f"{platform.value}_{str(uuid.uuid4())[:8]}"
-            dynamic_profile = DynamicProfile(
-                mutation_strategy=self.mutation_strategy,
-                base_profile_dict=base_template,
-                profile_id=profile_id
-            )
-            
-            # Create static profile
-            static_profile = self._adapt_dynamic_to_static(dynamic_profile)
-            
-            # Platform-specific enhancements
-            static_profile.timezone = "Europe/Rome"
-            static_profile.locale = "it-IT"
-            static_profile.languages_override = ["it-IT", "it", "en-US", "en"]
-            
-            # Enable CDP stealth for platforms that need it
-            if requirements.get('aggressive_stealth'):
-                static_profile.cdp_stealth_enabled = True
-                static_profile.override_navigator_webdriver = True
-                static_profile.mask_automation_indicators = True
-            
-            # Assign quality based on randomization
-            static_profile.quality = random.choices(
-                list(ProfileQuality),
-                weights=[0.1, 0.3, 0.4, 0.2],  # Prefer HIGH quality
-                k=1
-            )[0]
-            
-            # Setup proxy if available
-            proxy_configs = self.config.get('proxy_configs', [])
-            if proxy_configs:
-                proxy_config = random.choice(proxy_configs)
-                # Prefer residential proxies for aggressive platforms
-                if requirements.get('require_residential_proxy'):
-                    residential_proxies = [
-                        p for p in proxy_configs
-                        if getattr(p, 'proxy_provider', None) in ['brightdata', 'oxylabs', 'smartproxy']
-                    ]
-                    if residential_proxies:
-                        proxy_config = random.choice(residential_proxies)
-                
-                static_profile.proxy = proxy_config
-            
-            # TLS fingerprint rotation is now handled by stealth engine
-            
-            return {
-                'dynamic': dynamic_profile,
-                'static': static_profile
-            }
-            
-        except Exception as e:
-            logger.error(f"Failed to create platform profile: {e}", exc_info=True)
-            return None
-    
-    def _adapt_dynamic_to_static(self, dynamic_profile: DynamicProfile) -> BrowserProfile:
-        """Convert DynamicProfile to BrowserProfile with enhancements."""
-        js_data = dynamic_profile.get_stealth_init_js_profile_data()
-        
-        # Extract screen dimensions
-        screen_res = js_data.get('screen_resolution', (1920, 1080))
-        screen_width = screen_res[0] if isinstance(screen_res, tuple) else 1920
-        screen_height = screen_res[1] if isinstance(screen_res, tuple) else 1080
-        
-        # Create static profile with only fields that exist in BrowserProfile
-        static_profile = BrowserProfile(
-            profile_id=dynamic_profile.id,
-            browser=js_data.get('browser_name', 'Chrome'),
-            browser_version=js_data.get('browser_version', '121.0.6167.85'),
-            os=js_data.get('os', 'Windows 11'),
-            device_type=js_data.get('device_type', 'desktop'),
-            user_agent=js_data.get('user_agent', ''),
-            viewport_width=int(screen_width * 0.95),
-            viewport_height=int(screen_height * 0.85),
-            screen_width=screen_width,
-            screen_height=screen_height,
-            hardware_concurrency=int(js_data.get('hardware_concurrency', 8)),
-            device_memory=js_data.get('device_memory', 8),
-            gpu_vendor=js_data.get('webgl_vendor', 'NVIDIA'),
-            gpu_model=js_data.get('webgl_renderer', 'GeForce RTX 3060'),
-            timezone=js_data.get('timezone', 'Europe/Rome'),
-            locale=js_data.get('locale', 'it-IT'),
-            accept_language=','.join([
-                lang if i == 0 else f"{lang};q={[1.0, 0.9, 0.8, 0.7][min(i, 3)]:.1f}"
-                for i, lang in enumerate(js_data.get('languages_override', ['it-IT', 'it', 'en-US', 'en'])[:4])
-            ])
-        )
-        
-        return static_profile
-    
-    async def _periodic_profile_evolution_task(self):
-        """Enhanced evolution with session awareness."""
-        while not self._shutdown_event.is_set():
-            try:
-                # Jittered sleep
-                sleep_duration = self._calculate_cooldown_with_jitter(
-                    self.config.get('evolution_interval_seconds', 1800),
-                    self.config.get('evolution_interval_jitter_factor', 0.3)
-                )
-                await asyncio.sleep(sleep_duration)
-                
-                if self._shutdown_event.is_set():
-                    break
-                
-                async with self._profiles_lock:
-                    # Evolve profiles
-                    for dynamic_profile in list(self.dynamic_profiles):
-                        if dynamic_profile.should_mutate():
-                            changes = dynamic_profile.mutate()
-                            if changes:
-                                # Update static profile
-                                static_profile = self._adapt_dynamic_to_static(dynamic_profile)
-                                # Preserve session data
-                                old_static = self.static_profiles.get(dynamic_profile.id)
-                                if old_static:
-                                    static_profile.sessions = old_static.sessions
-                                    static_profile.proxy = old_static.proxy
-                                    static_profile.use_count = old_static.use_count
-                                    static_profile.success_count = old_static.success_count
-                                    static_profile.failure_count = old_static.failure_count
-                                    static_profile.last_used = old_static.last_used
-                                
-                                self.static_profiles[dynamic_profile.id] = static_profile
-                                logger.info(
-                                    f"Profile {dynamic_profile.id} evolved with {len(changes)} changes"
-                                )
-                    
-                    # Replace compromised profiles
-                    await self._replace_compromised_profiles()
-                    
-                    # Save state
-                    await self.persistence.save_profiles(
-                        self.dynamic_profiles,
-                        self.static_profiles
-                    )
-                
-            except Exception as e:
-                logger.error(f"Evolution task error: {e}", exc_info=True)
-    
-    async def _periodic_session_validation(self):
-        """Validate sessions periodically."""
-        while not self._shutdown_event.is_set():
-            try:
-                await asyncio.sleep(self.config.get('session_validation_interval_seconds', 3600))
-                
-                if self._shutdown_event.is_set():
-                    break
-                
-                await self.session_manager.validate_sessions(
-                    self.static_profiles,
-                    self.config.get('max_session_age_hours', 24)
-                )
-                
-            except Exception as e:
-                logger.error(f"Session validation error: {e}")
-    
-    async def _replace_compromised_profiles(self):
-        """Replace compromised profiles with platform awareness."""
-        compromised_profiles = [
-            p for p in self.dynamic_profiles
-            if p.state == ProfileState.COMPROMISED
-        ]
-        
-        if not compromised_profiles:
+        metadata: Dict[str, Any] = None
+    ) -> None:
+        """Record usage feedback for a profile"""
+        if profile_id not in self.profiles:
+            logger.warning(f"Unknown profile: {profile_id}")
             return
         
-        compromise_rate = len(compromised_profiles) / len(self.dynamic_profiles)
+        profile = self.profiles[profile_id]
+        stats = profile.platform_stats.setdefault(platform, {
+            'attempts': 0,
+            'successes': 0,
+            'failures': 0,
+            'success_rate': 0.0
+        })
         
-        if compromise_rate >= self.config.get('compromise_threshold_pct', 0.3):
-            logger.warning(f"Replacing {len(compromised_profiles)} compromised profiles")
+        # Update stats
+        stats['attempts'] += 1
+        
+        if event == 'success' or 'success' in event.lower():
+            stats['successes'] += 1
+            stats['last_success'] = datetime.now().isoformat()
+        else:
+            stats['failures'] += 1
+            stats['last_failure'] = datetime.now().isoformat()
+        
+        # Calculate success rate
+        if stats['attempts'] > 0:
+            stats['success_rate'] = stats['successes'] / stats['attempts']
+        
+        # Save periodically
+        if stats['attempts'] % 10 == 0:
+            self._save_profiles()
+        
+        logger.info(f"Profile {profile_id} on {platform}: {event} "
+                   f"(success rate: {stats['success_rate']:.1%})")
+    
+    def get_profile(self, profile_id: str) -> Optional[BrowserProfile]:
+        """Get specific profile by ID"""
+        return self.profiles.get(profile_id)
+    
+    def rotate_profiles(self) -> None:
+        """Rotate profiles - retire poor performers, create new ones"""
+        # Find worst performers
+        worst_profiles = []
+        
+        for profile_id, profile in self.profiles.items():
+            total_attempts = sum(
+                stats.get('attempts', 0) 
+                for stats in profile.platform_stats.values()
+            )
             
-            for profile in compromised_profiles:
-                # Remove from all pools
-                profile_id = profile.id
-                self.dynamic_profiles.remove(profile)
-                self.static_profiles.pop(profile_id, None)
+            if total_attempts > 50:  # Enough data
+                total_success = sum(
+                    stats.get('successes', 0)
+                    for stats in profile.platform_stats.values()
+                )
                 
-                for platform_profiles in self.platform_pools.values():
-                    if profile_id in platform_profiles:
-                        platform_profiles.remove(profile_id)
+                success_rate = total_success / total_attempts
+                if success_rate < 0.1:  # Less than 10% success
+                    worst_profiles.append((profile_id, success_rate))
+        
+        # Replace worst 20%
+        worst_profiles.sort(key=lambda x: x[1])
+        to_replace = worst_profiles[:max(1, len(worst_profiles) // 5)]
+        
+        for profile_id, _ in to_replace:
+            logger.info(f"Retiring poor performer: {profile_id}")
+            del self.profiles[profile_id]
+            
+            # Create replacement
+            new_profile = self._create_profile(ProfileQuality.MEDIUM)
+            self.profiles[new_profile.profile_id] = new_profile
+            logger.info(f"Created replacement: {new_profile.profile_id}")
+        
+        if to_replace:
+            self._save_profiles()
+    
+    def _save_profiles(self) -> None:
+        """Save profiles to disk"""
+        try:
+            data = {
+                'profiles': {
+                    pid: self._profile_to_dict(profile)
+                    for pid, profile in self.profiles.items()
+                },
+                'saved_at': datetime.now().isoformat()
+            }
+            
+            with open(self.storage_path, 'w') as f:
+                json.dump(data, f, indent=2)
                 
-                for session_profiles in self.session_manager.session_ready_profiles.values():
-                    session_profiles.discard(profile_id)
+        except Exception as e:
+            logger.error(f"Failed to save profiles: {e}")
+    
+    def _load_profiles(self) -> None:
+        """Load profiles from disk"""
+        try:
+            with open(self.storage_path, 'r') as f:
+                data = json.load(f)
+            
+            for pid, profile_data in data.get('profiles', {}).items():
+                profile = self._dict_to_profile(profile_data)
+                self.profiles[pid] = profile
                 
-                # Create replacement for same platform
-                for platform, profile_ids in self.platform_pools.items():
-                    if profile_id in profile_ids:
-                        new_profile = await self._create_platform_optimized_profile(
-                            Platform(platform)
-                        )
-                        if new_profile:
-                            self.dynamic_profiles.append(new_profile['dynamic'])
-                            self.static_profiles[new_profile['dynamic'].id] = new_profile['static']
-                            self.platform_pools[platform].append(new_profile['dynamic'].id)
-                        break
+        except Exception as e:
+            logger.error(f"Failed to load profiles: {e}")
+            raise
     
-    def _calculate_cooldown_with_jitter(
-        self,
-        base_seconds: float,
-        variance_factor: float = 0.3
-    ) -> float:
-        """Calculate cooldown with jitter."""
-        if base_seconds <= 0:
-            return 0.0
-        jittered = np.random.normal(loc=base_seconds, scale=base_seconds * variance_factor)
-        return max(base_seconds * 0.5, min(base_seconds * 2.0, jittered))
+    def _profile_to_dict(self, profile: BrowserProfile) -> Dict:
+        """Convert profile to dictionary for storage"""
+        data = asdict(profile)
+        # Convert enums to strings
+        if 'quality' in data and hasattr(profile.quality, 'name'):
+            data['quality'] = profile.quality.name
+        if 'data_optimization_level' in data and hasattr(data['data_optimization_level'], 'name'):
+            data['data_optimization_level'] = data['data_optimization_level'].name
+        # Convert datetime objects to ISO format strings
+        if 'created_at' in data and isinstance(data['created_at'], datetime):
+            data['created_at'] = data['created_at'].isoformat()
+        if 'last_used' in data and data['last_used'] and isinstance(data['last_used'], datetime):
+            data['last_used'] = data['last_used'].isoformat()
+        # Convert sets to lists for JSON serialization
+        if 'block_resources' in data and isinstance(data['block_resources'], set):
+            data['block_resources'] = list(data['block_resources'])
+        # Convert Path objects to strings
+        if 'persistent_context_dir' in data and data['persistent_context_dir']:
+            from pathlib import Path
+            if isinstance(data['persistent_context_dir'], Path):
+                data['persistent_context_dir'] = str(data['persistent_context_dir'])
+        # Remove internal fields
+        data.pop('_context_encryption_key', None)
+        return data
     
-    async def start_background_tasks(self):
-        """Start all background tasks."""
-        self._shutdown_event.clear()
+    def _dict_to_profile(self, data: Dict) -> BrowserProfile:
+        """Convert dictionary to profile"""
+        # Import here to avoid circular import
+        from .consilidated_models import DataOptimizationLevel
         
-        # Start evolution
-        self._evolution_task = asyncio.create_task(self._periodic_profile_evolution_task())
+        # Convert quality string back to enum
+        if 'quality' in data and isinstance(data['quality'], str):
+            data['quality'] = ProfileQuality[data['quality']]
         
-        # Start session validation
-        if self.config.get('enable_session_preloading', True):
-            self._session_validation_task = asyncio.create_task(self._periodic_session_validation())
+        # Convert data_optimization_level string back to enum
+        if 'data_optimization_level' in data and isinstance(data['data_optimization_level'], str):
+            data['data_optimization_level'] = DataOptimizationLevel[data['data_optimization_level']]
         
-        logger.info("Background tasks started")
+        # Convert datetime strings back to datetime objects
+        if 'created_at' in data and isinstance(data['created_at'], str):
+            data['created_at'] = datetime.fromisoformat(data['created_at'])
+        if 'last_used' in data and isinstance(data['last_used'], str):
+            data['last_used'] = datetime.fromisoformat(data['last_used'])
+        
+        # Convert list back to set
+        if 'block_resources' in data and isinstance(data['block_resources'], list):
+            data['block_resources'] = set(data['block_resources'])
+        
+        # Convert string back to Path
+        if 'persistent_context_dir' in data and isinstance(data['persistent_context_dir'], str):
+            from pathlib import Path
+            data['persistent_context_dir'] = Path(data['persistent_context_dir'])
+        
+        return BrowserProfile(**data)
     
-    async def stop_background_tasks(self):
-        """Stop all background tasks."""
-        self._shutdown_event.set()
-        
-        tasks = [t for t in [self._evolution_task, self._session_validation_task] if t]
-        
-        if tasks:
-            await asyncio.gather(*tasks, return_exceptions=True)
-        
-        # Final save
-        await self.persistence.save_profiles(self.dynamic_profiles, self.static_profiles)
-        
-        logger.info("Background tasks stopped")
+    async def initialize(self) -> None:
+        """Initialize manager (for compatibility)"""
+        logger.info("ProfileManager initialized")
+        # Rotate out poor performers on startup
+        self.rotate_profiles()
     
-    def get_pool_metrics(self) -> Dict[str, Any]:
-        """Get comprehensive pool metrics."""
-        metrics = {
-            'total_profiles': len(self.dynamic_profiles),
-            'platform_distribution': {p: len(ids) for p, ids in self.platform_pools.items()},
-            'session_ready': dict(self.session_manager.session_ready_profiles),
-            'state_distribution': defaultdict(int),
-            'quality_distribution': defaultdict(int),
-            'avg_success_rates': {},
-            'profiles_on_cooldown': len(self.profile_cooldowns),
-            'active_profiles': 0,
-            'detection_rate_24h': {}
+    def get_stats(self) -> Dict[str, Any]:
+        """Get manager statistics"""
+        total_profiles = len(self.profiles)
+        
+        quality_distribution = {}
+        for profile in self.profiles.values():
+            quality = profile.quality.name
+            quality_distribution[quality] = quality_distribution.get(quality, 0) + 1
+        
+        platform_stats = {}
+        for platform in ['fansale', 'ticketmaster', 'vivaticket']:
+            total_attempts = sum(
+                p.platform_stats.get(platform, {}).get('attempts', 0)
+                for p in self.profiles.values()
+            )
+            total_successes = sum(
+                p.platform_stats.get(platform, {}).get('successes', 0)
+                for p in self.profiles.values()
+            )
+            
+            platform_stats[platform] = {
+                'attempts': total_attempts,
+                'successes': total_successes,
+                'success_rate': total_successes / total_attempts if total_attempts > 0 else 0
+            }
+        
+        return {
+            'total_profiles': total_profiles,
+            'quality_distribution': quality_distribution,
+            'platform_performance': platform_stats
         }
-        
-        # State and quality distribution
-        for dynamic_profile in self.dynamic_profiles:
-            metrics['state_distribution'][dynamic_profile.state.value] += 1
-            
-            static_profile = self.static_profiles.get(dynamic_profile.id)
-            if static_profile:
-                metrics['quality_distribution'][static_profile.quality.name] += 1
-                if static_profile.last_used and (
-                    datetime.utcnow() - static_profile.last_used
-                ).total_seconds() < 3600:
-                    metrics['active_profiles'] += 1
-        
-        # Platform success rates and detection rates
-        for platform in Platform:
-            total_attempts = 0
-            total_successes = 0
-            recent_detections = 0
-            
-            for static_profile in self.static_profiles.values():
-                # Use overall success/failure counts as approximation
-                if platform in static_profile.platforms:
-                    total_attempts += static_profile.use_count
-                    total_successes += static_profile.success_count
-            
-            if total_attempts > 0:
-                metrics['avg_success_rates'][platform.value] = total_successes / total_attempts
-                # Simplified detection rate (assume 10% of failures are detections)
-                metrics['detection_rate_24h'][platform.value] = 0.1 * (1 - (total_successes / total_attempts))
-        
-        return metrics

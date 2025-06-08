@@ -1,0 +1,130 @@
+{
+  "timestamp": "2025-06-08T08:48:39.319457",
+  "proxy_tests": {
+    "httpx": {
+      "working": false,
+      "error": "AsyncClient.__init__() got an unexpected keyword argument 'proxies'"
+    },
+    "playwright": {
+      "working": true,
+      "page_loaded": true
+    }
+  },
+  "stealth_tests": {
+    "bot_sannysoft": {
+      "passed": false,
+      "failed_tests": [
+        "WebDriver (New)"
+      ]
+    }
+  },
+  "platform_tests": {
+    "fansale": {
+      "accessible": false,
+      "urls_tested": {
+        "https://www.fansale.it": {
+          "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://www.fansale.it/\", waiting until \"domcontentloaded\"\n"
+        },
+        "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388": {
+          "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388\", waiting until \"domcontentloaded\"\n"
+        }
+      },
+      "blocks_detected": [],
+      "errors": [
+        "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://www.fansale.it/\", waiting until \"domcontentloaded\"\n",
+        "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388\", waiting until \"domcontentloaded\"\n"
+      ]
+    },
+    "ticketmaster": {
+      "accessible": false,
+      "urls_tested": {
+        "https://www.ticketmaster.it": {
+          "status": 200,
+          "title": "Ticketmaster | Biglietti Ufficiali per Concerti, Festival, Arte e Teatro",
+          "blocked": true,
+          "reasons": [
+            "Blocked message detected",
+            "Captcha detected"
+          ]
+        },
+        "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano": {
+          "status": 200,
+          "title": "",
+          "blocked": true,
+          "reasons": [
+            "Captcha detected"
+          ]
+        }
+      },
+      "blocks_detected": [
+        "Blocked message detected",
+        "Captcha detected",
+        "Captcha detected"
+      ],
+      "errors": []
+    },
+    "vivaticket": {
+      "accessible": true,
+      "urls_tested": {
+        "https://www.vivaticket.com/it": {
+          "status": 200,
+          "title": "Vivaticket",
+          "blocked": false,
+          "reasons": []
+        },
+        "https://www.vivaticket.com/it/search?q=bruce+springsteen": {
+          "status": 200,
+          "title": "Vivaticket",
+          "blocked": false,
+          "reasons": []
+        }
+      },
+      "blocks_detected": [],
+      "errors": []
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "CRITICAL",
+      "issue": "Proxy not working",
+      "solution": [
+        "Verify proxy credentials in .env file",
+        "Check if proxy service is active",
+        "Try alternative proxy endpoints",
+        "Consider using residential proxies"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "issue": "Stealth detection failing: WebDriver (New)",
+      "solution": [
+        "Use undetected-chromedriver instead of regular Playwright",
+        "Implement more sophisticated fingerprint spoofing",
+        "Add browser profile rotation",
+        "Use headless=False for critical operations"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "issue": "Fansale blocking access: ",
+      "solution": [
+        "Use residential proxies from Italy",
+        "Implement request rate limiting",
+        "Add more human-like behavior patterns",
+        "Consider using Playwright stealth plugin",
+        "Rotate user agents and browser profiles"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "issue": "Ticketmaster blocking access: Captcha detected, Blocked message detected",
+      "solution": [
+        "Use residential proxies from Italy",
+        "Implement request rate limiting",
+        "Add more human-like behavior patterns",
+        "Consider using Playwright stealth plugin",
+        "Rotate user agents and browser profiles"
+      ]
+    }
+  ]
+}

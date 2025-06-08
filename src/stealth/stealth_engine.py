@@ -44,7 +44,7 @@ class StealthMasterEngine:
         
         # 2. Apply Polymorphic Fingerprinting
         fingerprint = self.fingerprint_mutator.generate_unique_fingerprint(platform)
-        await self._apply_fingerprint(page, fingerprint)
+        await _apply_fingerprint(page, fingerprint)
         
         # 3. Initialize Neural Behavior Engine
         await self.neural_behavior.initialize(page, platform)

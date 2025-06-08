@@ -19,7 +19,8 @@ from ..core.models import EnhancedTicketOpportunity
 from ..core.enums import PlatformType, PriorityLevel
 from ..profiles.models import BrowserProfile
 from ..core.errors import BlockedError, PlatformError
-from src.core.stealth.stealth_engine import get_stealthmaster_engine
+from ..stealth.stealth_engine import get_stealthmaster_engine
+from ..stealth.cdp_stealth import CDPStealthEngine
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ class UnifiedTicketingHandler:
         self.desired_sections = config.get('desired_sections', [])
         
         # State management
+        self.browser: Optional[Any] = None
         self.browser_context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
         self.detected_opportunities = set()
@@ -90,17 +92,62 @@ class UnifiedTicketingHandler:
         """Initialize unified handler with StealthMaster AI protection"""
         logger.info(f"🚀 Initializing Unified Handler for {self.platform.value}")
         
-        # Create stealth browser context
-        self.browser_context = await self.browser_manager.create_context(self.profile)
-        self.page = await self.browser_context.new_page()
+        # Create undetectable browser using CDP stealth
+        # Use headless=False for Ticketmaster, True for others
+        headless = self.config.get('headless', True)
+        if self.platform == PlatformType.TICKETMASTER:
+            headless = False  # Ticketmaster requires headful mode
+            logger.info("🖥️ Using headful mode for Ticketmaster")
         
-        # Apply StealthMaster AI v2.0 protection
+        self.browser = await CDPStealthEngine.create_undetectable_browser(self.browser_manager)
+        
+        # Get proxy configuration from profile
+        proxy_config = None
+        if self.profile.proxy_config:
+            if isinstance(self.profile.proxy_config, dict) and 'server' in self.profile.proxy_config:
+                proxy_config = self.profile.proxy_config
+                logger.info(f"🔐 Using proxy: {proxy_config['server']}")
+            elif hasattr(self.profile.proxy_config, 'server'):
+                # Handle ProxyConfig object
+                proxy_config = {
+                    'server': self.profile.proxy_config.server,
+                    'username': self.profile.proxy_config.username,
+                    'password': self.profile.proxy_config.password
+                }
+                logger.info(f"🔐 Using proxy: {proxy_config['server']}")
+        else:
+            logger.warning("⚠️ No proxy configured for this profile")
+        
+        # Create stealth context with CDP
+        self.browser_context = await CDPStealthEngine.create_stealth_context(
+            self.browser, 
+            proxy_config
+        )
+        
+        # Create page and apply CDP stealth
+        self.page = await self.browser_context.new_page()
+        await CDPStealthEngine.apply_page_stealth(self.page)
+        
+        # Apply additional stealth measures from StealthMaster AI
+        # CDP stealth is already applied, this adds extra protection
         await self.stealth_engine.apply_ultimate_stealth(
-            self.browser_manager.browser,
+            self.browser,
             self.browser_context,
             self.page,
             self.platform.value
         )
+        
+        # Platform-specific locale adjustments
+        if self.platform == PlatformType.FANSALE:
+            logger.info("🇮🇹 Setting Italian locale for Fansale")
+            await self.page.evaluate("""
+                Object.defineProperty(navigator, 'language', {
+                    get: () => 'it-IT'
+                });
+                Object.defineProperty(navigator, 'languages', {
+                    get: () => ['it-IT', 'it', 'en-US', 'en']
+                });
+            """)
         
         # Platform-specific initialization
         await self.platform_adapter.initialize(self.page, self.config)
@@ -159,40 +206,74 @@ class UnifiedTicketingHandler:
         # Random pre-navigation delay
         await asyncio.sleep(0.5 + random.random() * 1.5)
         
-        # Navigate with realistic timeout
-        await self.page.goto(
-            self.url,
-            wait_until='domcontentloaded',
-            timeout=30000
-        )
-        
-        # Simulate human page scanning
-        await self._simulate_human_scanning()
+        try:
+            # Navigate with realistic timeout
+            await self.page.goto(
+                self.url,
+                wait_until='domcontentloaded',
+                timeout=30000
+            )
+            
+            # Simulate human page scanning
+            await self._simulate_human_scanning()
+            
+        except Exception as e:
+            error_msg = str(e)
+            if 'ERR_HTTP2_PROTOCOL_ERROR' in error_msg:
+                logger.warning("HTTP/2 protocol error - retrying with HTTP/1.1")
+                # Try direct navigation without wait
+                await self.page.goto(self.url, wait_until='commit', timeout=30000)
+            elif 'net::ERR_TUNNEL_CONNECTION_FAILED' in error_msg:
+                logger.error("Proxy connection failed - may need new proxy")
+                raise
+            else:
+                raise
     
     async def _simulate_human_scanning(self) -> None:
         """Simulate human page scanning behavior"""
-        # Scroll patterns
-        scroll_positions = [0.2, 0.5, 0.3, 0.7, 0.4]
-        
-        for position in scroll_positions:
-            target_y = int(await self.page.evaluate("document.body.scrollHeight") * position)
+        try:
+            # Check if page has body element
+            has_body = await self.page.evaluate("() => !!document.body")
+            if not has_body:
+                logger.debug("Page body not ready, skipping human scanning")
+                return
+                
+            # Scroll patterns
+            scroll_positions = [0.2, 0.5, 0.3, 0.7, 0.4]
             
-            await self.page.evaluate(f"""
-                window.scrollTo({{
-                    top: {target_y},
-                    behavior: 'smooth'
-                }});
-            """)
-            
-            await asyncio.sleep(0.5 + random.random() * 1.0)
+            for position in scroll_positions:
+                try:
+                    scroll_height = await self.page.evaluate("() => document.body ? document.body.scrollHeight : 0")
+                    if scroll_height == 0:
+                        break
+                        
+                    target_y = int(scroll_height * position)
+                    
+                    await self.page.evaluate(f"""
+                        window.scrollTo({{
+                            top: {target_y},
+                            behavior: 'smooth'
+                        }});
+                    """)
+                    
+                    await asyncio.sleep(0.5 + random.random() * 1.0)
+                except Exception as e:
+                    logger.debug(f"Scroll simulation error: {e}")
+                    break
         
-        # Return to relevant section
-        await self.page.evaluate("""
-            const ticketSection = document.querySelector('[class*="ticket"], [class*="offer"], [id*="ticket"]');
-            if (ticketSection) {
-                ticketSection.scrollIntoView({behavior: 'smooth', block: 'center'});
-            }
-        """)
+            # Return to relevant section
+            try:
+                await self.page.evaluate("""
+                    const ticketSection = document.querySelector('[class*="ticket"], [class*="offer"], [id*="ticket"]');
+                    if (ticketSection) {
+                        ticketSection.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    }
+                """)
+            except:
+                pass  # Ignore errors in final scroll
+                
+        except Exception as e:
+            logger.debug(f"Human scanning simulation error: {e}")
     
     async def _extract_opportunities(self) -> List[EnhancedTicketOpportunity]:
         """Extract opportunities using multiple methods"""
@@ -432,16 +513,8 @@ class UnifiedTicketingHandler:
     
     async def _human_like_type(self, selector: str, text: str) -> None:
         """Type with human-like speed and patterns"""
-        await self.page.click(selector)
-        await asyncio.sleep(0.3)
-        
-        for char in text:
-            await self.page.keyboard.type(char)
-            # Variable delay between keystrokes
-            delay = random.uniform(0.05, 0.15)
-            if random.random() < 0.1:  # 10% chance of longer pause
-                delay += random.uniform(0.2, 0.5)
-            await asyncio.sleep(delay)
+        # Use CDP stealth's human-like typing
+        await CDPStealthEngine.type_like_human(self.page, selector, text)
     
     async def _handle_block_detection(self) -> None:
         """Handle detection and implement recovery"""
@@ -489,6 +562,10 @@ class UnifiedTicketingHandler:
 class PlatformAdapter(ABC):
     """Abstract base for platform-specific adaptations"""
     
+    async def initialize(self, page: Page, config: Dict[str, Any]) -> None:
+        """Initialize platform-specific settings"""
+        pass
+    
     @abstractmethod
     def get_ticket_selectors(self) -> List[Dict[str, str]]:
         """Get platform-specific selectors"""
@@ -511,6 +588,54 @@ class PlatformAdapter(ABC):
     def get_custom_headers(self) -> Dict[str, str]:
         """Get platform-specific headers"""
         return {}
+    
+    async def wait_for_content(self, page: Page) -> None:
+        """Wait for platform-specific content to load"""
+        await page.wait_for_load_state('domcontentloaded')
+    
+    async def wait_for_login_form(self, page: Page) -> None:
+        """Wait for login form to appear"""
+        pass
+    
+    async def verify_login_success(self, page: Page) -> bool:
+        """Verify if login was successful"""
+        return True
+    
+    def get_username_selector(self) -> str:
+        """Get username input selector"""
+        return 'input[type="email"], input[type="text"], input[name*="user"], input[name*="email"]'
+    
+    def get_password_selector(self) -> str:
+        """Get password input selector"""
+        return 'input[type="password"]'
+    
+    def get_submit_selector(self) -> str:
+        """Get submit button selector"""
+        return 'button[type="submit"], input[type="submit"], button:has-text("Login"), button:has-text("Sign in")'
+    
+    def get_login_url(self, base_url: str) -> str:
+        """Get login URL for platform"""
+        return base_url
+    
+    def get_js_extraction_script(self) -> str:
+        """Get JavaScript extraction script"""
+        return "[]"
+    
+    def parse_api_responses(self, responses: List[Dict]) -> List[EnhancedTicketOpportunity]:
+        """Parse API responses"""
+        return []
+    
+    def parse_js_data(self, data: Any) -> List[EnhancedTicketOpportunity]:
+        """Parse JavaScript data"""
+        return []
+    
+    def is_critical_resource(self, url: str) -> bool:
+        """Check if resource is critical"""
+        return False
+    
+    async def handle_block_recovery(self, page: Page) -> None:
+        """Handle platform-specific block recovery"""
+        pass
 
 
 class FansaleAdapter(PlatformAdapter):

@@ -55,7 +55,6 @@ class BrowserProfile:
     # Basic identification
     name: str
     profile_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    proxy_config: Optional[Union[Dict[str, Any], 'ProxyConfig']] = None
 
     # Browser fingerprint
     user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -142,19 +141,10 @@ class BrowserProfile:
         if self.persistent_context_dir is None:
             self.persistent_context_dir = Path(f"browser_contexts/{self.profile_id}")
         if self.proxy_config and isinstance(self.proxy_config, dict):
-            # Import at runtime to avoid circular imports
-            from .consolidated_models import ProxyConfig as ConsolidatedProxyConfig
             
             # Handle both 'protocol' and 'proxy_type' keys
             protocol = self.proxy_config.get('protocol') or self.proxy_config.get('proxy_type', 'http')
             
-            self.proxy_config = ConsolidatedProxyConfig(
-                host=self.proxy_config.get('host'),
-                port=self.proxy_config.get('port'),
-                username=self.proxy_config.get('username'),
-                password=self.proxy_config.get('password'),
-                proxy_type=protocol
-            )
         # Generate fingerprint hash
         self._generate_fingerprint_hash()
         
@@ -206,9 +196,16 @@ class BrowserProfile:
         
         # Proxy configuration
         if self.proxy_config:
-            proxy_url = self.proxy_config.get_proxy_url(self.proxy_session_id)
-            if proxy_url:
-                params['proxy'] = {'server': proxy_url}
+            # Handle both dict and ProxyConfig object
+            if isinstance(self.proxy_config, dict):
+                # Direct dict from proxy manager
+                if 'server' in self.proxy_config:
+                    params['proxy'] = self.proxy_config
+            else:
+                # ProxyConfig object
+                proxy_url = self.proxy_config.get_proxy_url(self.proxy_session_id)
+                if proxy_url:
+                    params['proxy'] = {'server': proxy_url}
         
         # Headers including Client Hints
         headers = dict(self.extra_http_headers)
@@ -235,7 +232,9 @@ class BrowserProfile:
         
         # Storage state for session persistence
         if self.persistent_context_dir:
-            params['storage_state'] = str(self.persistent_context_dir / 'state.json')
+            state_file = self.persistent_context_dir / 'state.json'
+            if state_file.exists():
+                params['storage_state'] = str(state_file)
         
         return params
     
@@ -284,6 +283,10 @@ class BrowserProfile:
             '--disable-webrtc-hw-encoding',
             '--disable-webrtc-hw-decoding',
             '--disable-webrtc-encryption',
+            
+            # Disable HTTP/2 for proxy compatibility
+            '--disable-http2',
+            '--force-http1',
         ]
         
         # Add optimization flags

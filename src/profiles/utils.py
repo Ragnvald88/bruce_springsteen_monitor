@@ -4,15 +4,26 @@ import yaml
 import logging
 import json
 import os
+import random
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple, Callable
+from typing import Dict, Any, List, Optional, Tuple, Callable, TYPE_CHECKING
 from collections import defaultdict
+import random
+import hashlib
+import uuid
+from typing import Dict, Any, List, Optional
+from datetime import datetime, timedelta
+from faker import Faker
 
-from .consolidated_models import Platform, ProfileQuality, ProxyConfig
-from .manager import ProfileManager
+
+from .consilidated_models import Platform, ProfileQuality
+from .models import ProxyConfig
 from dataclasses import dataclass, field
-from ..core.advanced_profile_system import ProfileState
+
+if TYPE_CHECKING:
+    from .manager import ProfileManager
+
 
 logger = logging.getLogger(__name__)
 
@@ -21,16 +32,6 @@ logger = logging.getLogger(__name__)
 class ProfileScoringConfig:
     """Enhanced scoring configuration for profile selection."""
     base_score: float = 100.0
-    
-    # State-based modifiers
-    state_modifiers: Dict[ProfileState, float] = field(default_factory=lambda: {
-        ProfileState.PRISTINE: 20.0,
-        ProfileState.HEALTHY: 30.0,
-        ProfileState.SUSPICIOUS: -40.0,
-        ProfileState.DORMANT: -20.0,
-        ProfileState.COMPROMISED: -1000.0,
-        ProfileState.EVOLVING: -500.0
-    })
     
     # Platform-specific bonuses
     platform_bonuses: Dict[str, float] = field(default_factory=lambda: {
@@ -300,7 +301,511 @@ def parse_cooldowns(cooldown_data: Dict[str, Any]) -> Dict[str, Tuple[float, flo
     
     return cooldowns
 
+def generate_random_profile(
+    platform: Optional[str] = None,
+    quality_tier: Optional[int] = None
+) -> Dict[str, Any]:
+    """
+    Generate a random, realistic browser profile
+    
+    Args:
+        platform: Target platform (fansale, ticketmaster, vivaticket)
+        quality_tier: Profile quality (1-5, higher is better)
+    
+    Returns:
+        Complete profile configuration
+    """
+    
+    # Determine quality tier
+    if quality_tier is None:
+        quality_tier = random.choices([1, 2, 3, 4, 5], weights=[10, 20, 30, 30, 10])[0]
+    
+    # Generate base profile
+    profile = {
+        'name': f"Profile_{uuid.uuid4().hex[:8]}",
+        'profile_id': f"profile_{uuid.uuid4().hex[:12]}",
+    }
+    
+    # Select browser configuration based on quality
+    browser_config = _get_browser_config(quality_tier)
+    # Map to BrowserProfile expected fields
+    profile['user_agent'] = browser_config.get('user_agent', '')
+    if 'platform' in browser_config:
+        profile['js_platform'] = browser_config['platform']
+    
+    # Keep OS info for fingerprint generation (but don't add to final profile)
+    os_info = browser_config.get('os', 'Windows')
+    browser_info = browser_config.get('browser', 'Chrome')
+    
+    # Generate device profile
+    device_profile = _generate_device_profile(browser_info)
+    profile.update(device_profile)
+    
+    # Generate network profile
+    network_profile = _generate_network_profile(quality_tier)
+    # Only add fields that BrowserProfile expects
+    if 'languages' in network_profile:
+        profile['languages_override'] = network_profile['languages']
+    if 'timezone' in network_profile:
+        profile['timezone'] = network_profile['timezone']
+    if 'locale' in network_profile:
+        profile['locale'] = network_profile['locale']
+    
+    # Skip behavioral profile as BrowserProfile doesn't have these fields
+    
+    # Generate fingerprint components - need to temporarily add OS for generation
+    temp_profile = {**profile, 'os': os_info, 'browser': browser_info}
+    fingerprint = _generate_fingerprint(temp_profile)
+    # Map fingerprint fields to BrowserProfile expected fields
+    profile['canvas_fingerprint'] = fingerprint.get('canvas_hash')
+    profile['webgl_vendor'] = fingerprint.get('webgl_vendor')
+    profile['webgl_renderer'] = fingerprint.get('webgl_renderer')
+    profile['audio_fingerprint'] = fingerprint.get('audio_hash')
+    profile['fonts_list'] = fingerprint.get('fonts', [])
+    
+    # Add platform-specific optimizations
+    if platform:
+        platform_opts = _get_platform_optimizations(platform)
+        # Only add headers that BrowserProfile expects
+        if 'accept_language' in platform_opts:
+            profile['accept_language'] = platform_opts['accept_language']
+        if 'sec_ch_ua_platform' in platform_opts:
+            profile['sec_ch_ua_platform'] = platform_opts['sec_ch_ua_platform']
+    
+    return profile
 
+
+def _get_browser_config(quality_tier: int) -> Dict[str, Any]:
+    """Get browser configuration based on quality tier"""
+    
+    # Higher quality = more recent browsers
+    if quality_tier >= 4:
+        browsers = [
+            {'browser': 'Chrome', 'version': random.randint(119, 121)},
+            {'browser': 'Edge', 'version': random.randint(119, 121)},
+        ]
+    elif quality_tier >= 2:
+        browsers = [
+            {'browser': 'Chrome', 'version': random.randint(115, 118)},
+            {'browser': 'Firefox', 'version': random.randint(119, 121)},
+            {'browser': 'Edge', 'version': random.randint(115, 118)},
+        ]
+    else:
+        browsers = [
+            {'browser': 'Chrome', 'version': random.randint(110, 114)},
+            {'browser': 'Firefox', 'version': random.randint(115, 118)},
+        ]
+    
+    chosen = random.choice(browsers)
+    
+    # Generate user agent
+    os_config = _get_os_config()
+    user_agent = _generate_user_agent(chosen['browser'], chosen['version'], os_config)
+    
+    return {
+        'browser': chosen['browser'],
+        'browser_version': f"{chosen['version']}.0.{random.randint(1000, 9999)}.{random.randint(10, 99)}",
+        'user_agent': user_agent,
+        **os_config
+    }
+
+
+def _get_os_config() -> Dict[str, Any]:
+    """Generate OS configuration"""
+    
+    os_choices = [
+        {
+            'os': 'Windows',
+            'os_version': '11',
+            'platform': 'Win32',
+            'weight': 45
+        },
+        {
+            'os': 'Windows',
+            'os_version': '10',
+            'platform': 'Win32',
+            'weight': 25
+        },
+        {
+            'os': 'macOS',
+            'os_version': random.choice(['13', '14']),
+            'platform': 'MacIntel',
+            'weight': 25
+        },
+        {
+            'os': 'Linux',
+            'os_version': 'Ubuntu',
+            'platform': 'Linux x86_64',
+            'weight': 5
+        }
+    ]
+    
+    weights = [c['weight'] for c in os_choices]
+    chosen = random.choices(os_choices, weights=weights)[0]
+    
+    return {
+        'os': chosen['os'],
+        'os_version': chosen['os_version'],
+        'platform': chosen['platform']
+    }
+
+
+def _generate_user_agent(browser: str, version: int, os_config: Dict[str, Any]) -> str:
+    """Generate realistic user agent string"""
+    
+    webkit = "537.36"
+    
+    if os_config['os'] == 'Windows':
+        if os_config['os_version'] == '11':
+            os_string = "Windows NT 10.0; Win64; x64"
+        else:
+            os_string = "Windows NT 10.0; Win64; x64"
+    elif os_config['os'] == 'macOS':
+        os_string = f"Macintosh; Intel Mac OS X 10_{15 + int(os_config['os_version']) - 13}_{random.randint(0, 7)}"
+    else:
+        os_string = "X11; Linux x86_64"
+    
+    if browser == 'Chrome':
+        return f"Mozilla/5.0 ({os_string}) AppleWebKit/{webkit} (KHTML, like Gecko) Chrome/{version}.0.0.0 Safari/{webkit}"
+    elif browser == 'Firefox':
+        return f"Mozilla/5.0 ({os_string}) Gecko/20100101 Firefox/{version}.0"
+    elif browser == 'Edge':
+        return f"Mozilla/5.0 ({os_string}) AppleWebKit/{webkit} (KHTML, like Gecko) Chrome/{version}.0.0.0 Safari/{webkit} Edg/{version}.0.0.0"
+    else:
+        return f"Mozilla/5.0 ({os_string}) AppleWebKit/{webkit} (KHTML, like Gecko) Safari/{webkit}"
+
+
+def _generate_device_profile(browser: str) -> Dict[str, Any]:
+    """Generate device characteristics"""
+    
+    # Common screen resolutions
+    resolutions = [
+        (1920, 1080),  # Full HD - most common
+        (2560, 1440),  # QHD
+        (1366, 768),   # Common laptop
+        (1440, 900),   # MacBook
+        (1536, 864),   # Surface
+        (3840, 2160),  # 4K
+    ]
+    
+    resolution = random.choice(resolutions)
+    
+    # Calculate viewport (slightly smaller than screen)
+    viewport_width = resolution[0] - random.randint(0, 200)
+    viewport_height = resolution[1] - random.randint(100, 200)
+    
+    # Hardware specs based on quality
+    quality_tier = random.randint(1, 5)
+    
+    return {
+        'screen_width': resolution[0],
+        'screen_height': resolution[1],
+        'viewport_width': viewport_width,
+        'viewport_height': viewport_height,
+        'color_depth': random.choice([24, 30, 32]),
+        'hardware_concurrency': 2 ** random.randint(1, 4),  # 2, 4, 8, 16 cores
+        'device_memory': 2 ** random.randint(1, 5),  # 2, 4, 8, 16, 32 GB
+    }
+
+
+def _generate_network_profile(quality_tier: int) -> Dict[str, Any]:
+    """Generate network characteristics"""
+    
+    # Language preferences - Italian-focused for our use case
+    if random.random() < 0.7:  # 70% Italian users
+        languages = random.choice([
+            ['it-IT', 'it', 'en-US', 'en'],
+            ['it-IT', 'it'],
+            ['it', 'en-US', 'en'],
+        ])
+        timezone = 'Europe/Rome'
+        locale = 'it-IT'
+    else:
+        languages = random.choice([
+            ['en-US', 'en'],
+            ['en-GB', 'en'],
+            ['de-DE', 'de', 'en'],
+        ])
+        timezone = random.choice(['Europe/London', 'Europe/Berlin', 'Europe/Paris'])
+        locale = languages[0]
+    
+    return {
+        'languages': languages,
+        'timezone': timezone,
+        'locale': locale,
+        'connection_type': random.choice(['wifi', '4g', 'ethernet']),
+        'do_not_track': random.choice([True, False, None]),
+    }
+
+
+def _generate_behavioral_profile(platform: Optional[str]) -> Dict[str, Any]:
+    """Generate behavioral characteristics"""
+    
+    # Platform-specific behavior patterns
+    if platform == 'fansale':
+        typing_speed = random.randint(40, 70)  # Moderate typing
+        mouse_precision = random.uniform(0.7, 0.9)
+        reading_speed = random.randint(200, 300)
+    elif platform == 'ticketmaster':
+        typing_speed = random.randint(50, 80)  # Faster for Ticketmaster
+        mouse_precision = random.uniform(0.8, 0.95)
+        reading_speed = random.randint(250, 350)
+    else:
+        typing_speed = random.randint(35, 75)
+        mouse_precision = random.uniform(0.6, 0.9)
+        reading_speed = random.randint(180, 320)
+    
+    return {
+        'typing_speed_wpm': typing_speed,
+        'mouse_precision': mouse_precision,
+        'reading_speed_wpm': reading_speed,
+        'click_patterns': {
+            'double_click_speed': random.randint(300, 600),
+            'drag_threshold': random.randint(3, 10),
+        },
+        'scroll_behavior': {
+            'smooth_scrolling': random.choice([True, False]),
+            'scroll_speed': random.uniform(0.5, 2.0),
+        },
+        'idle_behavior': {
+            'micro_movements': random.choice([True, False]),
+            'tab_switching': random.uniform(0.1, 0.5),
+        }
+    }
+
+
+def _generate_fingerprint(profile: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate browser fingerprint components"""
+    
+    # Canvas fingerprint
+    canvas_hash = hashlib.sha256(
+        f"{profile['profile_id']}_{datetime.now()}".encode()
+    ).hexdigest()[:16]
+    
+    # WebGL parameters
+    webgl_vendor = _get_webgl_vendor(profile['os'])
+    webgl_renderer = _get_webgl_renderer(webgl_vendor)
+    
+    # Audio fingerprint
+    audio_hash = hashlib.sha256(
+        f"audio_{profile['profile_id']}".encode()
+    ).hexdigest()[:16]
+    
+    # Font list based on OS
+    fonts = _get_font_list(profile['os'])
+    
+    return {
+        'canvas_hash': canvas_hash,
+        'webgl_vendor': webgl_vendor,
+        'webgl_renderer': webgl_renderer,
+        'audio_hash': audio_hash,
+        'fonts': fonts,
+        'plugins': _get_plugins(profile['browser']),
+        'mime_types': _get_mime_types(),
+    }
+
+
+def _get_webgl_vendor(os: str) -> str:
+    """Get WebGL vendor based on OS"""
+    
+    if os == 'Windows':
+        return random.choice([
+            'Google Inc. (NVIDIA)',
+            'Google Inc. (Intel)',
+            'Google Inc. (AMD)',
+            'Google Inc. (NVIDIA Corporation)',
+        ])
+    elif os == 'macOS':
+        return random.choice([
+            'Apple Inc.',
+            'Intel Inc.',
+        ])
+    else:
+        return 'Mesa/X.org'
+
+
+def _get_webgl_renderer(vendor: str) -> str:
+    """Get WebGL renderer based on vendor"""
+    
+    if 'NVIDIA' in vendor:
+        return random.choice([
+            'ANGLE (NVIDIA GeForce GTX 1060 6GB Direct3D11 vs_5_0 ps_5_0)',
+            'ANGLE (NVIDIA GeForce RTX 3060 Direct3D11 vs_5_0 ps_5_0)',
+            'ANGLE (NVIDIA GeForce GTX 1650 Direct3D11 vs_5_0 ps_5_0)',
+        ])
+    elif 'Intel' in vendor:
+        return random.choice([
+            'ANGLE (Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0)',
+            'ANGLE (Intel(R) Iris(R) Xe Graphics Direct3D11 vs_5_0 ps_5_0)',
+        ])
+    elif 'Apple' in vendor:
+        return random.choice([
+            'Apple M1',
+            'Apple M2',
+            'Intel(R) Iris(TM) Plus Graphics 655',
+        ])
+    else:
+        return 'ANGLE (Unknown GPU Direct3D11 vs_5_0 ps_5_0)'
+
+
+def _get_font_list(os: str) -> List[str]:
+    """Get font list based on OS"""
+    
+    base_fonts = [
+        'Arial', 'Verdana', 'Times New Roman', 'Georgia',
+        'Trebuchet MS', 'Comic Sans MS', 'Impact'
+    ]
+    
+    if os == 'Windows':
+        return base_fonts + [
+            'Calibri', 'Cambria', 'Segoe UI', 'Consolas',
+            'Candara', 'Constantia', 'Corbel'
+        ]
+    elif os == 'macOS':
+        return base_fonts + [
+            'Helvetica', 'Helvetica Neue', 'SF Pro Display',
+            'Monaco', 'Menlo', 'Avenir'
+        ]
+    else:
+        return base_fonts + [
+            'Ubuntu', 'Liberation Sans', 'DejaVu Sans'
+        ]
+
+
+def _get_plugins(browser: str) -> List[Dict[str, str]]:
+    """Get plugin list based on browser"""
+    
+    if browser == 'Chrome' or browser == 'Edge':
+        return [
+            {
+                'name': 'PDF Viewer',
+                'filename': 'internal-pdf-viewer',
+                'description': 'Portable Document Format'
+            },
+            {
+                'name': 'Chrome PDF Viewer',
+                'filename': 'internal-pdf-viewer',
+                'description': 'Portable Document Format'
+            }
+        ]
+    elif browser == 'Firefox':
+        return []  # Firefox doesn't expose plugins anymore
+    else:
+        return []
+
+
+def _get_mime_types() -> List[str]:
+    """Get standard MIME types"""
+    
+    return [
+        'application/pdf',
+        'text/plain',
+        'text/html',
+        'application/json',
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'video/mp4',
+        'video/webm',
+        'audio/mpeg',
+        'audio/wav',
+    ]
+
+
+def _get_platform_optimizations(platform: str) -> Dict[str, Any]:
+    """Get platform-specific optimizations"""
+    
+    optimizations = {
+        'fansale': {
+            'accept_language': 'it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7',
+            'sec_ch_ua_platform': '"Windows"',
+            'referrer_policy': 'strict-origin-when-cross-origin',
+        },
+        'ticketmaster': {
+            'accept_language': 'en-US,en;q=0.9,it;q=0.8',
+            'sec_ch_ua_platform': '"Windows"',
+            'referrer_policy': 'no-referrer-when-downgrade',
+            'queue_behavior': {
+                'patience_factor': random.uniform(0.8, 1.0),
+                'refresh_pattern': 'human-like'
+            }
+        },
+        'vivaticket': {
+            'accept_language': 'it-IT,it;q=0.9',
+            'sec_ch_ua_platform': '"Windows"',
+            'referrer_policy': 'same-origin',
+        }
+    }
+    
+    return optimizations.get(platform, {})
+
+
+# Additional utility functions
+
+def mutate_profile(profile: Dict[str, Any], mutation_rate: float = 0.1) -> Dict[str, Any]:
+    """
+    Mutate an existing profile to create variation
+    
+    Args:
+        profile: Existing profile to mutate
+        mutation_rate: Probability of mutating each field (0.0-1.0)
+    
+    Returns:
+        Mutated profile
+    """
+    mutated = profile.copy()
+    
+    # Mutate fingerprint
+    if random.random() < mutation_rate:
+        mutated['fingerprint']['canvas_hash'] = hashlib.sha256(
+            f"{profile['fingerprint']['canvas_hash']}_{datetime.now()}".encode()
+        ).hexdigest()[:16]
+    
+    # Mutate viewport slightly
+    if random.random() < mutation_rate:
+        mutated['viewport_width'] += random.randint(-50, 50)
+        mutated['viewport_height'] += random.randint(-50, 50)
+    
+    # Mutate behavioral patterns
+    if random.random() < mutation_rate:
+        mutated['typing_speed_wpm'] += random.randint(-5, 5)
+        mutated['mouse_precision'] *= random.uniform(0.9, 1.1)
+    
+    return mutated
+
+
+def validate_profile(profile: Dict[str, Any]) -> bool:
+    """
+    Validate that a profile has all required fields
+    
+    Args:
+        profile: Profile to validate
+    
+    Returns:
+        True if valid, False otherwise
+    """
+    required_fields = [
+        'profile_id', 'browser', 'user_agent', 'os', 'platform',
+        'screen_width', 'screen_height', 'viewport_width', 'viewport_height',
+        'languages', 'timezone', 'fingerprint'
+    ]
+    
+    for field in required_fields:
+        if field not in profile:
+            return False
+    
+    # Validate fingerprint
+    required_fingerprint_fields = [
+        'canvas_hash', 'webgl_vendor', 'webgl_renderer', 'audio_hash'
+    ]
+    
+    if 'fingerprint' in profile:
+        for field in required_fingerprint_fields:
+            if field not in profile['fingerprint']:
+                return False
+    
+    return True
 def generate_config_template(output_path: str = "config_template.yaml"):
     """Generate a config template file"""
     template = {
@@ -518,7 +1023,7 @@ def merge_profile_stats(profiles: List[Any]) -> Dict[str, Any]:
 def create_profile_manager_from_config(
     config_path: str,
     config_overrides: Optional[Dict[str, Any]] = None # Add the new parameter with a default
-) -> ProfileManager:
+) -> 'ProfileManager':
     """Create ProfileManager from YAML config file, applying overrides if provided."""
     config_path_obj = Path(config_path)
     if not config_path_obj.exists():
@@ -546,6 +1051,8 @@ def create_profile_manager_from_config(
     pm_config_obj = parse_profile_manager_config(final_config_for_parsing)
     base_template = final_config_for_parsing.get('base_profile_template')
 
+    # Import here to avoid circular import
+    from .manager import ProfileManager
     return ProfileManager(config=pm_config_obj, base_profile_template=base_template)
 
 def export_profile_health_report(profiles: List[Any], output_path: str):
@@ -679,7 +1186,7 @@ def generate_profile_recommendations(profile: Any, health_score: float) -> List[
 
 # Monitoring utilities
 
-def create_profile_monitor(manager: ProfileManager) -> 'ProfileMonitor':
+def create_profile_monitor(manager: 'ProfileManager') -> 'ProfileMonitor':
     """Create a profile monitor instance"""
     return ProfileMonitor(manager)
 
@@ -687,7 +1194,7 @@ def create_profile_monitor(manager: ProfileManager) -> 'ProfileMonitor':
 class ProfileMonitor:
     """Monitor profile health and performance"""
     
-    def __init__(self, manager: ProfileManager):
+    def __init__(self, manager: 'ProfileManager'):
         self.manager = manager
         self.alert_callbacks = []
     

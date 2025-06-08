@@ -23,7 +23,7 @@ from .managers import ConnectionPoolManager, ResponseCache
 from .ticket_reserver import TicketReserver
 
 # Enhanced components
-from .stealth.stealth_engine import get_stealthmaster_engine
+from ..stealth.stealth_engine import get_stealthmaster_engine
 from .strike_force import EnhancedStrikeForce
 from .proxy_manager import get_proxy_manager
 from ..platforms.unified_handler import UnifiedTicketingHandler
@@ -103,13 +103,14 @@ class UltimateOrchestrator:
             await self.profile_manager.initialize()
             
             # Initialize core components
-            self.connection_pool = ConnectionPoolManager(
-                max_connections=self._get_mode_setting('max_connections', 50)
-            )
+            connection_config = {
+                'max_connections': self._get_mode_setting('max_connections', 50),
+                'timeout': self.config.get('monitoring_settings', {}).get('timeout_ms', 30000) / 1000
+            }
+            self.connection_pool = ConnectionPoolManager(connection_config, self.profile_manager)
             
             self.response_cache = ResponseCache(
-                max_size=self._get_mode_setting('cache_size', 1000),
-                ttl=self.config['monitoring_settings'].get('cache_max_age_s', 300)
+                max_size_mb=self._get_mode_setting('cache_size', 100)  # MB instead of item count
             )
             
             # Initialize ticket reserver
@@ -201,6 +202,16 @@ class UltimateOrchestrator:
                 best_score = score
                 best_profile = profile
         
+        # Assign proxy to the selected profile
+        if best_profile:
+            proxy_config = self.proxy_manager.get_proxy_for_profile(
+                best_profile.profile_id, 
+                platform
+            )
+            if proxy_config:
+                best_profile.proxy_config = proxy_config
+                logger.info(f"Assigned proxy to profile {best_profile.name}")
+        
         return best_profile
     
     async def start(self) -> None:
@@ -264,6 +275,26 @@ class UltimateOrchestrator:
             except BlockedError:
                 logger.warning(f"Monitor {monitor_id} blocked - entering stealth mode")
                 await self._handle_monitor_block(monitor_id, monitor)
+                
+            except Exception as e:
+                error_msg = str(e)
+                # Check for proxy-related errors
+                if any(err in error_msg for err in ['ERR_HTTP2_PROTOCOL_ERROR', 'ERR_TUNNEL_CONNECTION_FAILED', 'ERR_PROXY_CONNECTION_FAILED']):
+                    logger.warning(f"Proxy error detected for {monitor_id}: {error_msg}")
+                    # Try to rotate proxy
+                    if hasattr(monitor, 'profile') and monitor.profile:
+                        new_proxy = self.proxy_manager.rotate_proxy_for_profile(
+                            monitor.profile.profile_id,
+                            monitor.platform.value
+                        )
+                        if new_proxy:
+                            monitor.profile.proxy_config = new_proxy
+                            logger.info(f"Rotated to new proxy for {monitor_id}")
+                            # Short cooldown before retry
+                            await asyncio.sleep(5)
+                            continue
+                        else:
+                            logger.error(f"No alternative proxy available for {monitor_id}")
                 
             except Exception as e:
                 logger.error(f"Monitor loop error: {e}")

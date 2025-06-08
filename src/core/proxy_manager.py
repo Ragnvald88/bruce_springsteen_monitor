@@ -199,7 +199,8 @@ class StealthProxyManager:
     
     async def _validate_proxy(self, proxy: Proxy) -> bool:
         """Validate single proxy"""
-        test_url = self.config.get('validation', {}).get('test_url', 'https://httpbin.org/ip')
+        # Use a simpler test URL that works better with proxies
+        test_url = self.config.get('validation', {}).get('test_url', 'http://ip-api.com/json')
         timeout = self.config.get('validation', {}).get('timeout_seconds', 10)
         
         try:
@@ -219,8 +220,13 @@ class StealthProxyManager:
                     proxy.record_request(True, response_time)
                     
                     # Verify IP is different
-                    data = response.json()
-                    logger.debug(f"Proxy {proxy.host} returned IP: {data.get('origin')}")
+                    try:
+                        data = response.json()
+                        # ip-api.com returns 'query' field with IP
+                        proxy_ip = data.get('query') or data.get('origin') or 'Unknown'
+                        logger.debug(f"Proxy {proxy.host} returned IP: {proxy_ip}")
+                    except:
+                        logger.debug(f"Proxy {proxy.host} validated successfully")
                     
                     return True
                 else:

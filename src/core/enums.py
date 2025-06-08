@@ -1,19 +1,8 @@
 # src/core/enums.py
-from __future__ import annotations
 from enum import Enum, auto
 
-# Import CorePlatformEnum from consolidated models
-try:
-    from ..profiles.consolidated_models import Platform as CorePlatformEnum
-except ImportError:
-    # Fallback or error handling if Platform cannot be imported
-    print("CRITICAL ERROR: Could not import CorePlatformEnum from profiles.consolidated_models in core.enums")
-    class CorePlatformEnum(Enum):
-        DUMMY = "dummy_platform"
-
-
 class OperationMode(Enum):
-    """System operation modes with enhanced capabilities"""
+    """System operation modes"""
     STEALTH = "stealth"
     BEAST = "beast"
     HYBRID = "hybrid"
@@ -21,52 +10,32 @@ class OperationMode(Enum):
     ULTRA_STEALTH = "ultra_stealth"
 
 class PlatformType(Enum):
-    """Supported ticketing platforms - aligned with core.profiles.Platform"""
+    """Supported ticketing platforms"""
     FANSALE = "fansale"
     TICKETMASTER = "ticketmaster"
     VIVATICKET = "vivaticket"
 
-    def to_core_platform(self) -> CorePlatformEnum:
-        """Convert to core Platform enum"""
-        # Use the already imported CorePlatformEnum
-        mapping = {
-            PlatformType.FANSALE: CorePlatformEnum.FANSALE,
-            PlatformType.TICKETMASTER: CorePlatformEnum.TICKETMASTER,
-            PlatformType.VIVATICKET: CorePlatformEnum.VIVATICKET
-        }
-        result = mapping.get(self)
-        if result is None:
-            # Fallback to GENERIC if mapping not found
-            result = CorePlatformEnum.GENERIC
-
-        return result
-        
-
-
 class PriorityLevel(Enum):
-    """Enhanced priority system with dynamic weighting"""
-    # Value tuple: (numeric_value, speed_multiplier, data_multiplier)
+    """Priority levels with multipliers"""
     CRITICAL = (1, 1.0, 0.1)
     HIGH = (2, 0.8, 0.3)
     NORMAL = (3, 0.6, 0.5)
     LOW = (4, 0.4, 0.8)
-
-    # __init__ is implicitly handled for enums with values.
-    # Properties are a good way to access tuple parts.
+    
     @property
-    def numeric_value(self) -> int:
+    def numeric_value(self):
         return self.value[0]
-
+    
     @property
-    def speed_multiplier(self) -> float:
+    def speed_multiplier(self):
         return self.value[1]
-
+    
     @property
-    def data_multiplier(self) -> float:
+    def data_multiplier(self):
         return self.value[2]
 
 class DetectionStatus(Enum):
-    """Advanced detection states for opportunities"""
+    """Detection states"""
     MONITORING = auto()
     DETECTED = auto()
     VERIFIED = auto()
@@ -75,4 +44,3 @@ class DetectionStatus(Enum):
     FAILED = auto()
     BLOCKED = auto()
     RATE_LIMITED = auto()
-    DATA_LIMITED = auto()

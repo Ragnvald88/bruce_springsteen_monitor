@@ -68,7 +68,7 @@ monitoring_settings:
 # BROWSER OPTIONS
 # =============================================================================
 browser_options:
-  headless: false  # IMPORTANT: Set to false to see browsers
+  headless: true  # IMPORTANT: Set to false to see browsers
   channel: "chrome"  # Use real Chrome for better compatibility
   
   # StealthMaster AI enhancements
@@ -362,6 +362,6 @@ advanced_features:
     
   # Emergency protocols
   emergency_protocols:
-    auto_switch_ultra_stealth: true
+    auto_switch_ultra_stealth: false
     threat_threshold: 0.8
     emergency_cooldown: 600

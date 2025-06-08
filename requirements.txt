@@ -1,27 +1,33 @@
-aiofiles>=23.1.0
-colorama>=0.4.4
-colorlog>=6.7.0
-customtkinter==5.2.2
-darkdetect==0.8.0
-fake-http-header==0.3.5
-fake-useragent>=1.4.0
-flask>=2.3.0
-flask-socketio>=5.3.0
-greenlet==3.2.2
-httpx>=0.28.1
-matplotlib>=3.7.0
-numpy>=1.24.0
-packaging==25.0
-playwright==1.52.0
-psutil>=5.9.0
-pyee==13.0.0
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-python-dotenv==1.1.0
-PyYAML==6.0.2
-setuptools==80.4.0
-tf-playwright-stealth==1.1.2
-typing_extensions==4.13.2
+# StealthMaster AI v3.0 - Minimal Requirements
+# Only essential dependencies for maximum efficiency
 
-# StealthMaster AI Optional Dependencies
-tls-client>=0.2.0  # Advanced TLS fingerprinting (optional but recommended)
+# Core async framework
+playwright==1.48.0
+
+# HTTP client for lightweight checks
+httpx==0.28.1
+
+# Configuration
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# GUI for detection monitor
+# Note: tkinter comes with Python, no need to install
+
+# Performance monitoring
+psutil==5.9.8
+
+# Scientific computing for adaptive scheduling
+numpy==1.26.2
+
+# Logging enhancements
+colorama==0.4.6
+
+# Async utilities
+aiofiles==24.1.0
+
+# Development/Testing (optional)
+pytest==8.0.0
+pytest-asyncio==0.23.3
+
+# Total size: ~50MB vs ~200MB in v2

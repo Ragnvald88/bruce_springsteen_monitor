@@ -1,0 +1,28 @@
+🚀 Starting comprehensive performance test suite...
+
+📊 Test 1: Startup Performance
+  Iteration 1/5Traceback (most recent call last):
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/tests/test_performance_suite.py", line 791, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/tests/test_performance_suite.py", line 749, in main
+    results = await test_suite.run_all_tests()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/tests/test_performance_suite.py", line 57, in run_all_tests
+    startup_results = await self.test_startup_performance()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/tests/test_performance_suite.py", line 124, in test_startup_performance
+    await stealth.apply_page_stealth(page)
+  File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/stealth/core.py", line 84, in apply_page_stealth
+    await self.human_behavior.initialize(page)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'HumanBehavior' object has no attribute 'initialize'

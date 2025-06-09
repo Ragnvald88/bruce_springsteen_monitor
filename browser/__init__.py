@@ -2,7 +2,7 @@
 """Browser automation layer for StealthMaster."""
 
 from .context import StealthContext
-from .launcher import StealthLauncher
+from .launcher import BrowserLauncher
 from .pool import BrowserPool
 
-__all__ = ["StealthContext", "StealthLauncher", "BrowserPool"]
+__all__ = ["StealthContext", "BrowserLauncher", "BrowserPool"]

@@ -78,7 +78,7 @@ proxy_settings:
   # Your IPRoyal proxy from .env
   primary_pool:
     - host: "${IPROYAL_HOSTNAME}"
-      port: ${IPROYAL_PORT}
+      port: "${IPROYAL_PORT}"
       username: "${IPROYAL_USERNAME}"
       password: "${IPROYAL_PASSWORD}"
       type: "http"

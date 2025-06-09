@@ -17,8 +17,8 @@ from .models import (
     UserCredentials, BrowserFingerprint, ProxyBinding,
     ProfileMetrics, PaymentMethod, BillingAddress
 )
-from ..stealth.fingerprint import FingerprintGenerator
-from ..config import Settings
+from stealth.fingerprint import FingerprintGenerator
+from config import Settings
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +46,6 @@ class ProfileManager:
         
         # Fingerprint generator
         self.fingerprint_gen = FingerprintGenerator()
-        
-        # Load profiles on init
-        asyncio.create_task(self.load_all_profiles())
     
     def _init_encryption(self) -> Fernet:
         """Initialize encryption for sensitive data."""
@@ -466,7 +463,7 @@ class ProfileManager:
         profile_file = self.profiles_dir / f"{profile.id}.json"
         
         # Prepare data
-        data = profile.dict()
+        data = profile.model_dump()
         
         # Encrypt sensitive fields
         sensitive_fields = ["credentials", "payment_methods"]
@@ -551,7 +548,7 @@ class ProfileManager:
                 pass
         
         # Update or add group
-        group_dict = group.dict()
+        group_dict = group.model_dump()
         found = False
         for i, g in enumerate(groups_data):
             if g["id"] == group.id:

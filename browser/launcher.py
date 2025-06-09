@@ -6,16 +6,16 @@ from typing import Dict, Optional, List
 
 from playwright.async_api import Browser, Playwright, BrowserContext
 
-from stealthmaster.config import BrowserConfig, ProxyConfig
-from stealthmaster.stealth.core import StealthCore
+from config import BrowserOptions, ProxyConfig
+from stealth.core import StealthCore
 
 logger = logging.getLogger(__name__)
 
 
-class StealthLauncher:
+class BrowserLauncher:
     """Launches browsers with maximum stealth configuration."""
     
-    def __init__(self, config: BrowserConfig):
+    def __init__(self, config: BrowserOptions):
         """Initialize the launcher with configuration."""
         self.config = config
         self.stealth_core = StealthCore()
@@ -44,7 +44,7 @@ class StealthLauncher:
         proxy_config = None
         if proxy:
             proxy_config = {
-                "server": proxy.server,
+                "server": f"{proxy.type}://{proxy.host}:{proxy.port}",
                 "username": proxy.username,
                 "password": proxy.password,
             }
@@ -90,7 +90,7 @@ class StealthLauncher:
             "--disable-component-extensions-with-background-pages",
             
             # Window settings
-            f"--window-size={self.config.viewport_width},{self.config.viewport_height}",
+            "--window-size=1920,1080",
             "--start-maximized",
             
             # Additional stealth flags
@@ -145,7 +145,7 @@ class StealthLauncher:
             },
             "user_agent": fingerprint["user_agent"],
             "locale": fingerprint["language"][:2],
-            "timezone_id": self.config.timezone,
+            "timezone_id": "Europe/Rome",
             "geolocation": fingerprint.get("geo"),
             "permissions": ["geolocation", "notifications"],
             "color_scheme": "light",
@@ -171,7 +171,7 @@ class StealthLauncher:
         # Store fingerprint for reference
         context._stealth_fingerprint = fingerprint
         
-        # Apply context-level stealth
+        # Apply context-level stealth BEFORE creating pages
         await self.stealth_core.apply_context_stealth(context)
         
         logger.debug(f"Created stealth context with fingerprint ID: {fingerprint.get('id', 'default')}")

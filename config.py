@@ -7,7 +7,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Union
 
-from pydantic import BaseModel, Field, HttpUrl, validator, root_validator
+from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 import yaml
 from dotenv import load_dotenv
 
@@ -71,7 +71,7 @@ class AppSettings(BaseModel):
     mode: AppMode = AppMode.ADAPTIVE
     version: str = "2.0.0"
     dry_run: bool = False
-    browser_open_mode: str = Field(default="both", regex="^(default|automated|both)$")
+    browser_open_mode: str = Field(default="both", pattern="^(default|automated|both)$")
     mode_configs: Dict[str, ModeConfig]
 
 
@@ -93,7 +93,7 @@ class MonitoringSettings(BaseModel):
 class BrowserOptions(BaseModel):
     """Browser configuration options."""
     headless: bool = True
-    channel: str = Field(default="chrome", regex="^(chrome|chromium|firefox|webkit)$")
+    channel: str = Field(default="chrome", pattern="^(chrome|chromium|firefox|webkit)$")
     
     class StealthOptions(BaseModel):
         viewport_randomization: bool = True
@@ -115,8 +115,8 @@ class BrowserOptions(BaseModel):
 
 class StrikeSettings(BaseModel):
     """Strike force configuration."""
-    coordination_strategy: str = Field(default="quantum", regex="^(quantum|parallel|sequential)$")
-    profile_selection: str = Field(default="ml_optimized", regex="^(ml_optimized|round_robin|random)$")
+    coordination_strategy: str = Field(default="quantum", pattern="^(quantum|parallel|sequential)$")
+    profile_selection: str = Field(default="ml_optimized", pattern="^(ml_optimized|round_robin|random)$")
     
     class TimeoutConfigs(BaseModel):
         navigation: int = Field(default=30000, ge=10000)
@@ -138,7 +138,8 @@ class PlatformAuth(BaseModel):
     username: str
     password: str
     
-    @validator("username", "password")
+    @field_validator("username", "password")
+    @classmethod
     def resolve_env_vars(cls, v):
         """Resolve environment variables."""
         if v.startswith("${") and v.endswith("}"):
@@ -156,7 +157,7 @@ class Authentication(BaseModel):
 class ProxyConfig(BaseModel):
     """Individual proxy configuration."""
     host: str
-    port: int
+    port: Union[int, str]
     username: Optional[str] = None
     password: Optional[str] = None
     type: ProxyType = ProxyType.HTTP
@@ -164,7 +165,8 @@ class ProxyConfig(BaseModel):
     quality_score: float = Field(default=0.5, ge=0.0, le=1.0)
     provider: Optional[str] = None
     
-    @validator("host", "username", "password")
+    @field_validator("host", "username", "password")
+    @classmethod
     def resolve_env_vars(cls, v):
         """Resolve environment variables."""
         if v and v.startswith("${") and v.endswith("}"):
@@ -172,8 +174,9 @@ class ProxyConfig(BaseModel):
             return os.getenv(env_var, v)
         return v
     
-    @validator("port")
-    def resolve_port_env(cls, v, values):
+    @field_validator("port")
+    @classmethod
+    def resolve_port_env(cls, v):
         """Resolve port from environment if needed."""
         if isinstance(v, str) and v.startswith("${"):
             env_var = v[2:-1]
@@ -275,7 +278,7 @@ class Target(BaseModel):
     event_name: str
     url: HttpUrl
     enabled: bool = True
-    priority: str = Field(default="NORMAL", regex="^(LOW|NORMAL|HIGH|CRITICAL)$")
+    priority: str = Field(default="NORMAL", pattern="^(LOW|NORMAL|HIGH|CRITICAL)$")
     interval_s: int = Field(default=30, ge=5)
     
     # Ticket preferences
@@ -290,10 +293,11 @@ class Target(BaseModel):
     burst_mode: Optional[BurstMode] = None
     queue_config: Optional[QueueConfig] = None
     
-    @validator("max_ticket_quantity")
-    def validate_quantity_range(cls, v, values):
+    @field_validator("max_ticket_quantity")
+    @classmethod
+    def validate_quantity_range(cls, v, info):
         """Ensure max >= min quantity."""
-        if "min_ticket_quantity" in values and v < values["min_ticket_quantity"]:
+        if "min_ticket_quantity" in info.data and v < info.data["min_ticket_quantity"]:
             raise ValueError("max_ticket_quantity must be >= min_ticket_quantity")
         return v
 
@@ -325,7 +329,7 @@ class AntiDetection(BaseModel):
 
 class LoggingConfig(BaseModel):
     """Logging configuration."""
-    level: str = Field(default="INFO", regex="^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$")
+    level: str = Field(default="INFO", pattern="^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$")
     log_directory: Path = Field(default=Path("logs"))
     main_log_file: str = "stealthmaster.log"
     error_log_file: str = "errors.log"
@@ -405,27 +409,27 @@ class Settings(BaseModel):
     logs_dir: Path = Field(default=Path("./logs"))
     screenshots_dir: Path = Field(default=Path("./screenshots"))
     
-    @validator("data_dir", "logs_dir", "screenshots_dir")
+    @field_validator("data_dir", "logs_dir", "screenshots_dir")
+    @classmethod
     def create_directories(cls, v: Path) -> Path:
         """Ensure directories exist."""
         v.mkdir(parents=True, exist_ok=True)
         return v
     
-    @root_validator
-    def validate_mode_configs(cls, values):
+    @model_validator(mode='after')
+    def validate_mode_configs(self):
         """Ensure all modes have configs."""
-        app_settings = values.get("app_settings")
-        if app_settings:
+        if self.app_settings:
             required_modes = ["ultra_stealth", "stealth", "adaptive", "hybrid", "beast"]
             for mode in required_modes:
-                if mode not in app_settings.mode_configs:
+                if mode not in self.app_settings.mode_configs:
                     raise ValueError(f"Missing configuration for mode: {mode}")
-        return values
+        return self
     
-    class Config:
-        """Pydantic configuration."""
-        use_enum_values = True
-        validate_assignment = True
+    model_config = {
+        "use_enum_values": True,
+        "validate_assignment": True
+    }
 
 
 def load_settings(config_path: Optional[Path] = None) -> Settings:

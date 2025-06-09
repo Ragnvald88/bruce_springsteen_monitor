@@ -942,3 +942,7 @@ class HumanBehavior:
             del self._active_pages[page_id]
         
         logger.debug(f"Cleaned up behaviors for page {page_id}")
+    
+    def is_protected(self, page: Page) -> bool:
+        """Check if page has CDP protection applied."""
+        return str(id(page)) in self._active_pages

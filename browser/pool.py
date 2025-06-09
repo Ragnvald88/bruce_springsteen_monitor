@@ -4,14 +4,14 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 from playwright.async_api import Browser, Playwright
 
-from stealthmaster.browser.context import StealthContext
-from stealthmaster.browser.launcher import StealthLauncher
-from stealthmaster.config import BrowserConfig, ProxyConfig
-from stealthmaster.constants import BrowserState
+from browser.context import StealthContext
+from browser.launcher import BrowserLauncher
+from config import BrowserOptions, ProxyConfig
+from constants import BrowserState
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ class BrowserPool:
     
     def __init__(
         self,
-        config: BrowserConfig,
+        config: BrowserOptions,
         playwright: Playwright,
         proxies: Optional[List[ProxyConfig]] = None,
     ):
@@ -104,7 +104,7 @@ class BrowserPool:
         self.config = config
         self.playwright = playwright
         self.proxies = proxies or []
-        self.launcher = StealthLauncher(config)
+        self.launcher = BrowserLauncher(config)
         
         self._instances: Dict[str, BrowserInstance] = {}
         self._lock = asyncio.Lock()

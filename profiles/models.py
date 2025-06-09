@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from enum import Enum
-from pydantic import BaseModel, Field, validator, EmailStr
+from pydantic import BaseModel, Field, field_validator, EmailStr
 import hashlib
 import json
 
@@ -45,7 +45,8 @@ class BillingAddress(BaseModel):
     postal_code: str
     country: str = Field(default="IT")
     
-    @validator('country')
+    @field_validator('country')
+    @classmethod
     def validate_country(cls, v):
         """Ensure country code is uppercase."""
         return v.upper()
@@ -81,10 +82,11 @@ class BrowserFingerprint(BaseModel):
     plugins: List[Dict[str, Any]]
     created_at: datetime = Field(default_factory=datetime.now)
     
-    class Config:
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda v: v.isoformat()
         }
+    }
 
 
 class ProfileMetrics(BaseModel):
@@ -169,12 +171,14 @@ class Profile(BaseModel):
     notes: Optional[str] = None
     custom_data: Dict[str, Any] = Field(default_factory=dict)
     
-    @validator('email')
+    @field_validator('email')
+    @classmethod
     def normalize_email(cls, v):
         """Normalize email to lowercase."""
         return v.lower()
     
-    @validator('phone')
+    @field_validator('phone')
+    @classmethod
     def validate_phone(cls, v):
         """Basic phone validation."""
         # Remove common separators
@@ -244,7 +248,7 @@ class Profile(BaseModel):
     
     def to_safe_dict(self) -> Dict[str, Any]:
         """Export profile without sensitive data."""
-        data = self.dict()
+        data = self.model_dump()
         # Remove sensitive fields
         for cred in data.get('credentials', []):
             cred.pop('password', None)
@@ -252,10 +256,11 @@ class Profile(BaseModel):
             cred.pop('cookies', None)
         return data
     
-    class Config:
-        json_encoders = {
+    model_config = {
+        "json_encoders": {
             datetime: lambda v: v.isoformat()
         }
+    }
 
 
 class ProfileGroup(BaseModel):

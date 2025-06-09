@@ -6,10 +6,10 @@ from typing import Dict, Any, Optional
 
 from playwright.async_api import Page, BrowserContext
 
-from stealthmaster.stealth.cdp import CDPStealth
-from stealthmaster.stealth.fingerprint import FingerprintGenerator
-from stealthmaster.stealth.injections import StealthInjections
-from stealthmaster.stealth.behaviors import HumanBehavior
+from stealth.cdp import CDPStealth
+from stealth.fingerprint import FingerprintGenerator
+from stealth.injections import StealthInjections
+from stealth.behaviors import HumanBehavior
 
 logger = logging.getLogger(__name__)
 
@@ -271,3 +271,83 @@ class StealthCore:
             "human_behavior_active": self.human_behavior.is_active(page),
             "fingerprint_id": getattr(page, "_stealth_fingerprint", {}).get("id"),
         }
+    
+    async def apply_context_stealth(self, context: BrowserContext) -> None:
+        """
+        Apply stealth measures at the context level.
+        
+        Args:
+            context: BrowserContext to protect
+        """
+        # Add comprehensive pre-page script
+        await context.add_init_script("""
+            // Context-level stealth initialization
+            (() => {
+                'use strict';
+                
+                // Remove webdriver before anything else loads
+                delete Object.getPrototypeOf(navigator).webdriver;
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined,
+                    configurable: false
+                });
+                
+                // Remove automation indicators
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+                
+                // Fix chrome object
+                if (!window.chrome) {
+                    window.chrome = {};
+                }
+                if (!window.chrome.runtime) {
+                    window.chrome.runtime = {
+                        connect: () => {},
+                        sendMessage: () => {},
+                        onMessage: { addListener: () => {} }
+                    };
+                }
+                
+                // Mock plugins early
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => {
+                        const arr = [
+                            {
+                                name: 'Chrome PDF Plugin',
+                                description: 'Portable Document Format',
+                                filename: 'internal-pdf-viewer',
+                                length: 1
+                            },
+                            {
+                                name: 'Chrome PDF Viewer', 
+                                description: 'Portable Document Format',
+                                filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai',
+                                length: 1
+                            },
+                            {
+                                name: 'Native Client',
+                                description: 'Native Client Executable',
+                                filename: 'internal-nacl-plugin',
+                                length: 2
+                            }
+                        ];
+                        arr.item = (i) => arr[i];
+                        arr.namedItem = (name) => arr.find(p => p.name === name);
+                        arr.refresh = () => {};
+                        Object.defineProperty(arr, 'length', { value: 3 });
+                        return arr;
+                    },
+                    configurable: false
+                });
+                
+                // Fix permissions
+                const originalQuery = navigator.permissions.query;
+                navigator.permissions.query = async (parameters) => {
+                    if (parameters.name === 'notifications') {
+                        return { state: 'prompt', onchange: null };
+                    }
+                    return originalQuery(parameters);
+                };
+            })();
+        """)

@@ -17,9 +17,9 @@ from rich.layout import Layout
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from .config import Settings, load_settings
-from .profiles import ProfileManager
-from .utils.logging import setup_logging
+from config import Settings, load_settings
+from profiles import ProfileManager
+from utils.logging import setup_logging
 
 # Placeholder imports for modules not yet created
 # from stealthmaster.browser.pool import BrowserPool

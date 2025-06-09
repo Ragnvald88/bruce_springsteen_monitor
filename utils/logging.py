@@ -12,7 +12,7 @@ import json
 from rich.logging import RichHandler
 from rich.console import Console
 
-from ..config import LoggingConfig
+from config import LoggingConfig
 
 
 class JSONFormatter(logging.Formatter):

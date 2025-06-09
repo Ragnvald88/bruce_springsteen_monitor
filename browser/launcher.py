@@ -1,0 +1,179 @@
+# stealthmaster/browser/launcher.py
+"""Stealth browser launcher with advanced anti-detection."""
+
+import logging
+from typing import Dict, Optional, List
+
+from playwright.async_api import Browser, Playwright, BrowserContext
+
+from stealthmaster.config import BrowserConfig, ProxyConfig
+from stealthmaster.stealth.core import StealthCore
+
+logger = logging.getLogger(__name__)
+
+
+class StealthLauncher:
+    """Launches browsers with maximum stealth configuration."""
+    
+    def __init__(self, config: BrowserConfig):
+        """Initialize the launcher with configuration."""
+        self.config = config
+        self.stealth_core = StealthCore()
+    
+    async def launch(
+        self,
+        playwright: Playwright,
+        proxy: Optional[ProxyConfig] = None,
+        headless: bool = False,
+    ) -> Browser:
+        """
+        Launch a browser with stealth configuration.
+        
+        Args:
+            playwright: Playwright instance
+            proxy: Optional proxy configuration
+            headless: Whether to run headless (not recommended)
+            
+        Returns:
+            Configured browser instance
+        """
+        # Build launch arguments
+        args = self._build_launch_args()
+        
+        # Proxy configuration
+        proxy_config = None
+        if proxy:
+            proxy_config = {
+                "server": proxy.server,
+                "username": proxy.username,
+                "password": proxy.password,
+            }
+        
+        # Launch browser
+        browser = await playwright.chromium.launch(
+            headless=headless,
+            args=args,
+            proxy=proxy_config,
+            # Chromium-specific options for better stealth
+            chromium_sandbox=False,
+            handle_sigint=False,
+            handle_sigterm=False,
+            handle_sighup=False,
+        )
+        
+        logger.info(
+            f"Launched {'headless' if headless else 'headed'} browser "
+            f"{'with proxy' if proxy else 'without proxy'}"
+        )
+        
+        return browser
+    
+    def _build_launch_args(self) -> List[str]:
+        """Build optimized launch arguments for stealth."""
+        args = [
+            # Disable automation indicators
+            "--disable-blink-features=AutomationControlled",
+            "--disable-dev-shm-usage",
+            "--disable-web-security",
+            "--disable-features=IsolateOrigins,site-per-process",
+            
+            # Performance optimizations
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-gpu",
+            "--disable-accelerated-2d-canvas",
+            
+            # Stealth enhancements
+            "--disable-infobars",
+            "--disable-extensions",
+            "--disable-default-apps",
+            "--disable-component-extensions-with-background-pages",
+            
+            # Window settings
+            f"--window-size={self.config.viewport_width},{self.config.viewport_height}",
+            "--start-maximized",
+            
+            # Additional stealth flags
+            "--disable-plugins-discovery",
+            "--disable-popup-blocking",
+            "--disable-prompt-on-repost",
+            "--disable-hang-monitor",
+            "--disable-sync",
+            "--disable-translate",
+            "--metrics-recording-only",
+            "--safebrowsing-disable-auto-update",
+            "--password-store=basic",
+            "--use-mock-keychain",
+            
+            # Remove automation extension
+            "--disable-component-update",
+            "--disable-background-timer-throttling",
+            "--disable-backgrounding-occluded-windows",
+            "--disable-renderer-backgrounding",
+            
+            # User agent override (if specified)
+            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        ]
+        
+        return args
+    
+    async def create_context(
+        self,
+        browser: Browser,
+        fingerprint: Optional[Dict] = None,
+    ) -> BrowserContext:
+        """
+        Create a browser context with stealth settings.
+        
+        Args:
+            browser: Browser instance
+            fingerprint: Optional fingerprint configuration
+            
+        Returns:
+            Configured browser context
+        """
+        # Generate fingerprint if not provided
+        if not fingerprint:
+            fingerprint = self.stealth_core.generate_fingerprint()
+        
+        # Context options
+        context_options = {
+            "viewport": {
+                "width": fingerprint["viewport"]["width"],
+                "height": fingerprint["viewport"]["height"],
+            },
+            "user_agent": fingerprint["user_agent"],
+            "locale": fingerprint["language"][:2],
+            "timezone_id": self.config.timezone,
+            "geolocation": fingerprint.get("geo"),
+            "permissions": ["geolocation", "notifications"],
+            "color_scheme": "light",
+            "device_scale_factor": fingerprint.get("device_scale_factor", 1),
+            "is_mobile": False,
+            "has_touch": False,
+            "bypass_csp": True,
+            "ignore_https_errors": True,
+            "offline": False,
+            "http_credentials": None,
+            "extra_http_headers": {
+                "Accept-Language": f"{fingerprint['language']},en;q=0.9",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache",
+            },
+        }
+        
+        # Create context
+        context = await browser.new_context(**context_options)
+        
+        # Store fingerprint for reference
+        context._stealth_fingerprint = fingerprint
+        
+        # Apply context-level stealth
+        await self.stealth_core.apply_context_stealth(context)
+        
+        logger.debug(f"Created stealth context with fingerprint ID: {fingerprint.get('id', 'default')}")
+        
+        return context

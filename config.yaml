@@ -1,0 +1,288 @@
+# config/config.yaml - StealthMaster v2.0 Example
+# This file shows how to reference your .env variables
+
+# =============================================================================
+# APPLICATION SETTINGS
+# =============================================================================
+app_settings:
+  mode: "adaptive"  # Options: stealth, beast, ultra_stealth, adaptive, hybrid
+  version: "2.0.0"
+  dry_run: false
+  browser_open_mode: "both"
+  
+  mode_configs:
+    ultra_stealth:
+      max_concurrent_monitors: 1
+      max_concurrent_strikes: 1
+      max_connections: 20
+      cache_size: 500
+      profile_rotation_interval: 300
+      min_quality_tier: 5
+      
+    stealth:
+      max_concurrent_monitors: 2
+      max_concurrent_strikes: 2
+      max_connections: 30
+      cache_size: 750
+      profile_rotation_interval: 180
+      min_quality_tier: 4
+      
+    adaptive:
+      max_concurrent_monitors: 3
+      max_concurrent_strikes: 3
+      max_connections: 50
+      cache_size: 1000
+      
+    hybrid:
+      max_concurrent_monitors: 4
+      max_concurrent_strikes: 4
+      max_connections: 75
+      cache_size: 1500
+      min_quality_tier: 3
+      
+    beast:
+      max_concurrent_monitors: 8
+      max_concurrent_strikes: 10
+      max_connections: 100
+      cache_size: 2000
+      min_quality_tier: 1
+
+# =============================================================================
+# AUTHENTICATION - References your .env variables
+# =============================================================================
+authentication:
+  enabled: true
+  platforms:
+    # Fansale credentials from .env
+    fansale:
+      username: "${FANSALE_EMAIL}"
+      password: "${FANSALE_PASSWORD}"
+      
+    # Ticketmaster credentials from .env
+    ticketmaster:
+      username: "${TICKETMASTER_EMAIL}"
+      password: "${TICKETMASTER_PASSWORD}"
+      
+    # Vivaticket credentials from .env
+    vivaticket:
+      username: "${VIVATICKET_EMAIL}"
+      password: "${VIVATICKET_PASSWORD}"
+
+# =============================================================================
+# PROXY CONFIGURATION - Uses your IPRoyal credentials
+# =============================================================================
+proxy_settings:
+  enabled: true
+  rotation_strategy: "intelligent"
+  
+  # Your IPRoyal proxy from .env
+  primary_pool:
+    - host: "${IPROYAL_HOSTNAME}"
+      port: ${IPROYAL_PORT}
+      username: "${IPROYAL_USERNAME}"
+      password: "${IPROYAL_PASSWORD}"
+      type: "http"
+      country: "IT"
+      quality_score: 0.95
+      provider: "iproyal"
+  
+  backup_pool: []
+  
+  rotation_rules:
+    rotate_on_block: true
+    rotate_interval_minutes: 30
+    max_requests_per_proxy: 100
+    cooldown_after_block_minutes: 120
+    
+  platform_preferences:
+    fansale:
+      preferred_countries: ["IT", "CH", "AT"]
+      require_residential: true
+    ticketmaster:
+      preferred_countries: ["IT", "EU"]
+      require_residential: true
+    vivaticket:
+      preferred_countries: ["IT"]
+      require_residential: false
+      
+  validation:
+    test_url: "https://httpbin.org/ip"
+    timeout_seconds: 10
+    validate_on_start: true
+    revalidate_interval_hours: 6
+
+# =============================================================================
+# CAPTCHA SERVICE - Uses your 2Captcha API key
+# =============================================================================
+captcha_settings:
+  enabled: true
+  service: "2captcha"
+  api_key: "${TWOCAPTCHA_API_KEY}"
+  timeout: 120
+  max_retries: 3
+
+# =============================================================================
+# MONITORING SETTINGS
+# =============================================================================
+monitoring_settings:
+  default_interval_s: 30
+  min_monitor_interval_s: 3
+  cache_max_age_s: 300
+  
+  quantum_optimization:
+    enabled: true
+    pattern_analysis_interval: 60
+    resource_reallocation: true
+    predictive_burst_mode: true
+
+# =============================================================================
+# BROWSER OPTIONS
+# =============================================================================
+browser_options:
+  headless: true
+  channel: "chrome"
+  
+  stealth_options:
+    viewport_randomization: true
+    timezone_spoofing: true
+    webgl_noise: true
+    canvas_fingerprint_defender: true
+    audio_context_noise: true
+    font_fingerprint_defender: true
+    
+  cdp_evasion:
+    enabled: true
+    runtime_enable_bypass: true
+    console_hook_bypass: true
+    error_stack_cleaning: true
+
+# =============================================================================
+# TICKETING TARGETS - Bruce Springsteen Milano
+# =============================================================================
+targets:
+  # FANSALE - Bruce Springsteen Milano
+  - platform: "fansale"
+    event_name: "Bruce Springsteen Milano 2025"
+    url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+    enabled: true
+    priority: "CRITICAL"
+    interval_s: 20
+    desired_sections: ["Prato", "Tribuna", "Primo Anello"]
+    max_price_per_ticket: 800
+    min_ticket_quantity: 2
+    max_ticket_quantity: 4
+    burst_mode:
+      enabled: true
+      min_interval_s: 3
+      duration_s: 300
+      trigger_on_activity: true
+      
+  # TICKETMASTER - Bruce Springsteen San Siro
+  - platform: "ticketmaster"
+    event_name: "Bruce Springsteen San Siro 2025"
+    url: "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano"
+    enabled: true
+    priority: "CRITICAL"
+    interval_s: 25
+    desired_sections: ["Floor", "Lower Bowl", "Club"]
+    max_price_per_ticket: 750
+    min_ticket_quantity: 2
+    max_ticket_quantity: 4
+    queue_config:
+      auto_join: true
+      maintain_presence: true
+      multi_tab_protection: false
+
+# =============================================================================
+# The rest of the configuration...
+# =============================================================================
+strike_settings:
+  coordination_strategy: "quantum"
+  profile_selection: "ml_optimized"
+  timeout_configs:
+    navigation: 30000
+    strike_execution: 45000
+    queue_wait: 300000
+  success_indicators:
+    - "reservation successful"
+    - "added to cart"
+    - "order confirmed"
+
+profile_settings:
+  profile_count: 50
+  rotation_strategy: "performance_based"
+  proxy_binding:
+    enabled: true
+    sticky_sessions: true
+    rotation_sync: true
+  quality_distribution:
+    premium: 10
+    high: 15
+    medium: 15
+    standard: 10
+  fingerprint_mutation:
+    enabled: true
+    mutation_interval: 3600
+    mutation_factor: 0.15
+
+data_limits:
+  global_limit_mb: 10000
+  session_limit_mb: 2000
+  optimization_thresholds:
+    aggressive_trigger_percent: 70
+    emergency_trigger_percent: 90
+  resource_blocking:
+    images: true
+    media: true
+    fonts: true
+    trackers: true
+    analytics: true
+
+anti_detection:
+  human_simulation:
+    mouse_movements: true
+    keyboard_typing: true
+    scroll_patterns: true
+    reading_delays: true
+    micro_movements: true
+  request_patterns:
+    randomize_intervals: true
+    vary_user_agents: true
+    rotate_headers: true
+  block_recovery:
+    profile_rotation: true
+    cooldown_multiplier: 2.0
+    max_retries: 3
+
+logging:
+  level: "INFO"
+  log_directory: "logs"
+  main_log_file: "stealthmaster.log"
+  error_log_file: "errors.log"
+  performance_logging:
+    enabled: true
+    log_file: "performance.log"
+  detection_logging:
+    enabled: true
+    log_file: "detection_events.log"
+  ticket_logging:
+    enabled: true
+    log_file: "ticket_opportunities.log"
+
+advanced_features:
+  ml_optimization:
+    enabled: true
+    model_update_interval: 3600
+    feature_extraction: true
+  quantum_coordination:
+    enabled: true
+    entanglement_factor: 0.8
+    superposition_states: 3
+  predictive_analytics:
+    enabled: true
+    pattern_recognition: true
+    demand_forecasting: true
+  emergency_protocols:
+    auto_switch_ultra_stealth: false
+    threat_threshold: 0.8
+    emergency_cooldown: 600

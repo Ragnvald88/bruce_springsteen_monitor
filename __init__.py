@@ -12,7 +12,7 @@ __license__ = "Proprietary"
 
 # Core module imports
 from .config import Settings, load_settings
-from .constants import BrowserState, DetectionType, PurchaseStatus
+from .src.constants import BrowserState, DetectionType, PurchaseStatus
 
 # Make key components available at package level
 from .stealth.core import StealthCore

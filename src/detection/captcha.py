@@ -232,7 +232,7 @@ class CaptchaDetector:
             
             # Get site key from page if not in element
             if "data_sitekey" not in info:
-                sitekey = await page.evaluate("""
+                sitekey = await page.evaluate(r"""
                     () => {
                         const scripts = Array.from(document.scripts);
                         for (const script of scripts) {

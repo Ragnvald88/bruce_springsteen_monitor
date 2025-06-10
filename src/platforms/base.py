@@ -9,8 +9,8 @@ from typing import Dict, Any, Optional, List, Tuple
 from playwright.async_api import Page
 
 from config import Target
-from profiles.models import Profile as UserProfile
-from constants import PurchaseStatus, COMMON_SELECTORS
+from profile import Profile as UserProfile
+from src.constants import PurchaseStatus, COMMON_SELECTORS
 from stealth.behaviors import HumanBehavior
 
 logger = logging.getLogger(__name__)

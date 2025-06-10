@@ -20,19 +20,20 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 try:
     # When running as module
     from .config import Settings, load_settings
-    from .profiles import ProfileManager
-    from .utils.logging import setup_logging
+    from .profiles.manager import ProfileManager
+    from .utils.logging import setup_logging, get_logger
+    from .browser.pool import EnhancedBrowserPool
 except ImportError:
     # When running directly
     from config import Settings, load_settings
-    from profiles import ProfileManager
-    from utils.logging import setup_logging
+    from profiles.manager import ProfileManager
+    from utils.logging import setup_logging, get_logger
+    from browser.pool import EnhancedBrowserPool
 
-from browser.pool import EnhancedBrowserPool
 # from orchestration.scheduler import TaskScheduler  # Skip for now due to import issues
 
 console = Console()
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class StealthMaster:

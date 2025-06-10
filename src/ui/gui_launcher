@@ -14,8 +14,8 @@ from tkinter import ttk, messagebox
 import queue
 from datetime import datetime
 
-from ..config import Settings, load_settings
-from ..main import StealthMaster
+from config import Settings, load_settings
+from main import StealthMaster
 
 logger = logging.getLogger(__name__)
 

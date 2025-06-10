@@ -24,7 +24,7 @@ from stealth.core import StealthCore
 from detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
 from network.tls_fingerprint import TLSFingerprintRotator
 from config import Settings, ProxyConfig
-from constants import BrowserState
+from src.constants import BrowserState
 
 logger = logging.getLogger(__name__)
 

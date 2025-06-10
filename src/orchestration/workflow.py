@@ -10,7 +10,7 @@ from enum import Enum
 from browser.pool import EnhancedBrowserPool
 from config import Target, Platform
 from profiles.models import Profile as UserProfile
-from constants import PurchaseStatus
+from src.constants import PurchaseStatus
 from detection.monitor import DetectionMonitor, MonitoringLevel
 from detection.recovery import RecoveryStrategy
 from network.rate_limiter import RateLimiter

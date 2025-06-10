@@ -8,7 +8,8 @@ from typing import Dict, Any, Optional, List, Tuple
 from enum import Enum
 
 from browser.pool import EnhancedBrowserPool
-from config import TargetEvent, UserProfile, Platform
+from config import Target, Platform
+from profiles.models import Profile as UserProfile
 from constants import PurchaseStatus
 from detection.monitor import DetectionMonitor, MonitoringLevel
 from detection.recovery import RecoveryStrategy

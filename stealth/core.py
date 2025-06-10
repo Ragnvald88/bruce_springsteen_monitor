@@ -138,10 +138,6 @@ class StealthCore:
             "ignore_https_errors": True,
             "java_script_enabled": True,
             "offline": False,
-            "http_credentials": None,
-            "storage_state": None,
-            "record_har": None,
-            "record_video": None,
             "proxy": proxy,
             "extra_http_headers": {
                 "Accept-Language": fingerprint["navigator"]["language"] + ",en;q=0.9",
@@ -188,7 +184,7 @@ class StealthCore:
     def _build_init_script(self, fingerprint: Dict[str, Any]) -> str:
         """Build complete initialization script."""
         scripts = [
-            self.injections.get_base_evasion(),
+            self.injections.get_context_init_script(),
             self.injections.get_webdriver_evasion(),
             self.injections.get_chrome_runtime_evasion(),
             self.injections.get_plugin_evasion(fingerprint),
@@ -201,7 +197,7 @@ class StealthCore:
             self.injections.get_permission_evasion(),
             self.injections.get_console_evasion(),
             self.injections.get_error_evasion(),
-            self.injections.get_advanced_evasion(),
+            # self.injections.get_advanced_evasion(),  # Not implemented yet
         ]
         
         return "\n\n".join(scripts)
@@ -342,7 +338,8 @@ class StealthCore:
         # This would integrate with the browser's network layer
         # For now, we store it for later use
         browser._tls_profile = tls_profile
-        logger.debug(f"Applied TLS profile: {tls_profile.get('name', 'default')}")
+        profile_name = tls_profile.get('name', 'default') if isinstance(tls_profile, dict) else getattr(tls_profile, 'name', 'default')
+        logger.debug(f"Applied TLS profile: {profile_name}")
     
     def _check_console_detection(self, msg: Any) -> None:
         """Monitor console for detection attempts."""

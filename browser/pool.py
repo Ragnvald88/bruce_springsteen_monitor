@@ -325,7 +325,7 @@ class BrowserInstance:
         context = await stealth_core.create_stealth_context(
             self.browser,
             fingerprint=fingerprint,
-            proxy=self.proxy.__dict__ if self.proxy else None
+            proxy=self.proxy.__dict__ if self.proxy and hasattr(self.proxy, '__dict__') else self.proxy
         )
         
         # Generate context ID
@@ -340,7 +340,7 @@ class BrowserInstance:
             proxy=self.proxy,
             context_id=context_id,
             browser_id=self.instance_id,
-            tls_profile=tls_profile
+            tls_profile=tls_profile.__dict__ if hasattr(tls_profile, '__dict__') else tls_profile
         )
         
         # Store context

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from enum import Enum
 
-from stealthmaster.constants import PurchaseStatus
+from ..constants import PurchaseStatus
 
 logger = logging.getLogger(__name__)
 

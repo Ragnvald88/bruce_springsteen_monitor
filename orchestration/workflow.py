@@ -7,14 +7,14 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
 from enum import Enum
 
-from ..browser.pool import EnhancedBrowserPool
-from ..config import TargetEvent, UserProfile, Platform
-from ..constants import PurchaseStatus
-from ..detection.monitor import DetectionMonitor, MonitoringLevel
-from ..detection.recovery import RecoveryStrategy
-from ..network.rate_limiter import RateLimiter
-from .state import StateManager, StateType
-from ..platforms import (
+from browser.pool import EnhancedBrowserPool
+from config import TargetEvent, UserProfile, Platform
+from constants import PurchaseStatus
+from detection.monitor import DetectionMonitor, MonitoringLevel
+from detection.recovery import RecoveryStrategy
+from network.rate_limiter import RateLimiter
+from orchestration.state import StateManager, StateType
+from platforms import (
     FansaleHandler,
     TicketmasterHandler,
     VivaticketHandler,
@@ -41,7 +41,7 @@ class PurchaseWorkflow:
     
     def __init__(
         self,
-        browser_pool: BrowserPool,
+        browser_pool: EnhancedBrowserPool,
         state_manager: StateManager,
         detection_monitor: DetectionMonitor,
         rate_limiter: RateLimiter,

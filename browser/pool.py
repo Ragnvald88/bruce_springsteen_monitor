@@ -1,6 +1,6 @@
-# stealthmaster/browser/pool_v3.py
+# stealthmaster/browser/pool.py
 """
-Enhanced Browser Pool v3 with Advanced Lifecycle Management, Data Usage Tracking,
+Enhanced Browser Pool with Advanced Lifecycle Management, Data Usage Tracking,
 and Intelligent Recovery Mechanisms for 2025 Bot Detection Evasion
 """
 
@@ -19,12 +19,12 @@ import json
 
 from playwright.async_api import Browser, Playwright, BrowserContext, Page, Request, Response
 
-from ..browser.launcher import BrowserLauncher
-from ..stealth.core import StealthCore
-from ..detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
-from ..network.tls_fingerprint import TLSFingerprintRotator
-from ..config import Settings, ProxyConfig
-from ..constants import BrowserState
+from browser.launcher import BrowserLauncher
+from stealth.core import StealthCore
+from detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
+from network.tls_fingerprint import TLSFingerprintRotator
+from config import Settings, ProxyConfig
+from constants import BrowserState
 
 logger = logging.getLogger(__name__)
 
@@ -570,7 +570,7 @@ class EnhancedBrowserPool:
     
     async def initialize(self):
         """Initialize the browser pool"""
-        logger.info(f"Initializing browser pool v3 (max: {self.max_browsers}, data limit: {self.data_limit_mb}MB)")
+        logger.info(f"Initializing browser pool (max: {self.max_browsers}, data limit: {self.data_limit_mb}MB)")
         
         # Pre-warm pool with browsers
         await self._ensure_minimum_browsers()
@@ -1130,7 +1130,7 @@ class EnhancedBrowserPool:
     
     async def shutdown(self):
         """Shutdown the browser pool"""
-        logger.info("Shutting down browser pool v3")
+        logger.info("Shutting down browser pool")
         self._shutdown = True
         
         # Cancel tasks

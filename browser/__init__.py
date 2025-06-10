@@ -3,6 +3,6 @@
 
 from .context import StealthContext
 from .launcher import BrowserLauncher
-from .pool import BrowserPool
+from .pool import EnhancedBrowserPool
 
-__all__ = ["StealthContext", "BrowserLauncher", "BrowserPool"]
+__all__ = ["StealthContext", "BrowserLauncher", "EnhancedBrowserPool"]

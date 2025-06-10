@@ -17,9 +17,16 @@ from rich.layout import Layout
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from config import Settings, load_settings
-from profiles import ProfileManager
-from utils.logging import setup_logging
+try:
+    # When running as module
+    from .config import Settings, load_settings
+    from .profiles import ProfileManager
+    from .utils.logging import setup_logging
+except ImportError:
+    # When running directly
+    from config import Settings, load_settings
+    from profiles import ProfileManager
+    from utils.logging import setup_logging
 
 # Placeholder imports for modules not yet created
 # from stealthmaster.browser.pool import BrowserPool
@@ -225,7 +232,7 @@ class StealthMaster:
     "--config",
     "-c",
     type=click.Path(exists=True, path_type=Path),
-    default=Path("config/config.yaml"),
+    default=Path("config.yaml"),
     help="Path to configuration file",
 )
 @click.option(
@@ -302,7 +309,7 @@ def main(
     app = StealthMaster(settings)
     
     # Setup signal handlers
-    def signal_handler(sig, frame):
+    def signal_handler(sig, frame):  # noqa: ARG001
         console.print("\n[yellow]🛑 Interrupt received, shutting down...[/yellow]")
         app.running = False
     

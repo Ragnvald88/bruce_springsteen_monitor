@@ -7,7 +7,7 @@ from typing import Dict, Any, List, Optional
 from playwright.async_api import Page
 
 from stealthmaster.config import TargetEvent, UserProfile
-from ..platforms.base import BasePlatformHandler
+from platforms.base import BasePlatformHandler
 
 logger = logging.getLogger(__name__)
 

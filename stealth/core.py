@@ -1,6 +1,6 @@
 # stealthmaster/stealth/core.py
 """
-Enhanced Stealth Core v3 - Multi-layered bot detection evasion system.
+Enhanced Stealth Core - Multi-layered bot detection evasion system.
 Implements advanced techniques to bypass modern AI-driven detection.
 """
 
@@ -18,7 +18,7 @@ from .fingerprint import FingerprintGenerator
 from .injections import StealthInjections
 from .cdp import CDPStealth
 from .behaviors import HumanBehavior
-from ..network.tls_fingerprint import TLSFingerprintRotator
+from network.tls_fingerprint import TLSFingerprintRotator
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class StealthCore:
         self._evasion_level = "maximum"  # minimal, balanced, maximum
         self._active_countermeasures: Set[str] = set()
         
-        logger.info("StealthCore v3 initialized with maximum evasion capabilities")
+        logger.info("StealthCore initialized with maximum evasion capabilities")
     
     async def create_stealth_browser(
         self,

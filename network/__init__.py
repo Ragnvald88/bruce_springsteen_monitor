@@ -24,6 +24,12 @@ from .rate_limiter import (
     HumanBehaviorPatterns
 )
 
+from .tls_fingerprint import (
+    TLSFingerprintRotator,
+    TLSProfile,
+    TLSValidator
+)
+
 __all__ = [
     # Interceptor
     "RequestInterceptor",
@@ -43,5 +49,10 @@ __all__ = [
     "RateLimitStrategy", 
     "RateLimitConfig",
     "AdaptiveTokenBucket",
-    "HumanBehaviorPatterns"
+    "HumanBehaviorPatterns",
+    
+    # TLS Fingerprint
+    "TLSFingerprintRotator",
+    "TLSProfile",
+    "TLSValidator"
 ]

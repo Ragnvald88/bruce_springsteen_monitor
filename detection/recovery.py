@@ -10,7 +10,7 @@ import random
 
 from playwright.async_api import Page, BrowserContext
 
-from ..detection.monitor import DetectionType, DetectionEvent
+from detection.monitor import DetectionType, DetectionEvent
 
 logger = logging.getLogger(__name__)
 
@@ -356,7 +356,7 @@ class RecoveryStrategy:
         """Handle CAPTCHA solving."""
         try:
             # Import here to avoid circular dependency
-            from ..detection.captcha import CaptchaHandler
+            from detection.captcha import CaptchaHandler
             
             handler = CaptchaHandler()
             result = await handler.handle(page)

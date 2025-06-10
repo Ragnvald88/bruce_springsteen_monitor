@@ -1,0 +1,2 @@
+{"timestamp": "2025-06-10T17:46:01.450991", "level": "INFO", "logger": "root", "message": "Logging initialized - Level: INFO, Directory: logs", "module": "logging", "function": "setup_logging", "line": 231, "taskName": null}
+{"timestamp": "2025-06-10T17:46:01.452439", "level": "INFO", "logger": "profiles.manager", "message": "Loaded 0 profiles", "module": "manager", "function": "load_all_profiles", "line": 520, "taskName": "Task-1"}

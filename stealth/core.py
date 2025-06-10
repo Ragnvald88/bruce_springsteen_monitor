@@ -17,6 +17,7 @@ from playwright.async_api import Browser, BrowserContext, Page, Route, Request
 from .fingerprint import FingerprintGenerator
 from .injections import StealthInjections
 from .cdp_bypass_engine import CDPStealth
+from .cdp_webdriver_bypass import CDPWebDriverBypass
 from .behaviors import HumanBehavior
 from network.tls_fingerprint import TLSFingerprintRotator
 
@@ -34,6 +35,7 @@ class StealthCore:
         self.fingerprint_generator = FingerprintGenerator()
         self.injections = StealthInjections()
         self.cdp_stealth = CDPStealth()
+        self.cdp_webdriver_bypass = CDPWebDriverBypass()
         self.behavior_engine = HumanBehavior()
         self.tls_rotator = TLSFingerprintRotator()
         
@@ -65,6 +67,9 @@ class StealthCore:
         """
         if not fingerprint:
             fingerprint = self.fingerprint_generator.generate()
+        
+        # Apply CDP WebDriver bypass at browser level
+        await self.cdp_webdriver_bypass.patch_browser_launch(browser)
         
         # Apply TLS fingerprint rotation
         tls_profile = self.tls_rotator.get_profile(fingerprint["user_agent"])
@@ -138,7 +143,7 @@ class StealthCore:
             "ignore_https_errors": True,
             "java_script_enabled": True,
             "offline": False,
-            "proxy": proxy,
+            "proxy": self._format_proxy(proxy) if proxy else None,
             "extra_http_headers": {
                 "Accept-Language": fingerprint["navigator"]["language"] + ",en;q=0.9",
                 "Accept-Encoding": "gzip, deflate, br",
@@ -158,6 +163,37 @@ class StealthCore:
         
         return options
     
+    def _format_proxy(self, proxy: Any) -> Optional[Dict[str, Any]]:
+        """Format proxy configuration for Playwright."""
+        if not proxy:
+            return None
+            
+        # If it's already a properly formatted dict
+        if isinstance(proxy, dict) and 'server' in proxy:
+            return proxy
+            
+        # If it's a ProxyConfig object or dict without 'server'
+        if hasattr(proxy, 'host') or (isinstance(proxy, dict) and 'host' in proxy):
+            host = proxy.host if hasattr(proxy, 'host') else proxy['host']
+            port = proxy.port if hasattr(proxy, 'port') else proxy['port']
+            username = proxy.username if hasattr(proxy, 'username') else proxy.get('username')
+            password = proxy.password if hasattr(proxy, 'password') else proxy.get('password')
+            proxy_type = proxy.type if hasattr(proxy, 'type') else proxy.get('type', 'http')
+            
+            formatted = {
+                "server": f"{proxy_type}://{host}:{port}"
+            }
+            
+            if username and password:
+                formatted["username"] = username
+                formatted["password"] = password
+                
+            return formatted
+            
+        # If we can't format it, return None
+        logger.warning(f"Unable to format proxy: {type(proxy)}")
+        return None
+    
     async def _apply_context_stealth(
         self,
         context: BrowserContext,
@@ -170,6 +206,9 @@ class StealthCore:
         
         # Apply route interception for additional protection
         await context.route("**/*", self._handle_route)
+        
+        # Apply CDP WebDriver bypass to context
+        await self.cdp_webdriver_bypass.apply_to_context(context)
         
         # Set up CDP stealth
         await self.cdp_stealth.apply_context_stealth(context)
@@ -238,6 +277,9 @@ class StealthCore:
             if not fingerprint:
                 fingerprint = self.fingerprint_generator.generate()
         
+        # Apply CDP WebDriver bypass to page
+        await self.cdp_webdriver_bypass.apply_to_page(page)
+        
         # Apply CDP-level stealth
         await self.cdp_stealth.apply_page_stealth(page)
         
@@ -256,7 +298,7 @@ class StealthCore:
     async def _apply_page_evasions(self, page: Page, fingerprint: Dict[str, Any]) -> None:
         """Apply page-specific evasion techniques."""
         # Override navigator.webdriver before any script execution
-        await page.evaluate_on_new_document("""
+        await page.add_init_script("""
             // Ensure webdriver is never exposed
             delete Object.getPrototypeOf(navigator).webdriver;
             

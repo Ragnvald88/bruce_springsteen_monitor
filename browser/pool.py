@@ -840,6 +840,9 @@ class EnhancedBrowserPool:
     
     def _select_proxy(self) -> Optional[ProxyConfig]:
         """Select optimal proxy based on data usage and performance"""
+        if not self.settings.proxy_settings.enabled:
+            return None
+            
         if not self._proxy_pool:
             return None
         
@@ -848,10 +851,14 @@ class EnhancedBrowserPool:
         now = datetime.now()
         
         for proxy in self._proxy_pool:
+            # Ensure proxy has proper format
+            if not hasattr(proxy, 'host') or not hasattr(proxy, 'port'):
+                continue
+                
             proxy_key = f"{proxy.host}:{proxy.port}"
             
             # Base score from configuration
-            score = proxy.quality_score
+            score = getattr(proxy, 'quality_score', 1.0)
             
             # Apply current performance score
             score *= self._proxy_scores[proxy_key]
@@ -870,6 +877,9 @@ class EnhancedBrowserPool:
             
             scored_proxies.append((score, proxy))
         
+        if not scored_proxies:
+            return None
+            
         # Sort and select
         scored_proxies.sort(key=lambda x: x[0], reverse=True)
         selected_proxy = scored_proxies[0][1]

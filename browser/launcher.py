@@ -42,12 +42,22 @@ class BrowserLauncher:
         
         # Proxy configuration
         proxy_config = None
-        if proxy:
+        if proxy and proxy.host and proxy.port:
+            # Format proxy properly
+            proxy_type = getattr(proxy, 'type', 'http').lower()
+            if proxy_type not in ['http', 'https', 'socks5']:
+                proxy_type = 'http'
+            
             proxy_config = {
-                "server": f"{proxy.type}://{proxy.host}:{proxy.port}",
-                "username": proxy.username,
-                "password": proxy.password,
+                "server": f"{proxy_type}://{proxy.host}:{proxy.port}",
             }
+            
+            # Only add credentials if both exist
+            if proxy.username and proxy.password:
+                proxy_config["username"] = proxy.username
+                proxy_config["password"] = proxy.password
+            
+            logger.info(f"Using proxy: {proxy_type}://{proxy.host}:{proxy.port}")
         
         # Launch browser with proper configuration
         launch_options = {
@@ -70,9 +80,12 @@ class BrowserLauncher:
         
         browser = await playwright.chromium.launch(**launch_options)
         
+        # Apply browser-level stealth immediately after launch
+        await self.stealth_core.create_stealth_browser(browser)
+        
         logger.info(
             f"Launched {'headless' if headless else 'headed'} browser "
-            f"{'with proxy' if proxy else 'without proxy'}"
+            f"{'with proxy' if proxy else 'without proxy'} with stealth"
         )
         
         return browser

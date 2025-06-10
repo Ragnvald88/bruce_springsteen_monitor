@@ -72,7 +72,7 @@ authentication:
 # PROXY CONFIGURATION - Uses your IPRoyal credentials
 # =============================================================================
 proxy_settings:
-  enabled: true
+  enabled: false  # Temporarily disabled to fix proxy errors
   rotation_strategy: "intelligent"
   
   # Your IPRoyal proxy from .env

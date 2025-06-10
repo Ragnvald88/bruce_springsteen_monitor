@@ -122,7 +122,7 @@ class SessionManager:
         self._metrics = SessionMetrics()
         
         # Load existing sessions
-        asyncio.create_task(self._load_sessions())
+        self._load_task = asyncio.create_task(self._load_sessions())
     
     async def create_session(
         self,
@@ -507,6 +507,21 @@ class SessionManager:
         
         logger.info(f"Cleaned up {len(expired)} expired sessions")
         return len(expired)
+    
+    async def shutdown(self) -> None:
+        """Shutdown session manager and cleanup resources."""
+        # Cancel load task if still running
+        if hasattr(self, '_load_task') and not self._load_task.done():
+            self._load_task.cancel()
+            try:
+                await self._load_task
+            except asyncio.CancelledError:
+                pass
+        
+        # Save all sessions
+        await self._save_sessions()
+        
+        logger.info("Session manager shut down")
 
 
 class CookieJar:

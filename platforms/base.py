@@ -8,9 +8,10 @@ from typing import Dict, Any, Optional, List, Tuple
 
 from playwright.async_api import Page
 
-from stealthmaster.config import TargetEvent, UserProfile
-from stealthmaster.constants import PurchaseStatus, COMMON_SELECTORS
-from stealthmaster.stealth.behaviors import HumanBehavior
+from config import Target
+from profiles.models import Profile as UserProfile
+from constants import PurchaseStatus, COMMON_SELECTORS
+from stealth.behaviors import HumanBehavior
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ class BasePlatformHandler(ABC):
     async def search_tickets(
         self,
         page: Page,
-        event: TargetEvent
+        event: Target
     ) -> List[Dict[str, Any]]:
         """
         Search for available tickets.
@@ -312,7 +313,7 @@ class BasePlatformHandler(ABC):
     def filter_tickets_by_preferences(
         self,
         tickets: List[Dict[str, Any]],
-        event: TargetEvent
+        event: Target
     ) -> List[Dict[str, Any]]:
         """
         Filter tickets based on user preferences.

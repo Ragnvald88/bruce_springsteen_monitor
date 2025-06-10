@@ -81,6 +81,7 @@ class DetectionMonitor:
         self._detection_events: List[DetectionEvent] = []
         self._callbacks: Dict[str, List[Callable]] = defaultdict(list)
         self._monitoring_tasks: Dict[str, asyncio.Task] = {}
+        self._shutdown = False
         
         # Detection patterns
         self._detection_patterns = self._load_detection_patterns()
@@ -212,7 +213,7 @@ class DetectionMonitor:
         page = config["page"]
         level = config["level"]
         
-        while page_id in self._monitored_pages:
+        while page_id in self._monitored_pages and not self._shutdown:
             try:
                 # Check if page is still valid
                 if page.is_closed():
@@ -686,3 +687,20 @@ class DetectionMonitor:
             MonitoringLevel.PARANOID: 1.0
         }
         return intervals.get(level, 5.0)
+    
+    async def shutdown(self) -> None:
+        """Shutdown monitor and cleanup resources."""
+        self._shutdown = True
+        
+        # Cancel all monitoring tasks
+        for page_id, task in list(self._monitoring_tasks.items()):
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+        
+        self._monitoring_tasks.clear()
+        self._monitored_pages.clear()
+        
+        logger.info("Detection monitor shut down")

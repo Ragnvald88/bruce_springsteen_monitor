@@ -28,11 +28,9 @@ except ImportError:
     from profiles import ProfileManager
     from utils.logging import setup_logging
 
-# Placeholder imports for modules not yet created
-# from stealthmaster.browser.pool import BrowserPool
-# from stealthmaster.network.proxy import ProxyManager
-# from stealthmaster.orchestration.scheduler import TaskScheduler
-# from stealthmaster.ui.dashboard import Dashboard
+from browser.pool import EnhancedBrowserPool
+from orchestration.scheduler import TaskScheduler
+from orchestration.workflow import TicketingWorkflow
 
 console = Console()
 logger = logging.getLogger(__name__)
@@ -49,9 +47,9 @@ class StealthMaster:
         
         # Core components
         self.profile_manager = ProfileManager(settings)
-        # self.browser_pool = BrowserPool(settings)
-        # self.proxy_manager = ProxyManager(settings)
-        # self.scheduler = TaskScheduler(settings)
+        self.browser_pool = None  # Will be initialized in initialize()
+        self.scheduler = None  # Will be initialized in initialize()
+        self.workflow = None  # Will be initialized in initialize()
         
         # Stats
         self.stats = {
@@ -76,10 +74,30 @@ class StealthMaster:
             await self.profile_manager.load_all_profiles()
             progress.update(task, description="✓ Profiles loaded")
             
-            # More initialization would go here
-            # task = progress.add_task("Initializing browser pool...", total=None)
-            # await self.browser_pool.initialize()
-            # progress.update(task, description="✓ Browser pool ready")
+            # Initialize browser pool
+            task = progress.add_task("Initializing browser pool...", total=None)
+            self.browser_pool = EnhancedBrowserPool(
+                max_browsers=self.settings.browser_pool.max_browsers,
+                max_contexts_per_browser=self.settings.browser_pool.max_contexts_per_browser,
+                headless=self.settings.browser_options.headless,
+                data_limit_mb=self.settings.data_limits.global_limit_mb
+            )
+            await self.browser_pool.initialize()
+            progress.update(task, description="✓ Browser pool ready")
+            
+            # Initialize scheduler
+            task = progress.add_task("Setting up task scheduler...", total=None)
+            self.scheduler = TaskScheduler(self.settings)
+            progress.update(task, description="✓ Scheduler ready")
+            
+            # Initialize workflow
+            task = progress.add_task("Preparing workflow engine...", total=None)
+            self.workflow = TicketingWorkflow(
+                browser_pool=self.browser_pool,
+                profile_manager=self.profile_manager,
+                settings=self.settings
+            )
+            progress.update(task, description="✓ Workflow engine ready")
         
         console.print("[green]✅ StealthMaster initialized successfully![/green]")
     
@@ -111,12 +129,33 @@ class StealthMaster:
         """Main monitoring loop."""
         while self.running:
             try:
-                # This would implement the actual monitoring logic
+                # Start monitoring for each target
+                for target in self.settings.targets:
+                    if target.enabled and not hasattr(target, '_monitoring'):
+                        console.print(f"[green]🎯 Starting monitor for {target.event_name}[/green]")
+                        target._monitoring = True
+                        
+                        # Acquire browser context and start monitoring
+                        context, page = await self.browser_pool.acquire_context(
+                            platform=target.platform.value,
+                            prefer_fresh=True
+                        )
+                        
+                        # Launch browser in non-headless mode to see GUI
+                        if not self.settings.browser_options.headless:
+                            console.print(f"[yellow]🌐 Browser window opened for {target.platform.value}[/yellow]")
+                        
+                        # Start workflow for this target
+                        asyncio.create_task(
+                            self.workflow.run_target_workflow(target, context, page)
+                        )
+                
+                self.stats["monitors_active"] = len([t for t in self.settings.targets if hasattr(t, '_monitoring')])
                 await asyncio.sleep(5)
-                self.stats["monitors_active"] = len(self.settings.targets)
                 
             except Exception as e:
                 logger.error(f"Monitor loop error: {e}")
+                console.print(f"[red]❌ Monitor error: {e}[/red]")
                 await asyncio.sleep(10)
     
     async def _stats_loop(self) -> None:
@@ -223,6 +262,11 @@ class StealthMaster:
         # Save profiles
         for profile in self.profile_manager.profiles.values():
             await self.profile_manager.save_profile(profile)
+        
+        # Shutdown browser pool
+        if self.browser_pool:
+            console.print("[yellow]🌐 Closing browser sessions...[/yellow]")
+            await self.browser_pool.shutdown()
         
         console.print("[green]✅ Shutdown complete. Goodbye![/green]")
 

@@ -144,7 +144,10 @@ class PlatformAuth(BaseModel):
         """Resolve environment variables."""
         if v.startswith("${") and v.endswith("}"):
             env_var = v[2:-1]
-            return os.getenv(env_var, v)
+            env_value = os.getenv(env_var)
+            if env_value is None:
+                raise ValueError(f"Environment variable {env_var} is not set")
+            return env_value
         return v
 
 
@@ -171,7 +174,13 @@ class ProxyConfig(BaseModel):
         """Resolve environment variables."""
         if v and v.startswith("${") and v.endswith("}"):
             env_var = v[2:-1]
-            return os.getenv(env_var, v)
+            env_value = os.getenv(env_var)
+            if env_value is None:
+                # For optional fields like proxy username/password, return None
+                if env_var.lower().endswith(("_username", "_password")):
+                    return None
+                raise ValueError(f"Environment variable {env_var} is not set")
+            return env_value
         return v
     
     @field_validator("port")
@@ -180,7 +189,10 @@ class ProxyConfig(BaseModel):
         """Resolve port from environment if needed."""
         if isinstance(v, str) and v.startswith("${"):
             env_var = v[2:-1]
-            return int(os.getenv(env_var, "8080"))
+            env_value = os.getenv(env_var)
+            if env_value is None:
+                raise ValueError(f"Environment variable {env_var} is not set")
+            return int(env_value)
         return v
 
 

@@ -163,7 +163,7 @@ class CDPStealth:
                             // Clean arguments of CDP references
                             const cleanArgs = args.map(arg => {
                                 if (typeof arg === 'string') {
-                                    return arg.replace(/\b(CDP|DevTools|Protocol|Runtime\.)\b/gi, '');
+                                    return arg.replace(/\\b(CDP|DevTools|Protocol|Runtime\\.)\\b/gi, '');
                                 }
                                 return arg;
                             });

@@ -16,7 +16,7 @@ from playwright.async_api import Browser, BrowserContext, Page, Route, Request
 
 from .fingerprint import FingerprintGenerator
 from .injections import StealthInjections
-from .cdp import CDPStealth
+from .cdp_bypass_engine import CDPStealth
 from .behaviors import HumanBehavior
 from network.tls_fingerprint import TLSFingerprintRotator
 

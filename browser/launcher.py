@@ -49,17 +49,26 @@ class BrowserLauncher:
                 "password": proxy.password,
             }
         
-        # Launch browser
-        browser = await playwright.chromium.launch(
-            headless=headless,
-            args=args,
-            proxy=proxy_config,
-            # Chromium-specific options for better stealth
-            chromium_sandbox=False,
-            handle_sigint=False,
-            handle_sigterm=False,
-            handle_sighup=False,
-        )
+        # Launch browser with proper configuration
+        launch_options = {
+            "headless": headless,
+            "args": args,
+            "proxy": proxy_config,
+            "chromium_sandbox": False,
+            "handle_sigint": False,
+            "handle_sigterm": False,
+            "handle_sighup": False,
+        }
+        
+        # Force non-headless user agent even in headless mode
+        if headless:
+            # Remove any existing user agent args
+            args = [arg for arg in args if not arg.startswith("--user-agent=")]
+            # Add proper user agent
+            args.append("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+            launch_options["args"] = args
+        
+        browser = await playwright.chromium.launch(**launch_options)
         
         logger.info(
             f"Launched {'headless' if headless else 'headed'} browser "

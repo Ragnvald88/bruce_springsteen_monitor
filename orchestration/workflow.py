@@ -7,14 +7,14 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
 from enum import Enum
 
-from stealthmaster.browser.pool import BrowserPool
-from stealthmaster.config import TargetEvent, UserProfile, Platform
-from stealthmaster.constants import PurchaseStatus
-from stealthmaster.detection.monitor import DetectionMonitor, MonitoringLevel
-from stealthmaster.detection.recovery import RecoveryStrategy
-from stealthmaster.network.rate_limiter import RateLimiter
-from stealthmaster.orchestration.state import StateManager, StateType
-from stealthmaster.platforms import (
+from ..browser.pool import EnhancedBrowserPool
+from ..config import TargetEvent, UserProfile, Platform
+from ..constants import PurchaseStatus
+from ..detection.monitor import DetectionMonitor, MonitoringLevel
+from ..detection.recovery import RecoveryStrategy
+from ..network.rate_limiter import RateLimiter
+from .state import StateManager, StateType
+from ..platforms import (
     FansaleHandler,
     TicketmasterHandler,
     VivaticketHandler,

@@ -1,3 +1,0 @@
-{"timestamp": "2025-06-09T20:52:58.100822", "level": "INFO", "logger": "root", "message": "Logging initialized - Level: INFO, Directory: logs", "module": "logging", "function": "setup_logging", "line": 231, "taskName": null}
-{"timestamp": "2025-06-09T20:53:29.447363", "level": "INFO", "logger": "root", "message": "Logging initialized - Level: INFO, Directory: logs", "module": "logging", "function": "setup_logging", "line": 231, "taskName": null}
-{"timestamp": "2025-06-09T20:53:29.448384", "level": "INFO", "logger": "profiles.manager", "message": "Loaded 0 profiles", "module": "manager", "function": "load_all_profiles", "line": 520, "taskName": "Task-1"}

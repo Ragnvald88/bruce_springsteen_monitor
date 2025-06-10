@@ -1,0 +1,478 @@
+{
+  "timestamp": "2025-06-09T23:24:33.592204",
+  "tests": {
+    "data_usage": {
+      "sites": {
+        "Fansale": {
+          "url": "https://www.fansale.it",
+          "total_size_mb": 0.0,
+          "request_count": 0,
+          "load_time_s": -1,
+          "resources": {}
+        },
+        "Ticketmaster": {
+          "url": "https://www.ticketmaster.it",
+          "total_size_mb": 7.69,
+          "request_count": 106,
+          "load_time_s": 1.57,
+          "resources": {
+            "document": {
+              "count": 1,
+              "size_mb": 0.41
+            },
+            "image": {
+              "count": 49,
+              "size_mb": 0.72
+            },
+            "font": {
+              "count": 4,
+              "size_mb": 0.15
+            },
+            "script": {
+              "count": 42,
+              "size_mb": 5.47
+            },
+            "xhr": {
+              "count": 2,
+              "size_mb": 0.01
+            },
+            "fetch": {
+              "count": 6,
+              "size_mb": 0.93
+            }
+          }
+        },
+        "Vivaticket": {
+          "url": "https://www.vivaticket.com",
+          "total_size_mb": 4.52,
+          "request_count": 32,
+          "load_time_s": 1.77,
+          "resources": {
+            "document": {
+              "count": 3,
+              "size_mb": 0.01
+            },
+            "stylesheet": {
+              "count": 3,
+              "size_mb": 0.33
+            },
+            "image": {
+              "count": 7,
+              "size_mb": 0.01
+            },
+            "font": {
+              "count": 3,
+              "size_mb": 0.07
+            },
+            "script": {
+              "count": 12,
+              "size_mb": 4.05
+            },
+            "xhr": {
+              "count": 2,
+              "size_mb": 0.05
+            }
+          }
+        },
+        "Example (baseline)": {
+          "url": "https://www.example.com",
+          "total_size_mb": 0.0,
+          "request_count": 1,
+          "load_time_s": 0.57,
+          "resources": {
+            "document": {
+              "count": 1,
+              "size_mb": 0.0
+            }
+          }
+        }
+      },
+      "total_data_mb": 12.2,
+      "average_per_site_mb": 3.05,
+      "resource_breakdown": {
+        "document": {
+          "count": 5,
+          "size_mb": 0.42
+        },
+        "stylesheet": {
+          "count": 3,
+          "size_mb": 0.33
+        },
+        "image": {
+          "count": 56,
+          "size_mb": 0.73
+        },
+        "media": {
+          "count": 0,
+          "size_mb": 0.0
+        },
+        "font": {
+          "count": 7,
+          "size_mb": 0.22
+        },
+        "script": {
+          "count": 54,
+          "size_mb": 9.52
+        },
+        "xhr": {
+          "count": 4,
+          "size_mb": 0.05
+        },
+        "fetch": {
+          "count": 6,
+          "size_mb": 0.93
+        },
+        "other": {
+          "count": 0,
+          "size_mb": 0.0
+        }
+      }
+    },
+    "page_load": {
+      "metrics": [
+        {
+          "dns_lookup_ms": 2.4000000953674316,
+          "tcp_connect_ms": 39.09999990463257,
+          "request_ms": 73.5,
+          "response_ms": 15.600000023841858,
+          "dom_processing_ms": 98.60000002384186,
+          "dom_content_loaded_ms": 0.09999990463256836,
+          "total_load_ms": 232.39999997615814,
+          "first_paint_ms": 183.30000007152557,
+          "first_contentful_paint_ms": 183.30000007152557
+        },
+        {
+          "dns_lookup_ms": 1.6999999284744263,
+          "tcp_connect_ms": 42.10000002384186,
+          "request_ms": 103.79999995231628,
+          "response_ms": 17.100000023841858,
+          "dom_processing_ms": -180.89999997615814,
+          "dom_content_loaded_ms": 0.10000002384185791,
+          "total_load_ms": -0.10000002384185791,
+          "first_paint_ms": 211.5,
+          "first_contentful_paint_ms": 211.5
+        },
+        {
+          "dns_lookup_ms": 1.7999999523162842,
+          "tcp_connect_ms": 42.200000047683716,
+          "request_ms": 87.39999997615814,
+          "response_ms": 17.5,
+          "dom_processing_ms": 95.5,
+          "dom_content_loaded_ms": 0,
+          "total_load_ms": 257.6999999284744,
+          "first_paint_ms": 192.60000002384186,
+          "first_contentful_paint_ms": 192.60000002384186
+        }
+      ],
+      "average_metrics": {
+        "dns_lookup_ms": 1.97,
+        "tcp_connect_ms": 41.13,
+        "request_ms": 88.23,
+        "response_ms": 16.73,
+        "dom_processing_ms": 4.4,
+        "dom_content_loaded_ms": 0.07,
+        "total_load_ms": 163.33,
+        "first_paint_ms": 195.8,
+        "first_contentful_paint_ms": 195.8
+      }
+    },
+    "resource_analysis": {
+      "blocking_impact": {
+        "none": {
+          "blocked_types": [],
+          "load_time_s": 1.32,
+          "data_mb": 7.69,
+          "requests": 106,
+          "functional": true
+        },
+        "images": {
+          "blocked_types": [
+            "image"
+          ],
+          "load_time_s": 1.39,
+          "data_mb": 6.96,
+          "requests": 57,
+          "functional": true
+        },
+        "css_fonts": {
+          "blocked_types": [
+            "stylesheet",
+            "font"
+          ],
+          "load_time_s": 1.4,
+          "data_mb": 8.09,
+          "requests": 121,
+          "functional": true
+        },
+        "media": {
+          "blocked_types": [
+            "image",
+            "media",
+            "font"
+          ],
+          "load_time_s": 1.35,
+          "data_mb": 6.81,
+          "requests": 53,
+          "functional": true
+        },
+        "aggressive": {
+          "blocked_types": [
+            "image",
+            "media",
+            "font",
+            "stylesheet"
+          ],
+          "load_time_s": 1.35,
+          "data_mb": 6.81,
+          "requests": 53,
+          "functional": true
+        }
+      },
+      "resource_timing": {}
+    },
+    "network_latency": {
+      "0ms": {
+        "load_time_s": 0.59,
+        "latency_impact_s": 0
+      },
+      "100ms": {
+        "load_time_s": 0.69,
+        "latency_impact_s": 0.1
+      },
+      "300ms": {
+        "load_time_s": 0.92,
+        "latency_impact_s": 0.33
+      },
+      "500ms": {
+        "load_time_s": 1.08,
+        "latency_impact_s": 0.49
+      }
+    },
+    "bot_detection_detailed": {
+      "detection_vectors": {
+        "baseline": {
+          "webdriver": true,
+          "webdriver_in_window": false,
+          "chrome_runtime": false,
+          "permissions_query": true,
+          "plugins_length": 0,
+          "plugins_type": "[object PluginArray]",
+          "languages": "en-US",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.6723.31 Safari/537.36",
+          "headless_chrome": true,
+          "automation_controlled": false,
+          "cdc_props": 0,
+          "selenium_props": 0,
+          "webgl_vendor": "Google Inc. (Apple)",
+          "canvas_test": true,
+          "detection_count": 3
+        },
+        "with_stealth": {
+          "webdriver": null,
+          "webdriver_in_window": false,
+          "chrome_runtime": false,
+          "permissions_query": true,
+          "plugins_length": 0,
+          "plugins_type": "[object PluginArray]",
+          "languages": "en-US,en;q=0.9",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.6723.31 Safari/537.36",
+          "headless_chrome": true,
+          "automation_controlled": false,
+          "cdc_props": 0,
+          "selenium_props": 0,
+          "webgl_vendor": "Google Inc. (Apple)",
+          "canvas_test": true,
+          "detection_count": 2
+        },
+        "headed": {
+          "webdriver": null,
+          "webdriver_in_window": false,
+          "chrome_runtime": false,
+          "permissions_query": true,
+          "plugins_length": 5,
+          "plugins_type": "[object PluginArray]",
+          "languages": "en-US,en;q=0.9",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+          "headless_chrome": false,
+          "automation_controlled": false,
+          "cdc_props": 0,
+          "selenium_props": 0,
+          "webgl_vendor": "Google Inc. (Apple)",
+          "canvas_test": true,
+          "detection_count": 0
+        },
+        "custom_args": {
+          "webdriver": null,
+          "webdriver_in_window": false,
+          "chrome_runtime": false,
+          "permissions_query": true,
+          "plugins_length": 0,
+          "plugins_type": "[object PluginArray]",
+          "languages": "en-US,en;q=0.9",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.6723.31 Safari/537.36",
+          "headless_chrome": true,
+          "automation_controlled": false,
+          "cdc_props": 0,
+          "selenium_props": 0,
+          "webgl_vendor": "Google Inc. (Apple)",
+          "canvas_test": true,
+          "detection_count": 2
+        }
+      },
+      "evasion_effectiveness": {}
+    },
+    "optimization_impact": {
+      "optimizations": {
+        "baseline": {
+          "config": {},
+          "total_load_time_s": 0.92,
+          "data_mb": 3.67,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.31
+        },
+        "block_images": {
+          "config": {
+            "block": [
+              "image"
+            ]
+          },
+          "total_load_time_s": 0.69,
+          "data_mb": 4.06,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.23
+        },
+        "block_media": {
+          "config": {
+            "block": [
+              "image",
+              "media",
+              "font"
+            ]
+          },
+          "total_load_time_s": 0.77,
+          "data_mb": 3.91,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.26
+        },
+        "aggressive": {
+          "config": {
+            "block": [
+              "image",
+              "media",
+              "font",
+              "stylesheet"
+            ]
+          },
+          "total_load_time_s": 0.69,
+          "data_mb": 3.91,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.23
+        },
+        "cache_enabled": {
+          "config": {
+            "cache": true
+          },
+          "total_load_time_s": 0.47,
+          "data_mb": 3.69,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.16
+        },
+        "combined": {
+          "config": {
+            "block": [
+              "image",
+              "media"
+            ],
+            "cache": true
+          },
+          "total_load_time_s": 0.72,
+          "data_mb": 4.27,
+          "cache_hits": 0,
+          "avg_page_load_s": 0.24
+        }
+      }
+    }
+  },
+  "data_analysis": {
+    "total_data_consumption": {
+      "average_site_mb": 3.05,
+      "heaviest_resources": [
+        [
+          "script",
+          {
+            "count": 54,
+            "size_mb": 9.52
+          }
+        ],
+        [
+          "fetch",
+          {
+            "count": 6,
+            "size_mb": 0.93
+          }
+        ],
+        [
+          "image",
+          {
+            "count": 56,
+            "size_mb": 0.73
+          }
+        ]
+      ]
+    },
+    "optimization_savings": {
+      "block_images": {
+        "data_saved_mb": -0.39,
+        "data_saved_percent": -10.6,
+        "speed_impact_s": -0.08
+      },
+      "block_media": {
+        "data_saved_mb": -0.24,
+        "data_saved_percent": -6.5,
+        "speed_impact_s": -0.05
+      },
+      "aggressive": {
+        "data_saved_mb": -0.24,
+        "data_saved_percent": -6.5,
+        "speed_impact_s": -0.08
+      },
+      "cache_enabled": {
+        "data_saved_mb": -0.02,
+        "data_saved_percent": -0.5,
+        "speed_impact_s": -0.15
+      },
+      "combined": {
+        "data_saved_mb": -0.6,
+        "data_saved_percent": -16.3,
+        "speed_impact_s": -0.07
+      }
+    },
+    "bot_detection_summary": {
+      "baseline": {
+        "detections": 3,
+        "webdriver_hidden": false,
+        "plugins_present": false,
+        "headless_hidden": false
+      },
+      "with_stealth": {
+        "detections": 2,
+        "webdriver_hidden": true,
+        "plugins_present": false,
+        "headless_hidden": false
+      },
+      "headed": {
+        "detections": 0,
+        "webdriver_hidden": true,
+        "plugins_present": true,
+        "headless_hidden": true
+      },
+      "custom_args": {
+        "detections": 2,
+        "webdriver_hidden": true,
+        "plugins_present": false,
+        "headless_hidden": false
+      }
+    }
+  },
+  "recommendations": []
+}

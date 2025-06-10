@@ -1,0 +1,29 @@
+============================================================
+COMPREHENSIVE METRICS TEST SUMMARY
+============================================================
+
+📊 DATA USAGE ANALYSIS:
+  Average per site: 3.05MB
+  Resource breakdown:
+    - script: 9.52MB (54 requests)
+    - fetch: 0.93MB (6 requests)
+    - image: 0.73MB (56 requests)
+    - document: 0.42MB (5 requests)
+    - stylesheet: 0.33MB (3 requests)
+
+💡 OPTIMIZATION EFFECTIVENESS:
+  block_images: -10.6% data saved
+  block_media: -6.5% data saved
+  aggressive: -6.5% data saved
+  cache_enabled: -0.5% data saved
+  combined: -16.3% data saved
+
+🤖 BOT DETECTION STATUS:
+  baseline: 3 detections
+  with_stealth: 2 detections
+  headed: 0 detections
+  custom_args: 2 detections
+
+📋 TOP RECOMMENDATIONS:
+
+============================================================

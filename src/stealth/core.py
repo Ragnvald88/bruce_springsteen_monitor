@@ -19,10 +19,7 @@ from .injections import StealthInjections
 from .cdp_bypass_engine import CDPStealth
 from .cdp_webdriver_bypass import CDPWebDriverBypass
 from .behaviors import HumanBehavior
-try:
-    from ..network.tls_fingerprint import TLSFingerprintRotator
-except ImportError:
-    from network.tls_fingerprint import TLSFingerprintRotator
+from ..network.tls_fingerprint import TLSFingerprintRotator
 
 logger = logging.getLogger(__name__)
 

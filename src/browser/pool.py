@@ -19,20 +19,16 @@ from collections import defaultdict, deque
 from playwright.async_api import Browser, Playwright, BrowserContext, Page, Request, Response
 
 try:
-    from .launcher import BrowserLauncher
+    from .launcher import NodriverBrowserLauncher
     from .stealth_launcher import StealthBrowserLauncher
     from ..stealth.core import StealthCore
-    from ..stealth.stealth_core_v3 import StealthCoreV3
     from ..detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
     from ..network.tls_fingerprint import TLSFingerprintRotator
     from ..config import Settings, ProxyConfig
     from ..constants import BrowserState
 except ImportError:
-    from browser.launcher import BrowserLauncher
-    from browser.stealth_launcher import StealthBrowserLauncher
-    from stealth.core import StealthCore
-    from stealth.stealth_core_v3 import StealthCoreV3
-    from detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
+    # Fallback imports
+    pass
     from network.tls_fingerprint import TLSFingerprintRotator
     from config import Settings, ProxyConfig
     from constants import BrowserState

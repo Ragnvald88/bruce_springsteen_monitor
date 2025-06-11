@@ -1,0 +1,41 @@
+# StealthMaster Example Configuration
+
+app_settings:
+  mode: stealth
+  dry_run: true
+  
+monitoring:
+  level: INFO
+  save_screenshots: false
+  save_network_logs: false
+
+browser_options:
+  headless: false
+  viewport_width: 1920
+  viewport_height: 1080
+  
+targets:
+  - platform: ticketmaster
+    event_name: "Test Concert"
+    url: "https://www.ticketmaster.com"
+    enabled: false
+    interval_s: 30
+    priority: high
+    ticket_type: "GA"
+
+proxy_settings:
+  enabled: false
+  primary_pool: []
+  
+profile_settings:
+  rotation_enabled: false
+  
+data_limits:
+  global_limit_mb: 1000
+  
+logging:
+  level: INFO
+  format: "simple"
+  console_output: true
+  
+logs_dir: "./logs"

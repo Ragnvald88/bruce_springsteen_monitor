@@ -1,1043 +1,326 @@
-# stealthmaster/stealth/fingerprint.py
-"""Advanced fingerprint generation for browser spoofing."""
+"""
+Enhanced Fingerprint Generator
+Provides realistic, per-session randomized fingerprints
+"""
 
 import random
-import uuid
+import hashlib
+import json
+from typing import Dict, Any, List, Tuple
 from datetime import datetime
-from typing import Dict, Any, List, Tuple, Optional
+import pytz
 
-from config import BrowserOptions
+from ..utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 
-class FingerprintGenerator:
-    """Generates realistic browser fingerprints for stealth."""
-    
-    # Realistic user agents (2024-2025 versions)
-    USER_AGENTS = {
-        "windows": [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
-        ],
-        "mac": [
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-        ],
-        "linux": [
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0",
-        ],
-    }
-    
-    # Common viewport sizes
-    VIEWPORTS = [
-        (1920, 1080),  # Full HD
-        (1366, 768),   # Common laptop
-        (1536, 864),   # Common laptop
-        (1440, 900),   # MacBook
-        (1280, 720),   # HD
-        (1600, 900),   # Common desktop
-        (1680, 1050),  # Older MacBook
-        (2560, 1440),  # QHD
-    ]
-    
-    # WebGL vendors and renderers
-    WEBGL_DATA = [
-        ("Intel Inc.", "Intel Iris OpenGL Engine"),
-        ("Intel Inc.", "Intel(R) HD Graphics 630"),
-        ("Intel Inc.", "Intel(R) UHD Graphics 630"),
-        ("NVIDIA Corporation", "NVIDIA GeForce GTX 1060/PCIe/SSE2"),
-        ("NVIDIA Corporation", "NVIDIA GeForce GTX 1070/PCIe/SSE2"),
-        ("NVIDIA Corporation", "NVIDIA GeForce RTX 3060/PCIe/SSE2"),
-        ("NVIDIA Corporation", "NVIDIA GeForce RTX 4070/PCIe/SSE2"),
-        ("AMD", "AMD Radeon Pro 5300M OpenGL Engine"),
-        ("Google Inc. (NVIDIA Corporation)", "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 Direct3D11 vs_5_0 ps_5_0)"),
-        ("Google Inc. (Intel)", "ANGLE (Intel, Intel(R) UHD Graphics 630 Direct3D11 vs_5_0 ps_5_0)"),
-    ]
-    
-    # Common fonts by platform
-    FONTS = {
-        "windows": [
-            "Arial", "Arial Black", "Arial Narrow", "Book Antiqua", "Bookman Old Style",
-            "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic",
-            "Comic Sans MS", "Consolas", "Courier", "Courier New", "Georgia",
-            "Helvetica", "Impact", "Lucida Console", "Lucida Sans Unicode", "Microsoft Sans Serif",
-            "Palatino Linotype", "Segoe UI", "Tahoma", "Times", "Times New Roman",
-            "Trebuchet MS", "Verdana",
-        ],
-        "mac": [
-            "American Typewriter", "Arial", "Arial Black", "Arial Narrow", "Arial Rounded MT Bold",
-            "Arial Unicode MS", "Avenir", "Avenir Next", "Avenir Next Condensed", "Baskerville",
-            "Big Caslon", "Bodoni 72", "Bradley Hand", "Chalkboard", "Cochin",
-            "Comic Sans MS", "Courier", "Courier New", "Futura", "Geneva",
-            "Georgia", "Gill Sans", "Helvetica", "Helvetica Neue", "Hoefler Text",
-            "Impact", "Lucida Grande", "Marker Felt", "Monaco", "Optima",
-            "Palatino", "SF Pro Display", "SF Pro Text", "Tahoma", "Times",
-            "Times New Roman", "Trebuchet MS", "Verdana",
-        ],
-        "linux": [
-            "Arial", "Bitstream Vera Sans", "Bitstream Vera Serif", "Courier New", "DejaVu Sans",
-            "DejaVu Sans Mono", "DejaVu Serif", "FreeMono", "FreeSans", "FreeSerif",
-            "Liberation Mono", "Liberation Sans", "Liberation Serif", "Noto Sans", "Noto Serif",
-            "Ubuntu", "Ubuntu Condensed", "Ubuntu Mono",
-        ],
-    }
-    
-    # Geolocation data for Italian cities
-    GEO_LOCATIONS = [
-        {"latitude": 41.9028, "longitude": 12.4964, "city": "Rome"},
-        {"latitude": 45.4642, "longitude": 9.1900, "city": "Milan"},
-        {"latitude": 40.8518, "longitude": 14.2681, "city": "Naples"},
-        {"latitude": 45.0703, "longitude": 7.6869, "city": "Turin"},
-        {"latitude": 43.7696, "longitude": 11.2558, "city": "Florence"},
-        {"latitude": 44.4949, "longitude": 11.3426, "city": "Bologna"},
-        {"latitude": 45.4384, "longitude": 12.3155, "city": "Venice"},
-        {"latitude": 45.4064, "longitude": 11.8768, "city": "Padua"},
-    ]
+class EnhancedFingerprintGenerator:
+    """
+    Fingerprint Generator with advanced randomization
+    Creates consistent but unique fingerprints per session
+    """
     
     def __init__(self):
-        """Initialize fingerprint generator."""
+        self.seed = None
         self._fingerprint_cache = {}
+        self._session_id = None
+        
+        # Realistic device profiles
+        self.device_profiles = [
+            {
+                "name": "Windows Gaming Desktop",
+                "os": "Windows",
+                "viewport": {"width": 1920, "height": 1080},
+                "screen": {"width": 1920, "height": 1080, "colorDepth": 24},
+                "cores": 8,
+                "memory": 16,
+                "gpu": "NVIDIA GeForce RTX 3070"
+            },
+            {
+                "name": "MacBook Pro",
+                "os": "macOS",
+                "viewport": {"width": 1440, "height": 900},
+                "screen": {"width": 2880, "height": 1800, "colorDepth": 30},
+                "cores": 8,
+                "memory": 16,
+                "gpu": "Apple M1 Pro"
+            },
+            {
+                "name": "Windows Laptop",
+                "os": "Windows",
+                "viewport": {"width": 1366, "height": 768},
+                "screen": {"width": 1366, "height": 768, "colorDepth": 24},
+                "cores": 4,
+                "memory": 8,
+                "gpu": "Intel Iris Xe Graphics"
+            },
+            {
+                "name": "Linux Desktop",
+                "os": "Linux",
+                "viewport": {"width": 1920, "height": 1080},
+                "screen": {"width": 1920, "height": 1080, "colorDepth": 24},
+                "cores": 6,
+                "memory": 32,
+                "gpu": "AMD Radeon RX 6700 XT"
+            }
+        ]
+        
+        # Realistic browser versions
+        self.browser_versions = {
+            "Chrome": ["121.0.6167.85", "122.0.6261.94", "123.0.6312.58"],
+            "Firefox": ["122.0", "123.0", "124.0"],
+            "Edge": ["121.0.2277.83", "122.0.2365.92", "123.0.2420.81"]
+        }
+        
+        # Common languages by region
+        self.language_sets = [
+            ["en-US", "en"],
+            ["en-GB", "en"],
+            ["it-IT", "it", "en"],
+            ["de-DE", "de", "en"],
+            ["fr-FR", "fr", "en"],
+            ["es-ES", "es", "en"]
+        ]
+        
+        # Timezone groups
+        self.timezone_groups = {
+            "US": ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles"],
+            "Europe": ["Europe/London", "Europe/Paris", "Europe/Berlin", "Europe/Rome", "Europe/Madrid"],
+            "Asia": ["Asia/Tokyo", "Asia/Shanghai", "Asia/Seoul", "Asia/Singapore"]
+        }
     
-    def generate(self, platform: str = "windows") -> Dict[str, Any]:
+    def set_session_id(self, session_id: str) -> None:
+        """Set session ID for consistent fingerprinting within session"""
+        self._session_id = session_id
+        self.seed = int(hashlib.md5(session_id.encode()).hexdigest()[:8], 16)
+        random.seed(self.seed)
+        logger.debug(f"Set fingerprint session: {session_id}")
+    
+    def generate(self, consistent: bool = True) -> Dict[str, Any]:
         """
-        Generate a complete browser fingerprint.
+        Generate realistic browser fingerprint
         
         Args:
-            platform: Target platform (windows, mac, linux)
-            
-        Returns:
-            Complete fingerprint configuration
+            consistent: If True, returns same fingerprint for same session
         """
-        # Generate unique ID
-        fingerprint_id = str(uuid.uuid4())
+        if consistent and self._session_id and self._session_id in self._fingerprint_cache:
+            return self._fingerprint_cache[self._session_id]
         
-        # Select user agent
-        user_agent = random.choice(self.USER_AGENTS.get(platform, self.USER_AGENTS["windows"]))
+        # Select random device profile
+        profile = random.choice(self.device_profiles)
         
-        # Select viewport
-        viewport = random.choice(self.VIEWPORTS)
+        # Select browser
+        browser = random.choice(["Chrome", "Firefox", "Edge"])
+        version = random.choice(self.browser_versions[browser])
         
-        # Calculate screen size (slightly larger than viewport)
-        screen_width = viewport[0] + random.randint(0, 200)
-        screen_height = viewport[1] + random.randint(100, 300)
+        # Build user agent
+        user_agent = self._build_user_agent(profile["os"], browser, version)
         
-        # Select WebGL data
-        webgl_vendor, webgl_renderer = random.choice(self.WEBGL_DATA)
+        # Select languages
+        languages = random.choice(self.language_sets)
         
-        # Select geolocation
-        geo = random.choice(self.GEO_LOCATIONS)
+        # Select timezone from appropriate region
+        region = "Europe" if any("it" in lang or "de" in lang or "fr" in lang or "es" in lang for lang in languages) else "US"
+        timezone = random.choice(self.timezone_groups[region])
+        
+        # Generate canvas noise
+        canvas_noise = random.uniform(0.0001, 0.001)
         
         # Build fingerprint
         fingerprint = {
-            "id": fingerprint_id,
-            "platform": platform,
-            "user_agent": user_agent,
-            "viewport": {
-                "width": viewport[0],
-                "height": viewport[1],
-            },
-            "screen": {
-                "width": screen_width,
-                "height": screen_height,
-                "availWidth": viewport[0],
-                "availHeight": viewport[1],
-                "colorDepth": 24,
-                "pixelDepth": 24,
-            },
+            "userAgent": user_agent,
+            "language": languages[0],
+            "languages": languages,
+            "platform": self._get_platform(profile["os"]),
+            "viewport": profile["viewport"],
+            "screen": profile["screen"],
+            "hardwareConcurrency": profile["cores"],
+            "deviceMemory": profile["memory"],
+            "timezone": timezone,
+            "timezoneOffset": self._get_timezone_offset(timezone),
             "webgl": {
-                "vendor": webgl_vendor,
-                "renderer": webgl_renderer,
-                "version": "WebGL 2.0",
-                "shadingLanguageVersion": "WebGL GLSL ES 3.00",
+                "vendor": self._get_webgl_vendor(profile["gpu"]),
+                "renderer": profile["gpu"]
             },
             "canvas": {
-                "noise": True,
-                "noise_factor": random.uniform(0.00001, 0.00005),
+                "noise": canvas_noise,
+                "hash": hashlib.md5(f"{self._session_id}{canvas_noise}".encode()).hexdigest()
             },
+            "fonts": self._get_font_list(profile["os"]),
             "audio": {
-                "noise": True,
-                "noise_factor": random.uniform(0.00001, 0.00009),
-                "sample_rate": random.choice([44100, 48000]),
+                "sampleRate": 48000,
+                "channelCount": 2,
+                "maxChannelCount": 2
             },
-            "fonts": self._select_fonts(platform),
-            "navigator": {
-                "language": random.choice(["it-IT", "en-US", "en-GB"]),
-                "languages": ["it-IT", "it", "en-US", "en"],
-                "platform": self._get_navigator_platform(platform),
-                "hardwareConcurrency": random.choice([4, 8, 12, 16]),
-                "deviceMemory": random.choice([4, 8, 16, 32]),
-                "maxTouchPoints": 0,  # Desktop
-                "cookieEnabled": True,
-                "doNotTrack": random.choice([None, "1"]),
-                "appCodeName": "Mozilla",
-                "appName": "Netscape",
-                "vendor": self._get_vendor(user_agent),
-                "vendorSub": "",
-                "productSub": "20030107",
-            },
-            "timezone": {
-                "id": "Europe/Rome",
-                "offset": -60,  # UTC+1
-            },
-            "geo": geo,
-            "plugins": self._generate_plugins(),
+            "plugins": self._get_plugins(browser),
             "battery": {
-                "charging": True,
-                "chargingTime": 0,
-                "dischargingTime": float("inf"),
-                "level": 0.99,
+                "charging": random.choice([True, True, False]),  # Most devices are plugged in
+                "level": random.uniform(0.5, 1.0) if random.random() > 0.3 else 1.0
             },
-            "network": {
-                "effectiveType": "4g",
-                "rtt": random.randint(50, 150),
-                "downlink": random.uniform(5.0, 20.0),
-                "saveData": False,
+            "connection": {
+                "effectiveType": random.choice(["4g", "4g", "wifi"]),
+                "rtt": random.randint(20, 150),
+                "downlink": random.uniform(1.5, 10.0)
             },
-            "device_scale_factor": random.choice([1, 1.25, 1.5, 2]),
-            "color_gamut": random.choice(["srgb", "p3", "rec2020"]),
-            "reduced_motion": False,
-            "prefers_color_scheme": "light",
-            "generated_at": datetime.now().isoformat(),
+            "mediaDevices": self._get_media_devices(),
+            "touchSupport": self._get_touch_support(profile),
+            "webdriver": False,  # Always false in V4
+            "timestamp": datetime.now().isoformat()
         }
         
-        # Cache fingerprint
-        self._fingerprint_cache[fingerprint_id] = fingerprint
+        # Cache if consistent mode
+        if consistent and self._session_id:
+            self._fingerprint_cache[self._session_id] = fingerprint
         
         return fingerprint
     
-    def _select_fonts(self, platform: str) -> List[str]:
-        """Select realistic fonts for platform."""
-        available_fonts = self.FONTS.get(platform, self.FONTS["windows"])
-        
-        # Select 60-80% of available fonts (realistic)
-        num_fonts = int(len(available_fonts) * random.uniform(0.6, 0.8))
-        selected = random.sample(available_fonts, num_fonts)
-        
-        # Always include common fonts
-        common = ["Arial", "Courier New", "Times New Roman", "Verdana"]
-        for font in common:
-            if font in available_fonts and font not in selected:
-                selected.append(font)
-        
-        return sorted(selected)
-    
-    def _get_navigator_platform(self, platform: str) -> str:
-        """Get navigator.platform value for OS."""
-        platform_map = {
-            "windows": "Win32",
-            "mac": "MacIntel",
-            "linux": "Linux x86_64",
+    def _build_user_agent(self, os: str, browser: str, version: str) -> str:
+        """Build realistic user agent string"""
+        os_strings = {
+            "Windows": "Windows NT 10.0; Win64; x64",
+            "macOS": "Macintosh; Intel Mac OS X 10_15_7",
+            "Linux": "X11; Linux x86_64"
         }
-        return platform_map.get(platform, "Win32")
+        
+        if browser == "Chrome":
+            return f"Mozilla/5.0 ({os_strings[os]}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{version} Safari/537.36"
+        elif browser == "Firefox":
+            return f"Mozilla/5.0 ({os_strings[os]}; rv:{version.split('.')[0]}.0) Gecko/20100101 Firefox/{version}"
+        else:  # Edge
+            return f"Mozilla/5.0 ({os_strings[os]}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{version} Safari/537.36 Edg/{version}"
     
-    def _get_vendor(self, user_agent: str) -> str:
-        """Get navigator.vendor based on browser."""
-        if "Chrome" in user_agent:
-            return "Google Inc."
-        elif "Firefox" in user_agent:
-            return ""
-        elif "Safari" in user_agent and "Chrome" not in user_agent:
-            return "Apple Computer, Inc."
-        return "Google Inc."
+    def _get_platform(self, os: str) -> str:
+        """Get platform string"""
+        platforms = {
+            "Windows": "Win32",
+            "macOS": "MacIntel",
+            "Linux": "Linux x86_64"
+        }
+        return platforms[os]
     
-    def _generate_plugins(self) -> List[Dict[str, str]]:
-        """Generate realistic plugin list."""
-        base_plugins = [
-            {
-                "name": "Chrome PDF Plugin",
-                "description": "Portable Document Format",
-                "filename": "internal-pdf-viewer",
-                "mimeTypes": ["application/x-google-chrome-pdf"],
-            },
-            {
-                "name": "Chrome PDF Viewer",
-                "description": "Portable Document Format",
-                "filename": "mhjfbmdgcfjbbpaeojofohoefgiehjai",
-                "mimeTypes": ["application/pdf"],
-            },
-            {
-                "name": "Native Client",
-                "description": "Native Client Executable",
-                "filename": "internal-nacl-plugin",
-                "mimeTypes": ["application/x-nacl", "application/x-pnacl"],
-            },
+    def _get_timezone_offset(self, timezone: str) -> int:
+        """Get timezone offset in minutes"""
+        tz = pytz.timezone(timezone)
+        now = datetime.now(tz)
+        offset = now.utcoffset().total_seconds() / 60
+        return int(offset)
+    
+    def _get_webgl_vendor(self, gpu: str) -> str:
+        """Get WebGL vendor string"""
+        if "NVIDIA" in gpu:
+            return "NVIDIA Corporation"
+        elif "AMD" in gpu or "Radeon" in gpu:
+            return "Advanced Micro Devices, Inc."
+        elif "Intel" in gpu:
+            return "Intel Inc."
+        elif "Apple" in gpu:
+            return "Apple Inc."
+        return "Unknown"
+    
+    def _get_font_list(self, os: str) -> List[str]:
+        """Get realistic font list for OS"""
+        base_fonts = [
+            "Arial", "Arial Black", "Comic Sans MS", "Courier New",
+            "Georgia", "Impact", "Times New Roman", "Trebuchet MS", "Verdana"
         ]
         
-        # Randomly include/exclude plugins
-        return [p for p in base_plugins if random.random() > 0.3]
-    
-    def get_cached(self, fingerprint_id: str) -> Optional[Dict[str, Any]]:
-        """Get cached fingerprint by ID."""
-        return self._fingerprint_cache.get(fingerprint_id)
-    
-    def rotate_fingerprint(self, current_id: str) -> Dict[str, Any]:
-        """
-        Rotate to a new fingerprint while maintaining platform consistency.
+        os_fonts = {
+            "Windows": ["Calibri", "Cambria", "Consolas", "Segoe UI", "Tahoma"],
+            "macOS": ["Helvetica", "Helvetica Neue", "Lucida Grande", "Monaco", "SF Pro Display"],
+            "Linux": ["DejaVu Sans", "Liberation Sans", "Noto Sans", "Ubuntu", "Droid Sans"]
+        }
         
-        Args:
-            current_id: Current fingerprint ID
-            
-        Returns:
-            New fingerprint
-        """
-        current = self.get_cached(current_id)
-        if current:
-            platform = current.get("platform", "windows")
-        else:
-            platform = "windows"
-        
-        return self.generate(platform)
-
-# stealthmaster/stealth/injections.py
-"""Stealth JavaScript injections for anti-detection."""
-
-import json
-from typing import Dict, Any, List
-
-
-class StealthInjections:
-    """Manages all JavaScript injections for stealth."""
+        return base_fonts + os_fonts.get(os, [])
     
-    def get_context_init_script(self) -> str:
-        """Get initialization script for browser context."""
-        return """
-        // Context initialization
-        (() => {
-            'use strict';
-            
-            // Mark as stealth context
-            window.__stealthmaster__ = true;
-            
-            // Override Object.prototype.toString to hide modifications
-            const originalToString = Object.prototype.toString;
-            Object.prototype.toString = function() {
-                if (this === navigator) return '[object Navigator]';
-                if (this === window.chrome) return '[object Object]';
-                return originalToString.call(this);
-            };
-        })();
-        """
-    
-    def get_webdriver_evasion(self) -> str:
-        """Complete webdriver property removal."""
-        return """
-        // Webdriver evasion
-        (() => {
-            'use strict';
-            
-            // Delete webdriver from all possible locations
-            delete Object.getPrototypeOf(navigator).webdriver;
-            delete navigator.webdriver;
-            delete navigator.__proto__.webdriver;
-            
-            // Create new navigator prototype without webdriver
-            const newProto = Object.create(Object.getPrototypeOf(navigator));
-            delete newProto.webdriver;
-            Object.setPrototypeOf(navigator, newProto);
-            
-            // Define as undefined (can't be detected)
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined,
-                set: () => {},
-                enumerable: false,
-                configurable: false
-            });
-            
-            // Also remove from window
-            delete window.navigator.webdriver;
-            
-            // Remove CDP runtime artifacts
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-        })();
-        """
-    
-    def get_chrome_runtime_evasion(self) -> str:
-        """Create convincing Chrome runtime object."""
-        return """
-        // Chrome runtime evasion
-        (() => {
-            'use strict';
-            
-            if (!window.chrome) {
-                window.chrome = {};
-            }
-            
-            // App
-            window.chrome.app = {
-                isInstalled: false,
-                InstallState: {
-                    DISABLED: 'disabled',
-                    INSTALLED: 'installed', 
-                    NOT_INSTALLED: 'not_installed'
+    def _get_plugins(self, browser: str) -> List[Dict[str, str]]:
+        """Get browser plugins"""
+        if browser == "Chrome" or browser == "Edge":
+            return [
+                {
+                    "name": "Chrome PDF Plugin",
+                    "filename": "internal-pdf-viewer",
+                    "description": "Portable Document Format"
                 },
-                RunningState: {
-                    CANNOT_RUN: 'cannot_run',
-                    READY_TO_RUN: 'ready_to_run',
-                    RUNNING: 'running'
-                },
-                getDetails: () => null,
-                getIsInstalled: () => false,
-                runningState: () => 'cannot_run'
-            };
-            
-            // Runtime with all properties
-            window.chrome.runtime = {
-                OnInstalledReason: {
-                    CHROME_UPDATE: 'chrome_update',
-                    INSTALL: 'install',
-                    SHARED_MODULE_UPDATE: 'shared_module_update',
-                    UPDATE: 'update'
-                },
-                OnRestartRequiredReason: {
-                    APP_UPDATE: 'app_update',
-                    OS_UPDATE: 'os_update',
-                    PERIODIC: 'periodic'
-                },
-                PlatformArch: {
-                    ARM: 'arm',
-                    ARM64: 'arm64',
-                    MIPS: 'mips',
-                    MIPS64: 'mips64',
-                    X86_32: 'x86-32',
-                    X86_64: 'x86-64'
-                },
-                PlatformNaclArch: {
-                    ARM: 'arm',
-                    MIPS: 'mips',
-                    MIPS64: 'mips64',
-                    X86_32: 'x86-32',
-                    X86_64: 'x86-64'
-                },
-                PlatformOs: {
-                    ANDROID: 'android',
-                    CROS: 'cros',
-                    LINUX: 'linux',
-                    MAC: 'mac',
-                    OPENBSD: 'openbsd',
-                    WIN: 'win'
-                },
-                RequestUpdateCheckStatus: {
-                    NO_UPDATE: 'no_update',
-                    THROTTLED: 'throttled',
-                    UPDATE_AVAILABLE: 'update_available'
-                },
-                id: undefined,
-                getManifest: undefined,
-                connect: () => {},
-                sendMessage: () => {}
-            };
-            
-            // LoadTimes
-            const timing = performance.timing;
-            const loadTimes = {
-                get requestTime() { return timing.navigationStart / 1000; },
-                get startLoadTime() { return timing.fetchStart / 1000; },
-                get commitLoadTime() { return timing.responseStart / 1000; },
-                get finishDocumentLoadTime() { return timing.domContentLoadedEventEnd / 1000; },
-                get finishLoadTime() { return timing.loadEventEnd / 1000; },
-                get firstPaintTime() { return (timing.responseStart + 100) / 1000; },
-                get firstPaintAfterLoadTime() { return 0; },
-                get navigationType() { return 'Other'; },
-                get wasFetchedViaSpdy() { return true; },
-                get wasNpnNegotiated() { return true; },
-                get npnNegotiatedProtocol() { return 'h2'; },
-                get wasAlternateProtocolAvailable() { return false; },
-                get connectionInfo() { return 'h2'; }
-            };
-            
-            window.chrome.loadTimes = function() { return loadTimes; };
-            
-            // CSI
-            window.chrome.csi = function() {
-                return {
-                    onloadT: timing.loadEventEnd,
-                    pageT: Date.now() - timing.navigationStart,
-                    startE: timing.navigationStart,
-                    tran: 15
-                };
-            };
-        })();
-        """
-    
-    def get_permission_evasion(self) -> str:
-        """Override permission API to appear legitimate."""
-        return """
-        // Permission API evasion
-        (() => {
-            'use strict';
-            
-            if (!navigator.permissions) return;
-            
-            const originalQuery = navigator.permissions.query.bind(navigator.permissions);
-            
-            navigator.permissions.query = async function(descriptor) {
-                // Common permissions that should be in specific states
-                const permissionStates = {
-                    'geolocation': 'granted',
-                    'notifications': 'default',
-                    'push': 'default',
-                    'midi': 'default',
-                    'camera': 'default',
-                    'microphone': 'default',
-                    'background-sync': 'granted',
-                    'ambient-light-sensor': 'default',
-                    'accelerometer': 'default',
-                    'gyroscope': 'default',
-                    'magnetometer': 'default',
-                    'clipboard-read': 'default',
-                    'clipboard-write': 'default'
-                };
-                
-                const name = descriptor.name || descriptor;
-                
-                if (name in permissionStates) {
-                    return {
-                        name: name,
-                        state: permissionStates[name],
-                        onchange: null,
-                        addEventListener: () => {},
-                        removeEventListener: () => {},
-                        dispatchEvent: () => true
-                    };
+                {
+                    "name": "Chrome PDF Viewer",
+                    "filename": "mhjfbmdgcfjbbpaeojofohoefgiehjai",
+                    "description": "Portable Document Format"
                 }
-                
-                try {
-                    return await originalQuery(descriptor);
-                } catch (e) {
-                    return {
-                        name: name,
-                        state: 'default',
-                        onchange: null
-                    };
-                }
-            };
-        })();
-        """
+            ]
+        return []
     
-    def get_plugin_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Create realistic plugin array."""
-        plugins = fingerprint.get("plugins", [])
-        plugins_json = json.dumps(plugins)
+    def _get_media_devices(self) -> List[Dict[str, str]]:
+        """Get media devices"""
+        devices = []
         
-        return f"""
-        // Plugin evasion
-        (() => {{
-            'use strict';
-            
-            const pluginsData = {plugins_json};
-            
-            // Create proper Plugin objects
-            const plugins = pluginsData.map(data => {{
-                const plugin = Object.create(Plugin.prototype);
-                
-                Object.defineProperties(plugin, {{
-                    name: {{ value: data.name, enumerable: true }},
-                    description: {{ value: data.description, enumerable: true }},
-                    filename: {{ value: data.filename, enumerable: true }},
-                    length: {{ value: data.mimeTypes.length, enumerable: true }}
-                }});
-                
-                // Add mime types
-                data.mimeTypes.forEach((mimeType, index) => {{
-                    const mime = Object.create(MimeType.prototype);
-                    Object.defineProperties(mime, {{
-                        type: {{ value: mimeType, enumerable: true }},
-                        suffixes: {{ value: 'pdf', enumerable: true }},
-                        description: {{ value: data.description, enumerable: true }},
-                        enabledPlugin: {{ value: plugin, enumerable: true }}
-                    }});
-                    
-                    plugin[index] = mime;
-                    plugin[mimeType] = mime;
-                }});
-                
-                // Methods
-                plugin.item = function(index) {{ return this[index] || null; }};
-                plugin.namedItem = function(name) {{ return this[name] || null; }};
-                
-                return plugin;
-            }});
-            
-            // Create PluginArray
-            const pluginArray = Object.create(PluginArray.prototype);
-            
-            plugins.forEach((plugin, index) => {{
-                pluginArray[index] = plugin;
-                pluginArray[plugin.name] = plugin;
-            }});
-            
-            Object.defineProperties(pluginArray, {{
-                length: {{ value: plugins.length, enumerable: true }}
-            }});
-            
-            pluginArray.item = function(index) {{ return this[index] || null; }};
-            pluginArray.namedItem = function(name) {{ return this[name] || null; }};
-            pluginArray.refresh = function() {{}};
-            
-            // Override navigator.plugins
-            Object.defineProperty(navigator, 'plugins', {{
-                get: () => pluginArray,
-                enumerable: true,
-                configurable: false
-            }});
-            
-            // Also set mimeTypes
-            const mimeTypes = [];
-            plugins.forEach(plugin => {{
-                for (let i = 0; i < plugin.length; i++) {{
-                    mimeTypes.push(plugin[i]);
-                }}
-            }});
-            
-            const mimeTypeArray = Object.create(MimeTypeArray.prototype);
-            mimeTypes.forEach((mime, index) => {{
-                mimeTypeArray[index] = mime;
-                mimeTypeArray[mime.type] = mime;
-            }});
-            
-            Object.defineProperty(mimeTypeArray, 'length', {{
-                value: mimeTypes.length
-            }});
-            
-            mimeTypeArray.item = function(index) {{ return this[index] || null; }};
-            mimeTypeArray.namedItem = function(name) {{ return this[name] || null; }};
-            
-            Object.defineProperty(navigator, 'mimeTypes', {{
-                get: () => mimeTypeArray,
-                enumerable: true,
-                configurable: false
-            }});
-        }})();
-        """
-    
-    def get_webgl_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Override WebGL parameters."""
-        webgl = fingerprint.get("webgl", {})
-        vendor = webgl.get("vendor", "Intel Inc.")
-        renderer = webgl.get("renderer", "Intel Iris OpenGL Engine")
+        # Audio inputs
+        for i in range(random.randint(1, 3)):
+            devices.append({
+                "kind": "audioinput",
+                "label": f"Microphone {i+1}",
+                "groupId": hashlib.md5(f"audio-in-{i}".encode()).hexdigest()[:16]
+            })
         
-        return f"""
-        // WebGL evasion
-        (() => {{
-            'use strict';
-            
-            const vendor = '{vendor}';
-            const renderer = '{renderer}';
-            
-            // WebGL 1.0
-            const getParameter = WebGLRenderingContext.prototype.getParameter;
-            WebGLRenderingContext.prototype.getParameter = function(parameter) {{
-                if (parameter === 37445) return vendor;   // UNMASKED_VENDOR_WEBGL
-                if (parameter === 37446) return renderer; // UNMASKED_RENDERER_WEBGL
-                if (parameter === 7937) return 'WebKit WebGL'; // VERSION
-                if (parameter === 35724) return 'WebGL GLSL ES 1.0'; // SHADING_LANGUAGE_VERSION
-                return getParameter.apply(this, arguments);
-            }};
-            
-            // WebGL 2.0
-            if (typeof WebGL2RenderingContext !== 'undefined') {{
-                const getParameter2 = WebGL2RenderingContext.prototype.getParameter;
-                WebGL2RenderingContext.prototype.getParameter = function(parameter) {{
-                    if (parameter === 37445) return vendor;
-                    if (parameter === 37446) return renderer;
-                    if (parameter === 7937) return 'WebGL 2.0';
-                    if (parameter === 35724) return 'WebGL GLSL ES 3.00';
-                    return getParameter2.apply(this, arguments);
-                }};
-            }}
-            
-            // Also override getSupportedExtensions
-            const getSupportedExtensions = WebGLRenderingContext.prototype.getSupportedExtensions;
-            WebGLRenderingContext.prototype.getSupportedExtensions = function() {{
-                const extensions = getSupportedExtensions.apply(this, arguments);
-                // Add/remove some extensions for realism
-                if (!extensions.includes('WEBGL_debug_renderer_info')) {{
-                    extensions.push('WEBGL_debug_renderer_info');
-                }}
-                return extensions;
-            }};
-        }})();
-        """
-    
-    def get_canvas_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Add noise to canvas fingerprinting."""
-        canvas = fingerprint.get("canvas", {})
-        noise_factor = canvas.get("noise_factor", 0.00001)
+        # Audio outputs
+        for i in range(random.randint(1, 2)):
+            devices.append({
+                "kind": "audiooutput",
+                "label": f"Speaker {i+1}",
+                "groupId": hashlib.md5(f"audio-out-{i}".encode()).hexdigest()[:16]
+            })
         
-        return f"""
-        // Canvas fingerprinting protection
-        (() => {{
-            'use strict';
-            
-            const noiseFactor = {noise_factor};
-            
-            // Helper to add noise
-            const addNoise = (value) => {{
-                const noise = (Math.random() - 0.5) * noiseFactor * 255;
-                return Math.max(0, Math.min(255, value + noise));
-            }};
-            
-            // Override toDataURL
-            const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
-            HTMLCanvasElement.prototype.toDataURL = function(...args) {{
-                const context = this.getContext('2d');
-                if (context && this.width > 0 && this.height > 0) {{
-                    try {{
-                        const imageData = context.getImageData(0, 0, this.width, this.height);
-                        for (let i = 0; i < imageData.data.length; i += 4) {{
-                            imageData.data[i] = addNoise(imageData.data[i]);     // R
-                            imageData.data[i+1] = addNoise(imageData.data[i+1]); // G
-                            imageData.data[i+2] = addNoise(imageData.data[i+2]); // B
-                            // Alpha channel unchanged
-                        }}
-                        context.putImageData(imageData, 0, 0);
-                    }} catch (e) {{
-                        // Ignore errors (cross-origin, etc)
-                    }}
-                }}
-                return originalToDataURL.apply(this, args);
-            }};
-            
-            // Override toBlob
-            const originalToBlob = HTMLCanvasElement.prototype.toBlob;
-            HTMLCanvasElement.prototype.toBlob = function(callback, ...args) {{
-                const context = this.getContext('2d');
-                if (context && this.width > 0 && this.height > 0) {{
-                    try {{
-                        const imageData = context.getImageData(0, 0, this.width, this.height);
-                        for (let i = 0; i < imageData.data.length; i += 4) {{
-                            imageData.data[i] = addNoise(imageData.data[i]);
-                            imageData.data[i+1] = addNoise(imageData.data[i+1]);
-                            imageData.data[i+2] = addNoise(imageData.data[i+2]);
-                        }}
-                        context.putImageData(imageData, 0, 0);
-                    }} catch (e) {{
-                        // Ignore errors
-                    }}
-                }}
-                return originalToBlob.call(this, callback, ...args);
-            }};
-            
-            // Override getImageData
-            const originalGetImageData = CanvasRenderingContext2D.prototype.getImageData;
-            CanvasRenderingContext2D.prototype.getImageData = function(...args) {{
-                const imageData = originalGetImageData.apply(this, args);
-                for (let i = 0; i < imageData.data.length; i += 4) {{
-                    imageData.data[i] = addNoise(imageData.data[i]);
-                    imageData.data[i+1] = addNoise(imageData.data[i+1]);
-                    imageData.data[i+2] = addNoise(imageData.data[i+2]);
-                }}
-                return imageData;
-            }};
-        }})();
-        """
-    
-    def get_audio_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Add noise to audio fingerprinting."""
-        audio = fingerprint.get("audio", {})
-        noise_factor = audio.get("noise_factor", 0.00001)
+        # Video inputs
+        if random.random() > 0.3:  # 70% have cameras
+            devices.append({
+                "kind": "videoinput",
+                "label": "Integrated Camera",
+                "groupId": hashlib.md5("video-0".encode()).hexdigest()[:16]
+            })
         
-        return f"""
-        // Audio fingerprinting protection
-        (() => {{
-            'use strict';
-            
-            const noiseFactor = {noise_factor};
-            
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            
-            // Override createOscillator
-            const originalCreateOscillator = AudioContext.prototype.createOscillator;
-            AudioContext.prototype.createOscillator = function() {{
-                const oscillator = originalCreateOscillator.apply(this, arguments);
-                const originalConnect = oscillator.connect;
-                
-                oscillator.connect = function(...args) {{
-                    // Add slight frequency variation
-                    if (oscillator.frequency && oscillator.frequency.value) {{
-                        oscillator.frequency.value *= (1 + (Math.random() - 0.5) * noiseFactor);
-                    }}
-                    return originalConnect.apply(this, args);
-                }};
-                
-                return oscillator;
-            }};
-            
-            // Override createAnalyser
-            const originalCreateAnalyser = AudioContext.prototype.createAnalyser;
-            AudioContext.prototype.createAnalyser = function() {{
-                const analyser = originalCreateAnalyser.apply(this, arguments);
-                
-                const originalGetFloatFrequencyData = analyser.getFloatFrequencyData;
-                analyser.getFloatFrequencyData = function(array) {{
-                    originalGetFloatFrequencyData.apply(this, arguments);
-                    for (let i = 0; i < array.length; i++) {{
-                        array[i] += (Math.random() - 0.5) * noiseFactor;
-                    }}
-                }};
-                
-                const originalGetByteFrequencyData = analyser.getByteFrequencyData;
-                analyser.getByteFrequencyData = function(array) {{
-                    originalGetByteFrequencyData.apply(this, arguments);
-                    for (let i = 0; i < array.length; i++) {{
-                        array[i] = Math.max(0, Math.min(255, 
-                            array[i] + (Math.random() - 0.5) * noiseFactor * 255));
-                    }}
-                }};
-                
-                return analyser;
-            }};
-        }})();
-        """
+        return devices
     
-    def get_navigator_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Override navigator properties."""
-        nav = fingerprint.get("navigator", {})
+    def _get_touch_support(self, profile: Dict[str, Any]) -> Dict[str, Any]:
+        """Get touch support info"""
+        # Laptops and desktops typically don't have touch
+        has_touch = profile["name"] == "Windows Laptop" and random.random() > 0.7
         
-        return f"""
-        // Navigator properties evasion
-        (() => {{
-            'use strict';
-            
-            const navProps = {json.dumps(nav)};
-            
-            // Apply each property
-            for (const [prop, value] of Object.entries(navProps)) {{
-                try {{
-                    if (value !== null && value !== undefined) {{
-                        Object.defineProperty(navigator, prop, {{
-                            get: () => value,
-                            enumerable: true,
-                            configurable: false
-                        }});
-                    }}
-                }} catch (e) {{
-                    // Some properties might be read-only
-                }}
-            }}
-            
-            // Special handling for languages
-            if (navProps.languages) {{
-                Object.defineProperty(navigator, 'languages', {{
-                    get: () => Object.freeze([...navProps.languages]),
-                    enumerable: true,
-                    configurable: false
-                }});
-            }}
-        }})();
-        """
+        return {
+            "maxTouchPoints": 10 if has_touch else 0,
+            "touchEvent": has_touch,
+            "touchStart": has_touch
+        }
     
-    def get_screen_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Override screen properties."""
-        screen = fingerprint.get("screen", {})
+    def mutate_slightly(self, fingerprint: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create slight mutation of existing fingerprint
+        Useful for appearing as same device with minor changes
+        """
+        mutated = fingerprint.copy()
         
-        return f"""
-        // Screen properties evasion
-        (() => {{
-            'use strict';
-            
-            const screenProps = {json.dumps(screen)};
-            
-            // Apply screen properties
-            for (const [prop, value] of Object.entries(screenProps)) {{
-                try {{
-                    Object.defineProperty(screen, prop, {{
-                        get: () => value,
-                        enumerable: true,
-                        configurable: false
-                    }});
-                }} catch (e) {{
-                    // Some properties might be read-only
-                }}
-            }}
-            
-            // Also set window.screen
-            for (const [prop, value] of Object.entries(screenProps)) {{
-                try {{
-                    Object.defineProperty(window.screen, prop, {{
-                        get: () => value,
-                        enumerable: true,
-                        configurable: false
-                    }});
-                }} catch (e) {{
-                    // Ignore
-                }}
-            }}
-        }})();
-        """
-    
-    def get_timezone_evasion(self, fingerprint: Dict[str, Any]) -> str:
-        """Override timezone-related functions."""
-        timezone = fingerprint.get("timezone", {})
-        offset = timezone.get("offset", -60)  # Default to Rome (UTC+1)
+        # Slightly change viewport (window resize)
+        if random.random() > 0.5:
+            mutated["viewport"]["width"] += random.randint(-50, 50)
+            mutated["viewport"]["height"] += random.randint(-50, 50)
         
-        return f"""
-        // Timezone evasion
-        (() => {{
-            'use strict';
-            
-            const timezoneOffset = {offset};
-            
-            // Override getTimezoneOffset
-            Date.prototype.getTimezoneOffset = function() {{
-                return timezoneOffset;
-            }};
-            
-            // Override Intl.DateTimeFormat
-            const OriginalDateTimeFormat = Intl.DateTimeFormat;
-            Intl.DateTimeFormat = new Proxy(OriginalDateTimeFormat, {{
-                construct(target, args) {{
-                    if (args.length > 1 && args[1] && !args[1].timeZone) {{
-                        args[1].timeZone = 'Europe/Rome';
-                    }}
-                    return new target(...args);
-                }}
-            }});
-            
-            // Override resolvedOptions
-            const originalResolvedOptions = Intl.DateTimeFormat.prototype.resolvedOptions;
-            Intl.DateTimeFormat.prototype.resolvedOptions = function() {{
-                const options = originalResolvedOptions.apply(this, arguments);
-                options.timeZone = 'Europe/Rome';
-                return options;
-            }};
-        }})();
-        """
-    
-    def get_console_evasion(self) -> str:
-        """Protect against console-based detection."""
-        return """
-        // Console protection
-        (() => {
-            'use strict';
-            
-            // Store original console methods
-            const originalConsole = {};
-            ['log', 'debug', 'info', 'warn', 'error', 'trace'].forEach(method => {
-                originalConsole[method] = console[method].bind(console);
-            });
-            
-            // Track console calls for detection
-            const consoleCallLog = [];
-            const maxLogSize = 100;
-            
-            // Override console methods
-            ['log', 'debug', 'info', 'warn', 'error'].forEach(method => {
-                console[method] = new Proxy(originalConsole[method], {
-                    apply(target, thisArg, args) {
-                        // Log the call
-                        consoleCallLog.push({
-                            method: method,
-                            timestamp: Date.now(),
-                            stack: new Error().stack
-                        });
-                        
-                        // Keep log size manageable
-                        if (consoleCallLog.length > maxLogSize) {
-                            consoleCallLog.shift();
-                        }
-                        
-                        // Check for rapid successive calls (CDP detection)
-                        if (consoleCallLog.length >= 3) {
-                            const recent = consoleCallLog.slice(-3);
-                            const timeDiffs = [
-                                recent[1].timestamp - recent[0].timestamp,
-                                recent[2].timestamp - recent[1].timestamp
-                            ];
-                            
-                            // If calls are too rapid, it's likely detection
-                            if (timeDiffs[0] < 5 && timeDiffs[1] < 5) {
-                                return undefined;
-                            }
-                        }
-                        
-                        // Check stack for automation tools
-                        const stack = new Error().stack || '';
-                        const suspiciousPatterns = [
-                            'puppeteer',
-                            'playwright',
-                            'selenium',
-                            'webdriver',
-                            'cdp',
-                            'devtools'
-                        ];
-                        
-                        if (suspiciousPatterns.some(pattern => 
-                            stack.toLowerCase().includes(pattern))) {
-                            return undefined;
-                        }
-                        
-                        // Normal console usage
-                        return target.apply(console, args);
-                    }
-                });
-            });
-            
-            // Override toString to hide modifications
-            console.log.toString = () => 'function log() { [native code] }';
-            console.debug.toString = () => 'function debug() { [native code] }';
-            console.info.toString = () => 'function info() { [native code] }';
-            console.warn.toString = () => 'function warn() { [native code] }';
-            console.error.toString = () => 'function error() { [native code] }';
-        })();
-        """
-    
-    def get_error_evasion(self) -> str:
-        """Clean error stack traces of automation signatures."""
-        return """
-        // Error stack trace cleaning
-        (() => {
-            'use strict';
-            
-            const OriginalError = Error;
-            
-            // Patterns to remove from stack traces
-            const cleanPatterns = [
-                /\\bplaywright\\b/gi,
-                /\\bpuppeteer\\b/gi,
-                /\\bselenium\\b/gi,
-                /\\bwebdriver\\b/gi,
-                /\\b__playwright\\b/gi,
-                /\\b__puppeteer\\b/gi,
-                /\\bcdp_session\\b/gi,
-                /\\bHeadlessChrome\\b/gi,
-                /\\bautomation\\b/gi
-            ];
-            
-            // Override Error constructor
-            Error = new Proxy(OriginalError, {
-                construct(target, args) {
-                    const error = new target(...args);
-                    
-                    // Clean the stack trace
-                    if (error.stack) {
-                        let cleanStack = error.stack;
-                        cleanPatterns.forEach(pattern => {
-                            cleanStack = cleanStack.replace(pattern, '');
-                        });
-                        
-                        // Fix any broken lines
-                        cleanStack = cleanStack
-                            .split('\\n')
-                            .filter(line => line.trim())
-                            .join('\\n');
-                        
-                        error.stack = cleanStack;
-                    }
-                    
-                    return error;
-                }
-            });
-            
-            // Copy static properties
-            Object.setPrototypeOf(Error, OriginalError);
-            Error.captureStackTrace = OriginalError.captureStackTrace;
-            Error.stackTraceLimit = OriginalError.stackTraceLimit;
-        })();
-        """
+        # Update timestamp
+        mutated["timestamp"] = datetime.now().isoformat()
+        
+        # Slight battery change
+        if "battery" in mutated and mutated["battery"]["level"] < 1.0:
+            mutated["battery"]["level"] = max(0.1, min(1.0, 
+                mutated["battery"]["level"] + random.uniform(-0.02, 0.02)
+            ))
+        
+        # Network fluctuation
+        if "connection" in mutated:
+            mutated["connection"]["rtt"] = max(10, mutated["connection"]["rtt"] + random.randint(-10, 10))
+        
+        return mutated
+
+
+# Global instance
+fingerprint_generator = EnhancedFingerprintGenerator()
+
+# Alias for backward compatibility
+FingerprintGenerator = EnhancedFingerprintGenerator

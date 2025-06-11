@@ -1,5 +1,5 @@
-"""Database module for StealthMaster V4"""
+"""Database module for StealthMaster"""
 
-from .statistics import TicketStatistics, StatsManager
+from .statistics import TicketStats, StatsManager, stats_manager
 
-__all__ = ['TicketStatistics', 'StatsManager']
+__all__ = ['TicketStats', 'StatsManager', 'stats_manager']

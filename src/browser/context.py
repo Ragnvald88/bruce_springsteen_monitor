@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 
 from playwright.async_api import BrowserContext, Page
 
-from stealth.core import StealthCore
+from ..stealth.core import StealthCore
 
 logger = logging.getLogger(__name__)
 

@@ -1,205 +1,363 @@
-# stealthmaster/browser/launcher.py
-"""Stealth browser launcher with advanced anti-detection."""
+"""
+Browser Launcher using Nodriver Core
+Implements CDP-optional browser automation with enhanced stealth
+"""
 
-import logging
-from typing import Dict, Optional, List
+import asyncio
+import time
+from typing import Dict, Any, Optional, List
+from contextlib import asynccontextmanager
+import uuid
 
-from playwright.async_api import Browser, Playwright, BrowserContext
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from playwright.async_api import Browser, BrowserContext, Page
+    from selenium.webdriver.remote.webdriver import WebDriver
 
-try:
-    from ..config import BrowserOptions, ProxyConfig
-    from ..stealth.core import StealthCore
-except ImportError:
-    from config import BrowserOptions, ProxyConfig
-    from stealth.core import StealthCore
+from ..stealth.nodriver_core import nodriver_core
+from ..stealth.fingerprint import fingerprint_generator
+from ..database.statistics import stats_manager
+from ..utils.logging import get_logger
+# Config will be passed from main
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
-class BrowserLauncher:
-    """Launches browsers with maximum stealth configuration."""
+class NodriverBrowserLauncher:
+    """
+    Browser Launcher with nodriver integration
+    Provides undetectable browser automation
+    """
     
-    def __init__(self, config: BrowserOptions):
-        """Initialize the launcher with configuration."""
-        self.config = config
-        self.stealth_core = StealthCore()
+    def __init__(self):
+        self.browsers: Dict[str, Any] = {}
+        self.contexts: Dict[str, Any] = {}
+        self.fingerprints: Dict[str, Any] = {}
+        self._session_id = f"launcher_{uuid.uuid4().hex[:8]}"
+        
+        # Performance tracking
+        self._launch_times: List[float] = []
+        self._detection_attempts = 0
+        self._successful_operations = 0
+        
+        # Configure nodriver with residential proxies if available
+        self._configure_proxies()
+        
+        logger.info("Browser Launcher initialized")
     
-    async def launch(
-        self,
-        playwright: Playwright,
-        proxy: Optional[ProxyConfig] = None,
-        headless: bool = False,
-    ) -> Browser:
+    def _configure_proxies(self):
+        """Configure residential proxies from config"""
+        proxy_config = {}
+        
+        if proxy_config.get("enabled", False):
+            proxy_list = proxy_config.get("residential", [])
+            for proxy in proxy_list:
+                nodriver_core.add_residential_proxy(proxy)
+            logger.info(f"Configured {len(proxy_list)} residential proxies")
+    
+    async def launch_browser(self, **kwargs) -> str:
         """
-        Launch a browser with stealth configuration.
+        Launch a new browser instance with stealth
+        
+        Returns:
+            browser_id: Unique identifier for the browser
+        """
+        start_time = time.time()
+        browser_id = str(uuid.uuid4())
+        
+        try:
+            # Set session-specific fingerprint
+            fingerprint_generator.set_session_id(browser_id)
+            
+            # Launch browser with nodriver core
+            browser_data = await nodriver_core.create_stealth_browser(**kwargs)
+            
+            # Store browser data
+            self.browsers[browser_id] = browser_data
+            self.fingerprints[browser_id] = browser_data.get("fingerprint", {})
+            
+            # Track performance
+            launch_time = (time.time() - start_time) * 1000
+            self._launch_times.append(launch_time)
+            
+            # Record metric
+            stats_manager.record_performance_metric(
+                self._session_id,
+                "browser_launch",
+                launch_time,
+                success=True
+            )
+            
+            logger.info(f"Launched browser {browser_id} in {launch_time:.0f}ms")
+            return browser_id
+            
+        except Exception as e:
+            logger.error(f"Failed to launch browser: {e}")
+            stats_manager.record_performance_metric(
+                self._session_id,
+                "browser_launch",
+                (time.time() - start_time) * 1000,
+                success=False
+            )
+            raise
+    
+    async def create_context(self, browser_id: str, **kwargs) -> str:
+        """
+        Create a new browser context with unique fingerprint
         
         Args:
-            playwright: Playwright instance
-            proxy: Optional proxy configuration
-            headless: Whether to run headless (not recommended)
+            browser_id: Browser to create context in
             
         Returns:
-            Configured browser instance
+            context_id: Unique identifier for the context
         """
-        # Build launch arguments
-        args = self._build_launch_args()
+        context_id = str(uuid.uuid4())
         
-        # Proxy configuration
-        proxy_config = None
-        if proxy and proxy.host and proxy.port:
-            # Format proxy properly
-            proxy_type = getattr(proxy, 'type', 'http').lower()
-            if proxy_type not in ['http', 'https', 'socks5']:
-                proxy_type = 'http'
+        try:
+            browser_data = self.browsers.get(browser_id)
+            if not browser_data:
+                raise ValueError(f"Browser {browser_id} not found")
             
-            proxy_config = {
-                "server": f"{proxy_type}://{proxy.host}:{proxy.port}",
-            }
+            # Generate context-specific fingerprint mutation
+            base_fingerprint = self.fingerprints[browser_id]
+            context_fingerprint = fingerprint_generator.mutate_slightly(base_fingerprint)
             
-            # Only add credentials if both exist
-            if proxy.username and proxy.password:
-                proxy_config["username"] = proxy.username
-                proxy_config["password"] = proxy.password
+            if browser_data.get("type") == "undetected_chrome":
+                # For Selenium/undetected-chromedriver, use the same session
+                self.contexts[context_id] = {
+                    "driver": browser_data["driver"],
+                    "fingerprint": context_fingerprint,
+                    "browser_id": browser_id
+                }
+            else:
+                # For Playwright, create new context
+                browser = browser_data.get("browser")
+                context = await browser.new_context(
+                    viewport={
+                        "width": context_fingerprint["viewport"]["width"],
+                        "height": context_fingerprint["viewport"]["height"]
+                    },
+                    user_agent=context_fingerprint["userAgent"],
+                    locale=context_fingerprint["language"],
+                    timezone_id=context_fingerprint["timezone"],
+                    **kwargs
+                )
+                
+                self.contexts[context_id] = {
+                    "context": context,
+                    "fingerprint": context_fingerprint,
+                    "browser_id": browser_id
+                }
             
-            logger.info(f"Using proxy: {proxy_type}://{proxy.host}:{proxy.port}")
-        
-        # Launch browser with proper configuration
-        launch_options = {
-            "headless": headless,
-            "args": args,
-            "proxy": proxy_config,
-            "chromium_sandbox": False,
-            "handle_sigint": False,
-            "handle_sigterm": False,
-            "handle_sighup": False,
-        }
-        
-        # Force non-headless user agent even in headless mode
-        if headless:
-            # Remove any existing user agent args
-            args = [arg for arg in args if not arg.startswith("--user-agent=")]
-            # Add proper user agent
-            args.append("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
-            launch_options["args"] = args
-        
-        browser = await playwright.chromium.launch(**launch_options)
-        
-        # Apply browser-level stealth immediately after launch
-        await self.stealth_core.create_stealth_browser(browser)
-        
-        logger.info(
-            f"Launched {'headless' if headless else 'headed'} browser "
-            f"{'with proxy' if proxy else 'without proxy'} with stealth"
-        )
-        
-        return browser
+            logger.debug(f"Created context {context_id} for browser {browser_id}")
+            return context_id
+            
+        except Exception as e:
+            logger.error(f"Failed to create context: {e}")
+            raise
     
-    def _build_launch_args(self) -> List[str]:
-        """Build optimized launch arguments for stealth."""
-        args = [
-            # Disable automation indicators
-            "--disable-blink-features=AutomationControlled",
-            "--disable-dev-shm-usage",
-            "--disable-web-security",
-            "--disable-features=IsolateOrigins,site-per-process",
-            
-            # Performance optimizations
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-gpu",
-            "--disable-accelerated-2d-canvas",
-            
-            # Stealth enhancements
-            "--disable-infobars",
-            "--disable-extensions",
-            "--disable-default-apps",
-            "--disable-component-extensions-with-background-pages",
-            
-            # Window settings
-            "--window-size=1920,1080",
-            "--start-maximized",
-            
-            # Additional stealth flags
-            "--disable-plugins-discovery",
-            "--disable-popup-blocking",
-            "--disable-prompt-on-repost",
-            "--disable-hang-monitor",
-            "--disable-sync",
-            "--disable-translate",
-            "--metrics-recording-only",
-            "--safebrowsing-disable-auto-update",
-            "--password-store=basic",
-            "--use-mock-keychain",
-            
-            # Remove automation extension
-            "--disable-component-update",
-            "--disable-background-timer-throttling",
-            "--disable-backgrounding-occluded-windows",
-            "--disable-renderer-backgrounding",
-            
-            # User agent override (if specified)
-            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-        ]
-        
-        return args
-    
-    async def create_context(
-        self,
-        browser: Browser,
-        fingerprint: Optional[Dict] = None,
-    ) -> BrowserContext:
+    async def new_page(self, context_id: str) -> Any:
         """
-        Create a browser context with stealth settings.
+        Create a new page in the given context
         
         Args:
-            browser: Browser instance
-            fingerprint: Optional fingerprint configuration
+            context_id: Context to create page in
             
         Returns:
-            Configured browser context
+            Page object (Selenium WebDriver or Playwright Page)
         """
-        # Generate fingerprint if not provided
-        if not fingerprint:
-            fingerprint = self.stealth_core.generate_fingerprint()
+        try:
+            context_data = self.contexts.get(context_id)
+            if not context_data:
+                raise ValueError(f"Context {context_id} not found")
+            
+            if "driver" in context_data:
+                # Selenium - open new tab
+                driver = context_data["driver"]
+                driver.execute_script("window.open('');")
+                driver.switch_to.window(driver.window_handles[-1])
+                
+                # Apply additional stealth
+                await nodriver_core.enhance_stealth_for_page(driver)
+                
+                return driver
+            else:
+                # Playwright
+                context = context_data["context"]
+                page = await context.new_page()
+                
+                # Apply stealth enhancements
+                await nodriver_core.enhance_stealth_for_page(page)
+                
+                return page
+                
+        except Exception as e:
+            logger.error(f"Failed to create page: {e}")
+            raise
+    
+    @asynccontextmanager
+    async def get_page(self, platform: Optional[str] = None):
+        """
+        Context manager for getting a stealth page
         
-        # Context options
-        context_options = {
-            "viewport": {
-                "width": fingerprint["viewport"]["width"],
-                "height": fingerprint["viewport"]["height"],
-            },
-            "user_agent": fingerprint["user_agent"],
-            "locale": fingerprint["language"][:2],
-            "timezone_id": "Europe/Rome",
-            "geolocation": fingerprint.get("geo"),
-            "permissions": ["geolocation", "notifications"],
-            "color_scheme": "light",
-            "device_scale_factor": fingerprint.get("device_scale_factor", 1),
-            "is_mobile": False,
-            "has_touch": False,
-            "bypass_csp": True,
-            "ignore_https_errors": True,
-            "offline": False,
-            "http_credentials": None,
-            "extra_http_headers": {
-                "Accept-Language": f"{fingerprint['language']},en;q=0.9",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Cache-Control": "no-cache",
-                "Pragma": "no-cache",
-            },
+        Args:
+            platform: Optional platform identifier for stats
+            
+        Yields:
+            Page object ready for automation
+        """
+        browser_id = None
+        context_id = None
+        page = None
+        
+        try:
+            # Launch browser
+            browser_id = await self.launch_browser()
+            
+            # Create context
+            context_id = await self.create_context(browser_id)
+            
+            # Create page
+            page = await self.new_page(context_id)
+            
+            # Track successful operation
+            self._successful_operations += 1
+            
+            yield page
+            
+        finally:
+            # Cleanup
+            try:
+                if page:
+                    if hasattr(page, "close"):
+                        await page.close()
+                    elif hasattr(page, "quit"):
+                        page.quit()
+                
+                if context_id and context_id in self.contexts:
+                    context_data = self.contexts.pop(context_id)
+                    if "context" in context_data:
+                        await context_data["context"].close()
+                
+                if browser_id and browser_id in self.browsers:
+                    browser_data = self.browsers.pop(browser_id)
+                    if "browser" in browser_data:
+                        await browser_data["browser"].close()
+                    elif "driver" in browser_data:
+                        browser_data["driver"].quit()
+                        
+            except Exception as e:
+                logger.error(f"Cleanup error: {e}")
+    
+    async def test_stealth(self, page: Any) -> Dict[str, Any]:
+        """
+        Test stealth capabilities of a page
+        
+        Args:
+            page: Page to test
+            
+        Returns:
+            Test results dictionary
+        """
+        results = {}
+        
+        try:
+            # Navigate to test page
+            test_url = "https://bot.sannysoft.com/"
+            
+            if hasattr(page, "goto"):
+                # Playwright
+                await page.goto(test_url, wait_until="domcontentloaded")
+                
+                # Run tests
+                results["webdriver"] = await page.evaluate("navigator.webdriver")
+                results["chrome"] = await page.evaluate("!!window.chrome")
+                results["chrome.runtime"] = await page.evaluate("!!window.chrome?.runtime")
+                results["permissions"] = await page.evaluate("""
+                    navigator.permissions.query({name: 'notifications'})
+                        .then(p => p.state)
+                        .catch(e => 'error')
+                """)
+                results["plugins.length"] = await page.evaluate("navigator.plugins.length")
+                results["languages"] = await page.evaluate("navigator.languages")
+                
+            else:
+                # Selenium
+                page.get(test_url)
+                time.sleep(2)  # Wait for page load
+                
+                results["webdriver"] = page.execute_script("return navigator.webdriver")
+                results["chrome"] = page.execute_script("return !!window.chrome")
+                results["chrome.runtime"] = page.execute_script("return !!window.chrome?.runtime")
+                results["plugins.length"] = page.execute_script("return navigator.plugins.length")
+                results["languages"] = page.execute_script("return navigator.languages")
+            
+            # Check detection
+            detection_score = 0
+            if results.get("webdriver") is True:
+                detection_score += 50
+            if results.get("chrome.runtime") is False and results.get("chrome"):
+                detection_score += 25
+            if results.get("plugins.length", 0) == 0:
+                detection_score += 25
+            
+            results["detection_score"] = detection_score
+            results["is_detected"] = detection_score > 25
+            
+            # Track detection attempts
+            self._detection_attempts += 1
+            if not results["is_detected"]:
+                logger.info("✅ Stealth test passed!")
+            else:
+                logger.warning(f"⚠️ Stealth test failed with score: {detection_score}")
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"Stealth test failed: {e}")
+            return {"error": str(e), "is_detected": True}
+    
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get launcher statistics"""
+        avg_launch_time = sum(self._launch_times) / len(self._launch_times) if self._launch_times else 0
+        
+        return {
+            "browsers_launched": len(self._launch_times),
+            "avg_launch_time_ms": avg_launch_time,
+            "successful_operations": self._successful_operations,
+            "detection_attempts": self._detection_attempts,
+            "active_browsers": len(self.browsers),
+            "active_contexts": len(self.contexts),
+            "nodriver_stats": nodriver_core.get_stats()
         }
+    
+    async def close_all(self):
+        """Close all browsers and contexts"""
+        logger.info("Closing all browsers...")
         
-        # Create context
-        context = await browser.new_context(**context_options)
+        # Close contexts
+        for context_id, context_data in list(self.contexts.items()):
+            try:
+                if "context" in context_data:
+                    await context_data["context"].close()
+            except Exception as e:
+                logger.error(f"Error closing context {context_id}: {e}")
         
-        # Store fingerprint for reference
-        context._stealth_fingerprint = fingerprint
+        # Close browsers
+        for browser_id, browser_data in list(self.browsers.items()):
+            try:
+                if "browser" in browser_data:
+                    await browser_data["browser"].close()
+                elif "driver" in browser_data:
+                    browser_data["driver"].quit()
+            except Exception as e:
+                logger.error(f"Error closing browser {browser_id}: {e}")
         
-        # Apply context-level stealth BEFORE creating pages
-        await self.stealth_core.apply_context_stealth(context)
+        self.browsers.clear()
+        self.contexts.clear()
         
-        logger.debug(f"Created stealth context with fingerprint ID: {fingerprint.get('id', 'default')}")
-        
-        return context
+        logger.info("All browsers closed")
+
+
+# Global instance
+launcher = NodriverBrowserLauncher()

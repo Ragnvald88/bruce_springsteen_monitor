@@ -1,5 +1,5 @@
 # stealthmaster/main.py
-"""Main entry point for StealthMaster V4 ticketing bot."""
+"""Main entry point for StealthMaster ticketing bot."""
 
 import asyncio
 import sys
@@ -24,19 +24,26 @@ try:
     from .config import Settings, load_settings
     from .profiles.manager import ProfileManager
     from .utils.logging import setup_logging, get_logger
-    from .browser.nodriver_launcher import v4_launcher
+    from .browser.launcher import launcher
     from .ui.enhanced_dashboard import EnhancedDashboard
+    from .ui.modern_dashboard import ModernDashboard
     from .database.statistics import stats_manager
-    from .detection.recovery_v4 import recovery_engine
+    from .detection.recovery import recovery_engine
 except ImportError:
-    # When running directly
-    from config import Settings, load_settings
-    from profiles.manager import ProfileManager
-    from utils.logging import setup_logging, get_logger
-    from browser.nodriver_launcher import v4_launcher
-    from ui.enhanced_dashboard import EnhancedDashboard
-    from database.statistics import stats_manager
-    from detection.recovery_v4 import recovery_engine
+    # When running directly  
+    import sys
+    from pathlib import Path
+    # Add parent directory to path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    
+    from src.config import Settings, load_settings
+    from src.profiles.manager import ProfileManager
+    from src.utils.logging import setup_logging, get_logger
+    from src.browser.launcher import launcher
+    from src.ui.enhanced_dashboard import EnhancedDashboard
+    from src.ui.modern_dashboard import ModernDashboard
+    from src.database.statistics import stats_manager
+    from src.detection.recovery import recovery_engine
 
 # from orchestration.scheduler import TaskScheduler  # Skip for now due to import issues
 
@@ -45,17 +52,17 @@ logger = get_logger(__name__)
 
 
 class StealthMaster:
-    """Main V4 application controller with enhanced UI."""
+    """Main application controller with enhanced UI."""
     
     def __init__(self, settings: Settings):
-        """Initialize StealthMaster V4 application."""
+        """Initialize StealthMaster application."""
         self.settings = settings
         self.running = False
         self.start_time = datetime.now()
         
-        # Core V4 components
+        # Core components
         self.profile_manager = ProfileManager(settings)
-        self.browser_launcher = v4_launcher
+        self.browser_launcher = launcher
         self.recovery_engine = recovery_engine
         self.stats_manager = stats_manager
         
@@ -72,8 +79,8 @@ class StealthMaster:
         self.active_browsers = 0
     
     async def initialize(self) -> None:
-        """Initialize all V4 components."""
-        console.print("[yellow]🚀 Initializing StealthMaster V4...[/yellow]")
+        """Initialize all components."""
+        console.print("[yellow]🚀 Initializing StealthMaster...[/yellow]")
         
         with Progress(
             SpinnerColumn(),
@@ -85,10 +92,10 @@ class StealthMaster:
             await self.profile_manager.load_all_profiles()
             progress.update(task, description="✓ Profiles loaded")
             
-            # Initialize V4 browser launcher
-            task = progress.add_task("Starting V4 stealth engine...", total=None)
-            # V4 launcher is already initialized as singleton
-            progress.update(task, description="✓ V4 stealth engine ready")
+            # Initialize browser launcher
+            task = progress.add_task("Starting stealth engine...", total=None)
+            # Launcher is already initialized as singleton
+            progress.update(task, description="✓ Stealth engine ready")
             
             # Test stealth capabilities
             task = progress.add_task("Testing stealth capabilities...", total=None)
@@ -100,7 +107,7 @@ class StealthMaster:
             self._launch_ui()
             progress.update(task, description="✓ Enhanced dashboard launched")
         
-        console.print("[green]✅ StealthMaster V4 initialized successfully![/green]")
+        console.print("[green]✅ StealthMaster initialized successfully![/green]")
         console.print("[cyan]📊 Dashboard opened in separate window[/cyan]")
     
     def _launch_ui(self):
@@ -128,7 +135,7 @@ class StealthMaster:
             self.dashboard.close()
     
     async def _test_stealth(self):
-        """Test V4 stealth capabilities."""
+        """Test stealth capabilities."""
         try:
             async with self.browser_launcher.get_page() as page:
                 results = await self.browser_launcher.test_stealth(page)
@@ -172,13 +179,13 @@ class StealthMaster:
             await self.shutdown()
     
     async def _monitor_loop(self) -> None:
-        """Main V4 monitoring loop with enhanced stealth."""
+        """Main monitoring loop with enhanced stealth."""
         while self.running:
             try:
                 # Start monitoring for each target
                 for target in self.settings.targets:
                     if target.enabled and target.event_name not in self.monitors:
-                        console.print(f"[green]🎯 Starting V4 monitor for {target.event_name}[/green]")
+                        console.print(f"[green]🎯 Starting monitor for {target.event_name}[/green]")
                         
                         # Log to dashboard
                         if self.dashboard:
@@ -189,7 +196,7 @@ class StealthMaster:
                         
                         # Create monitoring task
                         monitor_task = asyncio.create_task(
-                            self._run_target_monitoring_v4(target)
+                            self._run_target_monitoring(target)
                         )
                         self.monitors[target.event_name] = monitor_task
                 
@@ -204,8 +211,8 @@ class StealthMaster:
                 if self.dashboard:
                     self.dashboard.add_log_entry(f"Monitor error: {e}", "error")
     
-    async def _run_target_monitoring_v4(self, target) -> None:
-        """Run V4 monitoring for a specific target with stats tracking."""
+    async def _run_target_monitoring(self, target) -> None:
+        """Run monitoring for a specific target with stats tracking."""
         search_start = time.time()
         
         try:
@@ -218,7 +225,7 @@ class StealthMaster:
                 }
                 
                 url = platform_urls.get(target.platform.value, target.url)
-                console.print(f"[cyan]🌐 V4 navigating to {url} for {target.event_name}[/cyan]")
+                console.print(f"[cyan]🌐 Navigating to {url} for {target.event_name}[/cyan]")
                 
                 if hasattr(page, "goto"):
                     await page.goto(url, wait_until='domcontentloaded', timeout=30000)
@@ -305,8 +312,8 @@ class StealthMaster:
                     await asyncio.sleep(target.interval_s)
                         
         except Exception as e:
-            console.print(f"[red]❌ V4 monitoring error for {target.event_name}: {e}[/red]")
-            logger.error(f"V4 target monitoring error: {e}")
+            console.print(f"[red]❌ Monitoring error for {target.event_name}: {e}[/red]")
+            logger.error(f"Target monitoring error: {e}")
             
             if self.dashboard:
                 self.dashboard.add_log_entry(
@@ -318,7 +325,7 @@ class StealthMaster:
             if target.event_name in self.monitors:
                 del self.monitors[target.event_name]
     
-    async def _run_target_monitoring(self, target, browser_context, page) -> None:
+    async def _run_legacy_target_monitoring(self, target, browser_context, page) -> None:
         """Run monitoring for a specific target."""
         try:
             # Navigate to the platform
@@ -405,8 +412,8 @@ class StealthMaster:
     
     
     async def shutdown(self) -> None:
-        """Graceful V4 shutdown."""
-        console.print("\n[yellow]🛑 Shutting down StealthMaster V4...[/yellow]")
+        """Graceful shutdown."""
+        console.print("\n[yellow]🛑 Shutting down StealthMaster...[/yellow]")
         self.running = False
         
         # End session
@@ -417,7 +424,7 @@ class StealthMaster:
             await self.profile_manager.save_profile(profile)
         
         # Close all browsers
-        console.print("[yellow]🌐 Closing V4 browser sessions...[/yellow]")
+        console.print("[yellow]🌐 Closing browser sessions...[/yellow]")
         await self.browser_launcher.close_all()
         
         # Close UI
@@ -432,7 +439,7 @@ class StealthMaster:
         console.print(f"  Total Failed: {stats['total_failed']}")
         console.print(f"  Success Rate: {stats['overall_success_rate']:.1f}%")
         
-        console.print("[green]✅ V4 Shutdown complete. Goodbye![/green]")
+        console.print("[green]✅ Shutdown complete. Goodbye![/green]")
 
 
 @click.command()
@@ -471,7 +478,7 @@ def main(
     debug: bool,
     dry_run: bool,
 ) -> None:
-    """StealthMaster V4 - Undetectable Ticketing Bot with Enhanced UI."""
+    """StealthMaster - Undetectable Ticketing Bot with Enhanced UI."""
     # ASCII art banner
     banner = """
     ███████╗████████╗███████╗ █████╗ ██╗  ████████╗██╗  ██╗
@@ -480,7 +487,7 @@ def main(
     ╚════██║   ██║   ██╔══╝  ██╔══██║██║     ██║   ██╔══██║
     ███████║   ██║   ███████╗██║  ██║███████╗██║   ██║  ██║
     ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝   ╚═╝  ╚═╝
-                    M A S T E R   v4.0
+                    M A S T E R
     """
     console.print(f"[bold cyan]{banner}[/bold cyan]")
     

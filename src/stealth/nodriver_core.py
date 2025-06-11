@@ -1,5 +1,5 @@
 """
-StealthMaster V4 Core - CDP-Optional Architecture
+StealthMaster Core - CDP-Optional Architecture
 Uses nodriver-inspired techniques to avoid detection at protocol level
 """
 
@@ -10,10 +10,21 @@ import time
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 
-from playwright.async_api import Page, Browser, BrowserContext
-import undetected_chromedriver as uc
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from playwright.async_api import Page, Browser, BrowserContext
+    
+try:
+    import undetected_chromedriver as uc
+except ImportError:
+    uc = None
+    
+try:
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service
+except ImportError:
+    webdriver = None
+    Service = None
 
 from ..utils.logging import get_logger
 from .fingerprint import FingerprintGenerator
@@ -23,7 +34,7 @@ logger = get_logger(__name__)
 
 class NodriverCore:
     """
-    V4 Stealth Core - Implements CDP-optional automation
+    Stealth Core - Implements CDP-optional automation
     Inspired by nodriver's approach of avoiding CDP detection entirely
     """
     

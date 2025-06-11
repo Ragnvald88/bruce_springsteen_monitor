@@ -15,7 +15,7 @@ import aiofiles
 from playwright.async_api import Page, BrowserContext, Cookie
 import httpx
 
-from profiles.models import Profile, UserCredentials
+from ..profiles.models import Profile, UserCredentials
 
 logger = logging.getLogger(__name__)
 

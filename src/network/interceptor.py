@@ -26,6 +26,34 @@ class InterceptorMode:
     AGGRESSIVE = "aggressive" # Block/redirect requests
 
 
+class CachedResponse:
+    """Cached response data."""
+    def __init__(self, data: bytes, headers: Dict[str, str], status: int, max_age: int = 300):
+        self.data = data
+        self.headers = headers
+        self.status = status
+        self.max_age = max_age
+        self.timestamp = datetime.now()
+
+
+class InterceptRule:
+    """Rule for intercepting requests."""
+    def __init__(self, pattern: str, action: Callable, priority: int = 0):
+        self.pattern = pattern
+        self.action = action
+        self.priority = priority
+
+
+class PatternAnalyzer:
+    """Analyzes request patterns."""
+    def __init__(self):
+        self.patterns = []
+    
+    def analyze(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze request pattern."""
+        return {"risk_score": 0.0}
+
+
 class RequestInterceptor:
     """Advanced request/response interception with stealth modifications."""
     

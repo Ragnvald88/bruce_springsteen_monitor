@@ -15,19 +15,19 @@ import queue
 
 from ..database.statistics import stats_manager
 from ..utils.logging import get_logger
-from ..config import config
+# Config will be injected when needed
 
 logger = get_logger(__name__)
 
 
 class EnhancedDashboard:
     """
-    V4 Enhanced Dashboard with comprehensive statistics
+    Enhanced Dashboard with comprehensive statistics
     """
     
     def __init__(self, parent: Optional[tk.Tk] = None):
         self.parent = parent or tk.Tk()
-        self.parent.title("StealthMaster V4 - Enhanced Dashboard")
+        self.parent.title("StealthMaster - Enhanced Dashboard")
         self.parent.geometry("1400x900")
         
         # Set dark theme
@@ -91,7 +91,7 @@ class EnhancedDashboard:
         header_frame.pack(fill="x", padx=10, pady=(10, 5))
         
         # Title
-        title = ttk.Label(header_frame, text="🎫 StealthMaster V4 Dashboard", style="Title.TLabel")
+        title = ttk.Label(header_frame, text="🎫 StealthMaster Dashboard", style="Title.TLabel")
         title.pack(side="left", padx=10)
         
         # Session info

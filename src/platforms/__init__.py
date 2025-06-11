@@ -2,13 +2,13 @@
 """Platform-specific ticket bot handlers."""
 
 from .base import BasePlatformHandler
-from .fansale import FansaleHandler
-from .ticketmaster import TicketmasterHandler
-from .vivaticket import VivaticketHandler
+from .fansale import FansalePlatform
+from .ticketmaster import TicketmasterPlatform
+from .vivaticket import VivaticketPlatform
 
 __all__ = [
     "BasePlatformHandler",
-    "FansaleHandler", 
-    "TicketmasterHandler",
-    "VivaticketHandler",
+    "FansalePlatform", 
+    "TicketmasterPlatform",
+    "VivaticketPlatform",
 ]

@@ -6,8 +6,12 @@ from typing import Dict, Optional, List
 
 from playwright.async_api import Browser, Playwright, BrowserContext
 
-from config import BrowserOptions, ProxyConfig
-from stealth.core import StealthCore
+try:
+    from ..config import BrowserOptions, ProxyConfig
+    from ..stealth.core import StealthCore
+except ImportError:
+    from config import BrowserOptions, ProxyConfig
+    from stealth.core import StealthCore
 
 logger = logging.getLogger(__name__)
 

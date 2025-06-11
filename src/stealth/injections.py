@@ -101,8 +101,8 @@ class StealthInjections:
                 runningState: () => 'cannot_run'
             };
             
-            // Runtime with all properties
-            window.chrome.runtime = {
+            // Runtime with all properties - ENHANCED FOR DETECTION BYPASS
+            const mockRuntime = {
                 OnInstalledReason: {
                     CHROME_UPDATE: 'chrome_update',
                     INSTALL: 'install',
@@ -142,11 +142,62 @@ class StealthInjections:
                     THROTTLED: 'throttled',
                     UPDATE_AVAILABLE: 'update_available'
                 },
+                // CRITICAL: These must exist but be undefined for normal web pages
                 id: undefined,
                 getManifest: undefined,
-                connect: () => {},
-                sendMessage: () => {}
+                getURL: undefined,
+                // CRITICAL: These functions must throw errors like real Chrome on normal pages
+                connect: function() {
+                    throw new Error('Uncaught Error: Extension context invalidated.');
+                },
+                sendMessage: function() {
+                    throw new Error('Uncaught Error: Extension context invalidated.');
+                },
+                // Additional properties for full compatibility
+                lastError: undefined,
+                onConnect: {
+                    addListener: function() {},
+                    removeListener: function() {},
+                    hasListener: function() { return false; }
+                },
+                onMessage: {
+                    addListener: function() {},
+                    removeListener: function() {},
+                    hasListener: function() { return false; }
+                },
+                onInstalled: {
+                    addListener: function() {},
+                    removeListener: function() {},
+                    hasListener: function() { return false; }
+                }
             };
+            
+            // Create proxy to handle property access like real Chrome
+            window.chrome.runtime = new Proxy(mockRuntime, {
+                get(target, prop) {
+                    if (prop in target) {
+                        return target[prop];
+                    }
+                    // Return undefined for unknown properties
+                    return undefined;
+                },
+                has(target, prop) {
+                    return prop in target;
+                },
+                ownKeys(target) {
+                    return Object.keys(target);
+                },
+                getOwnPropertyDescriptor(target, prop) {
+                    if (prop in target) {
+                        return {
+                            configurable: true,
+                            enumerable: true,
+                            value: target[prop]
+                        };
+                    }
+                    return undefined;
+                }
+            });
             
             // LoadTimes
             const timing = performance.timing;

@@ -6,13 +6,19 @@ from typing import Dict, Any, List, Optional
 
 from playwright.async_api import Page
 
-from stealthmaster.config import TargetEvent, UserProfile
-from stealthmaster.platforms.base import BasePlatformHandler
+try:
+    from ..config import Target as TargetEvent
+    from ..profiles.models import Profile as UserProfile
+    from .base import BasePlatformHandler
+except ImportError:
+    from config import Target as TargetEvent
+    from profiles.models import Profile as UserProfile
+    from platforms.base import BasePlatformHandler
 
 logger = logging.getLogger(__name__)
 
 
-class TicketmasterHandler(BasePlatformHandler):
+class TicketmasterPlatform(BasePlatformHandler):
     """Handler for Ticketmaster.it ticket platform."""
     
     def __init__(self):

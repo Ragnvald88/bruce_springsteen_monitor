@@ -47,8 +47,7 @@ class PurchaseWorkflow:
         detection_monitor: DetectionMonitor,
         rate_limiter: RateLimiter,
     ):
-        """
-        Initialize purchase workflow.
+        """Initialize workflow with speed optimizations.
         
         Args:
             browser_pool: Browser pool for instances

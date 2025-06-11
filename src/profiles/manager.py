@@ -17,8 +17,12 @@ from .models import (
     UserCredentials, BrowserFingerprint, ProxyBinding,
     ProfileMetrics, PaymentMethod, BillingAddress
 )
-from stealth.fingerprint import FingerprintGenerator
-from config import Settings
+try:
+    from ..stealth.fingerprint import FingerprintGenerator
+    from ..config import Settings
+except ImportError:
+    from stealth.fingerprint import FingerprintGenerator
+    from config import Settings
 
 logger = logging.getLogger(__name__)
 

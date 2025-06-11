@@ -81,132 +81,203 @@ class CDPWebDriverBypass:
         (() => {
             'use strict';
             
-            // Store the original Object.defineProperty
+            // CRITICAL FIX: More aggressive webdriver removal
+            // Store originals before any modifications
             const originalDefineProperty = Object.defineProperty;
             const originalGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+            const originalGetOwnPropertyNames = Object.getOwnPropertyNames;
+            const originalHasOwnProperty = Object.prototype.hasOwnProperty;
             
-            // Track if we've patched navigator
-            let navigatorPatched = false;
+            // Remove webdriver completely before anything else
+            if (navigator && 'webdriver' in navigator) {
+                delete navigator.webdriver;
+            }
             
-            // Override Object.defineProperty to intercept webdriver definition
+            // Remove from prototype chain
+            if (typeof Navigator !== 'undefined' && Navigator.prototype) {
+                delete Navigator.prototype.webdriver;
+            }
+            
+            // Create clean navigator getter that never exposes webdriver
+            const navigatorDescriptor = originalGetOwnPropertyDescriptor(window, 'navigator');
+            if (navigatorDescriptor) {
+                const originalNavigator = navigatorDescriptor.get ? navigatorDescriptor.get() : window.navigator;
+                
+                originalDefineProperty(window, 'navigator', {
+                    get() {
+                        const nav = originalNavigator;
+                        
+                        // Ensure webdriver is never present
+                        if ('webdriver' in nav) {
+                            delete nav.webdriver;
+                        }
+                        
+                        // Override property access
+                        const navProxy = new Proxy(nav, {
+                            get(target, prop) {
+                                if (prop === 'webdriver') {
+                                    return undefined;
+                                }
+                                return target[prop];
+                            },
+                            has(target, prop) {
+                                if (prop === 'webdriver') {
+                                    return false;
+                                }
+                                return prop in target;
+                            },
+                            ownKeys(target) {
+                                return originalGetOwnPropertyNames(target).filter(key => key !== 'webdriver');
+                            },
+                            getOwnPropertyDescriptor(target, prop) {
+                                if (prop === 'webdriver') {
+                                    return undefined;
+                                }
+                                return originalGetOwnPropertyDescriptor(target, prop);
+                            }
+                        });
+                        
+                        return navProxy;
+                    },
+                    configurable: false,
+                    enumerable: true
+                });
+            }
+            
+            // Override Object.defineProperty to block webdriver
             Object.defineProperty = function(obj, prop, descriptor) {
-                // Check if trying to define webdriver on navigator or its prototype
-                if ((obj === navigator || obj === Navigator.prototype) && prop === 'webdriver') {
-                    // Log attempt but don't define it
-                    console.debug('Blocked webdriver property definition');
+                if ((obj === navigator || obj === Navigator.prototype || obj === window.navigator) && prop === 'webdriver') {
                     return obj;
                 }
-                
-                // Check if defining navigator itself
-                if (prop === 'navigator' && !navigatorPatched) {
-                    // Patch the navigator object being defined
-                    const result = originalDefineProperty.call(this, obj, prop, descriptor);
-                    patchNavigator();
-                    return result;
-                }
-                
-                // Normal property definition
                 return originalDefineProperty.call(this, obj, prop, descriptor);
             };
             
-            // Function to patch navigator
-            function patchNavigator() {
-                if (navigatorPatched) return;
-                navigatorPatched = true;
-                
-                try {
-                    // Remove webdriver from Navigator prototype
-                    const navProto = Navigator.prototype;
-                    const protoDescriptor = originalGetOwnPropertyDescriptor(navProto, 'webdriver');
-                    
-                    if (protoDescriptor) {
-                        delete navProto.webdriver;
-                    }
-                    
-                    // Create a new Navigator prototype without webdriver
-                    const cleanProto = Object.create(Object.getPrototypeOf(navProto));
-                    
-                    // Copy all properties except webdriver
-                    for (const prop of Object.getOwnPropertyNames(navProto)) {
-                        if (prop !== 'webdriver') {
-                            const descriptor = originalGetOwnPropertyDescriptor(navProto, prop);
-                            if (descriptor) {
-                                originalDefineProperty(cleanProto, prop, descriptor);
-                            }
-                        }
-                    }
-                    
-                    // Set the clean prototype
-                    Object.setPrototypeOf(navigator, cleanProto);
-                    
-                    // Prevent future webdriver definitions
-                    originalDefineProperty(navigator, 'webdriver', {
-                        get: () => undefined,
-                        set: () => {},
-                        enumerable: false,
-                        configurable: false
-                    });
-                    
-                } catch (e) {
-                    console.debug('Navigator patch error:', e);
+            // Override getOwnPropertyDescriptor to hide webdriver
+            Object.getOwnPropertyDescriptor = function(obj, prop) {
+                if ((obj === navigator || obj === Navigator.prototype) && prop === 'webdriver') {
+                    return undefined;
                 }
-            }
+                return originalGetOwnPropertyDescriptor.call(this, obj, prop);
+            };
             
-            // Patch immediately if navigator exists
-            if (typeof navigator !== 'undefined') {
-                patchNavigator();
-            }
+            // Override getOwnPropertyNames to exclude webdriver
+            Object.getOwnPropertyNames = function(obj) {
+                const names = originalGetOwnPropertyNames.call(this, obj);
+                if (obj === navigator || obj === Navigator.prototype) {
+                    return names.filter(name => name !== 'webdriver');
+                }
+                return names;
+            };
             
-            // Also override the Navigator constructor
+            // Override hasOwnProperty
+            Object.prototype.hasOwnProperty = function(prop) {
+                if (this === navigator && prop === 'webdriver') {
+                    return false;
+                }
+                return originalHasOwnProperty.call(this, prop);
+            };
+            
+            // Override 'in' operator via Proxy on Navigator.prototype
             if (typeof Navigator !== 'undefined') {
                 const OriginalNavigator = Navigator;
+                const OriginalPrototype = Navigator.prototype;
                 
-                // Create patched Navigator constructor
+                // Create new clean prototype
+                const CleanPrototype = new Proxy(OriginalPrototype, {
+                    has(target, prop) {
+                        if (prop === 'webdriver') {
+                            return false;
+                        }
+                        return prop in target;
+                    },
+                    get(target, prop) {
+                        if (prop === 'webdriver') {
+                            return undefined;
+                        }
+                        return target[prop];
+                    },
+                    getOwnPropertyDescriptor(target, prop) {
+                        if (prop === 'webdriver') {
+                            return undefined;
+                        }
+                        return originalGetOwnPropertyDescriptor(target, prop);
+                    }
+                });
+                
+                // Replace Navigator constructor
                 window.Navigator = new Proxy(OriginalNavigator, {
                     construct(target, args) {
                         const instance = new target(...args);
                         
-                        // Remove webdriver from instance
-                        delete instance.webdriver;
-                        
-                        // Prevent webdriver property
-                        originalDefineProperty(instance, 'webdriver', {
-                            get: () => undefined,
-                            set: () => {},
-                            enumerable: false,
-                            configurable: false
+                        // Create proxy for each instance
+                        return new Proxy(instance, {
+                            get(target, prop) {
+                                if (prop === 'webdriver') {
+                                    return undefined;
+                                }
+                                return target[prop];
+                            },
+                            has(target, prop) {
+                                if (prop === 'webdriver') {
+                                    return false;
+                                }
+                                return prop in target;
+                            }
                         });
-                        
-                        return instance;
+                    },
+                    get(target, prop) {
+                        if (prop === 'prototype') {
+                            return CleanPrototype;
+                        }
+                        return target[prop];
                     }
                 });
                 
                 // Copy static properties
                 for (const prop in OriginalNavigator) {
-                    if (OriginalNavigator.hasOwnProperty(prop)) {
+                    if (originalHasOwnProperty.call(OriginalNavigator, prop) && prop !== 'prototype') {
                         Navigator[prop] = OriginalNavigator[prop];
                     }
                 }
             }
             
-            // Monitor for late navigator creation
-            const observer = new MutationObserver(() => {
-                if (window.navigator && !navigatorPatched) {
-                    patchNavigator();
+            // Remove all CDP artifacts
+            const cdpProps = [
+                'cdc_adoQpoasnfa76pfcZLmcfl_Array',
+                'cdc_adoQpoasnfa76pfcZLmcfl_Promise', 
+                'cdc_adoQpoasnfa76pfcZLmcfl_Symbol',
+                'cdc_adoQpoasnfa76pfcZLmcfl_JSON',
+                'cdc_adoQpoasnfa76pfcZLmcfl_Object',
+                'cdc_adoQpoasnfa76pfcZLmcfl_Proxy'
+            ];
+            
+            cdpProps.forEach(prop => {
+                try {
+                    delete window[prop];
+                    delete document[prop];
+                } catch (e) {}
+            });
+            
+            // Monitor and clean continuously
+            const cleanupInterval = setInterval(() => {
+                if (navigator && 'webdriver' in navigator) {
+                    delete navigator.webdriver;
                 }
-            });
+                
+                // Clean CDP props
+                for (const key in window) {
+                    if (key.includes('cdc_') || key.includes('_cdc')) {
+                        try {
+                            delete window[key];
+                        } catch (e) {}
+                    }
+                }
+            }, 100);
             
-            observer.observe(document, {
-                childList: true,
-                subtree: true
+            // Stop after page load
+            window.addEventListener('load', () => {
+                setTimeout(() => clearInterval(cleanupInterval), 5000);
             });
-            
-            // Additional protection against CDP detection
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_JSON;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Object;
             
         })();
         """

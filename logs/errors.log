@@ -76,3 +76,6 @@
 {"timestamp": "2025-06-10T20:00:20.958646", "level": "ERROR", "logger": "detection.monitor", "message": "Page error detected: Cannot delete property 'webdriver' of [object Navigator]", "module": "monitor", "function": "_on_page_error", "line": 342, "taskName": "Task-385"}
 {"timestamp": "2025-06-10T20:00:21.200899", "level": "ERROR", "logger": "detection.monitor", "message": "Page error detected: Cannot delete property 'webdriver' of [object Navigator]", "module": "monitor", "function": "_on_page_error", "line": 342, "taskName": "Task-405"}
 {"timestamp": "2025-06-10T20:00:21.201681", "level": "ERROR", "logger": "detection.monitor", "message": "Page error detected: Cannot redefine property: webdriver", "module": "monitor", "function": "_on_page_error", "line": 342, "taskName": "Task-406"}
+2025-06-11 09:03:44,605 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'
+2025-06-11 09:12:25,820 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'
+2025-06-11 09:12:35,824 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'

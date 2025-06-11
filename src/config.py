@@ -392,6 +392,28 @@ class AdvancedFeatures(BaseModel):
     emergency_protocols: EmergencyProtocols = Field(default_factory=EmergencyProtocols)
 
 
+class CaptchaSettings(BaseModel):
+    """Captcha solving configuration."""
+    enabled: bool = True
+    service: str = Field(default="2captcha", pattern="^(2captcha|anticaptcha|capsolver)$")
+    api_key: str = ""
+    timeout: int = Field(default=120, ge=30, le=300)
+    max_retries: int = Field(default=3, ge=1, le=10)
+    
+    @field_validator("api_key")
+    @classmethod
+    def resolve_env_vars(cls, v):
+        """Resolve environment variables."""
+        if v.startswith("${") and v.endswith("}"):
+            env_var = v[2:-1]
+            env_value = os.getenv(env_var)
+            if env_value is None:
+                # Return empty string if not set, captcha will be disabled
+                return ""
+            return env_value
+        return v
+
+
 class Settings(BaseModel):
     """Main application settings."""
     # Core settings
@@ -403,6 +425,7 @@ class Settings(BaseModel):
     # Authentication & Network
     authentication: Authentication
     proxy_settings: ProxySettings
+    captcha_settings: Optional[CaptchaSettings] = None
     
     # Profile & Data
     profile_settings: ProfileSettings

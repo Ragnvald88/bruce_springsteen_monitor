@@ -746,3 +746,56 @@
 {"timestamp": "2025-06-10T20:00:27.977897", "level": "WARNING", "logger": "detection.monitor", "message": "Detection event: fingerprint (confidence: 0.70) on https://www.ticketmaster.com/", "module": "monitor", "function": "_create_detection_event", "line": 555, "taskName": "Task-24"}
 {"timestamp": "2025-06-10T20:00:27.989213", "level": "WARNING", "logger": "browser.pool", "message": "Detection event: ip_block - https://www.ticketmaster.com/ (confidence: 0.95)", "module": "pool", "function": "_on_detection_event", "line": 1089, "taskName": "Task-24"}
 {"timestamp": "2025-06-10T20:00:27.989428", "level": "WARNING", "logger": "detection.monitor", "message": "Detection event: ip_block (confidence: 0.95) on https://www.ticketmaster.com/", "module": "monitor", "function": "_create_detection_event", "line": 555, "taskName": "Task-24"}
+2025-06-11 09:03:43,469 - profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 09:03:43,733 - stealth.cdp_bypass_engine - INFO - CDP Stealth  initialized with 2025 evasion capabilities
+2025-06-11 09:03:43,734 - stealth.cdp_webdriver_bypass - INFO - CDP WebDriver Bypass initialized
+2025-06-11 09:03:43,734 - stealth.ml_resistant_behaviors - INFO - ML-Resistant behaviors initialized with normal profile
+2025-06-11 09:03:43,735 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:03:43,735 - stealth.core - INFO - StealthCore initialized with maximum evasion capabilities
+2025-06-11 09:03:43,735 - stealth.cdp_bypass_engine - INFO - CDP Stealth  initialized with 2025 evasion capabilities
+2025-06-11 09:03:43,736 - stealth.cdp_webdriver_bypass - INFO - CDP WebDriver Bypass initialized
+2025-06-11 09:03:43,736 - stealth.ml_resistant_behaviors - INFO - ML-Resistant behaviors initialized with normal profile
+2025-06-11 09:03:43,736 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:03:43,737 - stealth.core - INFO - StealthCore initialized with maximum evasion capabilities
+2025-06-11 09:03:43,737 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:03:43,737 - browser.pool - INFO - Initializing browser pool (max: 5, data limit: 2000MB)
+2025-06-11 09:03:44,345 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:03:44,346 - stealth.core - INFO - Applied stealth to browser with fingerprint 8cb22cd1-04a9-47f2-9743-62977d07cd08
+2025-06-11 09:03:44,346 - browser.launcher - INFO - Launched headless browser without proxy with stealth
+2025-06-11 09:03:44,397 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:03:44,397 - stealth.core - INFO - Applied stealth to browser with fingerprint 09325e3f-df29-475b-ade9-d6e9009d9f21
+2025-06-11 09:03:44,398 - browser.pool - INFO - Created browser 8822fd78 without proxy
+2025-06-11 09:03:44,552 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:03:44,552 - stealth.core - INFO - Applied stealth to browser with fingerprint 7bab2227-f963-4924-99b0-10da46143deb
+2025-06-11 09:03:44,553 - browser.launcher - INFO - Launched headless browser without proxy with stealth
+2025-06-11 09:03:44,601 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:03:44,602 - stealth.core - INFO - Applied stealth to browser with fingerprint d4b4a8be-5389-428e-bf11-3a2cccd9dca0
+2025-06-11 09:03:44,602 - browser.pool - INFO - Created browser 5e22126f without proxy
+2025-06-11 09:03:44,605 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'
+2025-06-11 09:12:24,683 - profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 09:12:24,959 - stealth.cdp_bypass_engine - INFO - CDP Stealth  initialized with 2025 evasion capabilities
+2025-06-11 09:12:24,959 - stealth.cdp_webdriver_bypass - INFO - CDP WebDriver Bypass initialized
+2025-06-11 09:12:24,960 - stealth.ml_resistant_behaviors - INFO - ML-Resistant behaviors initialized with normal profile
+2025-06-11 09:12:24,960 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:12:24,960 - stealth.core - INFO - StealthCore initialized with maximum evasion capabilities
+2025-06-11 09:12:24,961 - stealth.cdp_bypass_engine - INFO - CDP Stealth  initialized with 2025 evasion capabilities
+2025-06-11 09:12:24,961 - stealth.cdp_webdriver_bypass - INFO - CDP WebDriver Bypass initialized
+2025-06-11 09:12:24,961 - stealth.ml_resistant_behaviors - INFO - ML-Resistant behaviors initialized with normal profile
+2025-06-11 09:12:24,961 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:12:24,962 - stealth.core - INFO - StealthCore initialized with maximum evasion capabilities
+2025-06-11 09:12:24,962 - network.tls_fingerprint - INFO - TLS Fingerprint Rotator initialized with 8 profiles
+2025-06-11 09:12:24,963 - browser.pool - INFO - Initializing browser pool (max: 5, data limit: 2000MB)
+2025-06-11 09:12:25,562 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:12:25,562 - stealth.core - INFO - Applied stealth to browser with fingerprint 3e36b1b2-ba59-4931-9798-89e1640c034f
+2025-06-11 09:12:25,563 - browser.launcher - INFO - Launched headless browser without proxy with stealth
+2025-06-11 09:12:25,612 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:12:25,613 - stealth.core - INFO - Applied stealth to browser with fingerprint 22f75f2f-815d-418c-a465-4f43d9496238
+2025-06-11 09:12:25,613 - browser.pool - INFO - Created browser fae3699c without proxy
+2025-06-11 09:12:25,767 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:12:25,768 - stealth.core - INFO - Applied stealth to browser with fingerprint 69a5bd71-00ca-4351-95b9-2f3f0929cb90
+2025-06-11 09:12:25,768 - browser.launcher - INFO - Launched headless browser without proxy with stealth
+2025-06-11 09:12:25,816 - stealth.cdp_webdriver_bypass - INFO - Browser patched for WebDriver bypass
+2025-06-11 09:12:25,817 - stealth.core - INFO - Applied stealth to browser with fingerprint f5f6c1e0-5388-4e63-aeed-20163a1cd355
+2025-06-11 09:12:25,817 - browser.pool - INFO - Created browser 898d9bd9 without proxy
+2025-06-11 09:12:25,820 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'
+2025-06-11 09:12:35,824 - __main__ - ERROR - Monitor loop error: EnhancedBrowserPool.acquire_context() got an unexpected keyword argument 'platform'

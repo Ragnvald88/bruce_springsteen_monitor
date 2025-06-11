@@ -8,23 +8,34 @@ import asyncio
 import logging
 import random
 import time
+import gc
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Any, Set, Union
+from typing import Dict, List, Optional, Tuple, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
 import hashlib
 from collections import defaultdict, deque
-import psutil
-import json
 
 from playwright.async_api import Browser, Playwright, BrowserContext, Page, Request, Response
 
-from browser.launcher import BrowserLauncher
-from stealth.core import StealthCore
-from detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
-from network.tls_fingerprint import TLSFingerprintRotator
-from config import Settings, ProxyConfig
-from src.constants import BrowserState
+try:
+    from .launcher import BrowserLauncher
+    from .stealth_launcher import StealthBrowserLauncher
+    from ..stealth.core import StealthCore
+    from ..stealth.stealth_core_v3 import StealthCoreV3
+    from ..detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
+    from ..network.tls_fingerprint import TLSFingerprintRotator
+    from ..config import Settings, ProxyConfig
+    from ..constants import BrowserState
+except ImportError:
+    from browser.launcher import BrowserLauncher
+    from browser.stealth_launcher import StealthBrowserLauncher
+    from stealth.core import StealthCore
+    from stealth.stealth_core_v3 import StealthCoreV3
+    from detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
+    from network.tls_fingerprint import TLSFingerprintRotator
+    from config import Settings, ProxyConfig
+    from constants import BrowserState
 
 logger = logging.getLogger(__name__)
 
@@ -191,6 +202,15 @@ class StealthContextV3:
                     await page.close()
                 except Exception:
                     pass
+            
+            # MEMORY FIX: Clear resource cache to free memory
+            self.resource_cache.clear()
+            self.blocked_resources.clear()
+            
+            # Clear metrics data
+            self.metrics.response_times.clear()
+            self.metrics.data_usage.domain_usage.clear()
+            self.metrics.data_usage.hourly_usage.clear()
             
             # Close context
             await self.context.close()
@@ -449,6 +469,16 @@ class BrowserInstance:
             if any(t in content_type for t in cacheable_types):
                 body = await response.body()
                 if len(body) < 500000:  # 500KB limit
+                    # MEMORY FIX: Implement cache size limit
+                    total_cache_size = sum(len(v) for v in context.resource_cache.values())
+                    
+                    # If cache is too large, remove oldest entries
+                    if total_cache_size + len(body) > 10 * 1024 * 1024:  # 10MB cache limit
+                        # Remove first 25% of cache entries
+                        keys_to_remove = list(context.resource_cache.keys())[:len(context.resource_cache) // 4]
+                        for key in keys_to_remove:
+                            del context.resource_cache[key]
+                    
                     cache_key = f"{response.request.method}:{response.url}"
                     context.resource_cache[cache_key] = body
                     
@@ -531,8 +561,9 @@ class EnhancedBrowserPool:
     ):
         self.settings = settings
         self.playwright = playwright
-        self.launcher = BrowserLauncher(settings.browser_options)
-        self.stealth_core = StealthCore()
+        # Use V3 stealth launcher for CDP bypass
+        self.launcher = StealthBrowserLauncher(settings.browser_options)
+        self.stealth_core = StealthCoreV3()
         self.tls_rotator = TLSFingerprintRotator()
         self.detection_monitor = DetectionMonitor()
         
@@ -588,7 +619,7 @@ class EnhancedBrowserPool:
     
     async def acquire_context(
         self,
-        platform: str,
+        platform_name: str,
         prefer_fresh: bool = False,
         fingerprint: Optional[Dict[str, Any]] = None,
         data_limit_mb: Optional[float] = None
@@ -956,20 +987,52 @@ class EnhancedBrowserPool:
                 logger.error(f"Recovery loop error: {e}")
     
     async def _maintenance_loop(self):
-        """Periodic maintenance tasks"""
+        """Periodic maintenance tasks with memory optimization"""
         while not self._shutdown:
             try:
                 await asyncio.sleep(300)  # 5 minutes
                 
                 async with self._lock:
+                    # MEMORY FIX: Track memory usage
+                    total_memory_mb = 0
+                    total_cache_size = 0
+                    
+                    for browser in self._browsers.values():
+                        # Estimate memory per browser
+                        browser_memory = len(browser.contexts) * 50  # ~50MB per context
+                        total_memory_mb += browser_memory
+                        
+                        # Track cache size
+                        for context in browser.contexts.values():
+                            cache_size = sum(len(v) for v in context.resource_cache.values())
+                            total_cache_size += cache_size
+                    
                     # Remove old browsers
                     await self._cleanup_old_browsers()
                     
                     # Remove unhealthy contexts
                     await self._cleanup_unhealthy_contexts()
                     
+                    # MEMORY FIX: Clear caches if memory is high
+                    if total_memory_mb > 800 or total_cache_size > 100 * 1024 * 1024:  # 800MB or 100MB cache
+                        logger.info(f"High memory usage detected: {total_memory_mb}MB, clearing caches")
+                        for browser in self._browsers.values():
+                            for context in browser.contexts.values():
+                                # Clear large caches
+                                if len(context.resource_cache) > 50:
+                                    # Keep only last 20 entries
+                                    keys = list(context.resource_cache.keys())
+                                    for key in keys[:-20]:
+                                        del context.resource_cache[key]
+                    
                     # Ensure minimum browsers
                     await self._ensure_minimum_browsers()
+                    
+                    # MEMORY FIX: Force garbage collection if needed
+                    if total_memory_mb > 1000:  # 1GB
+                        import gc
+                        gc.collect()
+                        logger.info("Forced garbage collection due to high memory usage")
                     
                     # Log statistics
                     self._log_statistics()
@@ -1007,7 +1070,7 @@ class EnhancedBrowserPool:
             )
     
     async def _cleanup_unhealthy_contexts(self):
-        """Remove contexts with poor health"""
+        """Remove contexts with poor health and optimize memory"""
         for browser in self._browsers.values():
             to_remove = []
             
@@ -1030,6 +1093,12 @@ class EnhancedBrowserPool:
                 # Check data usage
                 if context.metrics.data_usage.get_mb_used() > 100:
                     to_remove.append(ctx_id)
+                
+                # MEMORY FIX: Check idle time
+                idle_time = (datetime.now() - context.metrics.last_activity).total_seconds()
+                if idle_time > 1800:  # 30 minutes idle
+                    to_remove.append(ctx_id)
+                    logger.debug(f"Context {ctx_id} idle for {idle_time/60:.1f} minutes")
             
             for ctx_id in to_remove:
                 context = browser.contexts[ctx_id]
@@ -1089,6 +1158,28 @@ class EnhancedBrowserPool:
         logger.warning(
             f"Detection event: {event.detection_type.value} - "
             f"{event.url} (confidence: {event.confidence:.2f})"
+        )
+    
+    def _log_statistics(self):
+        """Log pool statistics for monitoring"""
+        total_contexts = sum(len(b.contexts) for b in self._browsers.values())
+        healthy_contexts = sum(
+            1 for b in self._browsers.values() 
+            for c in b.contexts.values() 
+            if c.health in [ContextHealth.HEALTHY, ContextHealth.PRISTINE]
+        )
+        
+        avg_acquisition_time = (
+            sum(self._acquisition_times[-100:]) / len(self._acquisition_times[-100:])
+            if self._acquisition_times else 0
+        )
+        
+        logger.info(
+            f"Browser Pool Stats - "
+            f"Browsers: {len(self._browsers)}/{self.max_browsers}, "
+            f"Contexts: {total_contexts} (healthy: {healthy_contexts}), "
+            f"Data: {self._total_data_used_mb:.1f}/{self.data_limit_mb}MB, "
+            f"Avg acquisition: {avg_acquisition_time*1000:.1f}ms"
         )
         
         # Update context health if severe detection

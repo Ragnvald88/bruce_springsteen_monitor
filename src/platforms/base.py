@@ -8,10 +8,16 @@ from typing import Dict, Any, Optional, List, Tuple
 
 from playwright.async_api import Page
 
-from config import Target
-from profile import Profile as UserProfile
-from src.constants import PurchaseStatus, COMMON_SELECTORS
-from stealth.behaviors import HumanBehavior
+try:
+    from ..config import Target
+    from ..profiles.models import Profile as UserProfile
+    from ..constants import PurchaseStatus, PLATFORM_SELECTORS
+    from ..stealth.behaviors import HumanBehavior
+except ImportError:
+    from config import Target
+    from profiles.models import Profile as UserProfile
+    from constants import PurchaseStatus, PLATFORM_SELECTORS
+    from stealth.behaviors import HumanBehavior
 
 logger = logging.getLogger(__name__)
 

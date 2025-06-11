@@ -5,11 +5,13 @@ import asyncio
 import json
 import logging
 import random
+import re
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Callable, Union, Tuple
 from urllib.parse import urlparse, parse_qs
 import hashlib
 from collections import defaultdict
+from email.utils import parsedate_to_datetime
 
 from playwright.async_api import Request, Response, Route, Page
 import httpx
@@ -114,13 +116,28 @@ class RequestInterceptor:
         logger.info(f"Interception setup complete in {mode} mode")
     
     async def _handle_route(self, route: Route, request: Request) -> None:
-        """Handle intercepted routes."""
+        """Handle intercepted routes with caching."""
         self._intercepted_count += 1
         
         # Check if should block
         if self._should_block_request(request):
             await route.abort()
             return
+        
+        # PERFORMANCE FIX: Check cache before making request
+        if request.method == "GET" and self._mode != InterceptorMode.PASSIVE:
+            cache_key = self._generate_cache_key(request)
+            cached = self._response_cache.get(cache_key)
+            
+            if cached and self._is_cache_valid(cached):
+                # Serve from cache
+                await route.fulfill(
+                    status=cached.status,
+                    headers=cached.headers,
+                    body=cached.body
+                )
+                logger.debug(f"Served from cache: {request.url}")
+                return
         
         # Passive mode - just continue
         if self._mode == InterceptorMode.PASSIVE:
@@ -260,8 +277,16 @@ class RequestInterceptor:
     async def _cache_response(self, response: Response) -> None:
         """Cache response for efficiency."""
         try:
+            # PERFORMANCE FIX: Only cache cacheable responses
+            if not self._is_cacheable(response):
+                return
+                
             body = await response.body()
             size = len(body)
+            
+            # Skip large responses
+            if size > 5 * 1024 * 1024:  # 5MB limit per response
+                return
             
             # Check cache size limit
             if self._current_cache_size + size > self._cache_size_limit:
@@ -273,7 +298,8 @@ class RequestInterceptor:
                 status=response.status,
                 headers=dict(response.headers),
                 body=body,
-                timestamp=datetime.now()
+                timestamp=datetime.now(),
+                max_age=self._extract_max_age(response.headers)
             )
             self._current_cache_size += size
             
@@ -281,13 +307,39 @@ class RequestInterceptor:
             logger.debug(f"Failed to cache response: {e}")
     
     def _generate_cache_key(self, request: Request) -> str:
-        """Generate cache key for request."""
-        key_parts = [
+        """Generate optimized cache key for request."""
+        # PERFORMANCE FIX: Optimize cache key generation
+        # Don't include volatile headers that change frequently
+        headers_to_exclude = {
+            'date', 'x-request-id', 'x-correlation-id', 'x-trace-id',
+            'x-amzn-trace-id', 'x-b3-traceid', 'x-b3-spanid',
+            'cookie', 'authorization', 'x-csrf-token'
+        }
+        
+        # Filter headers for cache key
+        filtered_headers = {
+            k: v for k, v in request.headers.items()
+            if k.lower() not in headers_to_exclude
+        }
+        
+        # Create more efficient cache key
+        parsed_url = urlparse(request.url)
+        cache_components = [
             request.method,
-            request.url,
-            json.dumps(sorted(request.headers.items()))
+            parsed_url.netloc,
+            parsed_url.path,
+            parsed_url.query or '',
+            # Only include important headers
+            filtered_headers.get('accept', ''),
+            filtered_headers.get('accept-language', ''),
+            filtered_headers.get('user-agent', '')
         ]
-        return hashlib.md5(":".join(key_parts).encode()).hexdigest()
+        
+        # Use a more efficient hash
+        return hashlib.blake2b(
+            '|'.join(cache_components).encode(),
+            digest_size=16
+        ).hexdigest()
     
     async def _evict_cache(self) -> None:
         """Evict old cache entries."""
@@ -317,12 +369,74 @@ class RequestInterceptor:
             self._current_tls_profile = random.choice(self._tls_profiles)
             logger.info(f"Rotated to TLS profile: {self._current_tls_profile['name']}")
     
+    def _is_cache_valid(self, cached: CachedResponse) -> bool:
+        """Check if cached response is still valid."""
+        age = (datetime.now() - cached.timestamp).total_seconds()
+        return age < cached.max_age
+    
+    def _is_cacheable(self, response: Response) -> bool:
+        """Check if response should be cached."""
+        # Only cache successful GET requests
+        if response.request.method != "GET" or response.status != 200:
+            return False
+            
+        # Check cache-control headers
+        cache_control = response.headers.get('cache-control', '').lower()
+        if any(directive in cache_control for directive in ['no-cache', 'no-store', 'private']):
+            return False
+            
+        # Don't cache dynamic content
+        content_type = response.headers.get('content-type', '').lower()
+        non_cacheable_types = ['text/event-stream', 'application/json', 'application/x-ndjson']
+        if any(ct in content_type for ct in non_cacheable_types):
+            return False
+            
+        return True
+    
+    def _extract_max_age(self, headers: Dict[str, str]) -> int:
+        """Extract max-age from cache-control header."""
+        cache_control = headers.get('cache-control', '').lower()
+        
+        # Look for max-age directive
+        import re
+        match = re.search(r'max-age=(\d+)', cache_control)
+        if match:
+            return int(match.group(1))
+            
+        # Check expires header
+        expires = headers.get('expires')
+        if expires:
+            try:
+                from email.utils import parsedate_to_datetime
+                expires_dt = parsedate_to_datetime(expires)
+                age = (expires_dt - datetime.now()).total_seconds()
+                if age > 0:
+                    return int(age)
+            except:
+                pass
+                
+        # Default cache time based on content type
+        content_type = headers.get('content-type', '').lower()
+        if 'text/html' in content_type:
+            return 60  # 1 minute for HTML
+        elif any(t in content_type for t in ['css', 'javascript', 'font']):
+            return 3600  # 1 hour for static assets
+        elif 'image' in content_type:
+            return 86400  # 24 hours for images
+            
+        return 300  # Default 5 minutes
+    
     def get_statistics(self) -> Dict[str, Any]:
         """Get interception statistics."""
+        # Calculate cache hit rate
+        cache_hits = sum(1 for cached in self._response_cache.values() if self._is_cache_valid(cached))
+        cache_hit_rate = (cache_hits / len(self._response_cache) * 100) if self._response_cache else 0
+        
         return {
             "intercepted_requests": self._intercepted_count,
             "modified_requests": self._modified_count,
             "cached_responses": len(self._response_cache),
+            "cache_hit_rate": cache_hit_rate,
             "cache_size_mb": self._current_cache_size / (1024 * 1024),
             "blocked_patterns": len(self._blocked_patterns),
             "monitored_domains": len(self._request_patterns)
@@ -383,13 +497,15 @@ class CachedResponse:
         status: int,
         headers: Dict[str, str],
         body: bytes,
-        timestamp: datetime
+        timestamp: datetime,
+        max_age: Optional[int] = None
     ):
         self.url = url
         self.status = status
         self.headers = headers
         self.body = body
         self.timestamp = timestamp
+        self.max_age = max_age or 300  # Default 5 minutes
 
 
 class PatternAnalyzer:

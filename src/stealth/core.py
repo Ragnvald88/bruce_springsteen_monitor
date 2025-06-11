@@ -19,7 +19,10 @@ from .injections import StealthInjections
 from .cdp_bypass_engine import CDPStealth
 from .cdp_webdriver_bypass import CDPWebDriverBypass
 from .behaviors import HumanBehavior
-from network.tls_fingerprint import TLSFingerprintRotator
+try:
+    from ..network.tls_fingerprint import TLSFingerprintRotator
+except ImportError:
+    from network.tls_fingerprint import TLSFingerprintRotator
 
 logger = logging.getLogger(__name__)
 
@@ -297,23 +300,72 @@ class StealthCore:
     
     async def _apply_page_evasions(self, page: Page, fingerprint: Dict[str, Any]) -> None:
         """Apply page-specific evasion techniques."""
-        # Override navigator.webdriver before any script execution
+        # CRITICAL: Enhanced webdriver and chrome.runtime evasion
         await page.add_init_script("""
-            // Ensure webdriver is never exposed
-            delete Object.getPrototypeOf(navigator).webdriver;
-            
-            // Monitor for detection attempts
-            const detectAttempts = [];
-            const originalGetter = Object.getOwnPropertyDescriptor;
-            Object.getOwnPropertyDescriptor = function(obj, prop) {
-                if (obj === navigator && prop === 'webdriver') {
-                    detectAttempts.push(new Date().toISOString());
-                    return undefined;
+            // CRITICAL FIX: Comprehensive webdriver removal
+            (() => {
+                'use strict';
+                
+                // Remove webdriver completely
+                if (navigator && 'webdriver' in navigator) {
+                    delete navigator.webdriver;
                 }
-                return originalGetter.apply(this, arguments);
-            };
-            
-            window.__detectAttempts = detectAttempts;
+                
+                // Remove from prototype
+                if (typeof Navigator !== 'undefined' && Navigator.prototype) {
+                    delete Navigator.prototype.webdriver;
+                }
+                
+                // Override property descriptors
+                const originalGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+                Object.getOwnPropertyDescriptor = function(obj, prop) {
+                    if ((obj === navigator || obj === Navigator.prototype) && prop === 'webdriver') {
+                        return undefined;
+                    }
+                    return originalGetOwnPropertyDescriptor.apply(this, arguments);
+                };
+                
+                // Override 'in' operator checks
+                const originalHasOwnProperty = Object.prototype.hasOwnProperty;
+                Object.prototype.hasOwnProperty = function(prop) {
+                    if (this === navigator && prop === 'webdriver') {
+                        return false;
+                    }
+                    return originalHasOwnProperty.call(this, prop);
+                };
+                
+                // Ensure webdriver is always undefined/false
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => false,
+                    set: () => {},
+                    enumerable: false,
+                    configurable: false
+                });
+                
+                // Monitor detection attempts
+                window.__detectAttempts = [];
+                const checkInterval = setInterval(() => {
+                    if (navigator.webdriver === true) {
+                        window.__detectAttempts.push({
+                            time: new Date().toISOString(),
+                            detected: true,
+                            type: 'webdriver'
+                        });
+                        delete navigator.webdriver;
+                        Object.defineProperty(navigator, 'webdriver', {
+                            get: () => false,
+                            set: () => {},
+                            enumerable: false,
+                            configurable: false
+                        });
+                    }
+                }, 100);
+                
+                // Stop monitoring after load
+                window.addEventListener('load', () => {
+                    setTimeout(() => clearInterval(checkInterval), 5000);
+                });
+            })();
         """)
         
         # Set up detection monitoring

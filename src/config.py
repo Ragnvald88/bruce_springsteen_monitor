@@ -314,18 +314,6 @@ class Target(BaseModel):
             raise ValueError("max_ticket_quantity must be >= min_ticket_quantity")
         return v
     
-    # ADDED: Computed properties based on priority
-    @property
-    def effective_interval_s(self) -> float:
-        """Get effective monitoring interval based on priority."""
-        return self.interval_s * self.priority.interval_multiplier
-    
-    @property
-    def effective_burst_duration_s(self) -> float:
-        """Get effective burst duration based on priority."""
-        if self.burst_mode:
-            return self.burst_mode.duration_s * self.priority.burst_duration_multiplier
-        return 300  # Default burst duration
 
 
 class AntiDetection(BaseModel):
@@ -491,7 +479,11 @@ def load_settings(config_path: Optional[Path] = None) -> Settings:
     Returns:
         Settings object
     """
-    if config_path and config_path.exists():
+    # Use default config.yaml if no path provided
+    if config_path is None:
+        config_path = Path("config.yaml")
+    
+    if config_path.exists():
         with open(config_path, "r") as f:
             data = yaml.safe_load(f)
         
@@ -501,16 +493,6 @@ def load_settings(config_path: Optional[Path] = None) -> Settings:
                 # Ensure URL is string
                 if "url" in target:
                     target["url"] = str(target["url"])
-                # ADDED: Convert old priority strings to new enum values
-                if "priority" in target:
-                    old_priority = target["priority"].upper()
-                    priority_map = {
-                        "LOW": "low",
-                        "NORMAL": "normal", 
-                        "HIGH": "high",
-                        "CRITICAL": "urgent",  # Map CRITICAL to URGENT
-                    }
-                    target["priority"] = priority_map.get(old_priority, "normal")
         
         return Settings(**data)
     

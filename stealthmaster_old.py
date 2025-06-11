@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""StealthMaster - Automated Ticket Monitoring System with Browser Reuse."""
+"""StealthMaster - Automated Ticket Monitoring System with Live Dashboard."""
 
 import asyncio
 import sys
@@ -33,13 +33,12 @@ logger = get_logger(__name__)
 
 
 class StealthMasterUI:
-    """StealthMaster with Browser Reuse and Session Management."""
+    """StealthMaster with Live Dashboard UI."""
     
     def __init__(self, settings):
         self.settings = settings
         self.running = False
         self.monitors = {}
-        self.browsers = {}  # Store browser instances for reuse
         self.start_time = datetime.now()
         
         # Core components
@@ -52,7 +51,6 @@ class StealthMasterUI:
         self.tickets_found = 0
         self.tickets_reserved = 0
         self.tickets_failed = 0
-        self.access_denied_count = 0
         
         # Session
         self.session_id = f"ui_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -76,16 +74,13 @@ class StealthMasterUI:
         table.add_column("Value", style="green", justify="right")
         
         uptime = str(datetime.now() - self.start_time).split('.')[0]
-        active_count = len([s for s in self.monitor_status.values() if "Active" in str(s) or "Checking" in str(s)])
+        active_count = len([s for s in self.monitor_status.values() if "Active" in str(s)])
         
         table.add_row("⏱️  Uptime", uptime)
         table.add_row("📡 Active Monitors", str(active_count))
         table.add_row("🎫 Tickets Found", str(self.tickets_found))
         table.add_row("✅ Reserved", str(self.tickets_reserved))
         table.add_row("❌ Failed", str(self.tickets_failed))
-        
-        if self.access_denied_count > 0:
-            table.add_row("🚫 Access Denied", str(self.access_denied_count), style="red")
         
         # Calculate success rate
         total_attempts = self.tickets_reserved + self.tickets_failed
@@ -94,9 +89,6 @@ class StealthMasterUI:
         else:
             success_rate = 0.0
         table.add_row("📈 Success Rate", f"{success_rate:.1f}%")
-        
-        # Browser count
-        table.add_row("🌐 Browsers Open", str(len(self.browsers)))
         
         return Panel(table, title="📊 Session Statistics", style="green")
     
@@ -150,7 +142,7 @@ class StealthMasterUI:
         layout.split_column(
             Layout(self.create_header(), size=3, name="header"),
             Layout(name="body"),
-            Layout(name="footer", size=5)
+            Layout(name="footer", size=4)
         )
         
         # Split body into stats and monitors
@@ -163,8 +155,7 @@ class StealthMasterUI:
         instructions = Panel(
             "[yellow]Press Ctrl+C to stop monitoring[/yellow]\n"
             "[cyan]Monitors check every 30 seconds (5s burst mode when tickets found)[/cyan]\n"
-            f"[dim]Session ID: {self.session_id}[/dim]\n"
-            "[red]Note: Using ONE browser per platform to avoid detection[/red]",
+            f"[dim]Session ID: {self.session_id}[/dim]",
             title="ℹ️  Instructions",
             style="dim"
         )
@@ -172,148 +163,69 @@ class StealthMasterUI:
         
         return layout
     
-    async def get_or_create_browser(self, platform_name: str):
-        """Get existing browser or create new one for platform."""
-        if platform_name not in self.browsers:
-            console.print(f"[cyan]🌐 Creating browser for {platform_name}...[/cyan]")
-            try:
-                browser_data = await self.browser_launcher.launch_browser()
-                self.browsers[platform_name] = {
-                    'id': browser_data,
-                    'page': None,
-                    'context': None
-                }
-                console.print(f"[green]✓ Browser created for {platform_name}[/green]")
-            except Exception as e:
-                console.print(f"[red]✗ Failed to create browser for {platform_name}: {e}[/red]")
-                raise
-        
-        return self.browsers[platform_name]['id']
-    
     async def monitor_target(self, target):
-        """Monitor a single target with browser reuse."""
+        """Monitor a single target."""
         # Normalize platform name
         platform_name = target.platform.value.lower() if hasattr(target.platform, 'value') else str(target.platform).lower()
-        
-        # Get or create browser for this platform
-        try:
-            browser_id = await self.get_or_create_browser(platform_name)
-        except Exception as e:
-            self.monitor_status[target.event_name] = "❌ Browser Error"
-            logger.error(f"Failed to get browser for {target.event_name}: {e}")
-            return
-        
-        # Create persistent page/tab for this monitor
-        page = None
-        first_run = True
         
         while self.running:
             try:
                 self.monitor_status[target.event_name] = "🔄 Checking"
                 
-                # Create page if needed (reuse existing browser)
-                if page is None:
-                    context_id = await self.browser_launcher.create_context(browser_id)
-                    page = await self.browser_launcher.new_page(context_id)
+                async with self.browser_launcher.get_page(platform=platform_name) as page:
+                    # Navigate to URL
+                    url = str(target.url)
                     
-                    if first_run:
-                        console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
-                        first_run = False
-                
-                # Navigate to URL
-                url = str(target.url)
-                
-                if hasattr(page, "goto"):
-                    response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
-                    
-                    # Check for access denied
-                    if response and response.status == 403:
-                        self.access_denied_count += 1
-                        self.monitor_status[target.event_name] = "🚫 Access Denied"
-                        console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
-                        
-                        # Wait longer before retry
-                        await asyncio.sleep(60)
-                        continue
-                else:
-                    page.get(url)
-                    await asyncio.sleep(2)
-                
-                self.monitor_status[target.event_name] = "🟢 Active"
-                self.last_check[target.event_name] = datetime.now()
-                
-                # Check page content for access denied
-                try:
-                    content = await page.content() if hasattr(page, 'content') else page.page_source
-                    if 'access denied' in content.lower() or 'blocked' in content.lower():
-                        self.access_denied_count += 1
-                        self.monitor_status[target.event_name] = "🚫 Blocked"
-                        console.print(f"[red]🚫 Blocked on {target.event_name}![/red]")
-                        await asyncio.sleep(60)
-                        continue
-                except:
-                    pass
-                
-                # Simulate ticket checking (reduced to 10% for safety)
-                if random.random() > 0.9:
-                    self.tickets_found += 1
-                    stats_manager.record_ticket_found(
-                        platform_name,
-                        target.event_name,
-                        "general",
-                        1000
-                    )
-                    self.monitor_status[target.event_name] = "🎯 Found!"
-                    
-                    # Try to reserve
-                    success_chance = 0.4 if platform_name == "fansale" else 0.7
-                    if random.random() > success_chance:
-                        self.tickets_reserved += 1
-                        stats_manager.record_ticket_reserved(
-                            platform_name,
-                            target.event_name,
-                            "general",
-                            250
-                        )
-                        self.monitor_status[target.event_name] = "🎉 Reserved!"
+                    if hasattr(page, "goto"):
+                        await page.goto(url, wait_until='domcontentloaded', timeout=30000)
                     else:
-                        self.tickets_failed += 1
-                        stats_manager.record_ticket_failed(
+                        page.get(url)
+                        await asyncio.sleep(2)
+                    
+                    self.monitor_status[target.event_name] = "🟢 Active"
+                    self.last_check[target.event_name] = datetime.now()
+                    
+                    # Simulate ticket checking (20% chance for demo)
+                    if random.random() > 0.8:
+                        self.tickets_found += 1
+                        stats_manager.record_ticket_found(
                             platform_name,
                             target.event_name,
                             "general",
-                            "Sold out"
+                            1000
                         )
-                        self.monitor_status[target.event_name] = "❌ Sold out"
+                        self.monitor_status[target.event_name] = "🎯 Found!"
+                        
+                        # Try to reserve
+                        success_chance = 0.4 if platform_name == "fansale" else 0.7
+                        if random.random() > success_chance:
+                            self.tickets_reserved += 1
+                            stats_manager.record_ticket_reserved(
+                                platform_name,
+                                target.event_name,
+                                "general",
+                                250
+                            )
+                            self.monitor_status[target.event_name] = "🎉 Reserved!"
+                        else:
+                            self.tickets_failed += 1
+                            stats_manager.record_ticket_failed(
+                                platform_name,
+                                target.event_name,
+                                "general",
+                                "Sold out"
+                            )
+                            self.monitor_status[target.event_name] = "❌ Sold out"
+                        
+                        # Wait a bit to show the status
+                        await asyncio.sleep(3)
                     
-                    # Wait a bit to show the status
-                    await asyncio.sleep(3)
-                
-                # Wait for next check
-                await asyncio.sleep(target.interval_s)
-                
+                    await asyncio.sleep(target.interval_s)
+                    
             except Exception as e:
                 self.monitor_status[target.event_name] = f"⚠️  Error"
                 logger.error(f"Monitor error for {target.event_name}: {e}")
-                
-                # Close broken page
-                if page:
-                    try:
-                        if hasattr(page, 'close'):
-                            await page.close()
-                    except:
-                        pass
-                    page = None
-                
-                await asyncio.sleep(10)  # Wait before retry
-        
-        # Cleanup on exit
-        if page:
-            try:
-                if hasattr(page, 'close'):
-                    await page.close()
-            except:
-                pass
+                await asyncio.sleep(5)
     
     async def run(self):
         """Run the monitoring with live UI."""
@@ -323,13 +235,18 @@ class StealthMasterUI:
         console.print("[yellow]🚀 Initializing StealthMaster...[/yellow]")
         await self.profile_manager.load_all_profiles()
         
-        # Important notice about proxies
-        if not self.settings.proxy_settings.enabled:
-            console.print("[yellow]⚠️  Proxies are DISABLED - you may get blocked![/yellow]")
-            console.print("[cyan]   Enable proxies in config.yaml for better protection[/cyan]")
+        # Test stealth
+        console.print("[cyan]🔍 Testing stealth capabilities...[/cyan]")
+        try:
+            async with self.browser_launcher.get_page() as page:
+                results = await self.browser_launcher.test_stealth(page)
+                if not results.get("is_detected"):
+                    console.print("[green]✅ Stealth test passed - undetectable![/green]")
+                else:
+                    console.print("[yellow]⚠️  Stealth test detected automation[/yellow]")
+        except Exception as e:
+            console.print(f"[yellow]⚠️  Stealth test error: {e}[/yellow]")
         
-        # Skip stealth test to avoid extra browser
-        console.print("[cyan]🔍 Stealth mode enabled[/cyan]")
         console.print()
         
         # Start monitors
@@ -341,14 +258,13 @@ class StealthMasterUI:
                 task = asyncio.create_task(self.monitor_target(target))
                 self.monitors[target.event_name] = task
                 tasks.append(task)
-                console.print(f"[green]✓[/green] Starting monitor for {target.event_name}")
+                console.print(f"[green]✓[/green] Started monitor for {target.event_name}")
         
         if enabled_count == 0:
             console.print("[red]❌ No monitors enabled! Check your config.yaml[/red]")
             return
         
-        console.print(f"\n[cyan]📡 {enabled_count} monitors starting with browser reuse...[/cyan]")
-        console.print(f"[yellow]🌐 Creating {len(set(t.platform.value.lower() if hasattr(t.platform, 'value') else str(t.platform).lower() for t in self.settings.targets if t.enabled))} browsers total (one per platform)[/yellow]\n")
+        console.print(f"\n[cyan]📡 {enabled_count} monitors active. Dashboard starting...[/cyan]\n")
         
         # Run with live display
         with Live(self.create_layout(), refresh_per_second=1, console=console, screen=True) as live:
@@ -361,15 +277,10 @@ class StealthMasterUI:
         
         # Cleanup
         console.print("\n[yellow]🛑 Shutting down monitors...[/yellow]")
-        
-        # Cancel monitor tasks
         for task in tasks:
             task.cancel()
         
-        # Close all browsers
-        console.print("[yellow]🌐 Closing browsers...[/yellow]")
         await self.browser_launcher.close_all()
-        
         stats_manager.end_session(self.session_id)
         
         # Final stats
@@ -377,7 +288,6 @@ class StealthMasterUI:
         console.print(f"  Duration: {str(datetime.now() - self.start_time).split('.')[0]}")
         console.print(f"  Tickets Found: {self.tickets_found}")
         console.print(f"  Tickets Reserved: {self.tickets_reserved}")
-        console.print(f"  Access Denied: {self.access_denied_count}")
         console.print(f"  Success Rate: {(self.tickets_reserved / max(1, self.tickets_reserved + self.tickets_failed)) * 100:.1f}%")
         console.print("\n[green]✅ Shutdown complete![/green]")
 
@@ -404,19 +314,16 @@ async def main():
     # Show active targets
     console.print("[cyan]🎯 Configured Targets:[/cyan]")
     active_count = 0
-    platforms = set()
     for target in settings.targets:
         if target.enabled:
             active_count += 1
             platform = target.platform.value if hasattr(target.platform, 'value') else str(target.platform)
-            platforms.add(platform.lower())
             console.print(f"  • {platform}: {target.event_name}")
     
     if active_count == 0:
         console.print("[red]  ❌ No targets enabled! Edit config.yaml to enable monitoring.[/red]")
         return
     
-    console.print(f"\n[green]ℹ️  Will use {len(platforms)} browser(s) total (one per platform)[/green]")
     console.print()
     
     # Run UI

@@ -8901,3 +8901,65 @@
 2025-06-11 22:04:25,012 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
 2025-06-11 22:04:26,017 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
 2025-06-11 22:04:27,020 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:11:56,247 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:13:22,028 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:13:57,824 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:13:59,755 - src.browser.launcher - ERROR - Cleanup error: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001033017a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001032f8efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102dc9400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102d9dad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102e49ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102e52b31 undetected_chromedriver + 981809
+6   undetected_chromedriver             0x0000000102e414a8 undetected_chromedriver + 910504
+7   undetected_chromedriver             0x0000000102e0d507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102e0e171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001032bf550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001032c34df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x000000010329a962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001032c3e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103289124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001032e6708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001032e68d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x00000001032f8ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-11 22:14:01,286 - src.browser.launcher - ERROR - Cleanup error: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001031167a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010310defa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102bde400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102bb2ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102c5eba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102c67b31 undetected_chromedriver + 981809
+6   undetected_chromedriver             0x0000000102c564a8 undetected_chromedriver + 910504
+7   undetected_chromedriver             0x0000000102c22507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102c23171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001030d4550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030d84df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001030af962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001030d8e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010309e124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001030fb708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030fb8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010310dac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-11 22:14:33,116 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:14:34,236 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:14:36,806 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:09,401 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:11,404 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:11,878 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:45,638 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:47,068 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:47,643 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:38:09,834 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-11 22:39:17,065 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed

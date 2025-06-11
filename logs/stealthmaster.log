@@ -9683,3 +9683,107 @@
 2025-06-11 22:04:25,012 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
 2025-06-11 22:04:26,017 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
 2025-06-11 22:04:27,020 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:11:51,888 - src.database.statistics - INFO - Started statistics session: ui_20250611_221151
+2025-06-11 22:11:51,895 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:11:53,875 - src.browser.launcher - INFO - Launched browser e28d5b26-f0e9-4743-b9ec-073ef6ab43d2 in 1978ms
+2025-06-11 22:11:56,188 - src.browser.launcher - INFO - ✅ Stealth test passed!
+2025-06-11 22:11:56,247 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:11:58,628 - src.browser.launcher - INFO - Launched browser 050cb2ae-e809-472a-b071-724910e3d5aa in 2373ms
+2025-06-11 22:11:59,142 - src.browser.launcher - INFO - Launched browser 672ddb4f-ea00-463b-9a15-d36aeba73860 in 2888ms
+2025-06-11 22:12:00,189 - src.browser.launcher - INFO - Launched browser d5191246-9b97-45ad-a51c-67788699c40c in 3933ms
+2025-06-11 22:13:16,785 - src.database.statistics - INFO - Started statistics session: ui_20250611_221316
+2025-06-11 22:13:16,787 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:13:18,740 - src.browser.launcher - INFO - Launched browser 1b855d69-f083-4c67-8c4b-bf3205bd98fd in 1952ms
+2025-06-11 22:13:21,972 - src.browser.launcher - INFO - ✅ Stealth test passed!
+2025-06-11 22:13:22,028 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:13:24,243 - src.browser.launcher - INFO - Launched browser 9fc7ac9f-53d1-4955-92f4-ad80fd306656 in 2207ms
+2025-06-11 22:13:25,768 - src.browser.launcher - INFO - Launched browser 49c8c28a-e104-46b4-b604-64ba4278e627 in 3732ms
+2025-06-11 22:13:26,287 - src.browser.launcher - INFO - Launched browser 9127bc8e-c00f-410c-8d43-6070d320050d in 4252ms
+2025-06-11 22:13:28,280 - src.database.statistics - INFO - Recorded ticket reserved: ticketmaster/Bruce Springsteen San Siro 2025/general
+2025-06-11 22:13:57,824 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:13:59,755 - src.browser.launcher - ERROR - Cleanup error: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001033017a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001032f8efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102dc9400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102d9dad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102e49ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102e52b31 undetected_chromedriver + 981809
+6   undetected_chromedriver             0x0000000102e414a8 undetected_chromedriver + 910504
+7   undetected_chromedriver             0x0000000102e0d507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102e0e171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001032bf550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001032c34df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x000000010329a962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001032c3e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103289124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001032e6708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001032e68d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x00000001032f8ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-11 22:13:59,821 - src.browser.launcher - INFO - Launched browser b3cf43af-37ad-4a82-9ad9-78b621ccc47e in 1994ms
+2025-06-11 22:14:01,286 - src.browser.launcher - ERROR - Cleanup error: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001031167a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010310defa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102bde400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102bb2ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102c5eba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102c67b31 undetected_chromedriver + 981809
+6   undetected_chromedriver             0x0000000102c564a8 undetected_chromedriver + 910504
+7   undetected_chromedriver             0x0000000102c22507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102c23171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001030d4550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030d84df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001030af962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001030d8e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010309e124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001030fb708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030fb8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010310dac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-11 22:14:01,710 - src.browser.launcher - INFO - Launched browser 16a3128a-c402-4c8e-aae7-af4e65b737aa in 1953ms
+2025-06-11 22:14:03,593 - src.browser.launcher - INFO - Launched browser 6c7ee03c-0276-460b-a02a-6a97a3329523 in 2304ms
+2025-06-11 22:14:33,116 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:14:34,236 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:14:35,087 - src.browser.launcher - INFO - Launched browser 9c54a30f-bace-4065-b2f6-79bac8f17a7c in 1967ms
+2025-06-11 22:14:36,345 - src.browser.launcher - INFO - Launched browser 8d2329f0-e436-4381-ae47-046cbdd4bcdd in 2108ms
+2025-06-11 22:14:36,806 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:14:38,339 - src.database.statistics - INFO - Recorded ticket reserved: vivaticket/Bruce Springsteen San Siro 2025/general
+2025-06-11 22:14:38,687 - src.browser.launcher - INFO - Launched browser 97bb500a-215a-493e-88e6-6f6589533f76 in 1881ms
+2025-06-11 22:15:09,401 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:11,404 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:11,415 - src.browser.launcher - INFO - Launched browser e161039d-3d81-45a1-bf6d-4cd056bd6525 in 2010ms
+2025-06-11 22:15:11,878 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:13,746 - src.browser.launcher - INFO - Launched browser 5398279d-89b8-4916-8092-7a69441a61ff in 2341ms
+2025-06-11 22:15:15,014 - src.browser.launcher - INFO - Launched browser c79b9eda-ef9f-475e-895b-21c435c4f6bd in 3132ms
+2025-06-11 22:15:45,638 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:47,068 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:47,643 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:15:47,961 - src.browser.launcher - INFO - Launched browser a91d25c4-b698-487e-ac18-ac603dde3780 in 2319ms
+2025-06-11 22:15:49,396 - src.browser.launcher - INFO - Launched browser 4185e73f-bfd1-4ebe-bf03-913771e213ba in 2326ms
+2025-06-11 22:15:50,686 - src.browser.launcher - INFO - Launched browser dfe3a1cf-66ac-4459-ab45-b955e5bdc3b4 in 3041ms
+2025-06-11 22:15:52,677 - src.database.statistics - INFO - Recorded ticket reserved: vivaticket/Bruce Springsteen San Siro 2025/general
+2025-06-11 22:19:18,593 - src.database.statistics - INFO - Started statistics session: ui_20250611_221918
+2025-06-11 22:19:18,595 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:19:20,975 - src.browser.launcher - INFO - Launched browser d9d80045-5c22-42ab-960f-bea26eebb7e1 in 2367ms
+2025-06-11 22:19:22,143 - src.browser.launcher - INFO - Launched browser 40a9eebd-d1e4-4181-809c-b0bdfc20ba04 in 3544ms
+2025-06-11 22:19:22,701 - src.browser.launcher - INFO - Launched browser 787957f2-9045-4bd1-ae99-941088c4469d in 4094ms
+2025-06-11 22:19:24,524 - src.database.statistics - INFO - Recorded ticket reserved: vivaticket/Bruce Springsteen San Siro 2025/general
+2025-06-11 22:38:09,824 - src.database.statistics - INFO - Started statistics session: ui_20250611_223809
+2025-06-11 22:38:09,827 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:38:09,834 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-11 22:38:11,894 - src.browser.launcher - INFO - Launched browser 5b8b6b64-a353-4c6a-a4d6-bcc5acacd25e in 2054ms
+2025-06-11 22:38:12,547 - src.browser.launcher - INFO - Launched browser bb4da2ab-16ab-40d5-91bf-a962b453f764 in 2705ms
+2025-06-11 22:38:12,878 - src.browser.launcher - INFO - Launched browser 58415876-b461-4bc2-bd6f-22bbabf27830 in 3043ms
+2025-06-11 22:38:44,039 - src.database.statistics - WARNING - Recorded ticket failure: vivaticket/Bruce Springsteen San Siro 2025/general - Sold out
+2025-06-11 22:38:44,060 - src.database.statistics - WARNING - Recorded ticket failure: fansale/Bruce Springsteen Milano 2025/general - Sold out
+2025-06-11 22:39:17,065 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed

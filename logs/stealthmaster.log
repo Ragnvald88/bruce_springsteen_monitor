@@ -9579,3 +9579,13 @@
 2025-06-11 20:56:58,313 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
 2025-06-11 20:57:00,026 - src.browser.launcher - INFO - Launched browser 371778e9-50e8-453a-8633-d2f7015bf9d5 in 1712ms
 2025-06-11 20:57:00,573 - src.browser.launcher - WARNING - ⚠️ Stealth test failed with score: 75
+2025-06-11 21:36:50,102 - src.database.statistics - INFO - Started statistics session: main_20250611_213650
+2025-06-11 21:36:50,104 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 21:36:50,105 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-11 21:36:52,931 - src.browser.launcher - INFO - Launched browser a018672c-7996-4d7a-9c2e-84d18e216303 in 2825ms
+2025-06-11 21:36:53,621 - src.browser.launcher - WARNING - ⚠️ Stealth test failed with score: 75
+2025-06-11 21:46:08,609 - src.database.statistics - INFO - Started statistics session: main_20250611_214608
+2025-06-11 21:46:08,613 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 21:46:08,614 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-11 21:46:09,851 - src.browser.launcher - INFO - Launched browser 08c196ef-6af4-4db3-83f6-9d3edbdab742 in 1236ms
+2025-06-11 21:46:10,714 - src.browser.launcher - WARNING - ⚠️ Stealth test failed with score: 75

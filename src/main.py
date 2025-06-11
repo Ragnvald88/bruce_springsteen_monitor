@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime
 import threading
-import tkinter as tk
 import time
 import random
+import os
 
 import click
 from rich.console import Console
@@ -26,7 +26,6 @@ try:
     from .utils.logging import setup_logging, get_logger
     from .browser.launcher import launcher
     from .ui.enhanced_dashboard import EnhancedDashboard
-    from .ui.modern_dashboard import ModernDashboard
     from .database.statistics import stats_manager
     from .detection.recovery import recovery_engine
 except ImportError:
@@ -41,7 +40,6 @@ except ImportError:
     from src.utils.logging import setup_logging, get_logger
     from src.browser.launcher import launcher
     from src.ui.enhanced_dashboard import EnhancedDashboard
-    from src.ui.modern_dashboard import ModernDashboard
     from src.database.statistics import stats_manager
     from src.detection.recovery import recovery_engine
 
@@ -102,31 +100,24 @@ class StealthMaster:
             await self._test_stealth()
             progress.update(task, description="✓ Stealth tests complete")
             
-            # Launch UI in separate thread
-            task = progress.add_task("Launching enhanced UI...", total=None)
+            # Launch UI
+            task = progress.add_task("Setting up monitoring...", total=None)
             self._launch_ui()
-            progress.update(task, description="✓ Enhanced dashboard launched")
+            progress.update(task, description="✓ Console monitoring ready")
         
         console.print("[green]✅ StealthMaster initialized successfully![/green]")
-        console.print("[cyan]📊 Dashboard opened in separate window[/cyan]")
     
     def _launch_ui(self):
-        """Launch the enhanced UI dashboard in a separate thread."""
-        def run_ui():
-            try:
-                self.dashboard = EnhancedDashboard()
-                # Connect dashboard to main app
-                self.dashboard.parent.protocol("WM_DELETE_WINDOW", self._on_ui_close)
-                self.dashboard.run()
-            except Exception as e:
-                logger.error(f"UI error: {e}")
-        
-        self.ui_thread = threading.Thread(target=run_ui, daemon=True)
-        self.ui_thread.start()
-        
-        # Give UI time to initialize
-        import time
-        time.sleep(1)
+        """Launch the enhanced UI dashboard."""
+        try:
+            # On macOS, Tkinter must run on the main thread
+            # So we'll skip the GUI dashboard for now and use console output
+            logger.info("Enhanced dashboard disabled on macOS - using console output")
+            console.print("[yellow]ℹ️  GUI Dashboard disabled on macOS - using console output[/yellow]")
+            self.dashboard = None
+        except Exception as e:
+            logger.error(f"UI error: {e}")
+            self.dashboard = None
     
     def _on_ui_close(self):
         """Handle UI window close."""
@@ -167,6 +158,7 @@ class StealthMaster:
             tasks = [
                 asyncio.create_task(self._monitor_loop()),
                 asyncio.create_task(self._maintenance_loop()),
+                asyncio.create_task(self._status_display_loop()),
             ]
             
             # Wait for shutdown
@@ -373,6 +365,32 @@ class StealthMaster:
                 
             except Exception as e:
                 logger.error(f"Maintenance error: {e}")
+    
+    async def _status_display_loop(self) -> None:
+        """Display status updates in console."""
+        while self.running:
+            try:
+                await asyncio.sleep(30)  # Update every 30 seconds
+                
+                # Get current stats
+                stats = stats_manager.get_summary()
+                active_monitors = len([m for m in self.monitors.values() if not m.done()])
+                
+                # Create status table
+                table = Table(title=f"StealthMaster Status - {datetime.now().strftime('%H:%M:%S')}")
+                table.add_column("Metric", style="cyan")
+                table.add_column("Value", style="green")
+                
+                table.add_row("Active Monitors", str(active_monitors))
+                table.add_row("Tickets Found", str(stats.get('total_found', 0)))
+                table.add_row("Tickets Reserved", str(stats.get('total_reserved', 0)))
+                table.add_row("Success Rate", f"{stats.get('overall_success_rate', 0):.1f}%")
+                table.add_row("Session Duration", str(datetime.now() - self.start_time).split('.')[0])
+                
+                console.print(table)
+                
+            except Exception as e:
+                logger.error(f"Status display error: {e}")
     
     def _show_startup_info(self) -> None:
         """Display startup information."""

@@ -69,6 +69,16 @@ class NodriverCore:
         """Create browser using undetected-chromedriver (no CDP detection)"""
         options = uc.ChromeOptions()
         
+        # On macOS, help UC find Chrome if needed
+        import os
+        chrome_path = os.getenv('CHROME_PATH', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+        if os.path.exists(chrome_path):
+            options.binary_location = chrome_path
+        
+        # Check if headless mode is requested
+        if kwargs.get('headless', False):
+            options.add_argument('--headless=new')  # New headless mode for Chrome
+        
         # V4 Optimizations - learned from V3's successes
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-setuid-sandbox')
@@ -98,8 +108,9 @@ class NodriverCore:
         # Language and timezone
         options.add_argument(f'--lang={fingerprint.get("language", "en-US")}')
         
-        # Create driver
-        driver = uc.Chrome(options=options, version_main=None)
+        # Create driver (UC is synchronous, so we run in executor)
+        loop = asyncio.get_event_loop()
+        driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options, version_main=None))
         
         # Apply runtime stealth patches
         await self._apply_runtime_patches(driver)

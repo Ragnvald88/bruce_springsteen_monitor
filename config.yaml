@@ -166,14 +166,14 @@ targets:
     url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
     enabled: true
     priority: "CRITICAL"
-    interval_s: 20
-    desired_sections: ["Prato", "Tribuna", "Primo Anello"]
+    interval_s: 30
+    desired_sections: []
     max_price_per_ticket: 800
-    min_ticket_quantity: 2
-    max_ticket_quantity: 4
+    min_ticket_quantity: 1
+    max_ticket_quantity: 8
     burst_mode:
       enabled: true
-      min_interval_s: 3
+      min_interval_s: 5
       duration_s: 300
       trigger_on_activity: true
       
@@ -181,13 +181,13 @@ targets:
   - platform: "ticketmaster"
     event_name: "Bruce Springsteen San Siro 2025"
     url: "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano"
-    enabled: true
+    enabled: true  # Set to true when you have credentials
     priority: "CRITICAL"
-    interval_s: 25
-    desired_sections: ["Floor", "Lower Bowl", "Club"]
+    interval_s: 30
+    desired_sections: []
     max_price_per_ticket: 750
-    min_ticket_quantity: 2
-    max_ticket_quantity: 4
+    min_ticket_quantity: 1
+    max_ticket_quantity: 8
     queue_config:
       auto_join: true
       maintain_presence: true

@@ -11,7 +11,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from .ml_resistant_behaviors import MLResistantBehaviors, BehaviorProfile
+# from .ml_resistant_behaviors import MLResistantBehaviors, BehaviorProfile
+
+# Simple behavior profile enum replacement
+class BehaviorProfile:
+    NORMAL = "normal"
+    CAUTIOUS = "cautious"
+    AGGRESSIVE = "aggressive"
 
 
 class HumanBehavior:
@@ -21,8 +27,8 @@ class HumanBehavior:
         """Initialize behavior simulator."""
         self.last_action_time = 0
         self.action_count = 0
-        # Use ML-resistant behaviors
-        self.ml_behaviors = MLResistantBehaviors(BehaviorProfile.NORMAL)
+        # Simple behavior profile
+        self.behavior_profile = BehaviorProfile.NORMAL
     
     async def initialize(self, page: Page) -> None:
         """Initialize human behavior for a page."""

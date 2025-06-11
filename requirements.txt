@@ -14,6 +14,7 @@ python-socks[asyncio]>=2.4.0
 pydantic>=2.5.2
 pydantic-settings>=2.1.0
 PyYAML>=6.0.1
+email-validator>=2.1.0
 
 # UI and Visualization
 textual>=0.44.0

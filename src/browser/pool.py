@@ -20,7 +20,6 @@ from playwright.async_api import Browser, Playwright, BrowserContext, Page, Requ
 
 try:
     from .launcher import NodriverBrowserLauncher
-    from .stealth_launcher import StealthBrowserLauncher
     from ..stealth.core import StealthCore
     from ..detection.monitor import DetectionMonitor, DetectionType, MonitoringLevel
     from ..network.tls_fingerprint import TLSFingerprintRotator
@@ -557,9 +556,9 @@ class EnhancedBrowserPool:
     ):
         self.settings = settings
         self.playwright = playwright
-        # Use V3 stealth launcher for CDP bypass
-        self.launcher = StealthBrowserLauncher(settings.browser_options)
-        self.stealth_core = StealthCoreV3()
+        # Use Nodriver launcher for CDP bypass
+        self.launcher = NodriverBrowserLauncher()
+        self.stealth_core = StealthCore()
         self.tls_rotator = TLSFingerprintRotator()
         self.detection_monitor = DetectionMonitor()
         

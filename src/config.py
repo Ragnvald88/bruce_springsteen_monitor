@@ -494,11 +494,11 @@ def load_settings(config_path: Optional[Path] = None) -> Settings:
     return Settings(
         app_settings=AppSettings(
             mode_configs={
-                "ultra_stealth": ModeConfig(max_concurrent_monitors=1, max_concurrent_strikes=1),
-                "stealth": ModeConfig(max_concurrent_monitors=2, max_concurrent_strikes=2),
-                "adaptive": ModeConfig(max_concurrent_monitors=3, max_concurrent_strikes=3),
-                "hybrid": ModeConfig(max_concurrent_monitors=4, max_concurrent_strikes=4),
-                "beast": ModeConfig(max_concurrent_monitors=8, max_concurrent_strikes=10),
+                "ultra_stealth": ModeConfig(max_concurrent_monitors=1, max_concurrent_strikes=1, max_connections=20, cache_size=500),
+                "stealth": ModeConfig(max_concurrent_monitors=2, max_concurrent_strikes=2, max_connections=30, cache_size=750),
+                "adaptive": ModeConfig(max_concurrent_monitors=3, max_concurrent_strikes=3, max_connections=50, cache_size=1000),
+                "hybrid": ModeConfig(max_concurrent_monitors=4, max_concurrent_strikes=4, max_connections=75, cache_size=1500),
+                "beast": ModeConfig(max_concurrent_monitors=8, max_concurrent_strikes=10, max_connections=100, cache_size=2000),
             }
         ),
         monitoring_settings=MonitoringSettings(),

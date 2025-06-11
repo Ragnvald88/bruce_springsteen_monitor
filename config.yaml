@@ -193,6 +193,21 @@ targets:
       maintain_presence: true
       multi_tab_protection: false
 
+  # Vivaticket - Bruce Springsteen San Siro
+  - platform: "Vivaticket"
+    event_name: "Bruce Springsteen San Siro 2025"
+    url: "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526"
+    enabled: true  # Set to true when you have credentials
+    priority: "CRITICAL"
+    interval_s: 30
+    desired_sections: []
+    max_price_per_ticket: 750
+    min_ticket_quantity: 1
+    max_ticket_quantity: 8
+    queue_config:
+      auto_join: true
+      maintain_presence: true
+      multi_tab_protection: false
 # =============================================================================
 # The rest of the configuration...
 # =============================================================================

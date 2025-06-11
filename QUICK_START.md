@@ -15,9 +15,14 @@
 
 ### Option 2: Direct Python execution
 ```bash
-source venv/bin/activate
-python -m src.main
+python stealthmaster.py
 ```
+
+Both options launch the **Live Dashboard UI** showing:
+- 📊 Real-time monitoring status for each platform
+- 🎯 Tickets found/reserved counters
+- 📈 Success rate tracking
+- ⏱️ Next check countdown
 
 ## 📋 Current Configuration
 

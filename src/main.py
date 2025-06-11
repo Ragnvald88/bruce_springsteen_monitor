@@ -25,7 +25,7 @@ try:
     from .profiles.manager import ProfileManager
     from .utils.logging import setup_logging, get_logger
     from .browser.launcher import launcher
-    from .ui.enhanced_dashboard import EnhancedDashboard
+    from .ui.terminal_dashboard import StealthMasterDashboard
     from .database.statistics import stats_manager
     from .detection.recovery import recovery_engine
 except ImportError:
@@ -39,7 +39,7 @@ except ImportError:
     from src.profiles.manager import ProfileManager
     from src.utils.logging import setup_logging, get_logger
     from src.browser.launcher import launcher
-    from src.ui.enhanced_dashboard import EnhancedDashboard
+    from src.ui.terminal_dashboard import StealthMasterDashboard
     from src.database.statistics import stats_manager
     from src.detection.recovery import recovery_engine
 

@@ -9589,3 +9589,97 @@
 2025-06-11 21:46:08,614 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
 2025-06-11 21:46:09,851 - src.browser.launcher - INFO - Launched browser 08c196ef-6af4-4db3-83f6-9d3edbdab742 in 1236ms
 2025-06-11 21:46:10,714 - src.browser.launcher - WARNING - ⚠️ Stealth test failed with score: 75
+2025-06-11 21:50:35,703 - src.database.statistics - INFO - Started statistics session: main_20250611_215035
+2025-06-11 21:50:35,706 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 21:50:38,508 - src.browser.launcher - INFO - Launched browser 80d65b3e-0812-4a4d-aec5-1513f142b367 in 2800ms
+2025-06-11 21:50:42,130 - src.browser.launcher - INFO - ✅ Stealth test passed!
+2025-06-11 21:50:42,201 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 21:50:42,202 - src.main - INFO - Enhanced dashboard disabled on macOS - using console output
+2025-06-11 21:50:42,582 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-11 21:50:44,044 - src.browser.launcher - INFO - Launched browser 2f9f3a6c-c9ae-40b6-bcb0-545892e1eb42 in 1838ms
+2025-06-11 21:50:44,144 - src.browser.launcher - INFO - Launched browser e449915e-878a-4936-9ec0-2c3bb0830eeb in 1937ms
+2025-06-11 21:50:45,301 - src.detection.recovery - ERROR - Detection failed: asyncio.run() cannot be called from a running event loop
+2025-06-11 21:50:45,306 - src.detection.recovery - INFO - Auto-detected issue: unknown
+2025-06-11 21:50:45,308 - src.detection.recovery - WARNING - No recovery strategy for DetectionType.UNKNOWN
+2025-06-11 21:50:45,638 - src.main - ERROR - Target monitoring error: 'Target' object has no attribute 'ticket_type'
+2025-06-11 21:50:46,857 - src.detection.recovery - INFO - Auto-detected issue: captcha
+2025-06-11 21:50:46,858 - src.detection.recovery - INFO - CAPTCHA detected - waiting for manual solve...
+2025-06-11 21:50:48,271 - src.browser.launcher - INFO - Launched browser f904e430-7d4f-4818-8366-53bed8591d6e in 1064ms
+2025-06-11 21:50:48,887 - src.detection.recovery - ERROR - Detection failed: asyncio.run() cannot be called from a running event loop
+2025-06-11 21:50:48,888 - src.detection.recovery - INFO - Auto-detected issue: unknown
+2025-06-11 21:50:48,889 - src.detection.recovery - WARNING - No recovery strategy for DetectionType.UNKNOWN
+2025-06-11 21:50:49,285 - src.main - ERROR - Target monitoring error: 'Target' object has no attribute 'ticket_type'
+2025-06-11 21:50:53,316 - src.browser.launcher - INFO - Launched browser ff67f3c2-16f2-4618-8089-ac50a8c547e2 in 1107ms
+2025-06-11 21:50:53,908 - src.detection.recovery - ERROR - Detection failed: asyncio.run() cannot be called from a running event loop
+2025-06-11 21:50:53,909 - src.detection.recovery - INFO - Auto-detected issue: unknown
+2025-06-11 21:50:53,909 - src.detection.recovery - WARNING - No recovery strategy for DetectionType.UNKNOWN
+2025-06-11 21:50:54,224 - src.main - ERROR - Target monitoring error: 'Target' object has no attribute 'ticket_type'
+2025-06-11 21:50:58,253 - src.browser.launcher - INFO - Launched browser 789673cc-ec13-4dfc-b21e-f2fe1ac9d6b7 in 1042ms
+2025-06-11 21:50:58,535 - src.detection.recovery - ERROR - Detection failed: asyncio.run() cannot be called from a running event loop
+2025-06-11 21:50:58,536 - src.detection.recovery - INFO - Auto-detected issue: unknown
+2025-06-11 21:50:58,536 - src.detection.recovery - WARNING - No recovery strategy for DetectionType.UNKNOWN
+2025-06-11 21:50:58,838 - src.main - ERROR - Target monitoring error: 'Target' object has no attribute 'ticket_type'
+2025-06-11 21:51:03,285 - src.browser.launcher - INFO - Launched browser c00c09bd-8ed4-459e-a6f3-6fbdee082499 in 1072ms
+2025-06-11 21:51:03,880 - src.detection.recovery - ERROR - Detection failed: asyncio.run() cannot be called from a running event loop
+2025-06-11 21:51:03,881 - src.detection.recovery - INFO - Auto-detected issue: unknown
+2025-06-11 21:51:03,882 - src.detection.recovery - WARNING - No recovery strategy for DetectionType.UNKNOWN
+2025-06-11 21:51:04,250 - src.main - ERROR - Target monitoring error: 'Target' object has no attribute 'ticket_type'
+2025-06-11 22:03:27,793 - src.database.statistics - INFO - Started statistics session: simple_20250611_220327
+2025-06-11 22:03:27,795 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:03:29,731 - src.browser.launcher - INFO - Launched browser 10e985b5-056d-4ad6-b8d0-f8b6291e15b8 in 1934ms
+2025-06-11 22:03:32,712 - src.browser.launcher - INFO - ✅ Stealth test passed!
+2025-06-11 22:03:32,769 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:03:32,780 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:32,782 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:33,788 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:34,795 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:35,804 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:36,807 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:37,811 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:38,817 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:39,820 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:40,825 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:41,830 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:42,836 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:43,840 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:44,845 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:45,850 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:46,857 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:47,860 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:48,865 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:49,872 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:50,876 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:51,882 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:52,887 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:53,892 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:54,898 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:55,902 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:56,905 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:57,909 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:58,912 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:03:59,916 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:00,922 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:01,926 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:02,932 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:03,939 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:04,945 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:05,949 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:06,952 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:07,955 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:11,541 - src.database.statistics - INFO - Started statistics session: simple_20250611_220411
+2025-06-11 22:04:11,542 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-11 22:04:13,458 - src.browser.launcher - INFO - Launched browser 3ded52b0-26d3-422a-b9c7-96026d3b2f2d in 1914ms
+2025-06-11 22:04:16,787 - src.browser.launcher - INFO - ✅ Stealth test passed!
+2025-06-11 22:04:16,978 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
+2025-06-11 22:04:16,980 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:16,982 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:17,984 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:18,987 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:19,992 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:20,997 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:22,002 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:23,006 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:24,008 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:25,012 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:26,017 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+2025-06-11 22:04:27,020 - src.database.statistics - ERROR - Failed to get summary: unsupported operand type(s) for +: 'NoneType' and 'NoneType'

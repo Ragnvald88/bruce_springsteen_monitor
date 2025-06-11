@@ -156,7 +156,7 @@ class V4RecoveryEngine:
             "by_type": {}
         }
     
-    def detect_issue(self, page: Any, error: Optional[Exception] = None) -> Optional[DetectionType]:
+    async def detect_issue(self, page: Any, error: Optional[Exception] = None) -> Optional[DetectionType]:
         """Detect what type of issue occurred"""
         try:
             # Check error message
@@ -175,7 +175,10 @@ class V4RecoveryEngine:
             # Check page content
             if hasattr(page, "content"):
                 # Playwright
-                content = asyncio.run(page.content())
+                try:
+                    content = await page.content()
+                except:
+                    content = ""
             else:
                 # Selenium
                 content = page.page_source
@@ -280,7 +283,7 @@ class V4RecoveryEngine:
         Returns:
             Success status
         """
-        detection_type = self.detect_issue(page, error)
+        detection_type = await self.detect_issue(page, error)
         
         if detection_type:
             logger.info(f"Auto-detected issue: {detection_type.value}")

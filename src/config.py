@@ -31,61 +31,6 @@ class Platform(str, Enum):
     VIVATICKET = "vivaticket"
 
 
-# ADDED: Priority system with semantic meaning
-class PriorityLevel(str, Enum):
-    """
-    Priority levels with behavioral implications.
-    Each level directly affects monitoring behavior and resource allocation.
-    """
-    LOW = "low"           # Check every 60-120s, minimal resources
-    NORMAL = "normal"     # Check every 30-60s, standard resources  
-    HIGH = "high"         # Check every 10-30s, elevated resources
-    URGENT = "urgent"     # Check every 5-10s, maximum resources
-    
-    @property
-    def interval_multiplier(self) -> float:
-        """Get interval multiplier (lower = more frequent checks)."""
-        multipliers = {
-            "low": 2.0,      # 2x slower than base interval
-            "normal": 1.0,   # Base interval
-            "high": 0.5,     # 2x faster than base
-            "urgent": 0.2    # 5x faster than base
-        }
-        return multipliers[self.value]
-    
-    @property
-    def resource_weight(self) -> int:
-        """Get resource allocation weight for scheduling."""
-        weights = {
-            "low": 1,
-            "normal": 3,
-            "high": 5,
-            "urgent": 10
-        }
-        return weights[self.value]
-    
-    @property
-    def max_retries(self) -> int:
-        """Get maximum retry attempts on failure."""
-        retries = {
-            "low": 1,
-            "normal": 3,
-            "high": 5,
-            "urgent": 10
-        }
-        return retries[self.value]
-    
-    @property
-    def burst_duration_multiplier(self) -> float:
-        """Get burst mode duration multiplier."""
-        multipliers = {
-            "low": 0.5,      # 50% of base duration
-            "normal": 1.0,   # Base duration
-            "high": 1.5,     # 150% of base duration
-            "urgent": 2.0    # 200% of base duration
-        }
-        return multipliers[self.value]
-
 
 class ProxyType(str, Enum):
     """Proxy protocol types."""
@@ -346,7 +291,6 @@ class Target(BaseModel):
     event_name: str
     url: HttpUrl
     enabled: bool = True
-    priority: PriorityLevel = PriorityLevel.NORMAL  # MODIFIED: Use PriorityLevel enum
     interval_s: int = Field(default=30, ge=5)
     
     # Ticket preferences

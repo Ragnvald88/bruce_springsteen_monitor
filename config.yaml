@@ -165,7 +165,6 @@ targets:
     event_name: "Bruce Springsteen Milano 2025"
     url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
     enabled: true
-    priority: "CRITICAL"
     interval_s: 30
     desired_sections: []
     max_price_per_ticket: 800
@@ -182,7 +181,6 @@ targets:
     event_name: "Bruce Springsteen San Siro 2025"
     url: "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano"
     enabled: true  # Set to true when you have credentials
-    priority: "CRITICAL"
     interval_s: 30
     desired_sections: []
     max_price_per_ticket: 750
@@ -194,11 +192,10 @@ targets:
       multi_tab_protection: false
 
   # Vivaticket - Bruce Springsteen San Siro
-  - platform: "Vivaticket"
+  - platform: "vivaticket"
     event_name: "Bruce Springsteen San Siro 2025"
     url: "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526"
     enabled: true  # Set to true when you have credentials
-    priority: "CRITICAL"
     interval_s: 30
     desired_sections: []
     max_price_per_ticket: 750

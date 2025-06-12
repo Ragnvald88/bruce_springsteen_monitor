@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StealthMaster Dashboard</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .selection-filter {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .selection-filter:hover {
+            transform: scale(1.05);
+        }
+        
+        .selection-filter.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+                        StealthMaster Dashboard
+                    </h1>
+                    <p class="text-gray-400 mt-2">Real-time ticket monitoring and statistics</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="live-indicator"></span>
+                    <span class="text-sm">Live</span>
+                    <span id="current-time" class="text-sm text-gray-400"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Tickets Found -->
+            <div class="glass stat-card p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-400 text-sm">Tickets Found</p>
+                        <h2 class="text-3xl font-bold mt-2" id="total-found">0</h2>
+                        <p class="text-green-400 text-sm mt-2">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="hourly-found">0</span> last hour
+                        </p>
+                    </div>
+                    <div class="bg-green-500/20 p-3 rounded-lg">
+                        <i class="fas fa-ticket text-green-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blocks Encountered -->
+            <div class="glass stat-card p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-400 text-sm">Blocks Encountered</p>
+                        <h2 class="text-3xl font-bold mt-2" id="total-blocked">0</h2>
+                        <p class="text-red-400 text-sm mt-2">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="hourly-blocked">0</span> last hour
+                        </p>
+                    </div>
+                    <div class="bg-red-500/20 p-3 rounded-lg">
+                        <i class="fas fa-ban text-red-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Rate -->
+            <div class="glass stat-card p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-400 text-sm">Success Rate</p>
+                        <h2 class="text-3xl font-bold mt-2">
+                            <span id="success-rate">0</span>%
+                        </h2>
+                        <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                            <div id="success-bar" class="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-purple-500/20 p-3 rounded-lg">
+                        <i class="fas fa-chart-line text-purple-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Monitors -->
+            <div class="glass stat-card p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-400 text-sm">Active Monitors</p>
+                        <h2 class="text-3xl font-bold mt-2" id="active-monitors">0</h2>
+                        <p class="text-blue-400 text-sm mt-2 pulse">
+                            <i class="fas fa-circle"></i> Running
+                        </p>
+                    </div>
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-eye text-blue-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selection Filters -->
+        <div class="glass p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Ticket Selections</h3>
+            <div class="flex flex-wrap gap-3" id="selection-filters">
+                <!-- Filters will be populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Daily Statistics -->
+            <div class="glass p-6">
+                <h3 class="text-xl font-semibold mb-4">Daily Statistics</h3>
+                <div class="chart-container">
+                    <canvas id="daily-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Platform Performance -->
+            <div class="glass p-6">
+                <h3 class="text-xl font-semibold mb-4">Platform Performance</h3>
+                <div class="chart-container">
+                    <canvas id="platform-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Events -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Tickets -->
+            <div class="glass p-6">
+                <h3 class="text-xl font-semibold mb-4">Recent Tickets Found</h3>
+                <div class="overflow-y-auto max-h-96" id="recent-tickets">
+                    <!-- Tickets will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Recent Blocks -->
+            <div class="glass p-6">
+                <h3 class="text-xl font-semibold mb-4">Recent Blocks</h3>
+                <div class="overflow-y-auto max-h-96" id="recent-blocks">
+                    <!-- Blocks will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Global variables
+        let dailyChart, platformChart;
+        let selectedFilter = null;
+        let updateInterval;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            loadSelectionFilters();
+            updateDashboard();
+            
+            // Update every 2 seconds
+            updateInterval = setInterval(updateDashboard, 2000);
+            
+            // Update time
+            setInterval(updateTime, 1000);
+            updateTime();
+        });
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Daily statistics chart
+            const dailyCtx = document.getElementById('daily-chart').getContext('2d');
+            dailyChart = new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Tickets Found',
+                        data: [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Blocks',
+                        data: [],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Platform performance chart
+            const platformCtx = document.getElementById('platform-chart').getContext('2d');
+            platformChart = new Chart(platformCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#6366f1',
+                            '#8b5cf6',
+                            '#ec4899',
+                            '#f59e0b'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load selection filters
+        async function loadSelectionFilters() {
+            try {
+                const response = await axios.get('/api/selections');
+                const { categories, counts } = response.data.data;
+                
+                const container = document.getElementById('selection-filters');
+                container.innerHTML = '';
+                
+                // Add "All" filter
+                container.innerHTML += `
+                    <button onclick="setFilter(null)" class="selection-filter ${!selectedFilter ? 'active' : ''} glass px-4 py-2 rounded-lg">
+                        <i class="fas fa-globe mr-2"></i>All
+                    </button>
+                `;
+                
+                // Add category filters
+                categories.forEach(cat => {
+                    const count = counts[cat.id] || 0;
+                    container.innerHTML += `
+                        <button onclick="setFilter('${cat.id}')" class="selection-filter ${selectedFilter === cat.id ? 'active' : ''} glass px-4 py-2 rounded-lg">
+                            <span class="mr-2">${cat.icon}</span>
+                            ${cat.name}
+                            <span class="ml-2 bg-gray-700 px-2 py-1 rounded text-xs">${count}</span>
+                        </button>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading filters:', error);
+            }
+        }
+
+        // Set filter
+        function setFilter(filter) {
+            selectedFilter = filter;
+            loadSelectionFilters();
+            updateDashboard();
+        }
+
+        // Update dashboard
+        async function updateDashboard() {
+            try {
+                // Get live stats
+                const liveResponse = await axios.get('/api/stats/live');
+                const liveData = liveResponse.data.data;
+                
+                // Update counters
+                document.getElementById('total-found').textContent = liveData.total_found;
+                document.getElementById('total-blocked').textContent = liveData.total_blocked;
+                document.getElementById('success-rate').textContent = liveData.success_rate.toFixed(1);
+                document.getElementById('success-bar').style.width = liveData.success_rate + '%';
+                document.getElementById('active-monitors').textContent = liveData.active_monitors;
+                document.getElementById('hourly-found').textContent = liveData.hourly_found;
+                document.getElementById('hourly-blocked').textContent = liveData.hourly_blocked;
+                
+                // Get historical data
+                const historyResponse = await axios.get('/api/stats/history?days=7');
+                const historyData = historyResponse.data.data;
+                
+                // Update daily chart
+                updateDailyChart(historyData.daily);
+                
+                // Update platform chart
+                updatePlatformChart(historyData.platforms);
+                
+                // Update recent events
+                updateRecentTickets();
+                updateRecentBlocks();
+                
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+            }
+        }
+
+        // Update daily chart
+        function updateDailyChart(data) {
+            dailyChart.data.labels = data.map(d => new Date(d.date).toLocaleDateString());
+            dailyChart.data.datasets[0].data = data.map(d => d.tickets_found);
+            dailyChart.data.datasets[1].data = data.map(d => d.blocks);
+            dailyChart.update();
+        }
+
+        // Update platform chart
+        function updatePlatformChart(data) {
+            const platforms = Object.keys(data);
+            const found = platforms.map(p => data[p].found);
+            
+            platformChart.data.labels = platforms;
+            platformChart.data.datasets[0].data = found;
+            platformChart.update();
+        }
+
+        // Update recent tickets
+        async function updateRecentTickets() {
+            try {
+                const url = selectedFilter ? 
+                    `/api/tickets/recent?limit=20&selection=${selectedFilter}` : 
+                    '/api/tickets/recent?limit=20';
+                    
+                const response = await axios.get(url);
+                const tickets = response.data.data;
+                
+                const container = document.getElementById('recent-tickets');
+                container.innerHTML = '';
+                
+                if (tickets.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400">No tickets found yet</p>';
+                    return;
+                }
+                
+                tickets.reverse().forEach(ticket => {
+                    const time = new Date(ticket.timestamp).toLocaleTimeString();
+                    container.innerHTML += `
+                        <div class="border-b border-gray-700 py-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">${ticket.event}</p>
+                                    <p class="text-sm text-gray-400">
+                                        ${ticket.platform} • ${ticket.selection} 
+                                        ${ticket.price ? `• €${ticket.price}` : ''}
+                                    </p>
+                                </div>
+                                <span class="text-xs text-gray-500">${time}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error updating tickets:', error);
+            }
+        }
+
+        // Update recent blocks
+        async function updateRecentBlocks() {
+            try {
+                const response = await axios.get('/api/blocks/recent?limit=20');
+                const blocks = response.data.data;
+                
+                const container = document.getElementById('recent-blocks');
+                container.innerHTML = '';
+                
+                if (blocks.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400">No blocks encountered</p>';
+                    return;
+                }
+                
+                blocks.reverse().forEach(block => {
+                    const time = new Date(block.timestamp).toLocaleTimeString();
+                    const icon = block.reason.includes('captcha') ? 'fa-robot' : 'fa-ban';
+                    
+                    container.innerHTML += `
+                        <div class="border-b border-gray-700 py-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold text-red-400">
+                                        <i class="fas ${icon} mr-2"></i>${block.reason}
+                                    </p>
+                                    <p class="text-sm text-gray-400">${block.platform}</p>
+                                </div>
+                                <span class="text-xs text-gray-500">${time}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error updating blocks:', error);
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
+    </script>
+</body>
+</html>

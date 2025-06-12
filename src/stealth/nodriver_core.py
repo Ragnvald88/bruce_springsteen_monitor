@@ -57,6 +57,12 @@ class NodriverCore:
             "successful_operations": 0
         }
     
+    def add_residential_proxy(self, proxy: str):
+        """Add a residential proxy to the pool"""
+        if proxy not in self.residential_proxies:
+            self.residential_proxies.append(proxy)
+            logger.debug(f"Added residential proxy: {proxy.split('@')[-1] if '@' in proxy else proxy}")
+    
     async def create_stealth_browser(self, **kwargs) -> Dict[str, Any]:
         """
         Create truly undetectable browser instance
@@ -127,8 +133,28 @@ class NodriverCore:
             try:
                 # For IPRoyal and other authenticated proxies
                 proxy_url = proxy_config["server"]
+                username = proxy_config.get('username', '')
+                password = proxy_config.get('password', '')
                 
-                if '@' in proxy_url:
+                # Check if we have separate username/password or embedded in URL
+                if username and password and '@' not in proxy_url:
+                    # Username and password provided separately
+                    # Extract host and port from server URL
+                    proxy_url_clean = proxy_url.replace('http://', '').replace('https://', '')
+                    
+                    if ':' in proxy_url_clean:
+                        host, port = proxy_url_clean.split(':', 1)
+                    else:
+                        host = proxy_url_clean
+                        port = '8080'  # Default proxy port
+                    
+                    # Create proxy auth extension
+                    extension_path = create_proxy_auth_extension(username, password, host, port)
+                    options.add_extension(extension_path)
+                    
+                    logger.info(f"🌐 Using authenticated proxy: {host}:{port} with user: {username}")
+                    logger.info(f"🔐 Proxy auth extension created at: {extension_path}")
+                elif '@' in proxy_url:
                     # Extract proxy components for authenticated proxy
                     proxy_url_clean = proxy_url.replace('http://', '').replace('https://', '')
                     parts = proxy_url_clean.split('@')
@@ -136,9 +162,9 @@ class NodriverCore:
                     if len(parts) == 2:
                         auth_part, host_part = parts
                         
-                        # Use provided username/password from config
-                        username = proxy_config.get('username', '')
-                        password = proxy_config.get('password', '')
+                        # Extract username/password from URL if not provided separately
+                        if ':' in auth_part and not username:
+                            username, password = auth_part.split(':', 1)
                         
                         # Extract host and port
                         if ':' in host_part:
@@ -151,7 +177,8 @@ class NodriverCore:
                         extension_path = create_proxy_auth_extension(username, password, host, port)
                         options.add_extension(extension_path)
                         
-                        logger.info(f"Using authenticated proxy: {host}:{port} with user: {username}")
+                        logger.info(f"🌐 Using authenticated proxy: {host}:{port} with user: {username}")
+                        logger.info(f"🔐 Proxy auth extension created at: {extension_path}")
                     else:
                         logger.warning(f"Invalid proxy URL format: {proxy_url}")
                         options.add_argument(f'--proxy-server={proxy_url}')
@@ -169,8 +196,10 @@ class NodriverCore:
         options.add_argument(f'--lang={fingerprint.get("language", "en-US")}')
         
         # Create driver (UC is synchronous, so we run in executor)
+        logger.info("🚀 Launching Chrome with undetected-chromedriver...")
         loop = asyncio.get_event_loop()
         driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options, version_main=None))
+        logger.info("✅ Chrome browser launched successfully")
         
         # Wait a bit for the browser to stabilize
         await asyncio.sleep(0.5)

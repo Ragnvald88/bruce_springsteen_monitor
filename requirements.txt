@@ -35,3 +35,11 @@ flake8>=6.1.0
 mypy>=1.7.1
 pytest>=7.4.3
 pytest-asyncio>=0.21.1
+
+# Web Dashboard
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Database
+aiosqlite>=0.19.0
+sqlalchemy>=2.0.0

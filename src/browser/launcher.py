@@ -29,11 +29,12 @@ class NodriverBrowserLauncher:
     Provides undetectable browser automation
     """
     
-    def __init__(self):
+    def __init__(self, settings=None):
         self.browsers: Dict[str, Any] = {}
         self.contexts: Dict[str, Any] = {}
         self.fingerprints: Dict[str, Any] = {}
         self._session_id = f"launcher_{uuid.uuid4().hex[:8]}"
+        self.settings = settings
         
         # Performance tracking
         self._launch_times: List[float] = []
@@ -47,13 +48,20 @@ class NodriverBrowserLauncher:
     
     def _configure_proxies(self):
         """Configure residential proxies from config"""
-        proxy_config = {}
+        if not self.settings or not hasattr(self.settings, 'proxy_settings'):
+            logger.warning("No proxy settings available")
+            return
+            
+        proxy_settings = self.settings.proxy_settings
         
-        if proxy_config.get("enabled", False):
-            proxy_list = proxy_config.get("residential", [])
+        if proxy_settings.enabled:
+            proxy_list = proxy_settings.primary_pool
             for proxy in proxy_list:
-                nodriver_core.add_residential_proxy(proxy)
-            logger.info(f"Configured {len(proxy_list)} residential proxies")
+                # Format proxy for nodriver
+                if hasattr(proxy, 'host'):
+                    proxy_str = f"{proxy.type}://{proxy.username}:{proxy.password}@{proxy.host}:{proxy.port}"
+                    nodriver_core.add_residential_proxy(proxy_str)
+            logger.info(f"Configured {len(proxy_list)} residential proxies from settings")
     
     async def launch_browser(self, proxy=None, **kwargs) -> str:
         """
@@ -71,6 +79,21 @@ class NodriverBrowserLauncher:
         try:
             # Set session-specific fingerprint
             fingerprint_generator.set_session_id(browser_id)
+            
+            # Get proxy from settings if not provided
+            if not proxy and self.settings and hasattr(self.settings, 'proxy_settings'):
+                if self.settings.proxy_settings.enabled and self.settings.proxy_settings.primary_pool:
+                    # Select first proxy from pool
+                    proxy_config = self.settings.proxy_settings.primary_pool[0]
+                    proxy = {
+                        'server': f"{proxy_config.type}://{proxy_config.host}:{proxy_config.port}",
+                        'username': proxy_config.username,
+                        'password': proxy_config.password
+                    }
+                    logger.info(f"🌐 Using proxy from settings: {proxy_config.host}:{proxy_config.port}")
+                    logger.debug(f"Proxy type: {proxy_config.type}, Username: {proxy_config.username}")
+                else:
+                    logger.warning("⚠️ No proxy configured - using direct connection")
             
             # Add proxy to kwargs if provided
             if proxy:

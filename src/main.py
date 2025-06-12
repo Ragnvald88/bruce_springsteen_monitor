@@ -26,6 +26,7 @@ try:
     from .utils.logging import setup_logging, get_logger
     from .browser.launcher import launcher
     from .ui.terminal_dashboard import StealthMasterDashboard
+    from .ui.web_dashboard import StealthMasterDashboard as WebDashboard
     from .database.statistics import stats_manager
     from .detection.recovery import recovery_engine
 except ImportError:
@@ -40,6 +41,7 @@ except ImportError:
     from src.utils.logging import setup_logging, get_logger
     from src.browser.launcher import launcher
     from src.ui.terminal_dashboard import StealthMasterDashboard
+    from src.ui.web_dashboard import StealthMasterDashboard as WebDashboard
     from src.database.statistics import stats_manager
     from src.detection.recovery import recovery_engine
 
@@ -60,12 +62,17 @@ class StealthMaster:
         
         # Core components
         self.profile_manager = ProfileManager(settings)
+        # Update the launcher singleton with settings
+        launcher.settings = settings
+        # Reconfigure proxies with new settings
+        launcher._configure_proxies()
         self.browser_launcher = launcher
         self.recovery_engine = recovery_engine
         self.stats_manager = stats_manager
         
         # UI components
         self.dashboard = None
+        self.web_dashboard = None
         self.ui_thread = None
         
         # Session tracking
@@ -110,14 +117,18 @@ class StealthMaster:
     def _launch_ui(self):
         """Launch the enhanced UI dashboard."""
         try:
-            # On macOS, Tkinter must run on the main thread
-            # So we'll skip the GUI dashboard for now and use console output
-            logger.info("Enhanced dashboard disabled on macOS - using console output")
-            console.print("[yellow]ℹ️  GUI Dashboard disabled on macOS - using console output[/yellow]")
+            # Launch web dashboard instead of Tkinter on macOS
+            logger.info("🚀 Launching web dashboard...")
+            self.web_dashboard = WebDashboard()
+            self.web_dashboard.start()
+            console.print("[green]✅ Web dashboard started at http://127.0.0.1:5000[/green]")
+            
+            # Original terminal dashboard disabled
             self.dashboard = None
         except Exception as e:
             logger.error(f"UI error: {e}")
             self.dashboard = None
+            self.web_dashboard = None
     
     def _on_ui_close(self):
         """Handle UI window close."""
@@ -209,6 +220,17 @@ class StealthMaster:
         
         try:
             async with self.browser_launcher.get_page(platform=target.platform.value) as page:
+                # Check IP address to verify proxy
+                try:
+                    from .utils.ip_checker import check_ip_address
+                    logger.info("🔍 Checking IP address to verify proxy...")
+                    ip_result = await check_ip_address(page)
+                    if ip_result["success"]:
+                        console.print(f"[cyan]🌍 Current IP: {ip_result['ip']}[/cyan]")
+                    else:
+                        logger.warning("⚠️ Could not verify IP address")
+                except Exception as e:
+                    logger.debug(f"IP check failed: {e}")
                 # Navigate to platform
                 platform_urls = {
                     "ticketmaster": "https://www.ticketmaster.com",
@@ -218,12 +240,21 @@ class StealthMaster:
                 
                 url = platform_urls.get(target.platform.value, target.url)
                 console.print(f"[cyan]🌐 Navigating to {url} for {target.event_name}[/cyan]")
+                logger.info(f"📍 Target URL: {url}")
                 
-                if hasattr(page, "goto"):
-                    await page.goto(url, wait_until='domcontentloaded', timeout=30000)
-                else:
-                    page.get(url)
-                    await asyncio.sleep(2)
+                try:
+                    if hasattr(page, "goto"):
+                        logger.debug("Using Playwright navigation...")
+                        response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                        logger.info(f"📡 Response status: {response.status if response else 'N/A'}")
+                    else:
+                        logger.debug("Using Selenium navigation...")
+                        page.get(url)
+                        await asyncio.sleep(2)
+                        logger.info(f"📍 Current URL: {page.current_url}")
+                except Exception as e:
+                    logger.error(f"❌ Navigation failed: {e}")
+                    raise
                 
                 # Log successful navigation
                 if self.dashboard:
@@ -235,60 +266,90 @@ class StealthMaster:
                 # Monitoring loop
                 while self.running and target.event_name in self.monitors:
                     try:
-                        # Simulate ticket search
-                        search_time = (time.time() - search_start) * 1000
+                        # Check page status and content
+                        logger.info(f"🔍 Checking page status for {target.event_name}")
                         
-                        # Record that we found tickets (simulation)
-                        if search_time > 1000:  # After 1 second, "find" tickets
-                            stats_manager.record_ticket_found(
-                                target.platform.value,
-                                target.event_name,
-                                target.ticket_type,
-                                search_time
-                            )
+                        # Check if we're blocked or hit a captcha
+                        is_blocked = False
+                        block_reason = None
+                        
+                        if hasattr(page, "evaluate"):
+                            # Playwright - check for common block indicators
+                            page_content = await page.evaluate("() => document.body.innerText || ''")
+                            page_title = await page.evaluate("() => document.title")
+                            current_url = page.url
+                        else:
+                            # Selenium
+                            page_content = page.execute_script("return document.body.innerText || ''")
+                            page_title = page.execute_script("return document.title")
+                            current_url = page.current_url
+                        
+                        # Log current page info
+                        logger.debug(f"Page title: {page_title}")
+                        logger.debug(f"Current URL: {current_url}")
+                        
+                        # Check for blocks/captchas
+                        block_indicators = [
+                            ("Access Denied", "access_denied"),
+                            ("403 Forbidden", "forbidden"),
+                            ("Please verify you are a human", "captcha"),
+                            ("One more step", "cloudflare"),
+                            ("Pardon Our Interruption", "bot_detection"),
+                            ("blocked", "blocked"),
+                            ("captcha", "captcha"),
+                            ("challenge", "challenge"),
+                            ("Are you a robot", "robot_check")
+                        ]
+                        
+                        for indicator, reason in block_indicators:
+                            if indicator.lower() in page_content.lower() or indicator.lower() in page_title.lower():
+                                is_blocked = True
+                                block_reason = reason
+                                break
+                        
+                        if is_blocked:
+                            logger.warning(f"⚠️ BLOCKED on {target.platform.value}: {block_reason}")
+                            console.print(f"[red]❌ Blocked on {target.platform.value} - Reason: {block_reason}[/red]")
+                            
+                            # Report to web dashboard
+                            if self.web_dashboard:
+                                self.web_dashboard.add_block_encountered(
+                                    target.platform.value,
+                                    block_reason
+                                )
                             
                             if self.dashboard:
                                 self.dashboard.add_log_entry(
-                                    f"Found tickets for {target.event_name}!",
-                                    "success"
+                                    f"BLOCKED on {target.platform.value}: {block_reason}",
+                                    "error"
                                 )
                             
-                            # Simulate reservation attempt
-                            if target.platform.value in ["fansale", "vivaticket"]:
-                                # Higher success rate for easier platforms
-                                reserve_success = random.random() > 0.2
+                            # Try recovery
+                            logger.info("🔧 Attempting recovery...")
+                            if await self.recovery_engine.auto_recover(page, Exception(f"Blocked: {block_reason}")):
+                                logger.info("✅ Recovery successful, continuing...")
+                                await asyncio.sleep(5)  # Wait before retrying
+                                continue
                             else:
-                                # Lower success rate for Ticketmaster
-                                reserve_success = random.random() > 0.7
-                            
-                            if reserve_success:
-                                stats_manager.record_ticket_reserved(
-                                    target.platform.value,
-                                    target.event_name,
-                                    target.ticket_type,
-                                    random.uniform(100, 500)
-                                )
-                                
-                                if self.dashboard:
-                                    self.dashboard.add_log_entry(
-                                        f"Successfully reserved ticket for {target.event_name}!",
-                                        "success"
-                                    )
-                            else:
-                                stats_manager.record_ticket_failed(
-                                    target.platform.value,
-                                    target.event_name,
-                                    target.ticket_type,
-                                    "Sold out"
-                                )
-                                
-                                if self.dashboard:
-                                    self.dashboard.add_log_entry(
-                                        f"Failed to reserve ticket for {target.event_name} - Sold out",
-                                        "error"
-                                    )
-                            
-                            search_start = time.time()  # Reset for next search
+                                logger.error("❌ Recovery failed, stopping monitor")
+                                break
+                        
+                        # If not blocked, check for actual content
+                        logger.info(f"✅ Page accessible, searching for {target.event_name}")
+                        
+                        # Search for tickets with different selections
+                        await self._search_for_tickets(page, target, page_content)
+                        
+                        # Update monitor status
+                        if self.web_dashboard:
+                            self.web_dashboard.update_active_monitor(
+                                target.event_name,
+                                "active",
+                                {"platform": target.platform.value, "last_check": datetime.now().isoformat()}
+                            )
+                        
+                        # Wait before next check
+                        await asyncio.sleep(target.interval_s)
                     
                     except Exception as e:
                         # Try recovery
@@ -316,6 +377,96 @@ class StealthMaster:
             # Clean up
             if target.event_name in self.monitors:
                 del self.monitors[target.event_name]
+    
+    async def _search_for_tickets(self, page: Any, target: Any, page_content: str) -> None:
+        """Search for tickets with different selections"""
+        try:
+            # Define ticket selections to search for
+            selections = {
+                'seated': ['seated', 'posti a sedere', 'tribuna', 'grandstand'],
+                'prato_a': ['prato a', 'lawn a', 'general admission a', 'ga a'],
+                'prato_b': ['prato b', 'lawn b', 'general admission b', 'ga b'],
+                'pit': ['pit', 'parterre', 'standing'],
+                'vip': ['vip', 'gold', 'premium', 'hospitality']
+            }
+            
+            # Search for each selection type
+            for selection_type, keywords in selections.items():
+                for keyword in keywords:
+                    if keyword.lower() in page_content.lower():
+                        # Check if tickets are actually available (not sold out)
+                        sold_out_indicators = ['sold out', 'esaurito', 'non disponibile', 'unavailable']
+                        is_sold_out = any(indicator in page_content.lower() for indicator in sold_out_indicators)
+                        
+                        if not is_sold_out:
+                            # Found available tickets!
+                            logger.info(f"🎫 Found {selection_type} tickets for {target.event_name}!")
+                            console.print(f"[green]🎫 Found {selection_type} tickets for {target.event_name}![/green]")
+                            
+                            # Try to extract price if possible
+                            price = self._extract_price(page_content, keyword)
+                            
+                            # Report to web dashboard
+                            if self.web_dashboard:
+                                self.web_dashboard.add_ticket_found(
+                                    target.platform.value,
+                                    target.event_name,
+                                    selection_type,
+                                    price
+                                )
+                            
+                            # Record in stats
+                            stats_manager.record_ticket_found(
+                                target.platform.value,
+                                target.event_name,
+                                selection_type,
+                                time.time() * 1000
+                            )
+                            
+                            # Log to terminal dashboard
+                            if self.dashboard:
+                                self.dashboard.add_log_entry(
+                                    f"Found {selection_type} tickets for {target.event_name}!",
+                                    "success"
+                                )
+                            
+                            # Attempt to reserve (simulate for now)
+                            # In real implementation, this would click buttons and fill forms
+                            logger.info(f"🛒 Attempting to reserve {selection_type} ticket...")
+                            
+        except Exception as e:
+            logger.error(f"Error searching for tickets: {e}")
+    
+    def _extract_price(self, content: str, near_text: str) -> Optional[float]:
+        """Try to extract price from content near the given text"""
+        try:
+            # Simple price extraction - look for currency symbols
+            import re
+            
+            # Find the position of our keyword
+            pos = content.lower().find(near_text.lower())
+            if pos == -1:
+                return None
+            
+            # Look for prices in the surrounding text (within 200 chars)
+            surrounding = content[max(0, pos-100):pos+100]
+            
+            # Match common price patterns
+            price_patterns = [
+                r'€\s*(\d+(?:\.\d{2})?)',  # €100.00
+                r'EUR\s*(\d+(?:\.\d{2})?)',  # EUR 100.00
+                r'\$\s*(\d+(?:\.\d{2})?)',  # $100.00
+                r'(\d+(?:\.\d{2})?)\s*€',  # 100.00€
+            ]
+            
+            for pattern in price_patterns:
+                match = re.search(pattern, surrounding)
+                if match:
+                    return float(match.group(1))
+            
+            return None
+        except Exception:
+            return None
     
     async def _run_legacy_target_monitoring(self, target, browser_context, page) -> None:
         """Run monitoring for a specific target."""

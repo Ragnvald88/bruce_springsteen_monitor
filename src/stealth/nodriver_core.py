@@ -10,13 +10,26 @@ import time
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 
+from ..utils.logging import get_logger
+from .fingerprint import FingerprintGenerator
+from ..utils.proxy_auth_extension import create_proxy_auth_extension
+
+logger = get_logger(__name__)
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from playwright.async_api import Page, Browser, BrowserContext
+
+# Apply patch for Python 3.12+ compatibility before importing undetected_chromedriver
+try:
+    from ..utils import uc_patch
+except ImportError:
+    pass
     
 try:
     import undetected_chromedriver as uc
-except ImportError:
+except ImportError as e:
+    logger.warning(f"Failed to import undetected_chromedriver: {e}")
     uc = None
     
 try:
@@ -25,11 +38,6 @@ try:
 except ImportError:
     webdriver = None
     Service = None
-
-from ..utils.logging import get_logger
-from .fingerprint import FingerprintGenerator
-
-logger = get_logger(__name__)
 
 
 class NodriverCore:
@@ -67,6 +75,10 @@ class NodriverCore:
     
     async def _create_undetected_browser(self, **kwargs) -> Dict[str, Any]:
         """Create browser using undetected-chromedriver (no CDP detection)"""
+        if uc is None:
+            logger.error("undetected_chromedriver is not available, falling back to Playwright")
+            raise ImportError("undetected_chromedriver not available")
+        
         options = uc.ChromeOptions()
         
         # On macOS, help UC find Chrome if needed
@@ -86,6 +98,13 @@ class NodriverCore:
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--disable-features=IsolateOrigins,site-per-process')
         
+        # Additional stealth options for better proxy compatibility
+        options.add_argument('--disable-web-security')
+        options.add_argument('--disable-features=CrossSiteDocumentBlockingAlways,CrossSiteDocumentBlockingIfIsolating')
+        options.add_argument('--disable-site-isolation-trials')
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--allow-running-insecure-content')
+        
         # Performance optimizations from V3
         options.add_argument('--aggressive-cache-discard')
         options.add_argument('--disable-background-timer-throttling')
@@ -100,8 +119,49 @@ class NodriverCore:
         user_agent = fingerprint.get('userAgent', self._get_random_user_agent())
         options.add_argument(f'--user-agent={user_agent}')
         
-        # Proxy support
-        if self.proxy_rotation_enabled and self.residential_proxies:
+        # Proxy support with authentication
+        proxy_config = kwargs.get('proxy')
+        extension_path = None
+        
+        if proxy_config and proxy_config.get('server'):
+            try:
+                # For IPRoyal and other authenticated proxies
+                proxy_url = proxy_config["server"]
+                
+                if '@' in proxy_url:
+                    # Extract proxy components for authenticated proxy
+                    proxy_url_clean = proxy_url.replace('http://', '').replace('https://', '')
+                    parts = proxy_url_clean.split('@')
+                    
+                    if len(parts) == 2:
+                        auth_part, host_part = parts
+                        
+                        # Use provided username/password from config
+                        username = proxy_config.get('username', '')
+                        password = proxy_config.get('password', '')
+                        
+                        # Extract host and port
+                        if ':' in host_part:
+                            host, port = host_part.split(':', 1)
+                        else:
+                            host = host_part
+                            port = '8080'  # Default proxy port
+                        
+                        # Create proxy auth extension
+                        extension_path = create_proxy_auth_extension(username, password, host, port)
+                        options.add_extension(extension_path)
+                        
+                        logger.info(f"Using authenticated proxy: {host}:{port} with user: {username}")
+                    else:
+                        logger.warning(f"Invalid proxy URL format: {proxy_url}")
+                        options.add_argument(f'--proxy-server={proxy_url}')
+                else:
+                    # Non-authenticated proxy
+                    options.add_argument(f'--proxy-server={proxy_config["server"]}')
+            except Exception as e:
+                logger.error(f"Error configuring proxy: {e}")
+                # Continue without proxy rather than failing
+        elif self.proxy_rotation_enabled and self.residential_proxies:
             proxy = random.choice(self.residential_proxies)
             options.add_argument(f'--proxy-server={proxy}')
         
@@ -112,8 +172,19 @@ class NodriverCore:
         loop = asyncio.get_event_loop()
         driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options, version_main=None))
         
+        # Wait a bit for the browser to stabilize
+        await asyncio.sleep(0.5)
+        
         # Apply runtime stealth patches
         await self._apply_runtime_patches(driver)
+        
+        # Clean up extension file if created
+        if extension_path:
+            try:
+                import os
+                os.remove(extension_path)
+            except:
+                pass
         
         self._stats["sessions_created"] += 1
         
@@ -125,6 +196,13 @@ class NodriverCore:
     
     async def _apply_runtime_patches(self, driver):
         """Apply additional stealth patches at runtime"""
+        try:
+            # Check if driver is still valid
+            _ = driver.current_url
+        except Exception as e:
+            logger.warning(f"Driver may not be ready: {e}")
+            return
+            
         scripts = [
             # Remove webdriver property
             """

@@ -8963,3 +8963,36 @@ Stacktrace:
 2025-06-11 22:15:47,643 - src.browser.launcher - ERROR - Cleanup error: object NoneType can't be used in 'await' expression
 2025-06-11 22:38:09,834 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
 2025-06-11 22:39:17,065 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 17:33:02,537 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-12 17:33:40,485 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-12 17:34:12,736 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 17:34:14,563 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 21:04:50,718 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: too many values to unpack (expected 2)
+2025-06-12 21:38:25,773 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_78429.zip'
+2025-06-12 21:38:26,265 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_78429.zip'
+2025-06-12 21:38:57,814 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 21:39:36,295 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102ac47a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000102abbefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010258c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102560ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010260cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x000000010262ba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001026042b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x00000001025d0507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x00000001025d1171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000102a82550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x0000000102a864df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102a5d962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000102a86e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102a4c124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000102aa9708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x0000000102aa98d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000102abbac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 21:39:38,321 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed

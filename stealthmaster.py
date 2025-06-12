@@ -7,12 +7,48 @@ import os
 from pathlib import Path
 from datetime import datetime
 import random
+from dotenv import load_dotenv
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Set Chrome path
-os.environ['CHROME_PATH'] = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+# Load environment variables
+load_dotenv()
+
+# Auto-detect Chrome path
+def get_chrome_path():
+    """Auto-detect Chrome/Chromium path across different OS."""
+    paths = [
+        # macOS
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/Applications/Chromium.app/Contents/MacOS/Chromium',
+        # Linux
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser',
+        '/usr/bin/chromium',
+        # Windows
+        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    ]
+    
+    for path in paths:
+        if os.path.exists(path):
+            return path
+    
+    # Check if chrome is in PATH
+    import shutil
+    chrome_in_path = shutil.which('google-chrome') or shutil.which('chromium')
+    if chrome_in_path:
+        return chrome_in_path
+    
+    return None
+
+# Set Chrome path if found
+chrome_path = get_chrome_path()
+if chrome_path:
+    os.environ['CHROME_PATH'] = chrome_path
+else:
+    print("[yellow]⚠️  Chrome/Chromium not found. Please install Chrome or set CHROME_PATH environment variable.[/yellow]")
 
 from rich.console import Console
 from rich.table import Table
@@ -177,11 +213,18 @@ class StealthMasterUI:
         if platform_name not in self.browsers:
             console.print(f"[cyan]🌐 Creating browser for {platform_name}...[/cyan]")
             try:
-                browser_data = await self.browser_launcher.launch_browser()
+                # Get proxy settings for this platform
+                proxy_config = None
+                if self.settings.proxy_settings.enabled:
+                    proxy_config = self._get_proxy_for_platform(platform_name)
+                
+                browser_data = await self.browser_launcher.launch_browser(proxy=proxy_config)
                 self.browsers[platform_name] = {
                     'id': browser_data,
                     'page': None,
-                    'context': None
+                    'context': None,
+                    'last_used': datetime.now(),
+                    'request_count': 0
                 }
                 console.print(f"[green]✓ Browser created for {platform_name}[/green]")
             except Exception as e:
@@ -189,6 +232,24 @@ class StealthMasterUI:
                 raise
         
         return self.browsers[platform_name]['id']
+    
+    def _get_proxy_for_platform(self, platform_name: str):
+        """Get proxy configuration for a specific platform."""
+        if not self.settings.proxy_settings.primary_pool:
+            return None
+        
+        # For now, use the first proxy in the pool
+        # TODO: Implement proper proxy rotation
+        proxy = self.settings.proxy_settings.primary_pool[0]
+        
+        # Convert proxy settings to browser format
+        proxy_url = f"{proxy.type}://{proxy.username}:{proxy.password}@{proxy.host}:{proxy.port}"
+        
+        return {
+            'server': proxy_url,
+            'username': proxy.username,
+            'password': proxy.password
+        }
     
     async def monitor_target(self, target):
         """Monitor a single target with browser reuse."""
@@ -232,8 +293,19 @@ class StealthMasterUI:
                         self.monitor_status[target.event_name] = "🚫 Access Denied"
                         console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
                         
-                        # Wait longer before retry
-                        await asyncio.sleep(60)
+                        # Implement exponential backoff
+                        backoff_time = min(300, 60 * (2 ** min(self.browsers[platform_name].get('block_count', 0), 5)))
+                        self.browsers[platform_name]['block_count'] = self.browsers[platform_name].get('block_count', 0) + 1
+                        
+                        console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
+                        await asyncio.sleep(backoff_time)
+                        
+                        # Consider rotating proxy or browser
+                        if self.browsers[platform_name].get('block_count', 0) >= 3:
+                            console.print(f"[yellow]🔄 Too many blocks, recreating browser for {platform_name}[/yellow]")
+                            await self._close_browser(platform_name)
+                            self.browsers.pop(platform_name, None)
+                        
                         continue
                 else:
                     page.get(url)
@@ -289,8 +361,22 @@ class StealthMasterUI:
                     # Wait a bit to show the status
                     await asyncio.sleep(3)
                 
+                # Implement adaptive rate limiting
+                self.browsers[platform_name]['request_count'] = self.browsers[platform_name].get('request_count', 0) + 1
+                
+                # Calculate dynamic interval based on request count and blocks
+                base_interval = target.interval_s
+                request_count = self.browsers[platform_name].get('request_count', 0)
+                block_count = self.browsers[platform_name].get('block_count', 0)
+                
+                # Increase interval if we're making too many requests or getting blocked
+                if request_count > 50 or block_count > 0:
+                    dynamic_interval = base_interval * (1 + (block_count * 0.5) + (request_count / 100))
+                else:
+                    dynamic_interval = base_interval
+                
                 # Wait for next check
-                await asyncio.sleep(target.interval_s)
+                await asyncio.sleep(dynamic_interval)
                 
             except Exception as e:
                 self.monitor_status[target.event_name] = f"⚠️  Error"
@@ -368,7 +454,29 @@ class StealthMasterUI:
         
         # Close all browsers
         console.print("[yellow]🌐 Closing browsers...[/yellow]")
+        for platform_name in list(self.browsers.keys()):
+            await self._close_browser(platform_name)
         await self.browser_launcher.close_all()
+    
+    async def _close_browser(self, platform_name: str):
+        """Safely close a browser instance."""
+        try:
+            browser_info = self.browsers.get(platform_name)
+            if browser_info:
+                # Close any open pages/contexts
+                if browser_info.get('page'):
+                    try:
+                        await browser_info['page'].close()
+                    except:
+                        pass
+                
+                if browser_info.get('context'):
+                    try:
+                        await browser_info['context'].close()
+                    except:
+                        pass
+        except Exception as e:
+            logger.error(f"Error closing browser for {platform_name}: {e}")
         
         stats_manager.end_session(self.session_id)
         

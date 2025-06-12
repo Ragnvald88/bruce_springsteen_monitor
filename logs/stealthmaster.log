@@ -9787,3 +9787,72 @@ Stacktrace:
 2025-06-11 22:38:44,039 - src.database.statistics - WARNING - Recorded ticket failure: vivaticket/Bruce Springsteen San Siro 2025/general - Sold out
 2025-06-11 22:38:44,060 - src.database.statistics - WARNING - Recorded ticket failure: fansale/Bruce Springsteen Milano 2025/general - Sold out
 2025-06-11 22:39:17,065 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 17:33:02,531 - src.database.statistics - INFO - Started statistics session: ui_20250612_173302
+2025-06-12 17:33:02,535 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 17:33:02,537 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-12 17:33:04,679 - src.browser.launcher - INFO - Launched browser 83c35ff7-1925-461a-93a9-8d9f893e2dd9 in 2137ms
+2025-06-12 17:33:05,114 - src.browser.launcher - INFO - Launched browser d8a13f4c-706f-4ebf-b0ab-42dd92f02617 in 2573ms
+2025-06-12 17:33:05,624 - src.browser.launcher - INFO - Launched browser 7ea0e1e6-34a9-4b4a-b47b-c2dc000adce2 in 3083ms
+2025-06-12 17:33:40,481 - src.database.statistics - INFO - Started statistics session: ui_20250612_173340
+2025-06-12 17:33:40,483 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 17:33:40,485 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: 'NoneType' object has no attribute 'ChromeOptions'
+2025-06-12 17:33:41,905 - src.browser.launcher - INFO - Launched browser 03b41e45-ce55-439f-879f-d5dd461f6ef9 in 1418ms
+2025-06-12 17:33:42,246 - src.browser.launcher - INFO - Launched browser 342ea793-2520-4cf6-8a0d-a3ca13b8a7c4 in 1759ms
+2025-06-12 17:33:42,812 - src.browser.launcher - INFO - Launched browser c74243ad-69ad-45f4-a9bd-790630247a31 in 2326ms
+2025-06-12 17:34:12,736 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 17:34:14,563 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 20:49:32,324 - src.database.statistics - INFO - Started statistics session: ui_20250612_204932
+2025-06-12 20:49:32,331 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 20:49:39,280 - src.browser.launcher - INFO - Launched browser 4424c04c-b81c-4e16-96e1-91692afdfb16 in 6928ms
+2025-06-12 20:49:40,855 - src.browser.launcher - INFO - Launched browser 187083e5-d7b5-4b8b-8138-7d8327adf1d5 in 8521ms
+2025-06-12 20:49:41,188 - src.browser.launcher - INFO - Launched browser 253a1685-f653-4361-8c3f-c2c7d5890fe1 in 8836ms
+2025-06-12 21:04:50,667 - src.database.statistics - INFO - Started statistics session: ui_20250612_210450
+2025-06-12 21:04:50,676 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 21:04:50,718 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: too many values to unpack (expected 2)
+2025-06-12 21:04:52,497 - src.browser.launcher - INFO - Launched browser 14f603f2-0b36-4edd-9e5a-1758b5d6e820 in 1817ms
+2025-06-12 21:04:52,897 - src.browser.launcher - INFO - Launched browser c1547a93-4865-45bc-8b4e-f0e58ae529ec in 2174ms
+2025-06-12 21:04:53,353 - src.browser.launcher - INFO - Launched browser 3529e4ba-91d5-4c06-ab72-9f93ca0ec24c in 2631ms
+2025-06-12 21:38:19,130 - src.database.statistics - INFO - Started statistics session: ui_20250612_213819
+2025-06-12 21:38:19,136 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 21:38:19,165 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:38:19,170 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:38:19,174 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:38:24,284 - src.browser.launcher - INFO - Launched browser 12f194b6-9516-4847-98f2-c3ab9de2f3f8 in 5140ms
+2025-06-12 21:38:25,773 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_78429.zip'
+2025-06-12 21:38:26,265 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_78429.zip'
+2025-06-12 21:38:26,269 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:38:27,402 - src.browser.launcher - INFO - Launched browser a0e142a2-9556-4606-b277-0a77389ab636 in 8227ms
+2025-06-12 21:38:28,670 - src.browser.launcher - INFO - Launched browser 74550311-658e-41bc-b2a5-13a007b99baf in 9501ms
+2025-06-12 21:38:31,255 - src.database.statistics - INFO - Recorded ticket reserved: ticketmaster/Bruce Springsteen San Siro 2025/general
+2025-06-12 21:38:57,814 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 21:39:36,295 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102ac47a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000102abbefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010258c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102560ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010260cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x000000010262ba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001026042b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x00000001025d0507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x00000001025d1171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000102a82550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x0000000102a864df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102a5d962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000102a86e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102a4c124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000102aa9708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x0000000102aa98d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000102abbac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 21:39:38,321 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 21:39:47,753 - src.database.statistics - INFO - Started statistics session: ui_20250612_213947
+2025-06-12 21:39:47,754 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 21:39:47,773 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:39:47,778 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:39:47,782 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 21:39:51,009 - src.browser.launcher - INFO - Launched browser e4432be6-1b33-4e41-bcbb-1316f6048c41 in 3226ms

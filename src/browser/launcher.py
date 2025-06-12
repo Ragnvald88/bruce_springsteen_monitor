@@ -55,9 +55,12 @@ class NodriverBrowserLauncher:
                 nodriver_core.add_residential_proxy(proxy)
             logger.info(f"Configured {len(proxy_list)} residential proxies")
     
-    async def launch_browser(self, **kwargs) -> str:
+    async def launch_browser(self, proxy=None, **kwargs) -> str:
         """
         Launch a new browser instance with stealth
+        
+        Args:
+            proxy: Optional proxy configuration dict with 'server', 'username', 'password'
         
         Returns:
             browser_id: Unique identifier for the browser
@@ -68,6 +71,10 @@ class NodriverBrowserLauncher:
         try:
             # Set session-specific fingerprint
             fingerprint_generator.set_session_id(browser_id)
+            
+            # Add proxy to kwargs if provided
+            if proxy:
+                kwargs['proxy'] = proxy
             
             # Launch browser with nodriver core
             browser_data = await nodriver_core.create_stealth_browser(**kwargs)

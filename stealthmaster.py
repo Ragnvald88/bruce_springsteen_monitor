@@ -63,6 +63,9 @@ from src.profiles.manager import ProfileManager
 from src.browser.launcher import launcher
 from src.database.statistics import stats_manager
 from src.utils.logging import setup_logging, get_logger
+from src.utils.notifications import notification_manager
+from src.utils.config_validator import ConfigValidator
+from src.utils.retry_manager import retry_manager, with_retry
 
 console = Console()
 logger = get_logger(__name__)
@@ -80,6 +83,9 @@ class StealthMasterUI:
         
         # Core components
         self.profile_manager = ProfileManager(settings)
+        # Update launcher with settings
+        launcher.settings = settings
+        launcher._configure_proxies()
         self.browser_launcher = launcher
         
         # Stats
@@ -208,6 +214,7 @@ class StealthMasterUI:
         
         return layout
     
+    @with_retry(max_retries=3, base_delay=2.0)
     async def get_or_create_browser(self, platform_name: str):
         """Get existing browser or create new one for platform."""
         if platform_name not in self.browsers:
@@ -224,7 +231,8 @@ class StealthMasterUI:
                     'page': None,
                     'context': None,
                     'last_used': datetime.now(),
-                    'request_count': 0
+                    'request_count': 0,
+                    'health_check_fails': 0
                 }
                 console.print(f"[green]✓ Browser created for {platform_name}[/green]")
             except Exception as e:
@@ -236,14 +244,17 @@ class StealthMasterUI:
     def _get_proxy_for_platform(self, platform_name: str):
         """Get proxy configuration for a specific platform."""
         if not self.settings.proxy_settings.primary_pool:
+            console.print("[yellow]⚠️ No proxy configured - using direct connection[/yellow]")
             return None
         
         # For now, use the first proxy in the pool
         # TODO: Implement proper proxy rotation
         proxy = self.settings.proxy_settings.primary_pool[0]
         
-        # Convert proxy settings to browser format
-        proxy_url = f"{proxy.type}://{proxy.username}:{proxy.password}@{proxy.host}:{proxy.port}"
+        # Convert proxy settings to browser format - DO NOT include auth in URL
+        proxy_url = f"{proxy.type}://{proxy.host}:{proxy.port}"
+        
+        console.print(f"[cyan]🌐 Using proxy: {proxy.host}:{proxy.port} (user: {proxy.username})[/cyan]")
         
         return {
             'server': proxy_url,
@@ -274,42 +285,88 @@ class StealthMasterUI:
                 
                 # Create page if needed (reuse existing browser)
                 if page is None:
-                    context_id = await self.browser_launcher.create_context(browser_id)
-                    page = await self.browser_launcher.new_page(context_id)
-                    
-                    if first_run:
-                        console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
-                        first_run = False
+                    try:
+                        context_id = await self.browser_launcher.create_context(browser_id)
+                        page = await self.browser_launcher.new_page(context_id)
+                        
+                        # Store page reference for cleanup
+                        self.browsers[platform_name]['page'] = page
+                        self.browsers[platform_name]['context_id'] = context_id
+                        
+                        if first_run:
+                            console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
+                            
+                            # Check IP to verify proxy (optional, can be disabled for speed)
+                            if self.settings.proxy_settings.enabled:
+                                try:
+                                    if hasattr(page, "goto"):
+                                        await page.goto("https://httpbin.org/ip", wait_until='domcontentloaded', timeout=10000)
+                                        ip_data = await page.evaluate("() => document.body.textContent")
+                                    else:
+                                        page.get("https://httpbin.org/ip")
+                                        await asyncio.sleep(1)
+                                        ip_data = page.execute_script("return document.body.textContent")
+                                    
+                                    import json
+                                    ip_info = json.loads(ip_data)
+                                    console.print(f"[cyan]🌍 Current IP: {ip_info.get('origin', 'Unknown')}[/cyan]")
+                                except Exception as e:
+                                    console.print(f"[yellow]⚠️ Could not verify IP: {e}[/yellow]")
+                            
+                            first_run = False
+                    except Exception as e:
+                        logger.error(f"Failed to create page for {target.event_name}: {e}")
+                        # Mark browser as potentially broken
+                        self.browsers[platform_name]['broken'] = True
+                        return
                 
-                # Navigate to URL
+                # Navigate to URL with retry
                 url = str(target.url)
                 
-                if hasattr(page, "goto"):
-                    response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                try:
+                    if hasattr(page, "goto"):
+                        response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                        
+                        # Reset health check counter on successful navigation
+                        self.browsers[platform_name]['health_check_fails'] = 0
+                        
+                        # Check for access denied
+                        if response and response.status == 403:
+                            self.access_denied_count += 1
+                            self.monitor_status[target.event_name] = "🚫 Access Denied"
+                            console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
+                            
+                            # Implement exponential backoff
+                            backoff_time = min(300, 60 * (2 ** min(self.browsers[platform_name].get('block_count', 0), 5)))
+                            self.browsers[platform_name]['block_count'] = self.browsers[platform_name].get('block_count', 0) + 1
+                            
+                            console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
+                            await asyncio.sleep(backoff_time)
+                            
+                            # Consider rotating proxy or browser
+                            if self.browsers[platform_name].get('block_count', 0) >= 3:
+                                console.print(f"[yellow]🔄 Too many blocks, recreating browser for {platform_name}[/yellow]")
+                                await self._close_browser(platform_name)
+                                self.browsers.pop(platform_name, None)
+                            
+                            continue
+                    else:
+                        page.get(url)
+                        await asyncio.sleep(2)
+                        self.browsers[platform_name]['health_check_fails'] = 0
+                except Exception as nav_error:
+                    logger.error(f"Navigation error for {target.event_name}: {nav_error}")
+                    self.browsers[platform_name]['health_check_fails'] = self.browsers[platform_name].get('health_check_fails', 0) + 1
                     
-                    # Check for access denied
-                    if response and response.status == 403:
-                        self.access_denied_count += 1
-                        self.monitor_status[target.event_name] = "🚫 Access Denied"
-                        console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
-                        
-                        # Implement exponential backoff
-                        backoff_time = min(300, 60 * (2 ** min(self.browsers[platform_name].get('block_count', 0), 5)))
-                        self.browsers[platform_name]['block_count'] = self.browsers[platform_name].get('block_count', 0) + 1
-                        
-                        console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
-                        await asyncio.sleep(backoff_time)
-                        
-                        # Consider rotating proxy or browser
-                        if self.browsers[platform_name].get('block_count', 0) >= 3:
-                            console.print(f"[yellow]🔄 Too many blocks, recreating browser for {platform_name}[/yellow]")
-                            await self._close_browser(platform_name)
-                            self.browsers.pop(platform_name, None)
-                        
-                        continue
-                else:
-                    page.get(url)
-                    await asyncio.sleep(2)
+                    # If too many failures, recreate browser
+                    if self.browsers[platform_name]['health_check_fails'] >= 3:
+                        console.print(f"[yellow]🔧 Browser health check failed, recreating for {platform_name}[/yellow]")
+                        await self._close_browser(platform_name)
+                        self.browsers.pop(platform_name, None)
+                        page = None
+                    
+                    await asyncio.sleep(10)
+                    continue
                 
                 self.monitor_status[target.event_name] = "🟢 Active"
                 self.last_check[target.event_name] = datetime.now()
@@ -326,8 +383,47 @@ class StealthMasterUI:
                 except:
                     pass
                 
-                # Simulate ticket checking (reduced to 10% for safety)
-                if random.random() > 0.9:
+                # REAL ticket checking - search page content for actual tickets
+                # Platform-specific selectors for better accuracy
+                platform_selectors = {
+                    'fansale': ['.ticket-item', '.listing-item', '[data-testid="ticket-listing"]', '.offer-item'],
+                    'ticketmaster': ['.ticket-listing', '.event-ticket', '[data-event-ticketlist]', '.quick-picks'],  
+                    'vivaticket': ['.ticket-available', '.ticket-row', '.biglietto-disponibile']
+                }
+                
+                # Generic ticket indicators (more restrictive)
+                positive_indicators = ['add to cart', 'select tickets', 'buy now', 'purchase', 'acquista ora', 'compra']
+                negative_indicators = ['sold out', 'esaurito', 'no tickets', 'non disponibile', 'coming soon', 'waitlist']
+                
+                found_tickets = False
+                content_lower = content.lower() if 'content' in locals() else ""
+                
+                # First check for negative indicators
+                has_negative = any(neg in content_lower for neg in negative_indicators)
+                if has_negative:
+                    found_tickets = False
+                else:
+                    # Check platform-specific selectors
+                    selectors = platform_selectors.get(platform_name, [])
+                    for selector in selectors:
+                        try:
+                            elements = await page.locator(selector).count() if hasattr(page, 'locator') else 0
+                            if elements > 0:
+                                # Found ticket elements, now verify they're actually available
+                                has_positive = any(pos in content_lower for pos in positive_indicators)
+                                if has_positive:
+                                    found_tickets = True
+                                    break
+                        except:
+                            pass
+                    
+                    # Fallback: check for positive indicators with stricter validation
+                    if not found_tickets and len(content_lower) > 100:  # Ensure page loaded
+                        ticket_count = sum(1 for indicator in positive_indicators if indicator in content_lower)
+                        if ticket_count >= 2:  # Require multiple indicators to reduce false positives
+                            found_tickets = True
+                
+                if found_tickets:
                     self.tickets_found += 1
                     stats_manager.record_ticket_found(
                         platform_name,
@@ -335,31 +431,29 @@ class StealthMasterUI:
                         "general",
                         1000
                     )
-                    self.monitor_status[target.event_name] = "🎯 Found!"
+                    self.monitor_status[target.event_name] = "🎯 REAL tickets found!"
+                    console.print(f"[green]🎫 REAL tickets found for {target.event_name}![/green]")
                     
-                    # Try to reserve
-                    success_chance = 0.4 if platform_name == "fansale" else 0.7
-                    if random.random() > success_chance:
-                        self.tickets_reserved += 1
-                        stats_manager.record_ticket_reserved(
-                            platform_name,
-                            target.event_name,
-                            "general",
-                            250
-                        )
-                        self.monitor_status[target.event_name] = "🎉 Reserved!"
-                    else:
-                        self.tickets_failed += 1
-                        stats_manager.record_ticket_failed(
-                            platform_name,
-                            target.event_name,
-                            "general",
-                            "Sold out"
-                        )
-                        self.monitor_status[target.event_name] = "❌ Sold out"
+                    # Send notification
+                    await notification_manager.send_ticket_alert(
+                        platform=platform_name,
+                        event_name=target.event_name,
+                        ticket_count=1,  # TODO: Get actual count
+                        url=url
+                    )
+                    
+                    # TODO: Implement actual purchase logic here
+                    # For now, switch to burst mode for rapid monitoring
+                    
+                    # Switch to burst mode (5 second intervals)
+                    base_interval = 5
+                    console.print(f"[yellow]⚡ Burst mode activated for {target.event_name}[/yellow]")
                     
                     # Wait a bit to show the status
                     await asyncio.sleep(3)
+                else:
+                    # Log that we're still searching
+                    console.print(f"[dim]Still searching for {target.event_name}...[/dim]", end="\r")
                 
                 # Implement adaptive rate limiting
                 self.browsers[platform_name]['request_count'] = self.browsers[platform_name].get('request_count', 0) + 1
@@ -457,28 +551,44 @@ class StealthMasterUI:
         for platform_name in list(self.browsers.keys()):
             await self._close_browser(platform_name)
         await self.browser_launcher.close_all()
+        
+        # End session tracking
+        stats_manager.end_session(self.session_id)
     
     async def _close_browser(self, platform_name: str):
         """Safely close a browser instance."""
         try:
             browser_info = self.browsers.get(platform_name)
             if browser_info:
-                # Close any open pages/contexts
+                # Close any open pages
                 if browser_info.get('page'):
                     try:
-                        await browser_info['page'].close()
-                    except:
-                        pass
+                        if hasattr(browser_info['page'], 'close'):
+                            await browser_info['page'].close()
+                        else:
+                            browser_info['page'].quit()
+                    except Exception as e:
+                        logger.debug(f"Error closing page for {platform_name}: {e}")
                 
-                if browser_info.get('context'):
+                # Close context if exists
+                if browser_info.get('context_id'):
                     try:
-                        await browser_info['context'].close()
-                    except:
-                        pass
+                        await self.browser_launcher.close_context(browser_info['context_id'])
+                    except Exception as e:
+                        logger.debug(f"Error closing context for {platform_name}: {e}")
+                
+                # Close browser
+                if browser_info.get('id'):
+                    try:
+                        await self.browser_launcher.close_browser(browser_info['id'])
+                    except Exception as e:
+                        logger.debug(f"Error closing browser for {platform_name}: {e}")
+                        
+                # Remove from tracking
+                self.browsers.pop(platform_name, None)
+                
         except Exception as e:
-            logger.error(f"Error closing browser for {platform_name}: {e}")
-        
-        stats_manager.end_session(self.session_id)
+            logger.error(f"Error during browser cleanup for {platform_name}: {e}")
         
         # Final stats
         console.print(f"\n[cyan]📊 Session Summary:[/cyan]")
@@ -508,6 +618,16 @@ async def main():
     
     # Setup logging
     setup_logging(level="INFO", log_dir=Path("logs"))
+    
+    # Validate configuration
+    validator = ConfigValidator(settings)
+    is_valid, errors, warnings = validator.validate()
+    validator.print_validation_results()
+    
+    if not is_valid:
+        console.print("\n[red]❌ Cannot start due to configuration errors![/red]")
+        console.print("[yellow]Please fix the errors in config.yaml and try again.[/yellow]")
+        return
     
     # Show active targets
     console.print("[cyan]🎯 Configured Targets:[/cyan]")

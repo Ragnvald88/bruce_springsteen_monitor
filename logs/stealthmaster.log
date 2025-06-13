@@ -9856,3 +9856,1076 @@ Stacktrace:
 2025-06-12 21:39:47,778 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
 2025-06-12 21:39:47,782 - src.stealth.nodriver_core - INFO - Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
 2025-06-12 21:39:51,009 - src.browser.launcher - INFO - Launched browser e4432be6-1b33-4e41-bcbb-1316f6048c41 in 3226ms
+2025-06-12 23:39:47,087 - src.database.statistics - INFO - Started statistics session: ui_20250612_233947
+2025-06-12 23:39:47,092 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 23:39:47,129 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:39:47,130 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_7964.zip
+2025-06-12 23:39:47,130 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:39:47,134 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:39:47,134 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_7964.zip
+2025-06-12 23:39:47,135 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:39:47,138 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:39:47,139 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_7964.zip
+2025-06-12 23:39:47,139 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:39:47,975 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-12 23:39:50,539 - src.browser.launcher - INFO - Launched browser 5d0eab1c-0849-4823-827b-8187a765e914 in 3438ms
+2025-06-12 23:39:51,345 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:39:51,346 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:39:51,850 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010534c7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105343efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104e14400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104de8ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000104e94ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000104eb3a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000104e8c2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000104e58507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000104e59171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x000000010530a550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010530e4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001052e5962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010530ee4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x00000001052d4124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000105331708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001053318d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105343ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:39:51,853 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:39:51,854 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_7964.zip
+2025-06-12 23:39:51,854 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:39:51,857 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102ecb7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000102ec2efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102993400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102967ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102a13ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102a32a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102a0b2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x00000001029d7507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x00000001029d8171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000102e89550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x0000000102e8d4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102e64962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000102e8de4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102e53124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000102eb0708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x0000000102eb08d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000102ec2ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:39:53,056 - src.browser.launcher - INFO - Launched browser a24462db-3543-4fa6-86db-70f61b24577a in 5917ms
+2025-06-12 23:39:54,248 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:39:54,763 - src.browser.launcher - INFO - Launched browser d1ca8062-5147-429e-af1a-2130cd2d36f8 in 7629ms
+2025-06-12 23:40:21,805 - src.database.statistics - INFO - Recorded ticket reserved: fansale/Bruce Springsteen Milano 2025/general
+2025-06-12 23:40:27,817 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010458387d undetected_chromedriver + 313469
+4   undetected_chromedriver             0x00000001045ac13d undetected_chromedriver + 479549
+5   undetected_chromedriver             0x000000010461ddaf undetected_chromedriver + 945583
+6   undetected_chromedriver             0x000000010463ca1c undetected_chromedriver + 1071644
+7   undetected_chromedriver             0x00000001046152b3 undetected_chromedriver + 910003
+8   undetected_chromedriver             0x00000001045e1507 undetected_chromedriver + 697607
+9   undetected_chromedriver             0x00000001045e2171 undetected_chromedriver + 700785
+10  undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+11  undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+12  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+13  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+14  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+15  undetected_chromedriver             0x0000000104aba708 undetected_chromedriver + 5781256
+16  undetected_chromedriver             0x0000000104aba8d0 undetected_chromedriver + 5781712
+17  undetected_chromedriver             0x0000000104accac1 undetected_chromedriver + 5855937
+18  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+19  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:40:37,828 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:40:37,835 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:40:47,841 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:40:47,844 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:40:54,809 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-12 23:40:57,851 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:40:57,854 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:41:04,817 - src.browser.launcher - ERROR - Failed to create context: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:41:04,820 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:41:07,858 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:41:07,863 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:41:14,824 - src.browser.launcher - ERROR - Failed to create context: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:41:14,825 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:41:17,870 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:41:17,877 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x0000000104ad57a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104accefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010459d243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x00000001045e070f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001046153e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x000000010460fdbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x000000010460ef57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010456677f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104a93550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x0000000104a974df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x0000000104a6e962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104a97e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x0000000104a5d124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104564957 undetected_chromedriver + 186711
+14  dyld                                0x00000002055dd530 start + 3056
+
+2025-06-12 23:41:24,830 - src.browser.launcher - ERROR - Failed to create context: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:41:24,832 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: Browser.new_context: Target page, context or browser has been closed
+2025-06-12 23:57:21,721 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-12 23:57:21,727 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-12 23:57:21,729 - src.database.statistics - INFO - Started statistics session: ui_20250612_235721
+2025-06-12 23:57:21,729 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-12 23:57:21,751 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:57:21,752 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_11215.zip
+2025-06-12 23:57:21,752 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:57:21,760 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:57:21,760 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_11215.zip
+2025-06-12 23:57:21,761 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:57:21,767 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-12 23:57:21,768 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_11215.zip
+2025-06-12 23:57:21,768 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-12 23:57:25,389 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:57:25,740 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:57:25,740 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-12 23:57:25,924 - src.browser.launcher - INFO - Launched browser 31c8dbae-6d96-4969-a685-6f73d21e3897 in 4181ms
+2025-06-12 23:57:27,166 - src.stealth.nodriver_core - WARNING - Driver may not be ready: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:27,169 - src.browser.launcher - INFO - Launched browser a6737f35-82df-4ac0-a002-c5a6227d6ceb in 5411ms
+2025-06-12 23:57:27,173 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:27,179 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:27,183 - src.stealth.nodriver_core - WARNING - Driver may not be ready: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:27,187 - src.browser.launcher - INFO - Launched browser e84696a5-beba-4306-99c9-8e347af35bc8 in 5420ms
+2025-06-12 23:57:27,190 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:27,192 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:37,184 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:37,186 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:37,197 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:37,199 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:47,190 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:47,194 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:47,203 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:47,205 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:57,198 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:57,200 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:57,209 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:57:57,212 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:07,205 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:07,207 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:07,216 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:07,218 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:17,211 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:17,214 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:17,221 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:17,223 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:27,218 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:27,220 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x00000001055127a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105509efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104fda400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104faead0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x000000010505aba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000105079a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001050522b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010501e507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010501f171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001054d0550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001054d44df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001054ab962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001054d4e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x000000010549a124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x00000001054f7708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001054f78d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105509ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:27,227 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-12 23:58:27,230 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.69)
+Stacktrace:
+0   undetected_chromedriver             0x000000010348a7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103481efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102f52400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102f26ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102fd2ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ff1a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102fca2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102f96507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102f97171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103448550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010344c4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000103423962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010344ce4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000103412124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010346f708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010346f8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103481ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 10:46:45,866 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 10:46:45,870 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 10:46:45,872 - src.database.statistics - INFO - Started statistics session: ui_20250613_104645
+2025-06-13 10:46:45,872 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 10:46:45,896 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 10:46:45,897 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_18817.zip
+2025-06-13 10:46:45,897 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 10:46:45,900 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 10:46:45,901 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_18817.zip
+2025-06-13 10:46:45,901 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 10:46:45,904 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 10:46:45,904 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_18817.zip
+2025-06-13 10:46:45,905 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 10:46:47,423 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-13 10:46:50,477 - src.browser.launcher - INFO - Launched browser 4997df16-51a4-4e3e-a88b-cc06080593fd in 4576ms
+2025-06-13 10:46:53,308 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 10:46:53,313 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 10:46:53,825 - src.browser.launcher - INFO - Launched browser 5ed1f96a-619f-4003-9e8b-b34715248387 in 7922ms
+2025-06-13 10:46:55,725 - src.browser.launcher - INFO - Launched browser 7062786e-71ae-4046-82d4-f3358efc3586 in 9849ms
+2025-06-13 14:19:52,433 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 14:19:52,436 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 14:19:52,437 - src.database.statistics - INFO - Started statistics session: ui_20250613_141952
+2025-06-13 14:19:52,438 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 14:19:52,451 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 14:19:52,451 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_63459.zip
+2025-06-13 14:19:52,452 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 14:19:52,454 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 14:19:52,455 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_63459.zip
+2025-06-13 14:19:52,455 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 14:19:52,456 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 14:19:52,457 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_63459.zip
+2025-06-13 14:19:52,457 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 14:19:55,878 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 14:19:56,158 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 14:19:56,178 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 14:19:56,393 - src.browser.launcher - INFO - Launched browser 483836c3-4cb5-4205-82ef-0e1879a18922 in 3953ms
+2025-06-13 14:19:58,369 - src.browser.launcher - INFO - Launched browser 4f7cca1e-4a77-4bb6-89fb-d6c6b1fa1179 in 5913ms
+2025-06-13 14:20:02,451 - src.browser.launcher - INFO - Launched browser eae3ae8c-1853-4583-b83d-b2128848d31a in 9997ms
+2025-06-13 17:52:25,445 - src.database.statistics - INFO - Initialized statistics database at: /Users/macbookpro_ronald/.stealthmaster/statistics.db
+2025-06-13 17:52:25,450 - src.browser.launcher - WARNING - No proxy settings available
+2025-06-13 17:52:25,451 - src.browser.launcher - INFO - Browser Launcher initialized
+2025-06-13 17:52:25,456 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 17:52:25,457 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 17:52:25,458 - src.browser.launcher - INFO - 🌐 Using proxy from settings: geo.iproyal.com:12321
+2025-06-13 17:52:25,476 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 17:52:25,476 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_8979.zip
+2025-06-13 17:52:25,477 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 17:52:29,434 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 17:52:30,037 - src.browser.launcher - INFO - Launched browser 3f4e9d25-6d47-4914-ae41-7698a053ef0f in 4576ms
+2025-06-13 17:52:36,705 - src.browser.launcher - INFO - Closing all browsers...
+2025-06-13 17:52:36,900 - src.browser.launcher - INFO - All browsers closed
+2025-06-13 17:52:36,903 - uc - INFO - ensuring close

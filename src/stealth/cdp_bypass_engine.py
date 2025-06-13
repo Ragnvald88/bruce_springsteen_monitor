@@ -5,12 +5,8 @@ Implements cutting-edge techniques to bypass 2025 AI-driven bot detection.
 """
 
 import asyncio
-import json
 import logging
-import random
-from typing import Dict, Any, Optional, List, Set, Callable
-from datetime import datetime
-import re
+from typing import Dict, Any, List, Set
 
 from playwright.async_api import BrowserContext, Page, CDPSession
 

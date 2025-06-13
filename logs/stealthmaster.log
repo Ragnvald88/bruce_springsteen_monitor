@@ -10929,3 +10929,193 @@ Stacktrace:
 2025-06-13 17:52:36,705 - src.browser.launcher - INFO - Closing all browsers...
 2025-06-13 17:52:36,900 - src.browser.launcher - INFO - All browsers closed
 2025-06-13 17:52:36,903 - uc - INFO - ensuring close
+2025-06-13 17:54:17,136 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 17:54:17,137 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 17:54:17,139 - src.database.statistics - INFO - Started statistics session: ui_20250613_175417
+2025-06-13 17:54:17,139 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 17:54:17,169 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 17:54:17,169 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_9805.zip
+2025-06-13 17:54:17,170 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 17:54:17,178 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 17:54:17,179 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_9805.zip
+2025-06-13 17:54:17,179 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 17:54:17,187 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 17:54:17,187 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_9805.zip
+2025-06-13 17:54:17,188 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 17:54:18,643 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-13 17:54:20,548 - src.browser.launcher - INFO - Launched browser 587667cb-da03-48ec-9ac5-34f9a6d37096 in 3362ms
+2025-06-13 17:54:21,094 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 17:54:21,346 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 17:54:21,708 - src.browser.launcher - INFO - Launched browser da147887-c78f-47d2-81a4-8fdb5c3facaa in 4521ms
+2025-06-13 17:54:24,055 - src.browser.launcher - INFO - Launched browser db676062-1c59-4c5b-94ea-ff993bc71fd7 in 6904ms
+2025-06-13 18:09:53,096 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 18:09:53,106 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 18:09:53,108 - src.database.statistics - INFO - Started statistics session: ui_20250613_180953
+2025-06-13 18:09:53,109 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 18:09:53,138 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:09:53,139 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_14020.zip
+2025-06-13 18:09:53,139 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:09:53,147 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:09:53,148 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_14020.zip
+2025-06-13 18:09:53,149 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:09:53,157 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:09:53,157 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_14020.zip
+2025-06-13 18:09:53,158 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:10:15,050 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:15,058 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:15,060 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:10:15,061 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_14020.zip
+2025-06-13 18:10:15,061 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:10:15,062 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:16,485 - src.browser.launcher - INFO - Launched browser 385de7aa-bb00-4722-9b3b-ecf28fc6ec10 in 23365ms
+2025-06-13 18:10:16,829 - src.browser.launcher - INFO - Launched browser 3eb4dc78-1fbd-42fb-abbe-d32d3549a295 in 23682ms
+2025-06-13 18:10:17,087 - src.stealth.akamai_bypass - INFO - Applied Akamai bypass techniques
+2025-06-13 18:10:32,712 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:32,721 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:10:32,723 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_14020.zip
+2025-06-13 18:10:32,724 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:10:41,406 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:42,752 - src.browser.launcher - INFO - Launched browser f7724342-ac52-42b0-bd93-f66895747347 in 49597ms
+2025-06-13 18:10:56,744 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 18:10:57,096 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 18:11:23,074 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 18:11:36,749 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 18:11:37,100 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 18:11:38,994 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 18:12:50,701 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 18:12:50,702 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 18:12:50,704 - src.database.statistics - INFO - Started statistics session: ui_20250613_181250
+2025-06-13 18:12:50,705 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 18:12:50,736 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:12:50,737 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip
+2025-06-13 18:12:50,737 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:12:50,746 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:12:50,747 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip
+2025-06-13 18:12:50,747 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:12:50,755 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:12:50,756 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip
+2025-06-13 18:12:50,756 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:13:08,359 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 18:13:08,918 - src.browser.launcher - INFO - Launched browser 6a121265-be92-42a4-9fdf-4033e6f37403 in 18171ms
+2025-06-13 18:13:09,162 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 18:13:11,853 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip'
+2025-06-13 18:13:11,856 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip'
+2025-06-13 18:13:11,859 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 18:13:11,860 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip
+2025-06-13 18:13:11,861 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 18:13:13,487 - src.browser.launcher - INFO - Launched browser 5fed0080-bc19-497a-882f-a5d956f2d24e in 22733ms
+2025-06-13 18:13:21,074 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 18:13:21,595 - src.browser.launcher - INFO - Launched browser ec20a33c-f38c-49f1-a6fa-67facefe66e4 in 30877ms
+2025-06-13 18:13:47,933 - src.stealth.akamai_bypass - INFO - Akamai challenge detected, waiting for sensor data...
+2025-06-13 18:14:00,017 - src.stealth.akamai_bypass - INFO - Akamai challenge detected, waiting for sensor data...
+2025-06-13 21:27:25,533 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 21:27:25,539 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 21:27:25,541 - src.database.statistics - INFO - Started statistics session: ui_20250613_212725
+2025-06-13 21:27:25,542 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 21:27:25,573 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:27:25,573 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_35140.zip
+2025-06-13 21:27:25,574 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:27:25,583 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:27:25,584 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_35140.zip
+2025-06-13 21:27:25,584 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:27:25,594 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:27:25,594 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_35140.zip
+2025-06-13 21:27:25,595 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:27:28,814 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:27:29,183 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:27:29,404 - src.browser.launcher - INFO - Launched browser eb6862fb-be6d-421d-9a92-13fd0ad68fea in 3849ms
+2025-06-13 21:27:29,755 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 21:27:30,161 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:27:30,175 - src.browser.launcher - INFO - Launched browser d9c8eba7-eda1-480e-8581-3f48a6cd5d32 in 4592ms
+2025-06-13 21:27:30,312 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 21:27:32,042 - src.stealth.nodriver_core - WARNING - Driver may not be ready: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001030547a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010304befa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102b1c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102af0ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102b9cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102bbba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102b942b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102b60507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102b61171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103012550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030164df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102fed962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103016e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102fdc124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103039708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030398d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010304bac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 21:27:32,046 - src.browser.launcher - INFO - Launched browser 7102df0a-dc1c-40e2-bf60-8a6c818f9c7e in 6453ms
+2025-06-13 21:27:32,052 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001030547a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010304befa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102b1c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102af0ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102b9cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102bbba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102b942b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102b60507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102b61171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103012550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030164df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102fed962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103016e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102fdc124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103039708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030398d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010304bac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 21:27:32,055 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001030547a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010304befa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102b1c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102af0ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102b9cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102bbba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102b942b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102b60507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102b61171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103012550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030164df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102fed962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103016e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102fdc124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103039708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030398d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010304bac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+

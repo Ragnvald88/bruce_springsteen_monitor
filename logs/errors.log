@@ -9930,3 +9930,86 @@ Stacktrace:
 18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
 
 2025-06-13 10:46:47,423 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-13 17:54:18,643 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-13 18:10:15,050 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:15,058 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:15,062 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:32,712 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:41,406 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: <urlopen error [Errno 54] Connection reset by peer>
+2025-06-13 18:10:56,744 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 18:10:57,096 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 18:11:23,074 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 18:11:36,749 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 18:11:37,100 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Timeout 30000ms exceeded.
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 18:11:38,994 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 18:13:09,162 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 18:13:11,853 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip'
+2025-06-13 18:13:11,856 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15159.zip'
+2025-06-13 21:27:29,755 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 21:27:30,312 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 21:27:32,052 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001030547a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010304befa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102b1c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102af0ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102b9cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102bbba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102b942b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102b60507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102b61171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103012550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030164df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102fed962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103016e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102fdc124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103039708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030398d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010304bac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 21:27:32,055 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001030547a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010304befa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102b1c400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102af0ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102b9cba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102bbba1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102b942b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102b60507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102b61171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000103012550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001030164df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102fed962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103016e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102fdc124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103039708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001030398d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x000000010304bac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+

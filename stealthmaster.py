@@ -66,6 +66,7 @@ from src.utils.logging import setup_logging, get_logger
 from src.utils.notifications import notification_manager
 from src.utils.config_validator import ConfigValidator
 from src.utils.retry_manager import retry_manager, with_retry
+from src.stealth.akamai_bypass import AkamaiBypass
 
 console = Console()
 logger = get_logger(__name__)
@@ -296,6 +297,11 @@ class StealthMasterUI:
                         if first_run:
                             console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
                             
+                            # Apply Akamai bypass for platforms that need it
+                            if platform_name in ['ticketmaster', 'ticketone', 'fansale']:
+                                console.print(f"[cyan]🛡️ Applying Akamai bypass for {platform_name}[/cyan]")
+                                await AkamaiBypass.apply_bypass(page)
+                            
                             # Check IP to verify proxy (optional, can be disabled for speed)
                             if self.settings.proxy_settings.enabled:
                                 try:
@@ -374,10 +380,26 @@ class StealthMasterUI:
                 # Check page content for access denied
                 try:
                     content = await page.content() if hasattr(page, 'content') else page.page_source
-                    if 'access denied' in content.lower() or 'blocked' in content.lower():
+                    content_lower = content.lower()
+                    
+                    # Check for various blocking indicators
+                    if any(indicator in content_lower for indicator in [
+                        'access denied', 'blocked', 'forbidden', 
+                        'edgesuite.net', 'akamai', '_abck'
+                    ]):
                         self.access_denied_count += 1
                         self.monitor_status[target.event_name] = "🚫 Blocked"
                         console.print(f"[red]🚫 Blocked on {target.event_name}![/red]")
+                        
+                        # Try Akamai challenge handler
+                        if '_abck' in content or 'akamai' in content_lower:
+                            console.print(f"[yellow]🛡️ Attempting Akamai challenge bypass...[/yellow]")
+                            success = await AkamaiBypass.handle_challenge(page)
+                            if success:
+                                console.print(f"[green]✓ Challenge bypass attempted[/green]")
+                                await asyncio.sleep(5)  # Give it time to work
+                                continue
+                        
                         await asyncio.sleep(60)
                         continue
                 except:

@@ -104,12 +104,31 @@ class NodriverCore:
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--disable-features=IsolateOrigins,site-per-process')
         
+        # Enhanced stealth for Akamai/EdgeSuite bypass
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        # Note: --exclude-switches might not work with UC, so we skip it
+        options.add_argument('--disable-features=TranslateUI')
+        options.add_argument('--disable-features=AutofillServerCommunication')
+        options.add_argument('--disable-features=PasswordProtectionWarning')
+        
+        # Better fingerprinting evasion
+        options.add_argument('--disable-features=UserAgentClientHint')
+        options.add_argument('--disable-features=WebRtcHideLocalIpsWithMdns')
+        
         # Additional stealth options for better proxy compatibility
         options.add_argument('--disable-web-security')
         options.add_argument('--disable-features=CrossSiteDocumentBlockingAlways,CrossSiteDocumentBlockingIfIsolating')
         options.add_argument('--disable-site-isolation-trials')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--allow-running-insecure-content')
+        
+        # Extra stealth for Akamai/Fansale
+        options.add_argument('--disable-features=IsolateOrigins')
+        options.add_argument('--disable-features=BlockInsecurePrivateNetworkRequests')
+        options.add_argument('--disable-features=ImprovedCookieControls')
+        
+        # Note: Experimental options removed due to UC compatibility issues
+        # UC handles most of these internally
         
         # Performance optimizations from V3
         options.add_argument('--aggressive-cache-discard')
@@ -198,7 +217,36 @@ class NodriverCore:
         # Create driver (UC is synchronous, so we run in executor)
         logger.info("🚀 Launching Chrome with undetected-chromedriver...")
         loop = asyncio.get_event_loop()
-        driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options, version_main=None))
+        
+        try:
+            # Try with version_main=None first
+            driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options, version_main=None))
+        except Exception as e:
+            logger.warning(f"Failed with version_main=None: {e}")
+            # Create fresh options object for retry
+            options2 = uc.ChromeOptions()
+            
+            # Copy basic arguments (skip experimental options)
+            for arg in ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage',
+                       '--disable-blink-features=AutomationControlled', 
+                       f'--window-size={viewport.get("width", 1920)},{viewport.get("height", 1080)}',
+                       f'--user-agent={user_agent}']:
+                options2.add_argument(arg)
+            
+            # Add proxy if needed
+            if proxy_config and proxy_config.get('server'):
+                if 'extension_path' in locals() and extension_path:
+                    options2.add_extension(extension_path)
+                else:
+                    options2.add_argument(f'--proxy-server={proxy_config["server"]}')
+            
+            # Try without version_main parameter
+            try:
+                driver = await loop.run_in_executor(None, lambda: uc.Chrome(options=options2))
+            except Exception as e2:
+                logger.error(f"Failed to create UC driver: {e2}")
+                raise
+        
         logger.info("✅ Chrome browser launched successfully")
         
         # Wait a bit for the browser to stabilize
@@ -233,11 +281,24 @@ class NodriverCore:
             return
             
         scripts = [
-            # Remove webdriver property
+            # Remove webdriver property - more comprehensive
             """
+            // Remove webdriver in multiple ways
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
             });
+            delete navigator.__proto__.webdriver;
+            
+            // Fix Akamai sensor detection
+            window._abck = window._abck || {};
+            window.bmak = window.bmak || {};
+            window.bmak.js_post = false;
+            window.bmak.fpcf = { f: () => 0, s: () => {} };
+            
+            // Spoof automation rect
+            if (window.document.documentElement.getAttribute('webdriver')) {
+                window.document.documentElement.removeAttribute('webdriver');
+            }
             """,
             
             # Fix chrome.runtime

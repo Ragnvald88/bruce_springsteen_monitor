@@ -11,6 +11,7 @@ from datetime import datetime
 from dataclasses import dataclass, field
 import hashlib
 import json
+import struct
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +72,7 @@ class TLSFingerprintRotator:
     """
     Manages TLS fingerprint rotation with 2025 browser profiles.
     Provides realistic TLS signatures matching actual browser behavior.
+    Enhanced with GREASE values and dynamic randomization.
     """
     
     def __init__(self):
@@ -79,6 +81,7 @@ class TLSFingerprintRotator:
         self.profile_weights = self._calculate_weights()
         self.usage_history: List[Tuple[str, datetime]] = []
         self.profile_map: Dict[str, TLSProfile] = {p.name: p for p in self.profiles}
+        self.grease_cache: Dict[str, List[int]] = {}
         
         logger.info(f"TLS Fingerprint Rotator initialized with {len(self.profiles)} profiles")
     
@@ -467,32 +470,37 @@ class TLSFingerprintRotator:
         """Calculate selection weights based on popularity"""
         return [p.popularity_score for p in self.profiles]
     
-    def get_profile(self, user_agent: Optional[str] = None) -> TLSProfile:
+    def get_profile(self, user_agent: Optional[str] = None, session_id: Optional[str] = None) -> TLSProfile:
         """
         Get a TLS profile, optionally matching a user agent.
+        Enhanced with GREASE values and dynamic randomization.
         
         Args:
             user_agent: Optional user agent to match
+            session_id: Optional session ID for consistent profiles
             
         Returns:
-            Selected TLS profile
+            Selected TLS profile with dynamic randomization
         """
         if user_agent:
             # Try to match browser from user agent
             profile = self._match_user_agent(user_agent)
             if profile:
-                return profile
+                return self._enhance_profile_with_randomization(profile, session_id)
         
         # Select based on weights with some randomization
         selected = random.choices(self.profiles, weights=self.profile_weights, k=1)[0]
         
-        # Update usage stats
-        selected.times_used += 1
-        selected.last_used = datetime.now()
-        self.usage_history.append((selected.name, datetime.now()))
+        # Apply dynamic randomization
+        enhanced = self._enhance_profile_with_randomization(selected, session_id)
         
-        logger.debug(f"Selected TLS profile: {selected.name}")
-        return selected
+        # Update usage stats
+        enhanced.times_used += 1
+        enhanced.last_used = datetime.now()
+        self.usage_history.append((enhanced.name, datetime.now()))
+        
+        logger.debug(f"Selected TLS profile: {enhanced.name} (JA3: {enhanced.get_ja3_hash()})")
+        return enhanced
     
     def _match_user_agent(self, user_agent: str) -> Optional[TLSProfile]:
         """Match TLS profile to user agent"""
@@ -647,7 +655,198 @@ class TLSFingerprintRotator:
             profile.times_used = 0
             profile.last_used = None
         self.usage_history.clear()
+        self.grease_cache.clear()
         logger.info("Reset TLS profile usage statistics")
+    
+    def _enhance_profile_with_randomization(self, profile: TLSProfile, session_id: Optional[str] = None) -> TLSProfile:
+        """Enhance profile with dynamic randomization while maintaining browser consistency"""
+        # Create a copy to avoid modifying the original
+        import copy
+        enhanced = copy.deepcopy(profile)
+        
+        # Apply cipher suite randomization within browser patterns
+        enhanced.cipher_suites = self._randomize_cipher_suites(enhanced.cipher_suites, enhanced.browser)
+        
+        # Apply extension randomization with GREASE
+        enhanced.extensions = self._randomize_extensions_with_grease(
+            enhanced.extensions, enhanced.browser, session_id
+        )
+        
+        # Randomize elliptic curves order (Chrome/Edge behavior)
+        if enhanced.browser in ["Chrome", "Edge", "Brave", "Opera"]:
+            enhanced.elliptic_curves = self._randomize_curve_order(enhanced.elliptic_curves)
+        
+        # Randomize signature algorithms within valid ranges
+        enhanced.signature_algorithms = self._randomize_signature_algorithms(
+            enhanced.signature_algorithms, enhanced.browser
+        )
+        
+        return enhanced
+    
+    def _randomize_cipher_suites(self, ciphers: List[int], browser: str) -> List[int]:
+        """Randomize cipher suite order while maintaining browser patterns"""
+        # TLS 1.3 ciphers (always first)
+        tls13 = [c for c in ciphers[:3] if c in [4865, 4866, 4867]]
+        
+        # TLS 1.2 ciphers
+        tls12 = ciphers[3:]
+        
+        if browser in ["Chrome", "Edge", "Brave", "Opera"]:
+            # Chrome-based browsers group ciphers by type
+            ecdhe_gcm = [c for c in tls12 if c in [49195, 49199, 49196, 49200]]
+            ecdhe_cbc = [c for c in tls12 if c in [49171, 49172, 52393, 52392]]
+            rsa = [c for c in tls12 if c in [156, 157, 47, 53]]
+            
+            # Shuffle within groups
+            random.shuffle(ecdhe_gcm)
+            random.shuffle(ecdhe_cbc)
+            random.shuffle(rsa)
+            
+            return tls13 + ecdhe_gcm + ecdhe_cbc + rsa
+        
+        elif browser == "Firefox":
+            # Firefox has more random ordering
+            random.shuffle(tls12)
+            return tls13 + tls12
+        
+        # Safari keeps static order
+        return ciphers
+    
+    def _randomize_extensions_with_grease(self, extensions: List[int], browser: str, session_id: Optional[str]) -> List[int]:
+        """Add GREASE values to extensions at random positions"""
+        # Create a copy
+        ext_list = extensions.copy()
+        
+        # Generate or retrieve GREASE values for this session
+        if session_id and session_id in self.grease_cache:
+            grease_values = self.grease_cache[session_id]
+        else:
+            grease_values = self._generate_grease_values()
+            if session_id:
+                self.grease_cache[session_id] = grease_values
+        
+        # Chrome/Edge add 2-3 GREASE values
+        if browser in ["Chrome", "Edge", "Brave", "Opera"]:
+            # Remove existing GREASE values
+            ext_list = [e for e in ext_list if not self._is_grease_value(e)]
+            
+            # Add GREASE at semi-random positions (Chrome pattern)
+            positions = self._get_grease_positions(len(ext_list))
+            for i, pos in enumerate(sorted(positions, reverse=True)):
+                if i < len(grease_values):
+                    ext_list.insert(pos, grease_values[i])
+        
+        # Randomize some variable extensions
+        if browser in ["Chrome", "Edge"] and random.random() > 0.3:
+            # Sometimes add/remove optional extensions
+            optional_exts = [17, 41, 44, 49, 50]
+            if random.random() > 0.5:
+                # Add one
+                to_add = random.choice([e for e in optional_exts if e not in ext_list])
+                if to_add:
+                    ext_list.insert(random.randint(len(ext_list)//2, len(ext_list)), to_add)
+            else:
+                # Remove one if present
+                present = [e for e in optional_exts if e in ext_list]
+                if present:
+                    ext_list.remove(random.choice(present))
+        
+        return ext_list
+    
+    def _generate_grease_values(self) -> List[int]:
+        """Generate GREASE (Generate Random Extensions And Sustain Extensibility) values"""
+        # GREASE values follow pattern: 0x0A0A, 0x1A1A, ..., 0xFAFA
+        base_values = [0x0A, 0x1A, 0x2A, 0x3A, 0x4A, 0x5A, 0x6A, 0x7A, 0x8A, 0x9A, 0xAA, 0xBA, 0xCA, 0xDA, 0xEA]
+        
+        # Select 2-3 random GREASE values
+        num_grease = random.randint(2, 3)
+        selected_bases = random.sample(base_values, num_grease)
+        
+        # Convert to full GREASE values
+        return [(base << 8) | base for base in selected_bases]
+    
+    def _is_grease_value(self, value: int) -> bool:
+        """Check if a value is a GREASE value"""
+        # GREASE values have pattern 0xXAXA where X is same hex digit
+        if value < 0x0A0A or value > 0xFAFA:
+            return False
+        
+        high = (value >> 8) & 0xFF
+        low = value & 0xFF
+        
+        return high == low and (high & 0x0F) == 0x0A
+    
+    def _get_grease_positions(self, num_extensions: int) -> List[int]:
+        """Get positions for GREASE values following Chrome patterns"""
+        # Chrome typically puts GREASE at:
+        # - Near the beginning (position 1-3)
+        # - Middle (around 40-60%)
+        # - Near end (80-90%)
+        
+        positions = []
+        
+        # First GREASE near beginning
+        positions.append(random.randint(1, min(3, num_extensions // 4)))
+        
+        # Second GREASE in middle
+        middle_start = int(num_extensions * 0.4)
+        middle_end = int(num_extensions * 0.6)
+        if middle_end > middle_start:
+            positions.append(random.randint(middle_start, middle_end))
+        
+        # Third GREASE (if used) near end
+        if random.random() > 0.3:  # 70% chance of third GREASE
+            end_start = int(num_extensions * 0.8)
+            end_end = int(num_extensions * 0.9)
+            if end_end > end_start:
+                positions.append(random.randint(end_start, min(end_end, num_extensions - 1)))
+        
+        return positions
+    
+    def _randomize_curve_order(self, curves: List[int]) -> List[int]:
+        """Randomize elliptic curve order (Chrome behavior)"""
+        # Chrome uses these curves in varying orders
+        curve_orders = [
+            [29, 23, 24],  # x25519, secp256r1, secp384r1 (most common)
+            [29, 24, 23],  # x25519, secp384r1, secp256r1
+            [23, 29, 24],  # secp256r1, x25519, secp384r1
+        ]
+        
+        # Keep the main curves but randomize order
+        main_curves = [c for c in curves if c in [29, 23, 24]]
+        other_curves = [c for c in curves if c not in [29, 23, 24]]
+        
+        # Pick a random ordering for main curves
+        if main_curves:
+            main_curves = random.choice(curve_orders)
+        
+        return main_curves + other_curves
+    
+    def _randomize_signature_algorithms(self, algorithms: List[int], browser: str) -> List[int]:
+        """Randomize signature algorithm order within constraints"""
+        # Group algorithms by type
+        ecdsa = [a for a in algorithms if a in [1027, 1283, 1539]]  # ECDSA
+        rsa_pss = [a for a in algorithms if a in [2052, 2053, 2054]]  # RSA-PSS
+        rsa = [a for a in algorithms if a in [1025, 1281, 1537]]  # RSA
+        others = [a for a in algorithms if a not in ecdsa + rsa_pss + rsa]
+        
+        if browser in ["Chrome", "Edge", "Brave"]:
+            # Chrome prefers ECDSA, then RSA-PSS, then RSA
+            # But sometimes swaps RSA-PSS and RSA
+            if random.random() > 0.7:
+                return ecdsa + rsa + rsa_pss + others
+            else:
+                return ecdsa + rsa_pss + rsa + others
+        
+        elif browser == "Firefox":
+            # Firefox sometimes puts RSA-PSS first
+            if random.random() > 0.6:
+                return rsa_pss + ecdsa + rsa + others
+            else:
+                return ecdsa + rsa_pss + rsa + others
+        
+        # Default order
+        return algorithms
 
 
 class TLSValidator:

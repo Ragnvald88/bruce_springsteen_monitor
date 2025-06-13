@@ -5,11 +5,32 @@ import logging
 from typing import Optional
 from playwright.async_api import Page, BrowserContext
 
+# Import ultimate bypass for advanced mode
+try:
+    from .ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
+    ULTIMATE_MODE_AVAILABLE = True
+except ImportError:
+    ULTIMATE_MODE_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
 class AkamaiBypass:
     """Specialized techniques for bypassing Akamai bot detection."""
+    
+    def __init__(self):
+        """Initialize Akamai bypass with optional ultimate mode."""
+        self.ultimate_mode = False
+        self.ultimate_bypass = None
+        
+    def enable_ultimate_mode(self):
+        """Enable ultimate bypass mode if available."""
+        if ULTIMATE_MODE_AVAILABLE:
+            self.ultimate_mode = True
+            self.ultimate_bypass = UltimateAkamaiBypass()
+            logger.info("Ultimate Akamai bypass mode enabled")
+        else:
+            logger.warning("Ultimate mode not available - missing dependencies")
     
     @staticmethod
     async def apply_bypass(page: Page) -> None:

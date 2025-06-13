@@ -30,17 +30,27 @@ class FansalePlatform(BasePlatformHandler):
     async def initialize(self, page: Page) -> bool:
         """Initialize Fansale-specific setup."""
         try:
-            # Navigate to homepage
-            await page.goto(self.base_url, wait_until="domcontentloaded")
+            # Critical: Perform browser warmup to establish trust
+            logger.info("Starting browser warmup for Fansale...")
+            warmup_result = await browser_warmup_engine.warmup_browser(
+                page=page,
+                platform='fansale',
+                behavior_engine=self.human_baehavior
+            )
             
-            # Handle cookies
+            if not warmup_result['success']:
+                logger.error(f"Browser warmup failed: trust_score={warmup_result['trust_score']:.2f}")
+                return False
+            
+            logger.info(f"Browser warmup successful: trust_score={warmup_result['trust_score']:.2f}, "
+                       f"has_abck={warmup_result['has_abck']}")
+            
+            # Handle cookies after warmup
             await self.handle_cookies(page)
             
-            # Wait for page to stabilize
-            await page.wait_for_timeout(2000)
-            
             self._initialized = True
-            logger.info("Fansale handler initialized")
+            self._last_warmup = time.time()
+            logger.info("Fansale handler initialized with browser warmup")
             return True
             
         except Exception as e:

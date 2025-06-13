@@ -10,29 +10,19 @@ __version__ = "2.0.0"
 __author__ = "StealthMaster Team"
 __license__ = "Proprietary"
 
-# Core module imports
-from .config import Settings, load_settings
-from .src.constants import BrowserState, DetectionType, PurchaseStatus
+# Core module imports - commented out until proper structure is set up
+# from .config import Settings, load_settings
+# from .src.constants import BrowserState, DetectionType, PurchaseStatus
 
 # Make key components available at package level
-from .stealth.core import StealthCore
-from .detection.monitor import DetectionMonitor
-from .profiles.manager import ProfileManager
+# from .stealth.core import StealthCore
+# from .detection.monitor import DetectionMonitor
+# from .profiles.manager import ProfileManager
 
 __all__ = [
     # Version
     "__version__",
-    # Configuration
-    "Settings",
-    "load_settings",
-    # Constants
-    "BrowserState",
-    "DetectionType", 
-    "PurchaseStatus",
-    # Core Components
-    "StealthCore",
-    "DetectionMonitor",
-    "ProfileManager",
+    # Will add exports when modules are properly set up
 ]
 
 # Package initialization

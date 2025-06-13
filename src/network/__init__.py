@@ -1,58 +1,37 @@
-# stealthmaster/network/__init__.py
-"""Network layer for advanced request handling and session management."""
+"""
+Network functionality for StealthMaster.
+Includes proxy management and network utilities.
+"""
 
-from .interceptor import (
-    RequestInterceptor,
-    InterceptorMode,
-    InterceptRule,
-    HeaderNormalizer,
-    PatternAnalyzer
-)
-
-from .session import (
-    SessionManager,
-    SessionState,
-    CookieJar,
-    SessionMetrics
-)
-
-from .rate_limiter import (
-    IntelligentRateLimiter,
-    RateLimitStrategy,
-    RateLimitConfig,
-    AdaptiveTokenBucket,
-    HumanBehaviorPatterns
-)
-
-from .tls_fingerprint import (
-    TLSFingerprintRotator,
-    TLSProfile,
-    TLSValidator
-)
+# Proxy management modules will be imported when available
 
 __all__ = [
-    # Interceptor
-    "RequestInterceptor",
-    "InterceptorMode",
-    "InterceptRule",
-    "HeaderNormalizer",
-    "PatternAnalyzer",
+    # Core
+    'ProxyConfig',
+    'ProxyCredentials',
+    'ProxyProtocol',
+    'ProxyType',
+    'ProxyInstance',
+    'ProxyStats',
+    'RotationStrategy',
+    'ProxyProvider',
+    'ProxySelector',
+    'ProxyHealthChecker',
+    'BasicProxyHealthChecker',
     
-    # Session
-    "SessionManager",
-    "SessionState",
-    "CookieJar",
-    "SessionMetrics",
+    # Selectors
+    'RoundRobinSelector',
+    'RandomSelector',
+    'LeastUsedSelector',
+    'PerformanceBasedSelector',
+    'StickySelector',
     
-    # Rate Limiter
-    "IntelligentRateLimiter",
-    "RateLimitStrategy", 
-    "RateLimitConfig",
-    "AdaptiveTokenBucket",
-    "HumanBehaviorPatterns",
+    # Providers
+    'FileProxyProvider',
+    'EnvironmentProxyProvider',
+    'APIProxyProvider',
     
-    # TLS Fingerprint
-    "TLSFingerprintRotator",
-    "TLSProfile",
-    "TLSValidator"
+    # Manager
+    'ProxyManager',
+    'create_proxy_manager'
 ]

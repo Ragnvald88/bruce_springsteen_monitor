@@ -67,6 +67,7 @@ from src.utils.notifications import notification_manager
 from src.utils.config_validator import ConfigValidator
 from src.utils.retry_manager import retry_manager, with_retry
 from src.stealth.akamai_bypass import AkamaiBypass
+from src.stealth.ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
 
 console = Console()
 logger = get_logger(__name__)
@@ -81,6 +82,10 @@ class StealthMasterUI:
         self.monitors = {}
         self.browsers = {}  # Store browser instances for reuse
         self.start_time = datetime.now()
+        
+        # Check for ultimate mode
+        self.ultimate_mode = getattr(settings.app_settings, 'ultimate_mode', False)
+        self.ultimate_bot = None
         
         # Core components
         self.profile_manager = ProfileManager(settings)
@@ -140,6 +145,10 @@ class StealthMasterUI:
         
         # Browser count
         table.add_row("🌐 Browsers Open", str(len(self.browsers)))
+        
+        # Show mode
+        mode_text = "🔥 Ultimate" if self.ultimate_mode else "🛡️ Standard"
+        table.add_row("⚡ Mode", mode_text)
         
         return Panel(table, title="📊 Session Statistics", style="green")
     
@@ -517,6 +526,96 @@ class StealthMasterUI:
             except:
                 pass
     
+    async def monitor_target_ultimate(self, target):
+        """Monitor a single target using ultimate bypass mode."""
+        platform_name = target.platform.value.lower() if hasattr(target.platform, 'value') else str(target.platform).lower()
+        
+        # Initialize ultimate bot if not already done
+        if not self.ultimate_bot:
+            console.print("[cyan]🔥 Initializing Ultimate Bypass Mode...[/cyan]")
+            self.ultimate_bot = StealthMasterBot()
+        
+        # Get proxy configuration
+        proxy = None
+        # TODO: Implement proxy support for ultimate mode
+        # For now, ultimate mode runs without proxy
+        if False and self.settings.proxy_settings.enabled and self.settings.proxy_settings.primary_pool:
+            proxy_config = self.settings.proxy_settings.primary_pool[0]
+            proxy = {
+                'host': proxy_config.host,
+                'port': proxy_config.port,
+                'username': proxy_config.username,
+                'password': proxy_config.password
+            }
+        
+        while self.running:
+            try:
+                self.monitor_status[target.event_name] = "🔄 Checking"
+                
+                # Get page using ultimate stealth
+                page = await self.ultimate_bot.get_page(
+                    str(target.url),
+                    profile=f"{platform_name}_{target.event_name.replace(' ', '_')}",
+                    proxy=proxy
+                )
+                
+                self.monitor_status[target.event_name] = "🟢 Active"
+                self.last_check[target.event_name] = datetime.now()
+                
+                # Check for tickets using same logic as regular monitor
+                content = await page.content()
+                content_lower = content.lower()
+                
+                # Platform-specific selectors
+                platform_selectors = {
+                    'fansale': ['.ticket-item', '.listing-item', '[data-testid="ticket-listing"]', '.offer-item'],
+                    'ticketmaster': ['.ticket-listing', '.event-ticket', '[data-event-ticketlist]', '.quick-picks'],  
+                    'vivaticket': ['.ticket-available', '.ticket-row', '.biglietto-disponibile']
+                }
+                
+                positive_indicators = ['add to cart', 'select tickets', 'buy now', 'purchase', 'acquista ora', 'compra']
+                negative_indicators = ['sold out', 'esaurito', 'no tickets', 'non disponibile', 'coming soon', 'waitlist']
+                
+                found_tickets = False
+                
+                # Check for tickets
+                has_negative = any(neg in content_lower for neg in negative_indicators)
+                if not has_negative:
+                    selectors = platform_selectors.get(platform_name, [])
+                    for selector in selectors:
+                        try:
+                            elements = await page.locator(selector).count()
+                            if elements > 0:
+                                has_positive = any(pos in content_lower for pos in positive_indicators)
+                                if has_positive:
+                                    found_tickets = True
+                                    break
+                        except:
+                            pass
+                
+                if found_tickets:
+                    self.tickets_found += 1
+                    self.monitor_status[target.event_name] = "🎯 REAL tickets found!"
+                    console.print(f"[green]🎫 REAL tickets found for {target.event_name}![/green]")
+                    
+                    # Send notification
+                    await notification_manager.send_ticket_alert(
+                        platform=platform_name,
+                        event_name=target.event_name,
+                        ticket_count=1,
+                        url=str(target.url)
+                    )
+                    
+                    # Burst mode
+                    await asyncio.sleep(5)
+                else:
+                    await asyncio.sleep(target.interval_s)
+                    
+            except Exception as e:
+                self.monitor_status[target.event_name] = f"⚠️  Error"
+                logger.error(f"Ultimate monitor error for {target.event_name}: {e}")
+                await asyncio.sleep(10)
+    
     async def run(self):
         """Run the monitoring with live UI."""
         self.running = True
@@ -540,7 +639,9 @@ class StealthMasterUI:
         for target in self.settings.targets:
             if target.enabled:
                 enabled_count += 1
-                task = asyncio.create_task(self.monitor_target(target))
+                task = asyncio.create_task(
+                    self.monitor_target_ultimate(target) if self.ultimate_mode else self.monitor_target(target)
+                )
                 self.monitors[target.event_name] = task
                 tasks.append(task)
                 console.print(f"[green]✓[/green] Starting monitor for {target.event_name}")
@@ -570,9 +671,16 @@ class StealthMasterUI:
         
         # Close all browsers
         console.print("[yellow]🌐 Closing browsers...[/yellow]")
-        for platform_name in list(self.browsers.keys()):
-            await self._close_browser(platform_name)
-        await self.browser_launcher.close_all()
+        
+        # Ultimate mode cleanup
+        if self.ultimate_bot:
+            console.print("[yellow]🔥 Closing ultimate mode sessions...[/yellow]")
+            await self.ultimate_bot.cleanup()
+        else:
+            # Standard mode cleanup
+            for platform_name in list(self.browsers.keys()):
+                await self._close_browser(platform_name)
+            await self.browser_launcher.close_all()
         
         # End session tracking
         stats_manager.end_session(self.session_id)

@@ -11119,3 +11119,543 @@ Stacktrace:
 17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
 18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
 
+2025-06-13 21:43:14,032 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 21:43:14,039 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 21:43:14,041 - src.database.statistics - INFO - Started statistics session: ui_20250613_214314
+2025-06-13 21:43:14,042 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 21:43:14,074 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:43:14,074 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_39326.zip
+2025-06-13 21:43:14,075 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:43:14,084 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:43:14,085 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_39326.zip
+2025-06-13 21:43:14,086 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:43:14,095 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:43:14,096 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_39326.zip
+2025-06-13 21:43:14,096 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:43:17,977 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:43:17,978 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:43:18,483 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001013997a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000101390efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100e61400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000100e35ad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000100ee1ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000100f00a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000100ed92b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000100ea5507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000100ea6171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000101357550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x000000010135b4df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000101332962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x000000010135be4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000101321124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x000000010137e708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x000000010137e8d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000101390ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 21:43:18,508 - src.browser.launcher - INFO - Launched browser 94acaa07-3b4c-4b36-9663-b1aded2a1213 in 4414ms
+2025-06-13 21:43:19,876 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:43:20,382 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102aee7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000102ae5efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x00000001025b6400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010258aad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102636ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102655a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x000000010262e2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x00000001025fa507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x00000001025fb171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x0000000102aac550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x0000000102ab04df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x0000000102a87962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000102ab0e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000102a76124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000102ad3708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x0000000102ad38d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000102ae5ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 21:43:20,386 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-13 21:43:20,387 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_39326.zip
+2025-06-13 21:43:20,388 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-13 21:43:21,528 - src.browser.launcher - INFO - Launched browser 1541e12f-c8fb-4792-9f00-934fb3bfc8b9 in 7473ms
+2025-06-13 21:43:21,890 - src.stealth.akamai_bypass - INFO - Applied Akamai bypass techniques for Fansale
+2025-06-13 21:43:23,282 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-13 21:43:23,283 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-13 21:43:23,799 - src.browser.launcher - INFO - Launched browser 4e3c4fe4-12dc-49ec-882a-a65e3d30466b in 9716ms
+2025-06-13 21:43:23,954 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-13 21:44:55,321 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x000000010522e7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000105225efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104cf6400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000104ccaad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000104d76ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000104d95a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000104d6e2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000104d3a507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000104d3b171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001051ec550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001051f04df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001051c7962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x00000001051f0e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x00000001051b6124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000105213708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001052138d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000105225ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff801ef6df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff801ef2857 thread_start + 15
+
+2025-06-13 22:35:41,616 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 22:38:00,576 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 22:38:00,577 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 22:38:00,579 - src.database.statistics - INFO - Started statistics session: ui_20250613_223800
+2025-06-13 22:38:00,580 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 22:38:07,125 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:07,126 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:07,127 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:07,501 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:38:07,566 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:38:17,928 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:17,932 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:17,940 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:17,946 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:18,047 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 22:38:24,147 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:24,148 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:24,664 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:38:27,019 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:38:28,051 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:28,056 - src.stealth.ultimate_bypass - INFO - Closed session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:34,264 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:34,670 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:35,034 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:38:39,540 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:38:45,040 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:38:47,398 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:38:57,048 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:38:58,304 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:39:08,310 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:09,128 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:39:09,807 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:11,889 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:39:17,433 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:39:19,134 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:19,830 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.evaluate: Execution context was destroyed, most likely because of a navigation
+2025-06-13 22:39:19,892 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:39:20,526 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-13 22:39:20,527 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-13 22:39:20,529 - src.database.statistics - INFO - Started statistics session: ui_20250613_223920
+2025-06-13 22:39:20,529 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-13 22:39:27,020 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:27,023 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:27,025 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:27,025 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:27,026 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:27,027 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:29,836 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:39:29,898 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:31,046 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:39:31,112 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:39:41,051 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:41,769 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:39:42,150 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:43,513 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:43,514 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:43,515 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:43,516 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:43,516 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:43,517 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:39:47,209 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:39:51,775 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:39:52,481 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:00,056 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:00,058 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:00,059 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:00,060 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:00,061 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:00,061 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:01,148 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:40:02,490 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:03,001 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:03,834 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:40:13,006 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:14,908 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:16,542 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:16,544 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:16,545 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:16,545 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:16,546 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:16,547 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:17,531 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:22,666 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:40:24,915 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:25,384 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:33,082 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,086 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,088 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,089 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,090 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,091 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:33,873 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:40:35,443 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:35,968 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:36,109 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:40:45,979 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:46,429 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:49,638 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:49,640 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:49,642 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:49,643 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:49,645 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:49,646 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:40:52,954 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:56,436 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:40:56,939 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:40:57,757 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:41:06,143 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:06,166 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:06,168 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:06,171 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:06,172 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:06,173 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:06,174 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:07,083 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:07,097 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:07,203 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:41:13,311 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:14,522 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:41:17,208 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:17,214 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:22,395 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:22,396 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:22,396 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:22,737 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 22:41:22,877 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:41:23,107 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:41:23,691 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9226
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9226
+
+2025-06-13 22:41:23,693 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9226
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9226
+
+2025-06-13 22:41:24,526 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:24,531 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:28,063 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:30,201 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:41:31,017 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9226
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9226
+
+2025-06-13 22:41:31,018 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9226
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9226
+
+2025-06-13 22:41:32,742 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:32,749 - src.stealth.ultimate_bypass - INFO - Closed session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:32,884 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:32,891 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:33,111 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:33,118 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:38,962 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:39,099 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:39,329 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:41:39,857 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-13 22:41:40,179 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9227
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9227
+
+2025-06-13 22:41:40,180 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9227
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9227
+
+2025-06-13 22:41:40,573 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:41:40,767 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:41:47,527 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-13 22:41:47,530 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-13 22:41:49,869 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:41:54,678 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:41:56,757 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:41:56,760 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:42:00,486 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:04,029 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:42:04,030 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9222
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-06-13 22:42:04,729 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:42:10,609 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:10,618 - src.stealth.ultimate_bypass - INFO - Closed session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:10,798 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:10,810 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:12,977 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:42:15,779 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:42:20,523 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-13 22:42:20,525 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-13 22:42:35,004 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:36,761 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:37,509 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:42:37,944 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:42:45,893 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:42:45,902 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:42:47,516 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:47,934 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:42:52,136 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:42:55,479 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:42:57,946 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:42:58,306 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-13 22:43:08,206 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:08,234 - src.stealth.ultimate_bypass - INFO - Closed session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:08,310 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:08,315 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:14,473 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:14,511 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:15,065 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-13 22:43:17,102 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:43:25,096 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-13 22:43:25,518 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:43:25,525 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:43:30,113 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-13 22:43:31,753 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-13 22:43:35,509 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected

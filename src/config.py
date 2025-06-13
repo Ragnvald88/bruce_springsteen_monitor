@@ -74,6 +74,7 @@ class AppSettings(BaseModel):
     dry_run: bool = False
     browser_open_mode: str = Field(default="both", pattern="^(default|automated|both)$")
     mode_configs: Dict[str, ModeConfig]
+    ultimate_mode: bool = False  # Added ultimate mode flag
 
 
 class MonitoringSettings(BaseModel):

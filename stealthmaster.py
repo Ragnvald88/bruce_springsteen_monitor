@@ -783,11 +783,23 @@ async def main():
 
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        console.print("\n[yellow]👋 Goodbye![/yellow]")
-    except Exception as e:
-        console.print(f"\n[red]❌ Error: {e}[/red]")
-        import traceback
-        traceback.print_exc()
+    # Check if GUI mode is requested
+    if "--gui" in sys.argv or os.environ.get('STEALTHMASTER_GUI'):
+        # Launch GUI
+        try:
+            from src.ui.advanced_gui import main as gui_main
+            gui_main()
+        except ImportError as e:
+            console.print(f"[red]❌ GUI dependencies not installed: {e}[/red]")
+            console.print("[yellow]Install GUI dependencies with: pip install PySide6[/yellow]")
+            sys.exit(1)
+    else:
+        # Run CLI mode
+        try:
+            asyncio.run(main())
+        except KeyboardInterrupt:
+            console.print("\n[yellow]👋 Goodbye![/yellow]")
+        except Exception as e:
+            console.print(f"\n[red]❌ Error: {e}[/red]")
+            import traceback
+            traceback.print_exc()

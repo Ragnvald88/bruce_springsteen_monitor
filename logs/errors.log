@@ -14001,3 +14001,9 @@ Stacktrace:
 2025-06-14 20:38:41,298 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
 2025-06-14 20:39:44,660 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
 2025-06-14 20:40:47,347 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:43:02,081 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Path to the extension doesn't exist
+2025-06-14 20:43:02,087 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Path to the extension doesn't exist
+2025-06-14 20:43:05,171 - src.browser.launcher - ERROR - Failed to create page: 'NodriverBrowserLauncher' object has no attribute '_apply_resource_blocking'
+2025-06-14 20:43:05,172 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: 'NodriverBrowserLauncher' object has no attribute '_apply_resource_blocking'
+2025-06-14 20:43:05,792 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:43:07,050 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'

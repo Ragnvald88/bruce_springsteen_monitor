@@ -178,3 +178,19 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
 ]
+
+
+# ADDED: Common selectors for various UI elements
+COMMON_SELECTORS = {
+    "accept_cookies": [
+        'button:has-text("Accept all")',
+        'button:has-text("Accept All")',
+        'button:has-text("Accetta tutti")',
+        'button:has-text("Accetta")',
+        '#onetrust-accept-btn-handler',
+        '.cookie-consent-accept',
+        '[data-testid="cookie-accept"]',
+        'button[id*="accept"][id*="cookie"]',
+        'button[class*="accept"][class*="cookie"]'
+    ]
+}

@@ -374,7 +374,7 @@ class StealthMasterUI:
         # TODO: Implement proper proxy rotation
         proxy = self.settings.proxy_settings.primary_pool[0]
         
-        # Convert proxy settings to browser format - DO NOT include auth in URL
+        # FIXED: Convert proxy settings to browser format - DO NOT include auth in URL
         proxy_url = f"{proxy.type}://{proxy.host}:{proxy.port}"
         
         console.print(f"[cyan]🌐 Using proxy: {proxy.host}:{proxy.port} (user: {proxy.username})[/cyan]")
@@ -424,6 +424,12 @@ class StealthMasterUI:
                         if first_run:
                             console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
                             
+                            # ADDED: Dismiss cookie popups first
+                            console.print(f"[cyan]🍪 Checking for cookie popups...[/cyan]")
+                            cookie_dismissed = await cookie_handler.dismiss_cookie_banner(page, platform_name)
+                            if cookie_dismissed:
+                                console.print(f"[green]✓ Cookie popup handled[/green]")
+                            
                             # FIXED: Load cookies BEFORE navigating to save bandwidth
                             if self.settings.authentication.enabled:
                                 platform_auth = getattr(self.settings.authentication.platforms, platform_name, None)
@@ -464,6 +470,20 @@ class StealthMasterUI:
                                                         logger.debug(f"Cookie error: {e}")
                                                 
                                                 console.print(f"[green]✓ Loaded {len(cookies)} saved cookies for {platform_name}[/green]")
+                                                
+                                                # ADDED: Check authentication status
+                                                self.session_states[platform_name] = {'checking': True}
+                                                is_authenticated = await session_manager._verify_authentication(page, platform_name)
+                                                self.session_states[platform_name] = {'authenticated': is_authenticated}
+                                                
+                                                if not is_authenticated:
+                                                    console.print(f"[yellow]⚠️ Not authenticated on {platform_name}, attempting login...[/yellow]")
+                                                    if await session_manager._perform_login(page, credentials):
+                                                        self.session_states[platform_name] = {'authenticated': True}
+                                                        console.print(f"[green]✓ Successfully logged in to {platform_name}[/green]")
+                                                        await session_manager._save_cookies(page, platform_name)
+                                                    else:
+                                                        console.print(f"[red]✗ Login failed for {platform_name}[/red]")
                                         except Exception as e:
                                             logger.error(f"Failed to load cookies: {e}")
                             
@@ -548,6 +568,22 @@ class StealthMasterUI:
                         await asyncio.sleep(2)
                         self.browsers[platform_name]['health_check_fails'] = 0
                 except Exception as nav_error:
+                    # ADDED: Enhanced error analysis
+                    error_analysis = ErrorContext.analyze_error(nav_error, {
+                        'platform': platform_name,
+                        'url': url,
+                        'event': target.event_name
+                    })
+                    
+                    error_msg = ErrorContext.format_error_message(error_analysis, platform_name)
+                    console.print(f"[red]{error_msg}[/red]")
+                    
+                    # Get recovery action
+                    recovery_action = ErrorContext.get_recovery_action(error_analysis)
+                    if recovery_action == 'apply_akamai_bypass':
+                        console.print(f"[yellow]🛡️ Applying enhanced Akamai bypass...[/yellow]")
+                        await ErrorRecovery.apply_akamai_bypass(page, self.browser_launcher)
+                    
                     logger.error(f"Navigation error for {target.event_name}: {nav_error}")
                     self.browsers[platform_name]['health_check_fails'] = self.browsers[platform_name].get('health_check_fails', 0) + 1
                     
@@ -591,30 +627,60 @@ class StealthMasterUI:
                         self.monitor_status[target.event_name] = "🚫 Blocked"
                         console.print(f"[red]🚫 Blocked on {target.event_name}![/red]")
                         
-                        # Try Akamai challenge handler
-                        if '_abck' in content or 'akamai' in content_lower:
-                            console.print(f"[yellow]🛡️ Attempting Akamai challenge bypass...[/yellow]")
+                        # ADDED: Enhanced block recovery
+                        block_count = self.browsers[platform_name].get('block_count', 0) + 1
+                        self.browsers[platform_name]['block_count'] = block_count
+                        
+                        # Progressive recovery strategies
+                        if block_count == 1:
+                            console.print(f"[yellow]🛡️ First block - applying Akamai bypass...[/yellow]")
                             success = await AkamaiBypass.handle_challenge(page)
                             if success:
                                 console.print(f"[green]✓ Challenge bypass attempted[/green]")
-                                await asyncio.sleep(5)  # Give it time to work
+                                await asyncio.sleep(5)
                                 continue
+                        elif block_count == 2:
+                            console.print(f"[yellow]🔄 Second block - clearing browser data...[/yellow]")
+                            if hasattr(page, 'context'):
+                                await page.context.clear_cookies()
+                            await asyncio.sleep(10)
+                            continue
+                        elif block_count >= 3:
+                            console.print(f"[yellow]🔄 Multiple blocks - recreating browser...[/yellow]")
+                            await self._close_browser(platform_name)
+                            self.browsers.pop(platform_name, None)
+                            page = None
+                            await asyncio.sleep(30)
+                            continue
                         
-                        await asyncio.sleep(60)
+                        # Default backoff
+                        backoff_time = min(300, 60 * (2 ** min(block_count - 1, 5)))
+                        console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
+                        await asyncio.sleep(backoff_time)
                         continue
                 except:
                     pass
                 
                 # MODIFIED: Use smart check for data optimization
-                ticket_data = await self.data_tracker.smart_check(page, url, platform_name)
-                
-                # Get page content for detection (only if needed)
-                if ticket_data and ticket_data.get('hasTickets'):
-                    # We have tickets, get more details for detection
-                    content = await page.content() if hasattr(page, 'content') else page.page_source
+                if not first_run and hasattr(self.data_tracker, 'smart_check'):
+                    # Use optimized checking after first load
+                    ticket_data = await self.data_tracker.smart_check(page, url, platform_name)
+                    
+                    if ticket_data and ticket_data.get('hasTickets'):
+                        # We have tickets, get full page for detailed detection
+                        console.print(f"[yellow]🎫 Potential tickets found, loading full page...[/yellow]")
+                        if hasattr(page, "goto"):
+                            await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                        else:
+                            page.get(url)
+                            await asyncio.sleep(2)
+                        content = await page.content() if hasattr(page, 'content') else page.page_source
+                    else:
+                        # No tickets, use minimal data
+                        content = json.dumps(ticket_data)
                 else:
-                    # Use minimal content from smart check
-                    content = json.dumps(ticket_data)
+                    # First run or fallback - get full content
+                    content = await page.content() if hasattr(page, 'content') else page.page_source
                 
                 # Use enhanced ticket detector
                 detection_result = await self.ticket_detector.detect_tickets(page, platform_name, content)

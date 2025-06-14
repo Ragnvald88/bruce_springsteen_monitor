@@ -16128,3 +16128,46 @@ Stacktrace:
 2025-06-14 20:40:47,347 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
 2025-06-14 20:40:47,358 - src.telemetry.data_tracker - WARNING - Data spike detected: 24.62 MB in 1.1s
 2025-06-14 20:40:48,360 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.29 MB in 1.0s
+2025-06-14 20:42:57,575 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-14 20:42:57,576 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-14 20:42:57,577 - src.database.statistics - INFO - Started statistics session: ui_20250614_204257
+2025-06-14 20:42:57,578 - src.telemetry.history_tracker - INFO - History tracker session started: ui_20250614_204257
+2025-06-14 20:42:57,579 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-14 20:42:57,579 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-14 20:42:57,606 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-14 20:42:57,607 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip
+2025-06-14 20:42:57,608 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-14 20:42:57,622 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-14 20:42:57,623 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip
+2025-06-14 20:42:57,624 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-14 20:42:57,635 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-14 20:42:57,635 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip
+2025-06-14 20:42:57,636 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-14 20:42:58,587 - src.telemetry.data_tracker - WARNING - Data spike detected: 14.52 MB in 1.0s
+2025-06-14 20:42:59,588 - src.telemetry.data_tracker - WARNING - Data spike detected: 15.05 MB in 1.0s
+2025-06-14 20:43:00,412 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-14 20:43:00,592 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.72 MB in 1.0s
+2025-06-14 20:43:00,933 - src.browser.launcher - INFO - Launched browser 75c7a1d8-47ed-40aa-b172-fdf75efcae72 in 3296ms
+2025-06-14 20:43:01,521 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-14 20:43:02,080 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip'
+2025-06-14 20:43:02,081 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Path to the extension doesn't exist
+2025-06-14 20:43:02,086 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip'
+2025-06-14 20:43:02,087 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Path to the extension doesn't exist
+2025-06-14 20:43:02,088 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-14 20:43:02,089 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_15849.zip
+2025-06-14 20:43:02,089 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-14 20:43:04,832 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-14 20:43:04,835 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.37 MB in 2.7s
+2025-06-14 20:43:04,996 - src.browser.launcher - INFO - Launched browser ec5da3e0-4058-48b8-9e16-ebbefeba038f in 7377ms
+2025-06-14 20:43:05,171 - src.browser.launcher - ERROR - Failed to create page: 'NodriverBrowserLauncher' object has no attribute '_apply_resource_blocking'
+2025-06-14 20:43:05,172 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: 'NodriverBrowserLauncher' object has no attribute '_apply_resource_blocking'
+2025-06-14 20:43:05,369 - src.browser.launcher - INFO - Launched browser 70b25db0-199e-4f39-b952-06062eeb34e6 in 7776ms
+2025-06-14 20:43:05,789 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-14 20:43:05,792 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:43:06,212 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.96 MB in 1.4s
+2025-06-14 20:43:07,050 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:43:07,332 - src.telemetry.data_tracker - WARNING - Data spike detected: 24.22 MB in 1.1s
+2025-06-14 20:43:08,333 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.23 MB in 1.0s
+2025-06-14 20:43:09,340 - src.telemetry.data_tracker - WARNING - Data spike detected: 9.62 MB in 1.0s
+2025-06-14 20:43:13,347 - src.telemetry.data_tracker - WARNING - Data spike detected: 5.41 MB in 1.0s
+2025-06-14 20:43:14,348 - src.telemetry.data_tracker - WARNING - Data spike detected: 4.42 MB in 1.0s

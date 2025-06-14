@@ -203,3 +203,13 @@
 {"timestamp": "2025-06-14T20:40:45.209145", "bytes_sent": 340992, "bytes_recv": 764928, "total_mb": 1.0546875, "duration_seconds": 1.425961971282959, "rate_mbps": 5.91705821748434}
 {"timestamp": "2025-06-14T20:40:47.357927", "bytes_sent": 12153856, "bytes_recv": 13666304, "total_mb": 24.6240234375, "duration_seconds": 1.1461470127105713, "rate_mbps": 171.87340307603725}
 {"timestamp": "2025-06-14T20:40:48.359607", "bytes_sent": 111616, "bytes_recv": 1244160, "total_mb": 1.29296875, "duration_seconds": 1.0016777515411377, "rate_mbps": 10.326424824835689}
+{"timestamp": "2025-06-14T20:42:58.586337", "bytes_sent": 137216, "bytes_recv": 15087616, "total_mb": 14.51953125, "duration_seconds": 1.0015368461608887, "rate_mbps": 115.97800964113551}
+{"timestamp": "2025-06-14T20:42:59.588090", "bytes_sent": 218112, "bytes_recv": 15560704, "total_mb": 15.0478515625, "duration_seconds": 1.0017530918121338, "rate_mbps": 120.17213970583511}
+{"timestamp": "2025-06-14T20:43:00.592381", "bytes_sent": 203776, "bytes_recv": 1603584, "total_mb": 1.7236328125, "duration_seconds": 1.00429105758667, "rate_mbps": 13.73014565432393}
+{"timestamp": "2025-06-14T20:43:04.833662", "bytes_sent": 811008, "bytes_recv": 13205504, "total_mb": 13.3671875, "duration_seconds": 2.7431271076202393, "rate_mbps": 38.98379324200259}
+{"timestamp": "2025-06-14T20:43:06.211466", "bytes_sent": 514048, "bytes_recv": 1544192, "total_mb": 1.962890625, "duration_seconds": 1.3778047561645508, "rate_mbps": 11.397206265794441}
+{"timestamp": "2025-06-14T20:43:07.331734", "bytes_sent": 12040192, "bytes_recv": 13353984, "total_mb": 24.2177734375, "duration_seconds": 1.1202669143676758, "rate_mbps": 172.94288085742136}
+{"timestamp": "2025-06-14T20:43:08.333086", "bytes_sent": 79872, "bytes_recv": 1212416, "total_mb": 1.232421875, "duration_seconds": 1.0013539791107178, "rate_mbps": 9.846043662557681}
+{"timestamp": "2025-06-14T20:43:09.340501", "bytes_sent": 124928, "bytes_recv": 9964544, "total_mb": 9.6220703125, "duration_seconds": 1.0074102878570557, "rate_mbps": 76.41033988618788}
+{"timestamp": "2025-06-14T20:43:13.346607", "bytes_sent": 87040, "bytes_recv": 5586944, "total_mb": 5.4111328125, "duration_seconds": 1.001194953918457, "rate_mbps": 43.23739580445958}
+{"timestamp": "2025-06-14T20:43:14.347978", "bytes_sent": 130048, "bytes_recv": 4502528, "total_mb": 4.41796875, "duration_seconds": 1.001370906829834, "rate_mbps": 35.29536334532842}

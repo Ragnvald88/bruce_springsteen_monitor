@@ -79,6 +79,9 @@ from src.orchestration.purchase import purchase_engine
 from src.telemetry.history_tracker import history_tracker
 # ADDED: Request scheduler for rate limit management
 from src.network.request_scheduler import request_scheduler
+# ADDED: Error handler and cookie handler
+from src.utils.error_handler import ErrorContext, ErrorRecovery
+from src.utils.cookie_handler import cookie_handler
 
 console = Console()
 logger = get_logger(__name__)
@@ -118,6 +121,9 @@ class StealthMasterUI:
         self.tickets_reserved = 0
         self.tickets_failed = 0
         self.access_denied_count = 0
+        
+        # ADDED: Login status tracking
+        self.session_states = {}
         
         # Session
         self.session_id = f"ui_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -185,6 +191,20 @@ class StealthMasterUI:
         
         if blocks_info:
             table.add_row("🚫 Blocks", ", ".join(blocks_info))
+        
+        # ADDED: Show login status
+        table.add_row("", "")  # Separator
+        table.add_row("🔐 Auth Status", "", style="bold cyan")
+        
+        for platform in ['fansale', 'ticketmaster', 'vivaticket']:
+            if platform in self.browsers:
+                status = self.session_states.get(platform, {})
+                if status.get('authenticated'):
+                    table.add_row(f"  {platform}", "✓ Logged in", style="green")
+                elif status.get('checking'):
+                    table.add_row(f"  {platform}", "⏳ Checking...", style="yellow")
+                else:
+                    table.add_row(f"  {platform}", "✗ Not logged in", style="red")
         
         return Panel(table, title="📊 Session Statistics", style="green")
     

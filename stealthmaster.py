@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 import random
+import logging
 from dotenv import load_dotenv
 
 # Add src to path
@@ -435,77 +436,71 @@ class StealthMasterUI:
                 except:
                     pass
                 
-                # REAL ticket checking - search page content for actual tickets
-                # Platform-specific selectors for better accuracy
-                platform_selectors = {
-                    'fansale': ['.ticket-item', '.listing-item', '[data-testid="ticket-listing"]', '.offer-item'],
-                    'ticketmaster': ['.ticket-listing', '.event-ticket', '[data-event-ticketlist]', '.quick-picks'],  
-                    'vivaticket': ['.ticket-available', '.ticket-row', '.biglietto-disponibile']
-                }
+                # Track page size for data usage
+                response_size = len(content) if 'content' in locals() else 0
                 
-                # Generic ticket indicators (more restrictive)
-                positive_indicators = ['add to cart', 'select tickets', 'buy now', 'purchase', 'acquista ora', 'compra']
-                negative_indicators = ['sold out', 'esaurito', 'no tickets', 'non disponibile', 'coming soon', 'waitlist']
+                # Use enhanced ticket detector
+                detection_result = await self.ticket_detector.detect_tickets(page, platform_name, content)
                 
-                found_tickets = False
-                content_lower = content.lower() if 'content' in locals() else ""
+                # Track data usage
+                await self.data_tracker.track_request(
+                    platform=platform_name,
+                    url=url,
+                    response_size=response_size,
+                    blocked_resources={
+                        'images': getattr(page, '_blocked_images', 0),
+                        'scripts': getattr(page, '_blocked_scripts', 0)
+                    }
+                )
                 
-                # First check for negative indicators
-                has_negative = any(neg in content_lower for neg in negative_indicators)
-                if has_negative:
-                    found_tickets = False
-                else:
-                    # Check platform-specific selectors
-                    selectors = platform_selectors.get(platform_name, [])
-                    for selector in selectors:
-                        try:
-                            elements = await page.locator(selector).count() if hasattr(page, 'locator') else 0
-                            if elements > 0:
-                                # Found ticket elements, now verify they're actually available
-                                has_positive = any(pos in content_lower for pos in positive_indicators)
-                                if has_positive:
-                                    found_tickets = True
-                                    break
-                        except:
-                            pass
-                    
-                    # Fallback: check for positive indicators with stricter validation
-                    if not found_tickets and len(content_lower) > 100:  # Ensure page loaded
-                        ticket_count = sum(1 for indicator in positive_indicators if indicator in content_lower)
-                        if ticket_count >= 2:  # Require multiple indicators to reduce false positives
-                            found_tickets = True
-                
-                if found_tickets:
+                if detection_result['tickets_found']:
                     self.tickets_found += 1
+                    confidence = detection_result['confidence']
+                    ticket_count = detection_result.get('ticket_count', 1)
+                    
+                    self.monitor_status[target.event_name] = f"🎯 Tickets found! ({confidence:.0%})"
+                    console.print(f"[green]🎫 Tickets detected on {target.event_name}![/green]")
+                    console.print(f"  Detection confidence: {confidence:.0%}")
+                    console.print(f"  Ticket count: {ticket_count}")
+                    console.print(f"  Recommendation: {detection_result['recommendation']}")
+                    
+                    # Show detection details in debug mode
+                    if logger.isEnabledFor(logging.DEBUG):
+                        console.print(f"  Detection details: {detection_result['details']}")
+                    
                     stats_manager.record_ticket_found(
                         platform_name,
                         target.event_name,
                         "general",
-                        1000
+                        int(confidence * 1000)
                     )
-                    self.monitor_status[target.event_name] = "🎯 REAL tickets found!"
-                    console.print(f"[green]🎫 REAL tickets found for {target.event_name}![/green]")
                     
-                    # Send notification
+                    # Send notification with confidence level
                     await notification_manager.send_ticket_alert(
                         platform=platform_name,
                         event_name=target.event_name,
-                        ticket_count=1,  # TODO: Get actual count
-                        url=url
+                        ticket_count=ticket_count,
+                        url=url,
+                        confidence=confidence
                     )
                     
                     # TODO: Implement actual purchase logic here
                     # For now, switch to burst mode for rapid monitoring
                     
-                    # Switch to burst mode (5 second intervals)
-                    base_interval = 5
-                    console.print(f"[yellow]⚡ Burst mode activated for {target.event_name}[/yellow]")
+                    # Switch to burst mode (5 second intervals) for high confidence
+                    if confidence >= 0.8:
+                        base_interval = 5
+                        console.print(f"[yellow]⚡ Burst mode activated for {target.event_name}[/yellow]")
+                    else:
+                        base_interval = 10  # Slower for lower confidence
                     
                     # Wait a bit to show the status
                     await asyncio.sleep(3)
                 else:
-                    # Log that we're still searching
-                    console.print(f"[dim]Still searching for {target.event_name}...[/dim]", end="\r")
+                    # Log that we're still searching with data usage info
+                    data_summary = self.data_tracker.get_summary()
+                    platform_data = data_summary['platforms'].get(platform_name, {})
+                    console.print(f"[dim]Searching {target.event_name}... (Data: {platform_data.get('data_mb', 0):.1f}MB)[/dim]", end="\r")
                 
                 # Implement adaptive rate limiting
                 self.browsers[platform_name]['request_count'] = self.browsers[platform_name].get('request_count', 0) + 1
@@ -583,48 +578,37 @@ class StealthMasterUI:
                 self.monitor_status[target.event_name] = "🟢 Active"
                 self.last_check[target.event_name] = datetime.now()
                 
-                # Check for tickets using same logic as regular monitor
+                # Get page content
                 content = await page.content()
-                content_lower = content.lower()
+                response_size = len(content)
                 
-                # Platform-specific selectors
-                platform_selectors = {
-                    'fansale': ['.ticket-item', '.listing-item', '[data-testid="ticket-listing"]', '.offer-item'],
-                    'ticketmaster': ['.ticket-listing', '.event-ticket', '[data-event-ticketlist]', '.quick-picks'],  
-                    'vivaticket': ['.ticket-available', '.ticket-row', '.biglietto-disponibile']
-                }
+                # Use enhanced ticket detector
+                detection_result = await self.ticket_detector.detect_tickets(page, platform_name, content)
                 
-                positive_indicators = ['add to cart', 'select tickets', 'buy now', 'purchase', 'acquista ora', 'compra']
-                negative_indicators = ['sold out', 'esaurito', 'no tickets', 'non disponibile', 'coming soon', 'waitlist']
+                # Track data usage
+                await self.data_tracker.track_request(
+                    platform=platform_name,
+                    url=str(target.url),
+                    response_size=response_size,
+                    blocked_resources={'images': 0, 'scripts': 0}  # Ultimate mode doesn't block resources
+                )
                 
-                found_tickets = False
-                
-                # Check for tickets
-                has_negative = any(neg in content_lower for neg in negative_indicators)
-                if not has_negative:
-                    selectors = platform_selectors.get(platform_name, [])
-                    for selector in selectors:
-                        try:
-                            elements = await page.locator(selector).count()
-                            if elements > 0:
-                                has_positive = any(pos in content_lower for pos in positive_indicators)
-                                if has_positive:
-                                    found_tickets = True
-                                    break
-                        except:
-                            pass
-                
-                if found_tickets:
+                if detection_result['tickets_found']:
                     self.tickets_found += 1
-                    self.monitor_status[target.event_name] = "🎯 REAL tickets found!"
-                    console.print(f"[green]🎫 REAL tickets found for {target.event_name}![/green]")
+                    confidence = detection_result['confidence']
+                    ticket_count = detection_result.get('ticket_count', 1)
+                    
+                    self.monitor_status[target.event_name] = f"🎯 Tickets found! ({confidence:.0%})"
+                    console.print(f"[green]🎫 Tickets detected on {target.event_name}![/green]")
+                    console.print(f"  [Ultimate Mode] Confidence: {confidence:.0%}")
                     
                     # Send notification
                     await notification_manager.send_ticket_alert(
                         platform=platform_name,
                         event_name=target.event_name,
-                        ticket_count=1,
-                        url=str(target.url)
+                        ticket_count=ticket_count,
+                        url=str(target.url),
+                        confidence=confidence
                     )
                     
                     # Burst mode
@@ -644,6 +628,10 @@ class StealthMasterUI:
         # Initialize
         console.print("[yellow]🚀 Initializing StealthMaster...[/yellow]")
         await self.profile_manager.load_all_profiles()
+        
+        # Start data usage monitoring
+        await self.data_tracker.start_monitoring()
+        console.print("[cyan]📊 Data usage monitoring enabled[/cyan]")
         
         # Important notice about proxies
         if not self.settings.proxy_settings.enabled:
@@ -690,6 +678,9 @@ class StealthMasterUI:
         for task in tasks:
             task.cancel()
         
+        # Stop data monitoring
+        await self.data_tracker.stop_monitoring()
+        
         # Close all browsers
         console.print("[yellow]🌐 Closing browsers...[/yellow]")
         
@@ -702,6 +693,12 @@ class StealthMasterUI:
             for platform_name in list(self.browsers.keys()):
                 await self._close_browser(platform_name)
             await self.browser_launcher.close_all()
+        
+        # Generate and display data usage report
+        console.print("\n[cyan]📊 Data Usage Report:[/cyan]")
+        report = await self.data_tracker.generate_report()
+        for line in report.split('\n'):
+            console.print(f"  {line}")
         
         # End session tracking
         stats_manager.end_session(self.session_id)

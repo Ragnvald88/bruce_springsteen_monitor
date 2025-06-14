@@ -170,14 +170,21 @@ class StealthMasterUI:
         mode_text = "🔥 Ultimate" if self.ultimate_mode else "🛡️ Standard"
         table.add_row("⚡ Mode", mode_text)
         
-        # Data usage stats
-        data_summary = self.data_tracker.get_summary()
-        table.add_row("📊 Data Used", f"{data_summary['total_data_mb']:.1f} MB")
+        # Data usage stats - FIXED to show actual data
+        total_mb = 0
+        for platform_data in self.data_tracker.platform_totals.values():
+            total_mb += platform_data.total_mb
         
-        # Efficiency score (average across platforms)
-        efficiency_scores = [p['efficiency_score'] for p in data_summary['platforms'].values()]
-        avg_efficiency = sum(efficiency_scores) / len(efficiency_scores) if efficiency_scores else 100
-        table.add_row("⚡ Efficiency", f"{avg_efficiency:.0f}%")
+        table.add_row("📊 Data Used", f"{total_mb:.1f} MB")
+        
+        # Show blocks per platform
+        blocks_info = []
+        for platform, browser in self.browsers.items():
+            if browser.get('block_count', 0) > 0:
+                blocks_info.append(f"{platform}:{browser['block_count']}")
+        
+        if blocks_info:
+            table.add_row("🚫 Blocks", ", ".join(blocks_info))
         
         return Panel(table, title="📊 Session Statistics", style="green")
     

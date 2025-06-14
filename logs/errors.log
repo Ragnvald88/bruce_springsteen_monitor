@@ -13939,3 +13939,65 @@ Traceback (most recent call last):
   File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/venv/lib/python3.13/site-packages/rich/console.py", line 2020, in on_broken_pipe
     raise SystemExit(1)
 SystemExit: 1
+2025-06-14 20:30:14,904 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:30:15,906 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:30:19,493 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:30:19,706 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-14 20:30:29,765 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x000000010313e7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103135efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102c06400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102bdaad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102c86ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ca5a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102c7e2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102c4a507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102c4b171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001030fc550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001031004df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001030d7962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103100e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x00000001030c6124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103123708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001031238d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103135ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:30:29,771 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x000000010313e7a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000103135efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000102c06400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000102bdaad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x0000000102c86ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x0000000102ca5a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x0000000102c7e2b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x0000000102c4a507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x0000000102c4b171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x00000001030fc550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001031004df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x00000001030d7962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000103100e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x00000001030c6124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000103123708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001031238d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000103135ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:31:22,320 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:32:24,984 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:33:27,560 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:34:30,456 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:35:33,045 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:36:35,694 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:37:38,683 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:38:41,298 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:39:44,660 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:40:47,347 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'

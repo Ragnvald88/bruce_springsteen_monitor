@@ -1,0 +1,4 @@
+{"timestamp": "2025-06-14T17:56:38.990815", "platform": "fansale", "url": "https://example.com/event1", "method": "GET", "response_size": 524288, "blocked": {"images": 5, "scripts": 3}, "total_session_mb": 0.5}
+{"timestamp": "2025-06-14T17:56:38.991773", "platform": "ticketmaster", "url": "https://example.com/event2", "method": "GET", "response_size": 262144, "blocked": {"images": 10, "scripts": 2}, "total_session_mb": 0.25}
+{"timestamp": "2025-06-14T17:56:57.392905", "platform": "fansale", "url": "https://example.com/event1", "method": "GET", "response_size": 524288, "blocked": {"images": 5, "scripts": 3}, "total_session_mb": 0.5}
+{"timestamp": "2025-06-14T17:56:57.393708", "platform": "ticketmaster", "url": "https://example.com/event2", "method": "GET", "response_size": 262144, "blocked": {"images": 10, "scripts": 2}, "total_session_mb": 0.25}

@@ -1,3 +1,348 @@
+"""
+Advanced Ticket Detection System
+Platform-specific detection with ML-based verification
+"""
+
+from typing import Dict, Any, List, Optional
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+
+from ..utils.logging import get_logger
+
+logger = get_logger(__name__)
+
+
+@dataclass
+class DetectionResult:
+    """Result of ticket detection"""
+    confidence: float
+    has_tickets: bool
+    found_elements: Dict[str, int]
+    details: Optional[Dict[str, Any]] = None
+
+
+class PlatformDetectionRules(ABC):
+    """Base class for platform-specific detection rules"""
+    
+    @abstractmethod
+    async def check_dom_structure(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check DOM structure for tickets"""
+        pass
+    
+    @abstractmethod
+    async def analyze_content(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Analyze page content for ticket indicators"""
+        pass
+    
+    async def check_interactive_elements(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check for interactive ticket purchase elements"""
+        return {'confidence': 0.5, 'found': False}
+    
+    async def check_availability(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check ticket availability status"""
+        return {'confidence': 0.5, 'available': True}
+
+
+class FansaleDetectionRules(PlatformDetectionRules):
+    """Fansale-specific detection rules"""
+    
+    async def check_dom_structure(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check Fansale DOM structure for tickets"""
+        
+        # Fansale-specific selectors (updated for 2025)
+        selectors = {
+            'ticket_containers': [
+                '.ticket-listing-item',
+                '.offer-row',
+                '[data-test="ticket-offer"]',
+                '.listing-container .offer',
+                'div[class*="TicketOffer"]',
+                '.event-tickets-list',
+                '.tickets-available'
+            ],
+            'price_elements': [
+                '.ticket-price',
+                '.offer-price',
+                'span[class*="price"]',
+                '[data-test="offer-price"]',
+                '.price-tag',
+                '.prezzo'
+            ],
+            'availability': [
+                '.available-tickets',
+                '.tickets-left',
+                'button[class*="buy"]',
+                'a[href*="/checkout"]',
+                '.add-to-cart',
+                '[data-action="add-to-basket"]'
+            ]
+        }
+        
+        found_elements = {}
+        confidence = 0
+        
+        for element_type, selector_list in selectors.items():
+            for selector in selector_list:
+                try:
+                    if hasattr(page, "query_selector_all"):
+                        elements = await page.query_selector_all(selector)
+                        if elements:
+                            found_elements[element_type] = len(elements)
+                            confidence += 0.3
+                            break
+                    elif hasattr(page, "find_elements_by_css_selector"):
+                        elements = page.find_elements_by_css_selector(selector)
+                        if elements:
+                            found_elements[element_type] = len(elements)
+                            confidence += 0.3
+                            break
+                except Exception as e:
+                    logger.debug(f"Selector {selector} failed: {e}")
+        
+        return {
+            'found_elements': found_elements,
+            'confidence': min(confidence, 1.0),
+            'has_tickets': len(found_elements) >= 2
+        }
+    
+    async def analyze_content(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Analyze page content for ticket indicators"""
+        
+        if not content:
+            try:
+                content = await page.content() if hasattr(page, 'content') else page.page_source
+            except:
+                content = ""
+        
+        # Fansale-specific keywords (Italian + English)
+        positive_indicators = {
+            'high_confidence': [
+                'acquista ora', 'buy now',
+                'aggiungi al carrello', 'add to cart',
+                'disponibile', 'available',
+                'seleziona biglietti', 'select tickets',
+                'procedi all\'acquisto', 'proceed to checkout',
+                'biglietti disponibili', 'tickets available'
+            ],
+            'medium_confidence': [
+                'prezzo', 'price',
+                'settore', 'sector', 
+                'fila', 'row',
+                'posto', 'seat',
+                'quantità', 'quantity',
+                'tipologia', 'type'
+            ]
+        }
+        
+        negative_indicators = [
+            'sold out', 'esaurito',
+            'non disponibile', 'not available',
+            'terminato', 'finished',
+            'coming soon', 'prossimamente',
+            'waitlist', 'lista d\'attesa'
+        ]
+        
+        # Calculate confidence based on keyword presence
+        confidence = 0
+        found_keywords = []
+        
+        content_lower = content.lower()
+        
+        # Check positive indicators
+        for conf_level, keywords in positive_indicators.items():
+            weight = 0.4 if conf_level == 'high_confidence' else 0.2
+            for keyword in keywords:
+                if keyword in content_lower:
+                    confidence += weight
+                    found_keywords.append(keyword)
+        
+        # Check negative indicators (reduce confidence)
+        for keyword in negative_indicators:
+            if keyword in content_lower:
+                confidence -= 0.5
+        
+        return {
+            'confidence': max(0, min(confidence, 1.0)),
+            'found_keywords': found_keywords,
+            'has_negative_indicators': any(neg in content_lower for neg in negative_indicators)
+        }
+
+
+class TicketmasterDetectionRules(PlatformDetectionRules):
+    """Ticketmaster-specific detection rules"""
+    
+    async def check_dom_structure(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check Ticketmaster DOM structure for tickets"""
+        
+        selectors = {
+            'ticket_containers': [
+                '.ticket-listing',
+                '.event-ticket',
+                '[data-event-ticketlist]',
+                '.quick-picks',
+                '.ticket-selection',
+                '[data-testid="ticket-shelf"]'
+            ],
+            'price_elements': [
+                '.price-range',
+                '.ticket-price',
+                '[data-testid="offer-price"]',
+                '.PriceDisplay'
+            ],
+            'availability': [
+                'button[aria-label*="tickets"]',
+                '.buy-button',
+                '[data-testid="buy-button"]',
+                'a[href*="/purchase"]'
+            ]
+        }
+        
+        found_elements = {}
+        confidence = 0
+        
+        for element_type, selector_list in selectors.items():
+            for selector in selector_list:
+                try:
+                    if hasattr(page, "query_selector_all"):
+                        elements = await page.query_selector_all(selector)
+                        if elements:
+                            found_elements[element_type] = len(elements)
+                            confidence += 0.35
+                            break
+                except:
+                    pass
+        
+        return {
+            'found_elements': found_elements,
+            'confidence': min(confidence, 1.0),
+            'has_tickets': len(found_elements) >= 2
+        }
+    
+    async def analyze_content(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Analyze Ticketmaster page content"""
+        
+        if not content:
+            try:
+                content = await page.content() if hasattr(page, 'content') else page.page_source
+            except:
+                content = ""
+        
+        positive_indicators = {
+            'high_confidence': [
+                'find tickets', 'get tickets',
+                'see tickets', 'buy tickets',
+                'available now', 'on sale'
+            ],
+            'medium_confidence': [
+                'price range', 'seat map',
+                'section', 'row'
+            ]
+        }
+        
+        negative_indicators = [
+            'sold out', 'no tickets available',
+            'check back later', 'currently unavailable'
+        ]
+        
+        confidence = 0
+        content_lower = content.lower()
+        
+        # Check indicators
+        for conf_level, keywords in positive_indicators.items():
+            weight = 0.4 if conf_level == 'high_confidence' else 0.2
+            for keyword in keywords:
+                if keyword in content_lower:
+                    confidence += weight
+        
+        # Check negative
+        for keyword in negative_indicators:
+            if keyword in content_lower:
+                confidence -= 0.6
+        
+        return {
+            'confidence': max(0, min(confidence, 1.0)),
+            'has_negative_indicators': any(neg in content_lower for neg in negative_indicators)
+        }
+
+
+class VivaticketDetectionRules(PlatformDetectionRules):
+    """Vivaticket-specific detection rules"""
+    
+    async def check_dom_structure(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Check Vivaticket DOM structure"""
+        
+        selectors = {
+            'ticket_containers': [
+                '.ticket-available',
+                '.ticket-row',
+                '.biglietto-disponibile',
+                '.event-tickets'
+            ],
+            'price_elements': [
+                '.ticket-price',
+                '.prezzo-biglietto'
+            ],
+            'availability': [
+                '.buy-ticket-button',
+                'button[class*="acquista"]'
+            ]
+        }
+        
+        found_elements = {}
+        confidence = 0
+        
+        for element_type, selector_list in selectors.items():
+            for selector in selector_list:
+                try:
+                    if hasattr(page, "query_selector_all"):
+                        elements = await page.query_selector_all(selector)
+                        if elements:
+                            found_elements[element_type] = len(elements)
+                            confidence += 0.35
+                            break
+                except:
+                    pass
+        
+        return {
+            'found_elements': found_elements,
+            'confidence': min(confidence, 1.0),
+            'has_tickets': len(found_elements) >= 2
+        }
+    
+    async def analyze_content(self, page: Any, content: str = None) -> Dict[str, Any]:
+        """Analyze Vivaticket page content"""
+        
+        if not content:
+            try:
+                content = await page.content() if hasattr(page, 'content') else page.page_source
+            except:
+                content = ""
+        
+        positive_indicators = [
+            'biglietti disponibili', 'acquista',
+            'compra ora', 'disponibile'
+        ]
+        
+        negative_indicators = [
+            'esaurito', 'non disponibile',
+            'sold out'
+        ]
+        
+        confidence = 0
+        content_lower = content.lower()
+        
+        for keyword in positive_indicators:
+            if keyword in content_lower:
+                confidence += 0.3
+        
+        for keyword in negative_indicators:
+            if keyword in content_lower:
+                confidence -= 0.6
+        
+        return {
+            'confidence': max(0, min(confidence, 1.0)),
+            'has_negative_indicators': any(neg in content_lower for neg in negative_indicators)
+        }
 
 
 class TicketDetector:

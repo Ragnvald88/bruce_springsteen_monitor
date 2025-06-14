@@ -59,16 +59,21 @@ async def test_ticket_detector():
     class MockPage:
         async def query_selector_all(self, selector):
             # Simulate finding ticket elements
-            if selector in ['.ticket-item', '.offer-item']:
+            if selector in ['.ticket-listing-item', '.offer-row']:
                 return ['element1', 'element2']  # Found 2 elements
+            elif selector in ['.ticket-price', '.offer-price']:
+                return ['price1']  # Found price
+            elif selector in ['.available-tickets', 'button[class*="buy"]']:
+                return ['buy_button']  # Found buy button
             return []
         
         async def content(self):
             return """
-            <div class="ticket-item">
-                <span class="price">€50</span>
-                <button>Acquista ora</button>
+            <div class="ticket-listing-item">
+                <span class="ticket-price">€50</span>
+                <button class="buy-now">Acquista ora</button>
                 <span>Disponibile</span>
+                <span>Seleziona biglietti</span>
             </div>
             """
     

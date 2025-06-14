@@ -28,30 +28,19 @@ class TicketHistoryTracker:
         self.session_stats = defaultdict(lambda: defaultdict(int))
         self.current_session_id = None
         
-        # Category patterns for Italian ticket platforms
+        # Simplified category patterns for Italian ticket platforms
         self.category_patterns = {
             'prato_a': [
-                'PRATO A', 'SETTORE A', 'TRIBUNA A', 'ANELLO A',
-                'PRIMO ANELLO', 'FIRST RING', 'SECTOR A'
+                'PRATO A', 'PRATO 1', 'SETTORE A', 'PRIMO ANELLO', 
+                'FIRST RING', 'SECTOR A', 'ANELLO 1'
             ],
             'prato_b': [
-                'PRATO B', 'SETTORE B', 'TRIBUNA B', 'ANELLO B',
-                'SECONDO ANELLO', 'SECOND RING', 'SECTOR B'
+                'PRATO B', 'PRATO 2', 'SETTORE B', 'SECONDO ANELLO',
+                'SECOND RING', 'SECTOR B', 'ANELLO 2'
             ],
-            'vip': [
-                'VIP', 'GOLD', 'PREMIUM', 'HOSPITALITY', 'PLATINUM',
-                'EXECUTIVE', 'BUSINESS', 'LOUNGE'
-            ],
-            'pit': [
-                'PIT', 'PARTERRE', 'POSTO IN PIEDI', 'STANDING',
-                'FRONT STAGE', 'GOLDEN CIRCLE'
-            ],
-            'numbered': [
-                'NUMERATO', 'NUMBERED', 'POSTO NUMERATO', 'ASSIGNED SEAT',
-                'TRIBUNA NUMERATA'
-            ],
-            'general': [
-                'GENERALE', 'GENERAL', 'STANDARD', 'NORMALE'
+            'seating': [
+                'TRIBUNA', 'NUMERATO', 'POSTO', 'SEAT', 'SITTING',
+                'SEDUTO', 'POLTRONA', 'CHAIR'
             ]
         }
         

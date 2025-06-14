@@ -42,6 +42,9 @@ class NodriverBrowserLauncher:
         self._detection_attempts = 0
         self._successful_operations = 0
         
+        # ADDED: Initialize session_states
+        self.session_states: Dict[str, Any] = {}
+        
         # Configure nodriver with residential proxies if available
         self._configure_proxies()
         
@@ -186,85 +189,6 @@ class NodriverBrowserLauncher:
         except Exception as e:
             logger.error(f"Failed to create context: {e}")
             raise
-    
-    async def save_session(self, context_id: str, custom_data: Dict[str, Any] = None) -> bool:
-        """
-        Save the current browser session state
-        
-        Args:
-            context_id: Context ID to save
-            custom_data: Additional data to store with session
-            
-        Returns:
-            Success status
-        """
-        try:
-            context_data = self.contexts.get(context_id)
-            if not context_data:
-                logger.error(f"Context {context_id} not found")
-                return False
-            
-            platform = context_data.get("platform")
-            profile_id = context_data.get("profile_id")
-            
-            if not platform or not profile_id:
-                logger.warning("Cannot save session without platform and profile_id")
-                return False
-            
-            # For Playwright contexts
-            if "context" in context_data:
-                context = context_data["context"]
-                session_id = f"{profile_id}_{int(time.time())}"
-                
-                success = await session_persistence.save_session(
-                    session_id=session_id,
-                    browser_context=context,
-                    platform=platform,
-                    profile_id=profile_id,
-                    custom_data=custom_data
-                )
-                
-                if success:
-                    logger.info(f"Saved session for {platform}:{profile_id}")
-                    self._successful_operations += 1
-                
-                return success
-            
-            # TODO: Implement for Selenium/undetected-chromedriver
-            logger.warning("Session persistence not yet implemented for Selenium")
-            return False
-            
-        except Exception as e:
-            logger.error(f"Failed to save session: {e}")
-            return False
-    
-    async def invalidate_session(self, context_id: str) -> None:
-        """
-        Mark a session as invalid (e.g., after detection)
-        
-        Args:
-            context_id: Context ID to invalidate
-        """
-        if context_id in self.session_states:
-            session_state = self.session_states[context_id]
-            session_persistence.invalidate_session(session_state.session_id)
-            logger.warning(f"Invalidated session for context {context_id}")
-    
-    async def update_detection_score(self, context_id: str, score: float) -> None:
-        """
-        Update detection score for a session
-        
-        Args:
-            context_id: Context ID
-            score: Detection score (0.0 - 1.0)
-        """
-        if context_id in self.session_states:
-            session_state = self.session_states[context_id]
-            session_persistence.update_detection_score(session_state.session_id, score)
-            
-            # Invalidate if score too high
-            if score > 0.8:
-                await self.invalidate_session(context_id)
     
     async def new_page(self, context_id: str) -> Any:
         """
@@ -445,67 +369,8 @@ class NodriverBrowserLauncher:
             "nodriver_stats": nodriver_core.get_stats()
         }
     
-    # ADDED: Aggressive resource blocking for data optimization
-    async def _apply_resource_blocking(self, page):
-        """Apply aggressive resource blocking to minimize data usage"""
-        
-        # Define allowed patterns for ticket-critical resources
-        allowed_patterns = [
-            r'/api/',  # API endpoints
-            r'/ajax/',  # AJAX calls
-            r'/ticket',  # Ticket-related URLs
-            r'/checkout',  # Checkout process
-            r'/login',  # Authentication
-            r'/auth',  # Authentication
-            r'/session',  # Session management
-            r'\.json',  # JSON data
-        ]
-        
-        # Resource types to always block
-        block_types = {'image', 'media', 'font', 'stylesheet', 'other'}
-        
-        async def route_handler(route):
-            """Handle resource requests with minimal data usage"""
-            try:
-                url = route.request.url
-                resource_type = route.request.resource_type
-                
-                # Check if URL matches any allowed pattern
-                is_allowed = any(re.search(pattern, url, re.IGNORECASE) for pattern in allowed_patterns)
-                
-                # Block logic
-                if resource_type in block_types:
-                    await route.abort()
-                elif 'analytics' in url.lower() or 'tracking' in url.lower():
-                    await route.abort()
-                elif 'ads' in url.lower() or 'doubleclick' in url.lower():
-                    await route.abort()
-                elif resource_type == 'document' and not is_allowed:
-                    # For documents, only allow if they match our patterns
-                    await route.abort()
-                else:
-                    # Add compression headers for allowed requests
-                    headers = route.request.headers.copy()
-                    headers['Accept-Encoding'] = 'gzip, deflate, br'
-                    headers['Save-Data'] = 'on'
-                    await route.continue_(headers=headers)
-                    
-            except Exception as e:
-                logger.debug(f"Resource blocking error: {e}")
-                await route.continue_()
-        
-        # Apply the route handler
-        await page.route('**/*', route_handler)
-        
-        # Also set extra headers for the page
-        await page.set_extra_http_headers({
-            'Accept': 'text/html,application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Cache-Control': 'max-age=86400',
-            'Save-Data': 'on'
-        })
-        
-        logger.info("Applied aggressive resource blocking for data optimization")
+    # REMOVED: Aggressive resource blocking was causing detection
+    # Resource blocking should be selective, not aggressive
     
     async def close_all(self):
         """Close all browsers and contexts"""

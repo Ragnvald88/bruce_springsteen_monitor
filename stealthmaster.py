@@ -9,6 +9,7 @@ from datetime import datetime
 import random
 import logging
 import json
+import time
 from dotenv import load_dotenv
 
 # Add src to path
@@ -233,8 +234,7 @@ class StealthMasterUI:
         table.add_column("Total", style="white", width=8)
         table.add_column("Prato A", style="green", width=10)
         table.add_column("Prato B", style="yellow", width=10)
-        table.add_column("VIP", style="magenta", width=8)
-        table.add_column("General", style="blue", width=10)
+        table.add_column("Seating", style="blue", width=10)
         table.add_column("Avg Conf", style="dim", width=8)
         
         for platform, stats in history_data.items():
@@ -244,10 +244,9 @@ class StealthMasterUI:
             table.add_row(
                 platform.title(),
                 str(stats['total_detections']),
-                f"🎫 {stats['prato_a']}",
-                f"🎫 {stats['prato_b']}",
-                f"👑 {stats['vip']}",
-                f"🎟️ {stats['general']}",
+                f"🎫 {stats.get('prato_a', 0)}",
+                f"🎫 {stats.get('prato_b', 0)}",
+                f"💺 {stats.get('seating', 0)}",
                 f"{stats['avg_confidence']:.0%}"
             )
         
@@ -398,7 +397,7 @@ class StealthMasterUI:
                         if first_run:
                             console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
                             
-                            # ADDED: Initialize session with authentication
+                            # FIXED: Load cookies BEFORE navigating to save bandwidth
                             if self.settings.authentication.enabled:
                                 platform_auth = getattr(self.settings.authentication.platforms, platform_name, None)
                                 if platform_auth:
@@ -406,13 +405,45 @@ class StealthMasterUI:
                                         'username': platform_auth.username,
                                         'password': platform_auth.password
                                     }
-                                    console.print(f"[cyan]🔐 Checking authentication for {platform_name}...[/cyan]")
+                                    console.print(f"[cyan]🔐 Loading saved session for {platform_name}...[/cyan]")
                                     
-                                    auth_success = await session_manager.initialize_session(page, platform_name, credentials)
-                                    if auth_success:
-                                        console.print(f"[green]✓ Authenticated on {platform_name}[/green]")
-                                    else:
-                                        console.print(f"[yellow]⚠️ Authentication failed for {platform_name}, continuing anyway[/yellow]")
+                                    # Try to load existing cookies first
+                                    cookie_file = Path(f"data/cookies/{platform_name}_cookies.json")
+                                    if cookie_file.exists():
+                                        try:
+                                            import json
+                                            with open(cookie_file, 'r') as f:
+                                                cookies = json.load(f)
+                                            
+                                            # For Selenium, we need to navigate to domain first
+                                            base_urls = {
+                                                'fansale': 'https://www.fansale.it',
+                                                'ticketmaster': 'https://www.ticketmaster.it',
+                                                'vivaticket': 'https://www.vivaticket.com'
+                                            }
+                                            
+                                            if platform_name in base_urls:
+                                                page.get(base_urls[platform_name])
+                                                await asyncio.sleep(2)
+                                                
+                                                # Add cookies
+                                                for cookie in cookies:
+                                                    try:
+                                                        # Selenium needs specific format
+                                                        if 'sameSite' in cookie:
+                                                            cookie['sameSite'] = 'Strict'
+                                                        page.add_cookie(cookie)
+                                                    except Exception as e:
+                                                        logger.debug(f"Cookie error: {e}")
+                                                
+                                                console.print(f"[green]✓ Loaded {len(cookies)} saved cookies for {platform_name}[/green]")
+                                        except Exception as e:
+                                            logger.error(f"Failed to load cookies: {e}")
+                            
+                            # Apply selective resource blocking for Selenium
+                            if hasattr(page, 'execute_cdp_cmd'):
+                                from src.browser.resource_blocker import apply_selective_blocking
+                                apply_selective_blocking(page)
                             
                             # Apply Akamai bypass for platforms that need it
                             if platform_name in ['ticketmaster', 'ticketone', 'fansale']:
@@ -505,6 +536,19 @@ class StealthMasterUI:
                 
                 self.monitor_status[target.event_name] = "🟢 Active"
                 self.last_check[target.event_name] = datetime.now()
+                
+                # ADDED: Save cookies periodically for session persistence
+                if hasattr(page, 'get_cookies'):
+                    cookies = page.get_cookies()
+                    if cookies and len(cookies) > 5:  # Only save if we have meaningful cookies
+                        cookie_file = Path(f"data/cookies/{platform_name}_cookies.json")
+                        cookie_file.parent.mkdir(parents=True, exist_ok=True)
+                        try:
+                            with open(cookie_file, 'w') as f:
+                                json.dump(cookies, f)
+                            logger.debug(f"Saved {len(cookies)} cookies for {platform_name}")
+                        except Exception as e:
+                            logger.debug(f"Cookie save error: {e}")
                 
                 # Check page content for access denied
                 try:

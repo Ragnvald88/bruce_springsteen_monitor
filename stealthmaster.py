@@ -71,7 +71,6 @@ from src.stealth.akamai_bypass import AkamaiBypass
 from src.stealth.ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
 from src.telemetry.data_tracker import DataUsageTracker
 from src.detection.ticket_detector import TicketDetector
-from src.browser.pool_manager import BrowserPoolManager
 
 console = Console()
 logger = get_logger(__name__)
@@ -103,9 +102,6 @@ class StealthMasterUI:
         
         # Initialize ticket detector
         self.ticket_detector = TicketDetector()
-        
-        # Initialize browser pool manager (optional, for future use)
-        # self.browser_pool = BrowserPoolManager(settings, launcher)
         
         # Stats
         self.monitor_status = {}

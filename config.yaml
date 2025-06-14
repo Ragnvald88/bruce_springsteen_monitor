@@ -180,7 +180,7 @@ targets:
   # TICKETMASTER - Bruce Springsteen San Siro
   - platform: "ticketmaster"
     event_name: "Bruce Springsteen San Siro 2025"
-    url: "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano"
+    url: "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html"
     enabled: true  # Set to true when you have credentials
     interval_s: 30
     desired_sections: []

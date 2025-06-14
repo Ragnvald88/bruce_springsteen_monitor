@@ -12916,3 +12916,99 @@ navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-mil
 
 2025-06-14 15:39:07,468 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
 2025-06-14 15:39:09,968 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:38:17,680 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-14 19:38:17,681 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-14 19:38:17,682 - src.database.statistics - INFO - Started statistics session: ui_20250614_193817
+2025-06-14 19:38:17,683 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-14 19:38:17,684 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-14 19:38:24,166 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:38:24,167 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:38:24,167 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:38:24,547 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-14 19:38:24,659 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:38:25,727 - src.telemetry.data_tracker - WARNING - Data spike detected: 3.20 MB in 1.0s
+2025-06-14 19:38:26,649 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:38:26,729 - src.telemetry.data_tracker - WARNING - Data spike detected: 12.10 MB in 1.0s
+2025-06-14 19:38:27,730 - src.telemetry.data_tracker - WARNING - Data spike detected: 10.29 MB in 1.0s
+2025-06-14 19:38:33,735 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.10 MB in 1.0s
+2025-06-14 19:38:34,551 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:38:34,663 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:38:35,092 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-14 19:38:35,738 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.42 MB in 1.0s
+2025-06-14 19:38:36,312 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:38:45,102 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:38:46,753 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.64 MB in 1.0s
+2025-06-14 19:38:48,086 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:38:56,727 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:38:58,098 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.61 MB in 1.0s
+2025-06-14 19:38:59,134 - src.telemetry.data_tracker - WARNING - Data spike detected: 18.47 MB in 1.0s
+2025-06-14 19:38:59,135 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:39:00,135 - src.telemetry.data_tracker - WARNING - Data spike detected: 7.16 MB in 1.0s
+2025-06-14 19:39:06,366 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:06,769 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:16,773 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:17,247 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:18,168 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:39:19,160 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.08 MB in 1.0s
+2025-06-14 19:39:20,047 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:39:20,162 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.68 MB in 1.0s
+2025-06-14 19:39:26,169 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.47 MB in 1.0s
+2025-06-14 19:39:27,253 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:27,822 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:29,368 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:31,174 - src.telemetry.data_tracker - WARNING - Data spike detected: 9.91 MB in 1.0s
+2025-06-14 19:39:32,045 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:39:32,175 - src.telemetry.data_tracker - WARNING - Data spike detected: 10.21 MB in 1.0s
+2025-06-14 19:39:33,176 - src.telemetry.data_tracker - WARNING - Data spike detected: 6.04 MB in 1.0s
+2025-06-14 19:39:34,178 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.69 MB in 1.0s
+2025-06-14 19:39:37,826 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:38,276 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:48,287 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:48,713 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:50,196 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:39:52,654 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:39:58,718 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:39:59,157 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:40:02,267 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:40:04,831 - src.telemetry.data_tracker - WARNING - Data spike detected: 20.03 MB in 1.6s
+2025-06-14 19:40:04,833 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:40:05,834 - src.telemetry.data_tracker - WARNING - Data spike detected: 6.00 MB in 1.0s
+2025-06-14 19:40:09,163 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:40:09,733 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:40:19,745 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:40:20,274 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:40:22,708 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:40:24,911 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected

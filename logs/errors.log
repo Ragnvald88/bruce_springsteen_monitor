@@ -11219,3 +11219,47 @@ navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPre
 Call log:
 navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
 
+2025-06-14 19:38:24,547 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-14 19:38:24,659 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:38:35,092 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-14 19:39:06,769 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:17,247 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:27,822 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:38,276 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:48,713 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:39:59,157 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:40:09,733 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+
+2025-06-14 19:40:20,274 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano
+Call log:
+navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
+

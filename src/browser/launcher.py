@@ -8,6 +8,7 @@ import time
 from typing import Dict, Any, Optional, List
 from contextlib import asynccontextmanager
 import uuid
+import re
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -298,6 +299,10 @@ class NodriverBrowserLauncher:
                 # Apply stealth enhancements
                 await nodriver_core.enhance_stealth_for_page(page)
                 
+                # ADDED: Apply aggressive resource blocking for data optimization
+                if hasattr(page, 'route'):
+                    await self._apply_resource_blocking(page)
+                
                 return page
                 
         except Exception as e:
@@ -439,6 +444,68 @@ class NodriverBrowserLauncher:
             "active_contexts": len(self.contexts),
             "nodriver_stats": nodriver_core.get_stats()
         }
+    
+    # ADDED: Aggressive resource blocking for data optimization
+    async def _apply_resource_blocking(self, page):
+        """Apply aggressive resource blocking to minimize data usage"""
+        
+        # Define allowed patterns for ticket-critical resources
+        allowed_patterns = [
+            r'/api/',  # API endpoints
+            r'/ajax/',  # AJAX calls
+            r'/ticket',  # Ticket-related URLs
+            r'/checkout',  # Checkout process
+            r'/login',  # Authentication
+            r'/auth',  # Authentication
+            r'/session',  # Session management
+            r'\.json',  # JSON data
+        ]
+        
+        # Resource types to always block
+        block_types = {'image', 'media', 'font', 'stylesheet', 'other'}
+        
+        async def route_handler(route):
+            """Handle resource requests with minimal data usage"""
+            try:
+                url = route.request.url
+                resource_type = route.request.resource_type
+                
+                # Check if URL matches any allowed pattern
+                is_allowed = any(re.search(pattern, url, re.IGNORECASE) for pattern in allowed_patterns)
+                
+                # Block logic
+                if resource_type in block_types:
+                    await route.abort()
+                elif 'analytics' in url.lower() or 'tracking' in url.lower():
+                    await route.abort()
+                elif 'ads' in url.lower() or 'doubleclick' in url.lower():
+                    await route.abort()
+                elif resource_type == 'document' and not is_allowed:
+                    # For documents, only allow if they match our patterns
+                    await route.abort()
+                else:
+                    # Add compression headers for allowed requests
+                    headers = route.request.headers.copy()
+                    headers['Accept-Encoding'] = 'gzip, deflate, br'
+                    headers['Save-Data'] = 'on'
+                    await route.continue_(headers=headers)
+                    
+            except Exception as e:
+                logger.debug(f"Resource blocking error: {e}")
+                await route.continue_()
+        
+        # Apply the route handler
+        await page.route('**/*', route_handler)
+        
+        # Also set extra headers for the page
+        await page.set_extra_http_headers({
+            'Accept': 'text/html,application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Cache-Control': 'max-age=86400',
+            'Save-Data': 'on'
+        })
+        
+        logger.info("Applied aggressive resource blocking for data optimization")
     
     async def close_all(self):
         """Close all browsers and contexts"""

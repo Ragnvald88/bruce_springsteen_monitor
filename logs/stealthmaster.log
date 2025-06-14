@@ -13012,3 +13012,160 @@ navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-mil
 
 2025-06-14 19:40:22,708 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
 2025-06-14 19:40:24,911 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:40:51,780 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-14 19:40:51,786 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-14 19:40:51,787 - src.database.statistics - INFO - Started statistics session: ui_20250614_194051
+2025-06-14 19:40:51,788 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-14 19:40:51,788 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-14 19:40:58,136 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:40:58,137 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:40:58,138 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:40:58,439 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-14 19:40:58,579 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-06-14 19:41:01,217 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:41:08,453 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:08,772 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:08,783 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:09,224 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.10 MB in 1.0s
+2025-06-14 19:41:10,225 - src.telemetry.data_tracker - WARNING - Data spike detected: 7.02 MB in 1.0s
+2025-06-14 19:41:10,705 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:41:11,227 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.25 MB in 1.0s
+2025-06-14 19:41:14,970 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:15,980 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-06-14 19:41:16,231 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.85 MB in 1.0s
+2025-06-14 19:41:18,233 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.21 MB in 1.0s
+2025-06-14 19:41:25,986 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:27,244 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.47 MB in 1.0s
+2025-06-14 19:41:29,087 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:41:31,314 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:41:34,380 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:41:40,924 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:41:42,391 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.27 MB in 1.0s
+2025-06-14 19:41:42,571 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:41:43,392 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.92 MB in 1.0s
+2025-06-14 19:41:50,400 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.25 MB in 1.0s
+2025-06-14 19:41:59,157 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:42:00,415 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.35 MB in 1.0s
+2025-06-14 19:42:00,818 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:04,461 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:42:05,956 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:12,647 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:42:14,433 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:14,435 - src.telemetry.data_tracker - WARNING - Data spike detected: 7.04 MB in 1.0s
+2025-06-14 19:42:15,439 - src.telemetry.data_tracker - WARNING - Data spike detected: 8.38 MB in 1.0s
+2025-06-14 19:42:24,454 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.58 MB in 1.0s
+2025-06-14 19:42:30,890 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:42:33,109 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:36,608 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:42:38,849 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:44,505 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:42:45,485 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.39 MB in 1.0s
+2025-06-14 19:42:46,105 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:42:46,488 - src.telemetry.data_tracker - WARNING - Data spike detected: 14.68 MB in 1.0s
+2025-06-14 19:42:58,509 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.18 MB in 1.0s
+2025-06-14 19:43:03,167 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:43:04,519 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.44 MB in 1.0s
+2025-06-14 19:43:05,389 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:08,902 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:43:11,116 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:16,173 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:43:17,538 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.27 MB in 1.0s
+2025-06-14 19:43:18,294 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:18,540 - src.telemetry.data_tracker - WARNING - Data spike detected: 18.18 MB in 1.0s
+2025-06-14 19:43:32,564 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.20 MB in 1.0s
+2025-06-14 19:43:35,449 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:43:38,591 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:41,176 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:43:43,568 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:48,507 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:43:49,604 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.35 MB in 1.0s
+2025-06-14 19:43:50,247 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:43:50,606 - src.telemetry.data_tracker - WARNING - Data spike detected: 14.71 MB in 1.0s
+2025-06-14 19:44:08,643 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:44:10,486 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:13,630 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:44:15,163 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:20,317 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:44:21,651 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.23 MB in 1.0s
+2025-06-14 19:44:22,341 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:22,652 - src.telemetry.data_tracker - WARNING - Data spike detected: 18.15 MB in 1.0s
+2025-06-14 19:44:40,544 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:44:41,684 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.09 MB in 1.0s
+2025-06-14 19:44:42,844 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:45,218 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:44:47,756 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:52,537 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:44:54,765 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.32 MB in 1.0s
+2025-06-14 19:44:56,132 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.20 MB in 1.4s
+2025-06-14 19:44:56,133 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:44:57,137 - src.telemetry.data_tracker - WARNING - Data spike detected: 5.99 MB in 1.0s
+2025-06-14 19:45:12,902 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:45:14,160 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.39 MB in 1.0s
+2025-06-14 19:45:15,627 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:45:17,824 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:45:20,084 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:45:26,350 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:45:29,184 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.31 MB in 1.0s
+2025-06-14 19:45:29,764 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:45:30,186 - src.telemetry.data_tracker - WARNING - Data spike detected: 18.17 MB in 1.0s
+2025-06-14 19:45:45,679 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:45:47,122 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:45:47,211 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.06 MB in 1.0s
+2025-06-14 19:45:48,213 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.73 MB in 1.0s
+2025-06-14 19:45:50,147 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:45:52,260 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:45:59,965 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:01,231 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.40 MB in 1.0s
+2025-06-14 19:46:02,233 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.10 MB in 1.0s
+2025-06-14 19:46:02,429 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:46:03,237 - src.telemetry.data_tracker - WARNING - Data spike detected: 6.00 MB in 1.0s
+2025-06-14 19:46:17,180 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:18,258 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.38 MB in 1.0s
+2025-06-14 19:46:19,304 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:46:22,262 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.48 MB in 1.0s
+2025-06-14 19:46:22,315 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:46:23,263 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.07 MB in 1.0s
+2025-06-14 19:46:23,764 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:46:32,630 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:34,276 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.15 MB in 1.0s
+2025-06-14 19:46:34,459 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:46:35,278 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.78 MB in 1.0s
+2025-06-14 19:46:49,357 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:49,373 - src.stealth.ultimate_bypass - INFO - Closed session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:53,828 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:46:53,846 - src.stealth.ultimate_bypass - INFO - Closed session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:46:55,587 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:46:56,309 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.52 MB in 1.0s
+2025-06-14 19:46:57,311 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.57 MB in 1.0s
+2025-06-14 19:46:58,112 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:00,017 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:47:02,287 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:04,527 - src.stealth.ultimate_bypass - INFO - Session dead, recreating for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:47:04,534 - src.stealth.ultimate_bypass - INFO - Closed session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:47:10,737 - src.stealth.ultimate_bypass - INFO - Created ultimate browser session for profile: vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:47:12,331 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.20 MB in 1.0s
+2025-06-14 19:47:13,332 - src.telemetry.data_tracker - WARNING - Data spike detected: 7.23 MB in 1.0s
+2025-06-14 19:47:13,538 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:14,336 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.84 MB in 1.0s
+2025-06-14 19:47:16,339 - src.telemetry.data_tracker - WARNING - Data spike detected: 12.32 MB in 1.0s
+2025-06-14 19:47:28,184 - src.stealth.ultimate_bypass - INFO - Reusing existing session for ticketmaster_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:47:29,353 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.49 MB in 1.0s
+2025-06-14 19:47:30,612 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.73 MB in 1.3s
+2025-06-14 19:47:30,613 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:32,355 - src.stealth.ultimate_bypass - INFO - Reusing existing session for fansale_Bruce_Springsteen_Milano_2025
+2025-06-14 19:47:34,411 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:43,745 - src.stealth.ultimate_bypass - INFO - Reusing existing session for vivaticket_Bruce_Springsteen_San_Siro_2025
+2025-06-14 19:47:44,630 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.03 MB in 1.0s
+2025-06-14 19:47:45,631 - src.stealth.ultimate_bypass - INFO - No Akamai challenge detected
+2025-06-14 19:47:45,633 - src.telemetry.data_tracker - WARNING - Data spike detected: 7.46 MB in 1.0s
+2025-06-14 19:47:46,635 - src.telemetry.data_tracker - WARNING - Data spike detected: 9.69 MB in 1.0s
+2025-06-14 19:47:47,637 - src.telemetry.data_tracker - WARNING - Data spike detected: 17.24 MB in 1.0s

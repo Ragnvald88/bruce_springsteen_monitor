@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 import random
 import logging
+import json
 from dotenv import load_dotenv
 
 # Add src to path
@@ -52,7 +53,7 @@ else:
     print("[yellow]⚠️  Chrome/Chromium not found. Please install Chrome or set CHROME_PATH environment variable.[/yellow]")
 
 from rich.console import Console
-from rich.table import Table
+from rich.table import Table, box
 from rich.live import Live
 from rich.layout import Layout
 from rich.panel import Panel
@@ -71,6 +72,12 @@ from src.stealth.akamai_bypass import AkamaiBypass
 from src.stealth.ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
 from src.telemetry.data_tracker import DataUsageTracker
 from src.detection.ticket_detector import TicketDetector
+# ADDED: New imports for enhancements
+from src.utils.session_manager import session_manager
+from src.orchestration.purchase import purchase_engine
+from src.telemetry.history_tracker import history_tracker
+# ADDED: Request scheduler for rate limit management
+from src.network.request_scheduler import request_scheduler
 
 console = Console()
 logger = get_logger(__name__)
@@ -114,6 +121,9 @@ class StealthMasterUI:
         # Session
         self.session_id = f"ui_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         stats_manager.start_session(self.session_id)
+        
+        # ADDED: Initialize history tracker with session
+        history_tracker.set_session_id(self.session_id)
     
     def create_header(self) -> Panel:
         """Create the header panel."""
@@ -212,6 +222,56 @@ class StealthMasterUI:
         
         return Panel(table, title="🖥️  Active Monitors", style="blue")
     
+    # ADDED: Create history panel with ticket categorization
+    def create_history_panel(self) -> Panel:
+        """Create detailed history panel with ticket categories"""
+        history_data = history_tracker.get_formatted_history()
+        
+        # Create main table
+        table = Table(title="📊 Ticket Detection History", box=box.ROUNDED)
+        table.add_column("Platform", style="cyan", width=12)
+        table.add_column("Total", style="white", width=8)
+        table.add_column("Prato A", style="green", width=10)
+        table.add_column("Prato B", style="yellow", width=10)
+        table.add_column("VIP", style="magenta", width=8)
+        table.add_column("General", style="blue", width=10)
+        table.add_column("Avg Conf", style="dim", width=8)
+        
+        for platform, stats in history_data.items():
+            if platform == 'session_totals':
+                continue
+                
+            table.add_row(
+                platform.title(),
+                str(stats['total_detections']),
+                f"🎫 {stats['prato_a']}",
+                f"🎫 {stats['prato_b']}",
+                f"👑 {stats['vip']}",
+                f"🎟️ {stats['general']}",
+                f"{stats['avg_confidence']:.0%}"
+            )
+        
+        # Add session summary below
+        session_summary = Text()
+        session_summary.append(f"\n📅 Session: {self.session_id}\n", style="dim")
+        session_summary.append(f"⏱️  Duration: {str(datetime.now() - self.start_time).split('.')[0]}\n")
+        
+        # Add current session stats
+        if 'session_totals' in history_data:
+            session_summary.append("\n🔥 Current Session Detections:\n", style="bold")
+            for platform, categories in history_data['session_totals'].items():
+                total = sum(categories.values())
+                if total > 0:
+                    session_summary.append(f"  {platform}: {total} detections\n", style="cyan")
+        
+        layout = Layout()
+        layout.split_column(
+            Layout(table),
+            Layout(Panel(session_summary, style="dim"), size=6)
+        )
+        
+        return Panel(layout, title="📈 Analytics Dashboard", style="blue")
+    
     def create_layout(self) -> Layout:
         """Create the complete dashboard layout."""
         layout = Layout()
@@ -223,11 +283,20 @@ class StealthMasterUI:
             Layout(name="footer", size=5)
         )
         
-        # Split body into stats and monitors
-        layout["body"].split_row(
+        # MODIFIED: Split body into three sections
+        layout["body"].split_column(
+            Layout(name="top_row", size=10),
+            Layout(name="bottom_row", size=12)
+        )
+        
+        # Top row: stats and monitors
+        layout["body"]["top_row"].split_row(
             Layout(self.create_stats_panel(), name="stats", ratio=1),
             Layout(self.create_monitors_panel(), name="monitors", ratio=2)
         )
+        
+        # Bottom row: history panel
+        layout["body"]["bottom_row"].update(self.create_history_panel())
         
         # Add instructions to footer
         instructions = Panel(
@@ -311,6 +380,11 @@ class StealthMasterUI:
             try:
                 self.monitor_status[target.event_name] = "🔄 Checking"
                 
+                # ADDED: Check rate limits before making request
+                wait_time = await request_scheduler.wait_if_needed(platform_name)
+                if wait_time > 0:
+                    self.monitor_status[target.event_name] = f"⏳ Rate limit wait ({wait_time:.0f}s)"
+                
                 # Create page if needed (reuse existing browser)
                 if page is None:
                     try:
@@ -323,6 +397,22 @@ class StealthMasterUI:
                         
                         if first_run:
                             console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")
+                            
+                            # ADDED: Initialize session with authentication
+                            if self.settings.authentication.enabled:
+                                platform_auth = getattr(self.settings.authentication.platforms, platform_name, None)
+                                if platform_auth:
+                                    credentials = {
+                                        'username': platform_auth.username,
+                                        'password': platform_auth.password
+                                    }
+                                    console.print(f"[cyan]🔐 Checking authentication for {platform_name}...[/cyan]")
+                                    
+                                    auth_success = await session_manager.initialize_session(page, platform_name, credentials)
+                                    if auth_success:
+                                        console.print(f"[green]✓ Authenticated on {platform_name}[/green]")
+                                    else:
+                                        console.print(f"[yellow]⚠️ Authentication failed for {platform_name}, continuing anyway[/yellow]")
                             
                             # Apply Akamai bypass for platforms that need it
                             if platform_name in ['ticketmaster', 'ticketone', 'fansale']:
@@ -357,32 +447,44 @@ class StealthMasterUI:
                 url = str(target.url)
                 
                 try:
+                    # MODIFIED: Use smart check for minimal data usage
                     if hasattr(page, "goto"):
-                        response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                        # First time or cache expired - do full navigation
+                        cache_key = f"{platform_name}:{url}"
+                        should_full_load = cache_key not in self.data_tracker.request_cache
                         
-                        # Reset health check counter on successful navigation
-                        self.browsers[platform_name]['health_check_fails'] = 0
-                        
-                        # Check for access denied
-                        if response and response.status == 403:
-                            self.access_denied_count += 1
-                            self.monitor_status[target.event_name] = "🚫 Access Denied"
-                            console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
+                        if should_full_load:
+                            response = await page.goto(url, wait_until='domcontentloaded', timeout=30000)
                             
-                            # Implement exponential backoff
-                            backoff_time = min(300, 60 * (2 ** min(self.browsers[platform_name].get('block_count', 0), 5)))
-                            self.browsers[platform_name]['block_count'] = self.browsers[platform_name].get('block_count', 0) + 1
+                            # Reset health check counter on successful navigation
+                            self.browsers[platform_name]['health_check_fails'] = 0
                             
-                            console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
-                            await asyncio.sleep(backoff_time)
+                            # ADDED: Record request for rate limiting
+                            request_scheduler.record_request(platform_name)
                             
-                            # Consider rotating proxy or browser
-                            if self.browsers[platform_name].get('block_count', 0) >= 3:
-                                console.print(f"[yellow]🔄 Too many blocks, recreating browser for {platform_name}[/yellow]")
-                                await self._close_browser(platform_name)
-                                self.browsers.pop(platform_name, None)
-                            
-                            continue
+                            # Check for access denied
+                            if response and response.status == 403:
+                                self.access_denied_count += 1
+                                self.monitor_status[target.event_name] = "🚫 Access Denied"
+                                console.print(f"[red]🚫 Access denied for {target.event_name}![/red]")
+                                
+                                # Implement exponential backoff
+                                backoff_time = min(300, 60 * (2 ** min(self.browsers[platform_name].get('block_count', 0), 5)))
+                                self.browsers[platform_name]['block_count'] = self.browsers[platform_name].get('block_count', 0) + 1
+                                
+                                console.print(f"[yellow]⏳ Backing off for {backoff_time}s...[/yellow]")
+                                await asyncio.sleep(backoff_time)
+                                
+                                # Consider rotating proxy or browser
+                                if self.browsers[platform_name].get('block_count', 0) >= 3:
+                                    console.print(f"[yellow]🔄 Too many blocks, recreating browser for {platform_name}[/yellow]")
+                                    await self._close_browser(platform_name)
+                                    self.browsers.pop(platform_name, None)
+                                
+                                continue
+                        else:
+                            # Use smart check for subsequent checks
+                            console.print(f"[dim]Using optimized check for {target.event_name}[/dim]", end="\r")
                     else:
                         page.get(url)
                         await asyncio.sleep(2)
@@ -432,22 +534,19 @@ class StealthMasterUI:
                 except:
                     pass
                 
-                # Track page size for data usage
-                response_size = len(content) if 'content' in locals() else 0
+                # MODIFIED: Use smart check for data optimization
+                ticket_data = await self.data_tracker.smart_check(page, url, platform_name)
+                
+                # Get page content for detection (only if needed)
+                if ticket_data and ticket_data.get('hasTickets'):
+                    # We have tickets, get more details for detection
+                    content = await page.content() if hasattr(page, 'content') else page.page_source
+                else:
+                    # Use minimal content from smart check
+                    content = json.dumps(ticket_data)
                 
                 # Use enhanced ticket detector
                 detection_result = await self.ticket_detector.detect_tickets(page, platform_name, content)
-                
-                # Track data usage
-                await self.data_tracker.track_request(
-                    platform=platform_name,
-                    url=url,
-                    response_size=response_size,
-                    blocked_resources={
-                        'images': getattr(page, '_blocked_images', 0),
-                        'scripts': getattr(page, '_blocked_scripts', 0)
-                    }
-                )
                 
                 if detection_result['tickets_found']:
                     self.tickets_found += 1
@@ -459,6 +558,15 @@ class StealthMasterUI:
                     console.print(f"  Detection confidence: {confidence:.0%}")
                     console.print(f"  Ticket count: {ticket_count}")
                     console.print(f"  Recommendation: {detection_result['recommendation']}")
+                    
+                    # ADDED: Record detection in history tracker
+                    await history_tracker.record_detection(
+                        platform=platform_name,
+                        event=target.event_name,
+                        page_content=content,
+                        confidence=confidence,
+                        ticket_details=detection_result.get('details', {})
+                    )
                     
                     # Show detection details in debug mode
                     if logger.isEnabledFor(logging.DEBUG):
@@ -480,8 +588,22 @@ class StealthMasterUI:
                         confidence=confidence
                     )
                     
-                    # TODO: Implement actual purchase logic here
-                    # For now, switch to burst mode for rapid monitoring
+                    # ADDED: Attempt automatic purchase if confidence is high
+                    if confidence >= 0.7 and not self.settings.app_settings.dry_run:
+                        console.print(f"[yellow]🛒 Attempting automatic purchase...[/yellow]")
+                        
+                        purchase_result = await purchase_engine.handle_ticket_detection(
+                            page=page,
+                            platform=platform_name,
+                            detection_result=detection_result
+                        )
+                        
+                        if purchase_result and purchase_result.success:
+                            self.tickets_reserved += purchase_result.tickets_purchased
+                            console.print(f"[green]🎉 Purchase successful! Order: {purchase_result.order_id}[/green]")
+                        elif purchase_result:
+                            self.tickets_failed += 1
+                            console.print(f"[red]❌ Purchase failed: {purchase_result.error}[/red]")
                     
                     # Switch to burst mode (5 second intervals) for high confidence
                     if confidence >= 0.8:
@@ -501,16 +623,14 @@ class StealthMasterUI:
                 # Implement adaptive rate limiting
                 self.browsers[platform_name]['request_count'] = self.browsers[platform_name].get('request_count', 0) + 1
                 
-                # Calculate dynamic interval based on request count and blocks
+                # MODIFIED: Use request scheduler for intelligent intervals
                 base_interval = target.interval_s
-                request_count = self.browsers[platform_name].get('request_count', 0)
-                block_count = self.browsers[platform_name].get('block_count', 0)
+                dynamic_interval = request_scheduler.get_optimal_interval(platform_name, base_interval)
                 
-                # Increase interval if we're making too many requests or getting blocked
-                if request_count > 50 or block_count > 0:
-                    dynamic_interval = base_interval * (1 + (block_count * 0.5) + (request_count / 100))
-                else:
-                    dynamic_interval = base_interval
+                # Additional adjustments for blocks
+                block_count = self.browsers[platform_name].get('block_count', 0)
+                if block_count > 0:
+                    dynamic_interval *= (1 + (block_count * 0.5))
                 
                 # Wait for next check
                 await asyncio.sleep(dynamic_interval)
@@ -696,6 +816,29 @@ class StealthMasterUI:
         for line in report.split('\n'):
             console.print(f"  {line}")
         
+        # ADDED: Display detection analytics
+        console.print("\n[cyan]📈 Detection Analytics:[/cyan]")
+        analytics = history_tracker.get_detection_analytics()
+        
+        if analytics.get('total_detections', 0) > 0:
+            console.print(f"  Total Detections: {analytics['total_detections']}")
+            console.print(f"  Platform Breakdown:")
+            for platform, data in analytics['platforms'].items():
+                console.print(f"    - {platform}: {data['count']} ({data['percentage']:.1f}%)")
+            
+            console.print(f"  Category Distribution:")
+            for category, count in analytics['categories'].items():
+                console.print(f"    - {category}: {count}")
+            
+            if analytics.get('time_analysis', {}).get('peak_hours'):
+                peak_hours = ', '.join([f"{h}:00" for h in analytics['time_analysis']['peak_hours']])
+                console.print(f"  Peak Detection Hours: {peak_hours}")
+            
+            if analytics.get('recommendations'):
+                console.print(f"  Recommendations:")
+                for rec in analytics['recommendations']:
+                    console.print(f"    • {rec}")
+        
         # End session tracking
         stats_manager.end_session(self.session_id)
     
@@ -741,6 +884,12 @@ class StealthMasterUI:
         console.print(f"  Tickets Reserved: {self.tickets_reserved}")
         console.print(f"  Access Denied: {self.access_denied_count}")
         console.print(f"  Success Rate: {(self.tickets_reserved / max(1, self.tickets_reserved + self.tickets_failed)) * 100:.1f}%")
+        
+        # ADDED: Export history if significant detections
+        if self.tickets_found > 0:
+            export_file = history_tracker.export_history()
+            console.print(f"\n[green]📁 History exported to: {export_file}[/green]")
+        
         console.print("\n[green]✅ Shutdown complete![/green]")
 
 
@@ -762,6 +911,10 @@ async def main():
     
     # Setup logging
     setup_logging(level="INFO", log_dir=Path("logs"))
+    
+    # ADDED: Ensure data directories exist
+    Path("data").mkdir(exist_ok=True)
+    Path("data/cookies").mkdir(exist_ok=True)
     
     # Validate configuration
     validator = ConfigValidator(settings)

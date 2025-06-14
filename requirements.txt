@@ -48,3 +48,6 @@ flask-cors>=4.0.0
 # Database
 aiosqlite>=0.19.0
 sqlalchemy>=2.0.0
+
+# Additional dependencies for enhancements
+tinydb>=4.8.2      # For history tracking

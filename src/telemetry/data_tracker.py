@@ -14,6 +14,9 @@ from pathlib import Path
 import aiofiles
 
 from ..utils.logging import get_logger
+import re
+from collections import deque
+import hashlib
 
 logger = get_logger(__name__)
 
@@ -59,6 +62,11 @@ class DataUsageTracker:
         # Network baseline
         self._network_baseline = None
         self._last_check = None
+        
+        # ADDED: Cache for data optimization
+        self.request_cache = {}
+        self.last_content_hash = {}
+        self.cache_ttl = 300  # 5 minutes
         
     async def start_monitoring(self):
         """Start real-time monitoring"""
@@ -253,3 +261,88 @@ class DataUsageTracker:
                 report.append(f"  • {rec}")
         
         return "\n".join(report)
+    
+    # ADDED: Smart content checking with caching
+    async def smart_check(self, page: Any, url: str, platform: str) -> Dict[str, Any]:
+        """Only fetch if content likely changed - minimize data usage"""
+        cache_key = f"{platform}:{url}"
+        
+        # Check cache first
+        if cache_key in self.request_cache:
+            cache_entry = self.request_cache[cache_key]
+            if time.time() - cache_entry['timestamp'] < self.cache_ttl:
+                logger.debug(f"Using cached data for {url}")
+                return cache_entry['data']
+        
+        # Try HEAD request first to check if content changed
+        try:
+            if hasattr(page, 'request'):
+                head_response = await page.request.head(url)
+                last_modified = head_response.headers.get('last-modified', '')
+                etag = head_response.headers.get('etag', '')
+                
+                # Check if content unchanged
+                content_hash = hashlib.md5(f"{last_modified}{etag}".encode()).hexdigest()
+                if content_hash == self.last_content_hash.get(cache_key):
+                    logger.debug(f"Content unchanged for {url}, using cache")
+                    return self.request_cache.get(cache_key, {}).get('data', {})
+                
+                self.last_content_hash[cache_key] = content_hash
+        except:
+            pass
+        
+        # Fetch only ticket-specific elements instead of full page
+        ticket_data = await page.evaluate("""
+            () => {
+                const tickets = document.querySelectorAll('[class*="ticket"], [class*="offer"], [class*="biglietto"]');
+                const data = {
+                    tickets: [],
+                    hasTickets: false,
+                    pageTitle: document.title,
+                    timestamp: Date.now()
+                };
+                
+                tickets.forEach(ticket => {
+                    const ticketInfo = {
+                        text: ticket.innerText.slice(0, 200),  // Limit text
+                        available: !ticket.classList.contains('sold-out') && 
+                                  !ticket.classList.contains('esaurito'),
+                        price: null,
+                        section: null
+                    };
+                    
+                    // Extract price
+                    const priceEl = ticket.querySelector('[class*="price"], [class*="prezzo"]');
+                    if (priceEl) {
+                        ticketInfo.price = priceEl.innerText;
+                    }
+                    
+                    // Extract section
+                    const sectionEl = ticket.querySelector('[class*="section"], [class*="settore"]');
+                    if (sectionEl) {
+                        ticketInfo.section = sectionEl.innerText;
+                    }
+                    
+                    data.tickets.push(ticketInfo);
+                });
+                
+                data.hasTickets = data.tickets.length > 0;
+                return data;
+            }
+        """)
+        
+        # Cache the result
+        self.request_cache[cache_key] = {
+            'data': ticket_data,
+            'timestamp': time.time()
+        }
+        
+        # Track the optimized request
+        await self.track_request(
+            platform=platform,
+            url=url,
+            response_size=len(json.dumps(ticket_data)),  # Much smaller than full page
+            blocked_resources={'images': 999, 'scripts': 999}  # Indicate we blocked most resources
+        )
+        
+        return ticket_data

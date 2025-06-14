@@ -11263,3 +11263,15 @@ navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-mil
 Call log:
 navigating to "https://shop.ticketmaster.it/biglietti/bruce-springsteen-2025-milano", waiting until "domcontentloaded"
 
+2025-06-14 19:40:58,439 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526
+Call log:
+navigating to "https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526", waiting until "domcontentloaded"
+
+2025-06-14 19:40:58,579 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-06-14 19:41:15,980 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+

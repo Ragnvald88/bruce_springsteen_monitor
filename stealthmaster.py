@@ -68,6 +68,9 @@ from src.utils.config_validator import ConfigValidator
 from src.utils.retry_manager import retry_manager, with_retry
 from src.stealth.akamai_bypass import AkamaiBypass
 from src.stealth.ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
+from src.telemetry.data_tracker import DataUsageTracker
+from src.detection.ticket_detector import TicketDetector
+from src.browser.pool_manager import BrowserPoolManager
 
 console = Console()
 logger = get_logger(__name__)
@@ -93,6 +96,15 @@ class StealthMasterUI:
         launcher.settings = settings
         launcher._configure_proxies()
         self.browser_launcher = launcher
+        
+        # Initialize data tracker
+        self.data_tracker = DataUsageTracker()
+        
+        # Initialize ticket detector
+        self.ticket_detector = TicketDetector()
+        
+        # Initialize browser pool manager (optional, for future use)
+        # self.browser_pool = BrowserPoolManager(settings, launcher)
         
         # Stats
         self.monitor_status = {}
@@ -149,6 +161,15 @@ class StealthMasterUI:
         # Show mode
         mode_text = "🔥 Ultimate" if self.ultimate_mode else "🛡️ Standard"
         table.add_row("⚡ Mode", mode_text)
+        
+        # Data usage stats
+        data_summary = self.data_tracker.get_summary()
+        table.add_row("📊 Data Used", f"{data_summary['total_data_mb']:.1f} MB")
+        
+        # Efficiency score (average across platforms)
+        efficiency_scores = [p['efficiency_score'] for p in data_summary['platforms'].values()]
+        avg_efficiency = sum(efficiency_scores) / len(efficiency_scores) if efficiency_scores else 100
+        table.add_row("⚡ Efficiency", f"{avg_efficiency:.0f}%")
         
         return Panel(table, title="📊 Session Statistics", style="green")
     

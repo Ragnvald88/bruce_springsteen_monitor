@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional, Callable
 from enum import Enum
 
-from config import Target as TargetEvent
+from ..config import Target as TargetEvent
 
 logger = logging.getLogger(__name__)
 

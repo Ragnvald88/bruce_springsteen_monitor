@@ -11275,3 +11275,609 @@ navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-
 Call log:
 navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
 
+2025-06-14 20:12:41,211 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:41,212 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:41,212 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:41,213 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:41,213 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:41,214 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,687 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,688 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,689 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,689 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,690 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:12:57,690 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:13,548 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:13:14,106 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-14 20:13:14,381 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:14,382 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:14,383 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:14,383 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:14,394 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:14,395 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:17,803 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-14 20:13:19,443 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-14 20:13:27,863 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001048817a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104878efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104349400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010431dad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x00000001043c9ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x00000001043e8a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001043c12b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010438d507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010438e171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x000000010483f550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001048434df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x000000010481a962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000104843e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000104809124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000104866708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001048668d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000104878ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:13:27,866 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001048817a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x0000000104878efa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000104349400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010431dad0 undetected_chromedriver + 240336
+4   undetected_chromedriver             0x00000001043c9ba8 undetected_chromedriver + 945064
+5   undetected_chromedriver             0x00000001043e8a1c undetected_chromedriver + 1071644
+6   undetected_chromedriver             0x00000001043c12b3 undetected_chromedriver + 910003
+7   undetected_chromedriver             0x000000010438d507 undetected_chromedriver + 697607
+8   undetected_chromedriver             0x000000010438e171 undetected_chromedriver + 700785
+9   undetected_chromedriver             0x000000010483f550 undetected_chromedriver + 5621072
+10  undetected_chromedriver             0x00000001048434df undetected_chromedriver + 5637343
+11  undetected_chromedriver             0x000000010481a962 undetected_chromedriver + 5470562
+12  undetected_chromedriver             0x0000000104843e4f undetected_chromedriver + 5639759
+13  undetected_chromedriver             0x0000000104809124 undetected_chromedriver + 5398820
+14  undetected_chromedriver             0x0000000104866708 undetected_chromedriver + 5781256
+15  undetected_chromedriver             0x00000001048668d0 undetected_chromedriver + 5781712
+16  undetected_chromedriver             0x0000000104878ac1 undetected_chromedriver + 5855937
+17  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:13:30,886 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:30,887 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:30,888 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:30,888 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:30,889 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:30,890 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,371 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,374 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,374 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,375 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,376 - src.stealth.ultimate_bypass - ERROR - Failed to connect to Chrome: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:13:47,376 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: BrowserType.connect_over_cdp: connect ECONNREFUSED 127.0.0.1:9223
+Call log:
+<ws preparing> retrieving websocket url from http://localhost:9223
+
+2025-06-14 20:14:04,181 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-14 20:14:04,199 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: Target page, context or browser has been closed
+2025-06-14 20:14:04,240 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: Target page, context or browser has been closed
+2025-06-14 20:14:17,263 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x000000010433187d undetected_chromedriver + 313469
+4   undetected_chromedriver             0x000000010435a13d undetected_chromedriver + 479549
+5   undetected_chromedriver             0x00000001043cbdaf undetected_chromedriver + 945583
+6   undetected_chromedriver             0x00000001043eaa1c undetected_chromedriver + 1071644
+7   undetected_chromedriver             0x00000001043c32b3 undetected_chromedriver + 910003
+8   undetected_chromedriver             0x000000010438f507 undetected_chromedriver + 697607
+9   undetected_chromedriver             0x0000000104390171 undetected_chromedriver + 700785
+10  undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+11  undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+12  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+13  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+14  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+15  undetected_chromedriver             0x0000000104868708 undetected_chromedriver + 5781256
+16  undetected_chromedriver             0x00000001048688d0 undetected_chromedriver + 5781712
+17  undetected_chromedriver             0x000000010487aac1 undetected_chromedriver + 5855937
+18  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+19  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:14:19,446 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce400 undetected_chromedriver + 418816
+3   undetected_chromedriver             0x0000000100db487d undetected_chromedriver + 313469
+4   undetected_chromedriver             0x0000000100ddd13d undetected_chromedriver + 479549
+5   undetected_chromedriver             0x0000000100e4edaf undetected_chromedriver + 945583
+6   undetected_chromedriver             0x0000000100e6da1c undetected_chromedriver + 1071644
+7   undetected_chromedriver             0x0000000100e462b3 undetected_chromedriver + 910003
+8   undetected_chromedriver             0x0000000100e12507 undetected_chromedriver + 697607
+9   undetected_chromedriver             0x0000000100e13171 undetected_chromedriver + 700785
+10  undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+11  undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+12  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+13  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+14  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+15  undetected_chromedriver             0x00000001012eb708 undetected_chromedriver + 5781256
+16  undetected_chromedriver             0x00000001012eb8d0 undetected_chromedriver + 5781712
+17  undetected_chromedriver             0x00000001012fdac1 undetected_chromedriver + 5855937
+18  libsystem_pthread.dylib             0x00007ff813b56df1 _pthread_start + 99
+19  libsystem_pthread.dylib             0x00007ff813b52857 thread_start + 15
+
+2025-06-14 20:14:20,683 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen Milano 2025: Page.goto: net::ERR_ABORTED at https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+Call log:
+navigating to "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388", waiting until "domcontentloaded"
+
+2025-06-14 20:14:21,623 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.evaluate: TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at evaluate (:234:30), <anonymous>:2:29)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:234:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+2025-06-14 20:14:27,271 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:29,451 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:37,275 - __main__ - ERROR - Navigation error for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:39,455 - __main__ - ERROR - Navigation error for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:47,281 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:47,283 - __main__ - ERROR - Failed to create page for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:47,285 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: 'fansale'
+2025-06-14 20:14:49,460 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:49,462 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:49,464 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'vivaticket'
+2025-06-14 20:14:57,289 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:57,296 - __main__ - ERROR - Failed to create page for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:14:57,301 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: 'fansale'
+2025-06-14 20:14:59,468 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:59,473 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:14:59,474 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'vivaticket'
+2025-06-14 20:15:04,357 - __main__ - ERROR - Ultimate monitor error for Bruce Springsteen San Siro 2025: Page.goto: net::ERR_ABORTED at https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+Call log:
+navigating to "https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html", waiting until "domcontentloaded"
+
+2025-06-14 20:15:07,305 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:15:07,317 - __main__ - ERROR - Failed to create page for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:15:07,321 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: 'fansale'
+2025-06-14 20:15:09,479 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:15:09,486 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:15:09,490 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'vivaticket'
+2025-06-14 20:15:17,326 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:15:17,333 - __main__ - ERROR - Failed to create page for Bruce Springsteen Milano 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001048837a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x000000010487aefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x000000010434b243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x000000010438e70f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x00000001043c33e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x00000001043bddbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x00000001043bcf57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x000000010431477f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x0000000104841550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001048454df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010481c962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x0000000104845e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010480b124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000104312957 undetected_chromedriver + 186711
+14  dyld                                0x000000020534c530 start + 3056
+
+2025-06-14 20:15:17,337 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: 'fansale'
+2025-06-14 20:15:19,494 - src.browser.launcher - ERROR - Failed to create page: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:15:19,501 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: invalid session id
+Stacktrace:
+0   undetected_chromedriver             0x00000001013067a8 undetected_chromedriver + 5892008
+1   undetected_chromedriver             0x00000001012fdefa undetected_chromedriver + 5857018
+2   undetected_chromedriver             0x0000000100dce243 undetected_chromedriver + 418371
+3   undetected_chromedriver             0x0000000100e1170f undetected_chromedriver + 694031
+4   undetected_chromedriver             0x0000000100e463e6 undetected_chromedriver + 910310
+5   undetected_chromedriver             0x0000000100e40dbd undetected_chromedriver + 888253
+6   undetected_chromedriver             0x0000000100e3ff57 undetected_chromedriver + 884567
+7   undetected_chromedriver             0x0000000100d9777f undetected_chromedriver + 194431
+8   undetected_chromedriver             0x00000001012c4550 undetected_chromedriver + 5621072
+9   undetected_chromedriver             0x00000001012c84df undetected_chromedriver + 5637343
+10  undetected_chromedriver             0x000000010129f962 undetected_chromedriver + 5470562
+11  undetected_chromedriver             0x00000001012c8e4f undetected_chromedriver + 5639759
+12  undetected_chromedriver             0x000000010128e124 undetected_chromedriver + 5398820
+13  undetected_chromedriver             0x0000000100d95957 undetected_chromedriver + 186711
+14  dyld                                0x000000020209e530 start + 3056
+
+2025-06-14 20:15:19,503 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'vivaticket'

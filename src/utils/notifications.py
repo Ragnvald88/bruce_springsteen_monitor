@@ -21,7 +21,8 @@ class NotificationManager:
         platform: str, 
         event_name: str, 
         ticket_count: int,
-        url: Optional[str] = None
+        url: Optional[str] = None,
+        confidence: float = 1.0
     ):
         """Send notification when tickets are found."""
         self.notification_count += 1
@@ -32,6 +33,7 @@ class NotificationManager:
         print(f"Platform: {platform}")
         print(f"Event: {event_name}")
         print(f"Tickets found: {ticket_count}")
+        print(f"Confidence: {confidence:.0%}")
         if url:
             print(f"URL: {url}")
         print("\a")  # System beep
@@ -39,15 +41,46 @@ class NotificationManager:
         # macOS notification
         if os.system == 'Darwin':  # macOS
             title = f"🎫 Tickets Found on {platform}!"
-            message = f"{ticket_count} tickets for {event_name}"
+            message = f"{ticket_count} tickets for {event_name} ({confidence:.0%} confidence)"
             os.system(f'''
                 osascript -e 'display notification "{message}" with title "{title}" sound name "Glass"'
             ''')
         
         # Log to file
-        logger.info(f"TICKET ALERT: {platform} - {event_name} - {ticket_count} tickets")
+        logger.info(f"TICKET ALERT: {platform} - {event_name} - {ticket_count} tickets - {confidence:.0%} confidence")
         
         # Future: Add email, SMS, Discord, Telegram notifications
+    
+    async def send_purchase_success(
+        self,
+        platform: str,
+        order_id: Optional[str] = None,
+        tickets: int = 0,
+        price: float = 0.0
+    ):
+        """Send notification for successful purchase."""
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        
+        # Console notification
+        print(f"\n🎉 PURCHASE SUCCESS at {timestamp}!")
+        print(f"Platform: {platform}")
+        if order_id:
+            print(f"Order ID: {order_id}")
+        print(f"Tickets: {tickets}")
+        if price > 0:
+            print(f"Total Price: €{price:.2f}")
+        print("\a\a")  # Double beep for success
+        
+        # macOS notification
+        if os.system == 'Darwin':  # macOS
+            title = f"🎉 Purchase Complete on {platform}!"
+            message = f"Order {order_id}: {tickets} tickets purchased"
+            os.system(f'''
+                osascript -e 'display notification "{message}" with title "{title}" sound name "Hero"'
+            ''')
+        
+        # Log to file
+        logger.info(f"PURCHASE SUCCESS: {platform} - Order {order_id} - {tickets} tickets - €{price:.2f}")
         
     async def test_notification(self):
         """Test notification system."""

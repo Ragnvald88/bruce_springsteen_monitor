@@ -182,6 +182,51 @@ class StatsManager:
             except Exception as e:
                 logger.error(f"Failed to record ticket failure: {e}")
     
+    def record_purchase_success(self, platform: str, tickets: int, price: float):
+        """Record successful purchase"""
+        with self._lock:
+            try:
+                with sqlite3.connect(str(self.db_path)) as conn:
+                    cursor = conn.cursor()
+                    
+                    # We'll track this as a special category
+                    cursor.execute("""
+                        INSERT INTO ticket_stats (platform, event_name, category, reserved_count)
+                        VALUES (?, 'PURCHASE_SUCCESS', 'completed', ?)
+                        ON CONFLICT(platform, event_name, category) DO UPDATE SET
+                            reserved_count = reserved_count + ?,
+                            last_reserved = CURRENT_TIMESTAMP,
+                            updated_at = CURRENT_TIMESTAMP
+                    """, (platform, tickets, tickets))
+                    
+                    conn.commit()
+                    logger.info(f"Recorded purchase success: {platform} - {tickets} tickets - €{price:.2f}")
+                    
+            except Exception as e:
+                logger.error(f"Failed to record purchase success: {e}")
+    
+    def record_purchase_failure(self, platform: str, reason: str):
+        """Record failed purchase attempt"""
+        with self._lock:
+            try:
+                with sqlite3.connect(str(self.db_path)) as conn:
+                    cursor = conn.cursor()
+                    
+                    cursor.execute("""
+                        INSERT INTO ticket_stats (platform, event_name, category, failed_count)
+                        VALUES (?, 'PURCHASE_FAILED', ?, 1)
+                        ON CONFLICT(platform, event_name, category) DO UPDATE SET
+                            failed_count = failed_count + 1,
+                            last_failed = CURRENT_TIMESTAMP,
+                            updated_at = CURRENT_TIMESTAMP
+                    """, (platform, reason[:50]))  # Truncate reason to fit in category
+                    
+                    conn.commit()
+                    logger.warning(f"Recorded purchase failure: {platform} - {reason}")
+                    
+            except Exception as e:
+                logger.error(f"Failed to record purchase failure: {e}")
+    
     def get_stats(self, platform: Optional[str] = None, event_name: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get statistics, optionally filtered by platform/event"""
         with self._lock:

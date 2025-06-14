@@ -3,6 +3,7 @@
 
 from .scheduler import TaskScheduler
 from .state import StateManager
-from .workflow import PurchaseWorkflow
+# COMMENTED OUT: workflow.py has dependencies we don't need
+# from .workflow import PurchaseWorkflow
 
-__all__ = ["TaskScheduler", "StateManager", "PurchaseWorkflow"]
+__all__ = ["TaskScheduler", "StateManager"]

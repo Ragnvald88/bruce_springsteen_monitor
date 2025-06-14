@@ -7,20 +7,21 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
 from enum import Enum
 
-from browser.pool import EnhancedBrowserPool
-from config import Target, Platform
-from profiles.models import Profile as UserProfile
-from src.constants import PurchaseStatus
-from detection.monitor import DetectionMonitor, MonitoringLevel
-from detection.recovery import RecoveryStrategy
-from network.rate_limiter import RateLimiter
-from orchestration.state import StateManager, StateType
-from platforms import (
-    FansaleHandler,
-    TicketmasterHandler,
-    VivaticketHandler,
-    BasePlatformHandler
-)
+from ..browser.pool import EnhancedBrowserPool
+from ..config import Target, Platform
+from ..profiles.models import Profile as UserProfile
+from ..constants import PurchaseStatus
+from ..detection.monitor import DetectionMonitor, MonitoringLevel
+from ..detection.recovery import RecoveryStrategy
+from ..network.rate_limiter import IntelligentRateLimiter as RateLimiter
+from .state import StateManager, StateType
+# COMMENTED OUT: Using purchase handlers instead
+# from ..platforms import (
+#     FansaleHandler,
+#     TicketmasterHandler,
+#     VivaticketHandler,
+#     BasePlatformHandler
+# )
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ class PurchaseWorkflow:
     
     async def start_purchase(
         self,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile,
         workflow_id: Optional[str] = None
     ) -> str:
@@ -149,7 +150,7 @@ class PurchaseWorkflow:
     async def _execute_workflow(
         self,
         workflow_id: str,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> None:
         """Execute the purchase workflow."""
@@ -239,7 +240,7 @@ class PurchaseWorkflow:
         workflow_id: str,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Execute workflow steps."""
@@ -294,7 +295,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Initialize platform."""
@@ -308,7 +309,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Login to platform."""
@@ -334,7 +335,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Search for tickets."""
@@ -366,7 +367,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Select tickets."""
@@ -407,7 +408,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Complete checkout."""
@@ -432,7 +433,7 @@ class PurchaseWorkflow:
         self,
         page: Any,
         handler: BasePlatformHandler,
-        event: TargetEvent,
+        event: Target,
         profile: UserProfile
     ) -> Dict[str, Any]:
         """Confirm purchase."""

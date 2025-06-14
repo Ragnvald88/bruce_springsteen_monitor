@@ -9,7 +9,7 @@ app_settings:
   version: "2.0.0"
   dry_run: false
   browser_open_mode: "both"
-  ultimate_mode: true
+  ultimate_mode: false
   
   mode_configs:
     ultra_stealth:

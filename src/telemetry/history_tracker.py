@@ -155,11 +155,10 @@ class TicketHistoryTracker:
     
     def get_formatted_history(self) -> Dict[str, Any]:
         """Get history formatted for display"""
-        Query = TinyDB.Query
         history = {}
         
         for platform in ['fansale', 'ticketmaster', 'vivaticket']:
-            platform_data = self.history_db.search(Query.platform == platform)
+            platform_data = self.history_db.search(Query().platform == platform)
             
             # Calculate category breakdown
             category_counts = defaultdict(int)
@@ -195,12 +194,11 @@ class TicketHistoryTracker:
         """Get hourly category trends for a platform"""
         from datetime import timedelta
         
-        Query = TinyDB.Query
         cutoff_time = (datetime.now() - timedelta(hours=hours)).isoformat()
         
         recent_data = self.history_db.search(
-            (Query.platform == platform) & 
-            (Query.timestamp >= cutoff_time)
+            (Query().platform == platform) & 
+            (Query().timestamp >= cutoff_time)
         )
         
         # Group by hour and category
@@ -224,7 +222,6 @@ class TicketHistoryTracker:
     
     def get_detection_analytics(self) -> Dict[str, Any]:
         """Generate comprehensive analytics"""
-        Query = TinyDB.Query
         all_records = self.history_db.all()
         
         if not all_records:

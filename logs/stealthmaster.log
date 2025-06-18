@@ -4031,3 +4031,309 @@ Traceback (most recent call last):
   File "/Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/venv/lib/python3.13/site-packages/rich/console.py", line 2020, in on_broken_pipe
     raise SystemExit(1)
 SystemExit: 1
+2025-06-18 23:41:40,959 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-18 23:41:40,961 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-18 23:41:40,962 - src.database.statistics - INFO - Started statistics session: ui_20250618_234140
+2025-06-18 23:41:40,963 - src.telemetry.history_tracker - INFO - History tracker session started: ui_20250618_234140
+2025-06-18 23:41:40,964 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-18 23:41:40,965 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-18 23:41:41,023 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:41,032 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:41,032 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:41,043 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:41,044 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:41,044 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:41,054 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:41,055 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:41,055 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:41,703 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-18 23:41:41,705 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-18 23:41:41,981 - src.telemetry.data_tracker - WARNING - Data spike detected: 41.67 MB in 1.0s
+2025-06-18 23:41:42,117 - src.stealth.nodriver_core - ERROR - Failed to create UC driver: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-18 23:41:42,130 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-18 23:41:42,991 - src.telemetry.data_tracker - WARNING - Data spike detected: 8.16 MB in 1.0s
+2025-06-18 23:41:44,001 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.09 MB in 1.0s
+2025-06-18 23:41:44,013 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: BrowserType.launch: Executable doesn't exist at /Users/macbookpro_ronald/Library/Caches/ms-playwright/firefox-1465/firefox/Nightly.app/Contents/MacOS/firefox
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2025-06-18 23:41:44,018 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:44,021 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:44,024 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:45,007 - src.telemetry.data_tracker - WARNING - Data spike detected: 15.78 MB in 1.0s
+2025-06-18 23:41:47,032 - src.stealth.nodriver_core - ERROR - Failed to create UC driver: Message: Service /Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver unexpectedly exited. Status code was: -4
+
+2025-06-18 23:41:47,033 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: Service /Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver unexpectedly exited. Status code was: -4
+
+2025-06-18 23:41:47,340 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: BrowserType.launch: Executable doesn't exist at /Users/macbookpro_ronald/Library/Caches/ms-playwright/firefox-1465/firefox/Nightly.app/Contents/MacOS/firefox
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2025-06-18 23:41:47,347 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:47,348 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:47,349 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:47,500 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:41:47,667 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:41:48,049 - src.browser.launcher - INFO - Launched browser e8c47797-6282-4d14-be1d-937f2373c8f9 in 7006ms
+2025-06-18 23:41:49,263 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-18 23:41:49,271 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-18 23:41:49,875 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000102ccf358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x0000000102cc6aba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x000000010275b380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x000000010272faa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001027db8a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x00000001027fa72c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x00000001027d2fc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x000000010279f217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x000000010279fe81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000102c8d220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x0000000102c9118f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x0000000102c685c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000102c91aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000102c56d84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x0000000102cb42b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x0000000102cb4480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x0000000102cc6681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:41:49,887 - src.telemetry.data_tracker - WARNING - Data spike detected: 13.03 MB in 2.9s
+2025-06-18 23:41:50,196 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: BrowserType.launch: Executable doesn't exist at /Users/macbookpro_ronald/Library/Caches/ms-playwright/firefox-1465/firefox/Nightly.app/Contents/MacOS/firefox
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2025-06-18 23:41:50,203 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:50,204 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:50,205 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:51,701 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:41:51,735 - src.telemetry.data_tracker - WARNING - Data spike detected: 11.11 MB in 1.9s
+2025-06-18 23:41:52,313 - src.browser.launcher - INFO - Launched browser f8c72daf-9174-4975-b66e-71967ad0479a in 11328ms
+2025-06-18 23:41:53,304 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-18 23:41:53,310 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-18 23:41:54,059 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-18 23:41:54,117 - src.telemetry.data_tracker - WARNING - Data spike detected: 23.57 MB in 2.3s
+2025-06-18 23:41:54,644 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip'
+2025-06-18 23:41:54,645 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: Path to the extension doesn't exist
+2025-06-18 23:41:54,791 - src.stealth.nodriver_core - ERROR - Failed to create stealth browser: BrowserType.launch: Executable doesn't exist at /Users/macbookpro_ronald/Library/Caches/ms-playwright/firefox-1465/firefox/Nightly.app/Contents/MacOS/firefox
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2025-06-18 23:41:54,795 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:41:54,796 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_84781.zip
+2025-06-18 23:41:54,797 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:41:57,302 - src.telemetry.data_tracker - WARNING - Data spike detected: 24.41 MB in 3.2s
+2025-06-18 23:41:57,575 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:41:58,146 - src.browser.launcher - INFO - Launched browser d59d06cf-7653-4329-bb04-24e56b92cd81 in 17084ms
+2025-06-18 23:41:58,498 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-18 23:41:58,897 - src.telemetry.data_tracker - WARNING - Data spike detected: 10.23 MB in 1.6s
+2025-06-18 23:41:59,320 - __main__ - ERROR - Monitor error for Bruce Springsteen Milano 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-18 23:42:01,034 - src.telemetry.data_tracker - WARNING - Data spike detected: 4.63 MB in 2.1s
+2025-06-18 23:42:03,666 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-18 23:42:03,672 - src.telemetry.data_tracker - WARNING - Data spike detected: 24.17 MB in 1.6s
+2025-06-18 23:42:04,121 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000104da5358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x0000000104d9caba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000104831380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x0000000104805aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001048b18a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x00000001048d072c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x00000001048a8fc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000104875217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000104875e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000104d63220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x0000000104d6718f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x0000000104d3e5c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000104d67aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000104d2cd84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x0000000104d8a2b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x0000000104d8a480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x0000000104d9c681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:42:04,127 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000104da5358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x0000000104d9caba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000104831380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x0000000104805aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001048b18a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x00000001048d072c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x00000001048a8fc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000104875217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000104875e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000104d63220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x0000000104d6718f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x0000000104d3e5c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000104d67aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000104d2cd84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x0000000104d8a2b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x0000000104d8a480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x0000000104d9c681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:42:05,675 - src.telemetry.data_tracker - WARNING - Data spike detected: 3.80 MB in 1.0s
+2025-06-18 23:42:06,677 - src.telemetry.data_tracker - WARNING - Data spike detected: 6.05 MB in 1.0s
+2025-06-18 23:42:09,377 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001012c0358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x00000001012b7aba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000100d4c380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x0000000100d20aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x0000000100dcc8a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x0000000100deb72c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x0000000100dc3fc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000100d90217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000100d90e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x000000010127e220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x000000010128218f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x00000001012595c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000101282aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000101247d84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x00000001012a52b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x00000001012a5480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x00000001012b7681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:42:09,380 - __main__ - ERROR - Failed to create page for Bruce Springsteen Milano 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x00000001012c0358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x00000001012b7aba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000100d4c380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x0000000100d20aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x0000000100dcc8a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x0000000100deb72c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x0000000100dc3fc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000100d90217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000100d90e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x000000010127e220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x000000010128218f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x00000001012595c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000101282aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000101247d84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x00000001012a52b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x00000001012a5480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x00000001012b7681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:42:14,687 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.90 MB in 1.0s
+2025-06-18 23:42:17,693 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.54 MB in 1.0s
+2025-06-18 23:42:39,723 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.24 MB in 1.0s
+2025-06-18 23:50:14,867 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-18 23:50:14,870 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-18 23:50:14,872 - src.database.statistics - INFO - Started statistics session: ui_20250618_235014
+2025-06-18 23:50:14,872 - src.telemetry.history_tracker - INFO - History tracker session started: ui_20250618_235014
+2025-06-18 23:50:14,873 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-18 23:50:14,874 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-18 23:50:14,926 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:50:14,927 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_87770.zip
+2025-06-18 23:50:14,927 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:50:14,938 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:50:14,939 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_87770.zip
+2025-06-18 23:50:14,939 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:50:14,950 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-18 23:50:14,951 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_87770.zip
+2025-06-18 23:50:14,951 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-18 23:50:15,503 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: Message: Service /Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver unexpectedly exited. Status code was: -9
+
+2025-06-18 23:50:15,543 - src.stealth.nodriver_core - WARNING - Failed with version_main=None: [Errno 2] No such file or directory: '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected/chromedriver-mac-x64/chromedriver' -> '/Users/macbookpro_ronald/Library/Application Support/undetected_chromedriver/undetected_chromedriver'
+2025-06-18 23:50:15,906 - src.telemetry.data_tracker - WARNING - Data spike detected: 47.07 MB in 1.0s
+2025-06-18 23:50:17,101 - src.telemetry.data_tracker - WARNING - Data spike detected: 4.19 MB in 1.1s
+2025-06-18 23:50:18,107 - src.telemetry.data_tracker - WARNING - Data spike detected: 3.22 MB in 1.2s
+2025-06-18 23:50:20,999 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:50:21,196 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-18 23:50:21,530 - src.browser.launcher - INFO - Launched browser 3c0ab054-d3ed-4f23-b2db-092bbf5592be in 6592ms
+2025-06-18 23:50:21,696 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-18 23:50:21,701 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-18 23:50:22,113 - src.browser.launcher - INFO - Launched browser bd05bca5-6933-4bbf-bb64-4a3e55a60ace in 7219ms
+2025-06-18 23:50:22,278 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-18 23:50:22,282 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-18 23:50:24,061 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.73 MB in 1.3s
+2025-06-18 23:50:25,379 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-18 23:50:26,075 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-18 23:50:27,083 - src.telemetry.data_tracker - WARNING - Data spike detected: 33.71 MB in 1.0s
+2025-06-18 23:50:28,085 - src.telemetry.data_tracker - WARNING - Data spike detected: 5.10 MB in 1.0s
+2025-06-18 23:50:35,439 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000104857358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x000000010484eaba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x00000001042e3380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x00000001042b7aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001043638a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x000000010438272c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x000000010435afc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000104327217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000104327e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000104815220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x000000010481918f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x00000001047f05c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000104819aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x00000001047ded84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x000000010483c2b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x000000010483c480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x000000010484e681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-18 23:50:35,444 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000104857358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x000000010484eaba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x00000001042e3380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x00000001042b7aa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001043638a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x000000010438272c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x000000010435afc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x0000000104327217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x0000000104327e81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000104815220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x000000010481918f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x00000001047f05c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000104819aef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x00000001047ded84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x000000010483c2b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x000000010483c480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x000000010484e681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+

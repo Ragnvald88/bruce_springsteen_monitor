@@ -15,12 +15,12 @@ from ..detection.monitor import DetectionMonitor, MonitoringLevel
 from ..detection.recovery import RecoveryStrategy
 from ..network.rate_limiter import IntelligentRateLimiter as RateLimiter
 from .state import StateManager, StateType
+from ..platforms.base import BasePlatformHandler
 # COMMENTED OUT: Using purchase handlers instead
 # from ..platforms import (
 #     FansaleHandler,
 #     TicketmasterHandler,
 #     VivaticketHandler,
-#     BasePlatformHandler
 # )
 
 logger = logging.getLogger(__name__)

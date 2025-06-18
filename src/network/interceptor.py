@@ -44,8 +44,8 @@ class InterceptRule:
         self.priority = priority
 
 
-class PatternAnalyzer:
-    """Analyzes request patterns."""
+class BasicPatternAnalyzer:
+    """Basic analyzer for request patterns."""
     def __init__(self):
         self.patterns = []
     
@@ -71,7 +71,7 @@ class RequestInterceptor:
         
         # Request pattern analysis
         self._request_patterns = defaultdict(list)
-        self._pattern_analyzer = PatternAnalyzer()
+        self._pattern_analyzer = None  # Will be initialized later with the full PatternAnalyzer
         
         # Response cache for efficiency
         self._response_cache: Dict[str, CachedResponse] = {}
@@ -271,6 +271,7 @@ class RequestInterceptor:
         
         # Analyze patterns
         if len(self._request_patterns[domain]) > 10:
+            self._initialize_pattern_analyzer()
             self._pattern_analyzer.analyze(domain, self._request_patterns[domain])
     
     async def _on_response(self, response: Response) -> None:
@@ -453,6 +454,11 @@ class RequestInterceptor:
             return 86400  # 24 hours for images
             
         return 300  # Default 5 minutes
+    
+    def _initialize_pattern_analyzer(self):
+        """Initialize the pattern analyzer when needed."""
+        if self._pattern_analyzer is None:
+            self._pattern_analyzer = PatternAnalyzer()
     
     def get_statistics(self) -> Dict[str, Any]:
         """Get interception statistics."""

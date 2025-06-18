@@ -1,0 +1,6 @@
+2025-06-15 12:27:52,335 - INFO - Starting StealthMaster Project Audit...
+2025-06-15 12:27:52,335 - INFO - Checking for import errors...
+2025-06-15 12:27:52,903 - INFO - Initialized statistics database at: /Users/macbookpro_ronald/.stealthmaster/statistics.db
+2025-06-15 12:27:52,903 - WARNING - No proxy settings available
+2025-06-15 12:27:52,903 - INFO - Browser Launcher initialized
+2025-06-15 12:27:53,542 - INFO - Initialized statistics database at: /Users/macbookpro_ronald/.stealthmaster/statistics.db

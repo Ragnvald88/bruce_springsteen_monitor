@@ -5,7 +5,7 @@ import asyncio
 import sys
 import signal
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 from datetime import datetime
 import threading
 import time

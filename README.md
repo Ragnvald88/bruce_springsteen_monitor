@@ -1,167 +1,90 @@
-# 🎯 StealthMaster - Automated Ticket Monitoring System
+# StealthMaster Advanced - No BS Edition
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)]()
+A highly advanced, undetectable ticket monitoring system for Fansale.it (and expandable to other platforms).
 
-StealthMaster is an advanced ticket monitoring system with stealth capabilities designed to help you find and reserve tickets from major platforms.
+## What This Actually Does
 
-## 🚀 Features
+- Monitors ticket availability in real-time
+- Avoids detection using REAL stealth techniques (not quantum BS)
+- Alerts you instantly when tickets become available
+- Works reliably without getting blocked
 
-- **Multi-Platform Support**: Monitors Ticketmaster, Fansale, and Vivaticket simultaneously
-- **Stealth Technology**: Advanced anti-detection with CDP bypass and fingerprint randomization
-- **Live Dashboard**: Real-time monitoring status with visual indicators
-- **Smart Monitoring**: Configurable check intervals with burst mode when tickets are found
-- **Session Persistence**: Saves cookies and maintains login sessions
-- **Proxy Support**: Built-in support for residential proxies (IPRoyal configured)
+## Quick Start
 
-## 📋 Prerequisites
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements_simple.txt
+   ```
 
-- Python 3.11+ (works with 3.13)
-- Google Chrome installed
-- Active accounts on ticket platforms
-- (Optional) 2Captcha API key for CAPTCHA solving
-- (Optional) IPRoyal proxy credentials
+2. **Configure** (edit `config_simple.yaml`):
+   ```yaml
+   targets:
+     - platform: "fansale"
+       event_name: "Your Event Name"
+       url: "https://www.fansale.it/..."
+       enabled: true
+       interval_s: 30
+   ```
 
-## 🛠️ Installation
+3. **Run:**
+   ```bash
+   python stealthmaster_advanced.py
+   ```
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/yourusername/stealthmaster.git
-cd stealthmaster
-```
+## How It Actually Works
 
-2. **Create virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+Unlike the previous overcomplicated mess, this version:
 
-3. **Install dependencies**
-```bash
-pip install -r requirements.txt
-```
+1. **Uses undetected-chromedriver properly** - No conflicting stealth libraries
+2. **Smart page checking** - Uses JavaScript instead of Selenium selectors (less detectable)
+3. **Realistic behavior** - Random viewports, user agents, and subtle human simulation
+4. **Intelligent intervals** - Adjusts check frequency based on time of day and ticket availability
+5. **Proper error handling** - Recovers from blocks and errors gracefully
 
-4. **Configure credentials**
-```bash
-cp .env.example .env
-# Edit .env with your credentials
-```
+## Key Features
 
-## ⚙️ Configuration
+- **No proxy required** - Works directly (proxies were causing blocks)
+- **Session persistence** - Handles cookies properly
+- **Live dashboard** - See real-time stats without cluttering logs
+- **Smart detection** - Checks page state before actions to avoid triggers
+- **Exponential backoff** - Handles blocks intelligently
 
-Edit `config.yaml` to set your monitoring targets:
-
-```yaml
-targets:
-  - platform: "fansale"
-    event_name: "Bruce Springsteen Milano 2025"
-    url: "https://www.fansale.it/..."
-    enabled: true
-    priority: "urgent"  # low, normal, high, urgent
-    interval_s: 30
-    max_price_per_ticket: 800
-    min_ticket_quantity: 1
-    max_ticket_quantity: 8
-```
-
-## 🎮 Usage
-
-### Start StealthMaster with Live Dashboard
-
-```bash
-./run.sh
-# OR
-python stealthmaster.py
-```
-
-### Dashboard Interface
+## Architecture (Simple)
 
 ```
-🎯 StealthMaster - Ticket Monitor
-┌─────────────────────────────────────────────────────────────┐
-│ 📊 Session Statistics          │ 🖥️  Active Monitors        │
-│ Uptime: 0:15:42               │ Platform  Event    Status  │
-│ Active Monitors: 2            │ Fansale   Bruce... 🟢 Active│
-│ Tickets Found: 12             │ Ticketm.. Bruce... 🔄 Check │
-│ Tickets Reserved: 3           │                            │
-│ Success Rate: 25.0%           │                            │
-└─────────────────────────────────────────────────────────────┘
+stealthmaster_advanced.py   # Main monitor (475 lines of working code)
+├── AdvancedStealth        # Real stealth configuration
+├── SmartMonitor           # Intelligent monitoring logic
+└── config_simple.yaml     # Simple configuration
 ```
 
-### Status Indicators
+## What Was Removed
 
-- ⏳ **Starting** - Monitor initializing
-- 🔄 **Checking** - Currently checking for tickets
-- 🟢 **Active** - Monitor running normally
-- 🎉 **Reserved!** - Successfully reserved tickets
-- ❌ **Sold out** - Tickets unavailable
-- ⚠️  **Error** - Connection or other issue
+- Quantum coordination (WTF was that??)
+- ML optimization (no ML code existed)
+- 459 lines of CDP bypass that crashes
+- "Ultimate" mode that gets you blocked faster
+- TLS fingerprinting (UC already does this)
+- Overcomplicated error handlers
+- Multiple logging systems
+- Unused GUI code
+- And tons more bloat...
 
-## 🔧 Advanced Features
+## Future Improvements
 
-### Priority Levels
+1. **Proxy support** - When you find proxies that actually work
+2. **Multi-site support** - Expand to Ticketmaster, Vivaticket
+3. **Auto-purchase** - Add purchasing capability
+4. **Better notifications** - Email, Discord, SMS
 
-Configure monitoring intensity with priority levels:
+## Tips for Staying Undetected
 
-- **low**: Check every 60-120s
-- **normal**: Check every 30-60s (default)
-- **high**: Check every 10-30s
-- **urgent**: Check every 5-10s with maximum resources
+1. **Don't use proxies** unless they're residential and high quality
+2. **Keep intervals reasonable** - 30 seconds is fine
+3. **Run one instance per event** - Don't overload
+4. **Use different browsers** for different sites
+5. **Clear cookies occasionally** if you get blocked
 
-### Burst Mode
+## License
 
-When tickets are found, automatically switches to rapid checking (5-second intervals) to maximize reservation chances.
-
-### Stealth Features
-
-- Undetected ChromeDriver integration
-- Browser fingerprint randomization
-- Human-like behavior simulation
-- TLS fingerprint rotation
-- CDP protocol bypass
-
-## 📁 Project Structure
-
-```
-stealthmaster/
-├── stealthmaster.py      # Main entry point with UI
-├── config.yaml          # Configuration file
-├── .env                 # Your credentials (create from .env.example)
-├── src/                 # Source code
-│   ├── browser/         # Browser automation
-│   ├── platforms/       # Platform-specific handlers
-│   ├── stealth/         # Anti-detection measures
-│   └── ui/              # User interface components
-└── logs/                # Application logs
-```
-
-## 🐛 Troubleshooting
-
-### Chrome not found
-Ensure Chrome is installed in `/Applications/Google Chrome.app` on macOS
-
-### Login required
-The browser will open visibly on first run - manually login when prompted
-
-### Proxy errors
-Set `proxy_settings.enabled: false` in config.yaml if you don't have proxies
-
-## 📊 Monitoring Tips
-
-1. **Start with normal priority** and increase if needed
-2. **Set realistic price limits** to avoid overpaying
-3. **Use burst mode** for high-demand events
-4. **Monitor logs** in the `logs/` directory for detailed information
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## ⚠️ Disclaimer
-
-This tool is for educational purposes. Always comply with website terms of service and local regulations regarding automated ticket purchasing.
+Do whatever you want with it. Just don't sell it as "Quantum Ticket Master Pro" 😂

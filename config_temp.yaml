@@ -1,0 +1,245 @@
+advanced_features:
+  emergency_protocols:
+    auto_switch_ultra_stealth: false
+    emergency_cooldown: 600
+    threat_threshold: 0.8
+  ml_optimization:
+    enabled: true
+    feature_extraction: true
+    model_update_interval: 3600
+  predictive_analytics:
+    demand_forecasting: true
+    enabled: true
+    pattern_recognition: true
+  quantum_coordination:
+    enabled: true
+    entanglement_factor: 0.8
+    superposition_states: 3
+anti_detection:
+  block_recovery:
+    cooldown_multiplier: 2.0
+    max_retries: 3
+    profile_rotation: true
+  human_simulation:
+    keyboard_typing: true
+    micro_movements: true
+    mouse_movements: true
+    reading_delays: true
+    scroll_patterns: true
+  request_patterns:
+    randomize_intervals: true
+    rotate_headers: true
+    vary_user_agents: true
+app_settings:
+  browser_open_mode: both
+  dry_run: false
+  mode: stealth
+  mode_configs:
+    adaptive:
+      cache_size: 1000
+      max_concurrent_monitors: 3
+      max_concurrent_strikes: 3
+      max_connections: 50
+    beast:
+      cache_size: 2000
+      max_concurrent_monitors: 8
+      max_concurrent_strikes: 10
+      max_connections: 100
+      min_quality_tier: 1
+    hybrid:
+      cache_size: 1500
+      max_concurrent_monitors: 4
+      max_concurrent_strikes: 4
+      max_connections: 75
+      min_quality_tier: 3
+    stealth:
+      cache_size: 750
+      max_concurrent_monitors: 2
+      max_concurrent_strikes: 2
+      max_connections: 30
+      min_quality_tier: 4
+      profile_rotation_interval: 180
+    ultra_stealth:
+      cache_size: 500
+      max_concurrent_monitors: 1
+      max_concurrent_strikes: 1
+      max_connections: 20
+      min_quality_tier: 5
+      profile_rotation_interval: 300
+  ultimate_mode: false
+  version: 2.0.0
+authentication:
+  enabled: true
+  platforms:
+    fansale:
+      password: ${FANSALE_PASSWORD}
+      username: ${FANSALE_EMAIL}
+    ticketmaster:
+      password: ${TICKETMASTER_PASSWORD}
+      username: ${TICKETMASTER_EMAIL}
+    vivaticket:
+      password: ${VIVATICKET_PASSWORD}
+      username: ${VIVATICKET_EMAIL}
+browser_options:
+  cdp_evasion:
+    console_hook_bypass: true
+    enabled: true
+    error_stack_cleaning: true
+    runtime_enable_bypass: true
+  channel: chromium
+  headless: false
+  stealth_options:
+    audio_context_noise: true
+    canvas_fingerprint_defender: true
+    font_fingerprint_defender: true
+    timezone_spoofing: true
+    viewport_randomization: true
+    webgl_noise: true
+captcha_settings:
+  api_key: ${TWOCAPTCHA_API_KEY}
+  enabled: true
+  max_retries: 3
+  service: 2captcha
+  timeout: 120
+data_limits:
+  global_limit_mb: 10000
+  optimization_thresholds:
+    aggressive_trigger_percent: 70
+    emergency_trigger_percent: 90
+  resource_blocking:
+    analytics: true
+    fonts: true
+    images: true
+    media: true
+    trackers: true
+  session_limit_mb: 2000
+logging:
+  detection_logging:
+    enabled: true
+    log_file: detection_events.log
+  error_log_file: errors.log
+  level: INFO
+  log_directory: logs
+  main_log_file: stealthmaster.log
+  performance_logging:
+    enabled: true
+    log_file: performance.log
+  ticket_logging:
+    enabled: true
+    log_file: ticket_opportunities.log
+monitoring_settings:
+  cache_max_age_s: 300
+  default_interval_s: 30
+  min_monitor_interval_s: 3
+  quantum_optimization:
+    enabled: true
+    pattern_analysis_interval: 60
+    predictive_burst_mode: true
+    resource_reallocation: true
+profile_settings:
+  fingerprint_mutation:
+    enabled: true
+    mutation_factor: 0.15
+    mutation_interval: 3600
+  profile_count: 50
+  proxy_binding:
+    enabled: true
+    rotation_sync: true
+    sticky_sessions: true
+  quality_distribution:
+    high: 15
+    medium: 15
+    premium: 10
+    standard: 10
+  rotation_strategy: performance_based
+proxy_settings:
+  backup_pool: []
+  enabled: true
+  platform_preferences:
+    fansale:
+      preferred_countries:
+      - IT
+      - CH
+      - AT
+      require_residential: true
+    ticketmaster:
+      preferred_countries:
+      - IT
+      - EU
+      require_residential: true
+    vivaticket:
+      preferred_countries:
+      - IT
+      require_residential: false
+  primary_pool:
+  - country: IT
+    host: ${IPROYAL_HOSTNAME}
+    password: ${IPROYAL_PASSWORD}
+    port: ${IPROYAL_PORT}
+    provider: iproyal
+    quality_score: 0.95
+    type: http
+    username: ${IPROYAL_USERNAME}
+  rotation_rules:
+    cooldown_after_block_minutes: 120
+    max_requests_per_proxy: 100
+    rotate_interval_minutes: 30
+    rotate_on_block: true
+  rotation_strategy: intelligent
+  validation:
+    revalidate_interval_hours: 6
+    test_url: https://httpbin.org/ip
+    timeout_seconds: 10
+    validate_on_start: true
+strike_settings:
+  coordination_strategy: quantum
+  profile_selection: ml_optimized
+  success_indicators:
+  - reservation successful
+  - added to cart
+  - order confirmed
+  timeout_configs:
+    navigation: 30000
+    queue_wait: 300000
+    strike_execution: 45000
+targets:
+- burst_mode:
+    duration_s: 300
+    enabled: true
+    min_interval_s: 1
+    trigger_on_activity: true
+  desired_sections: []
+  enabled: true
+  event_name: Bruce Springsteen Milano 2025
+  interval_s: 2
+  max_price_per_ticket: 800
+  max_ticket_quantity: 8
+  min_ticket_quantity: 1
+  platform: fansale
+  url: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+- desired_sections: []
+  enabled: false
+  event_name: Bruce Springsteen San Siro 2025
+  interval_s: 30
+  max_price_per_ticket: 750
+  max_ticket_quantity: 8
+  min_ticket_quantity: 1
+  platform: ticketmaster
+  queue_config:
+    auto_join: true
+    maintain_presence: true
+    multi_tab_protection: false
+  url: https://shop.ticketmaster.it/tickets/bruce-springsteen-and-the-e-street-band-2024-world-tour-03-july-2025-stadio-san-siro-milano-9670.html
+- desired_sections: []
+  enabled: true
+  event_name: Bruce Springsteen San Siro 2025
+  interval_s: 2
+  max_price_per_ticket: 750
+  max_ticket_quantity: 8
+  min_ticket_quantity: 1
+  platform: vivaticket
+  queue_config:
+    auto_join: true
+    maintain_presence: true
+    multi_tab_protection: false
+  url: https://shop.vivaticket.com/index.php?nvpg[resell]&cmd=tabellaPrezziRivendita&pcode=11787547&tcode=vt0002526

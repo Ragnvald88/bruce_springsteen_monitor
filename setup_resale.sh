@@ -22,44 +22,34 @@ fi
 echo "Activating virtual environment..."
 source venv/bin/activate
 
-# Install minimal requirements
+# Install requirements
 echo "Installing requirements..."
 pip install --quiet --upgrade pip
 
-# Core requirements only
-pip install --quiet \
-    playwright==1.40.0 \
-    python-dotenv==1.0.0 \
-    pyyaml==6.0.1 \
-    aiohttp==3.9.1 \
-    psutil==5.9.6 \
-    rich==13.7.0
-
-# Install Playwright browsers
-echo "Installing Chrome for Playwright..."
-playwright install chromium
+# Install from requirements.txt
+pip install --quiet -r requirements.txt
 
 # Make scripts executable
-chmod +x stealthmaster_lite.py
 chmod +x run_resale.py
+chmod +x run_stealth.sh
 chmod +x monitor_dashboard.py
 
 echo ""
 echo "✅ Setup complete!"
 echo ""
 echo "📋 How to use:"
-echo "1. Run the optimized monitor:"
-echo "   python stealthmaster_lite.py"
-echo ""
-echo "2. Or use existing system with focus on resale:"
+echo "1. Run the resale-focused monitor:"
 echo "   python run_resale.py"
+echo ""
+echo "2. Or use the shell script:"
+echo "   ./run_stealth.sh"
 echo ""
 echo "3. Monitor dashboard (in separate terminal):"
 echo "   python monitor_dashboard.py"
 echo ""
-echo "⚡ Tips:"
-echo "- The lite version is faster and more efficient"
-echo "- Sessions rotate every 7 minutes automatically"
+echo "⚡ Features:"
+echo "- Uses undetected-chromedriver for better stealth"
+echo "- Automatic proxy configuration"
 echo "- Fixed price tickets are purchased instantly"
 echo "- You have 10 minutes to complete payment"
 echo ""

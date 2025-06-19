@@ -4536,3 +4536,95 @@ Stacktrace:
 2025-06-19 18:18:49,529 - src.telemetry.data_tracker - WARNING - Data spike detected: 9.82 MB in 1.0s
 2025-06-19 18:18:50,531 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.25 MB in 1.0s
 2025-06-19 18:18:52,534 - src.telemetry.data_tracker - WARNING - Data spike detected: 2.23 MB in 1.0s
+2025-06-19 20:11:26,035 - stealthmaster_lite - INFO - 🚀 Starting StealthMaster Lite...
+2025-06-19 20:11:26,670 - stealthmaster_lite - INFO - 🌐 Using proxy: geo.iproyal.com
+2025-06-19 20:11:26,683 - stealthmaster_lite - INFO - ✅ Browser initialized
+2025-06-19 20:11:26,684 - stealthmaster_lite - INFO - 👀 Starting ticket monitoring...
+2025-06-19 20:11:26,939 - stealthmaster_lite - INFO - 🎫 Setting up FanSale...
+2025-06-19 21:04:50,745 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-19 21:04:50,748 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-19 22:38:54,944 - src.stealth.nodriver_core - INFO - Added residential proxy to pool: ProxyType.HTTP://Doq...
+2025-06-19 22:38:54,948 - src.browser.launcher - INFO - Configured 1 residential proxies from settings
+2025-06-19 22:38:54,949 - src.database.statistics - INFO - Started statistics session: ui_20250619_223854
+2025-06-19 22:38:54,950 - src.telemetry.history_tracker - INFO - History tracker session started: ui_20250619_223854
+2025-06-19 22:38:54,950 - src.profiles.manager - INFO - Loaded 0 profiles
+2025-06-19 22:38:54,951 - src.telemetry.data_tracker - INFO - Data usage monitoring started
+2025-06-19 22:38:54,990 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-19 22:38:54,991 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_46543.zip
+2025-06-19 22:38:54,991 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-19 22:38:54,999 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-19 22:38:54,999 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_46543.zip
+2025-06-19 22:38:54,999 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-19 22:38:55,007 - src.stealth.nodriver_core - INFO - 🌐 Using authenticated proxy: ProxyType.HTTP://geo.iproyal.com:12321 with user: Doqe2Sm9Yjl1MrZd
+2025-06-19 22:38:55,007 - src.stealth.nodriver_core - INFO - 🔐 Proxy auth extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_46543.zip
+2025-06-19 22:38:55,007 - src.stealth.nodriver_core - INFO - 🚀 Launching Chrome with undetected-chromedriver...
+2025-06-19 22:38:55,972 - src.telemetry.data_tracker - WARNING - Data spike detected: 9.57 MB in 1.0s
+2025-06-19 22:38:56,977 - src.telemetry.data_tracker - WARNING - Data spike detected: 20.05 MB in 1.0s
+2025-06-19 22:38:57,979 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.71 MB in 1.0s
+2025-06-19 22:38:58,402 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-19 22:38:58,472 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-19 22:38:58,724 - src.stealth.nodriver_core - INFO - ✅ Chrome browser launched successfully
+2025-06-19 22:38:58,923 - src.browser.launcher - INFO - Launched browser 3f11fd31-e44e-4cd6-8315-f5a95f1a33d4 in 3915ms
+2025-06-19 22:38:59,036 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-19 22:39:00,208 - src.browser.launcher - INFO - Launched browser 7dedf2b5-4cdb-41e3-bc6a-64a05ad25c69 in 5209ms
+2025-06-19 22:39:00,338 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-19 22:39:00,341 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-19 22:39:02,710 - src.browser.launcher - INFO - Launched browser 1954351d-e1af-4de1-8349-a057bc8a4034 in 7747ms
+2025-06-19 22:39:02,827 - src.browser.resource_blocker - INFO - Applied selective resource blocking (images + ads only)
+2025-06-19 22:39:02,830 - src.stealth.akamai_bypass - ERROR - Failed to apply Akamai bypass: 'Chrome' object has no attribute 'add_init_script'
+2025-06-19 22:39:09,490 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.89 MB in 4.7s
+2025-06-19 22:39:10,492 - src.telemetry.data_tracker - WARNING - Data spike detected: 36.56 MB in 7.8s
+2025-06-19 22:39:10,802 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-19 22:39:11,268 - __main__ - ERROR - Monitor error for Bruce Springsteen San Siro 2025: 'Chrome' object has no attribute 'evaluate'
+2025-06-19 22:39:11,509 - src.stealth.akamai_bypass - ERROR - Error handling Akamai challenge: 'Chrome' object has no attribute 'content'
+2025-06-19 22:39:11,516 - src.telemetry.data_tracker - WARNING - Data spike detected: 22.74 MB in 1.0s
+2025-06-19 22:39:21,326 - src.browser.launcher - ERROR - Failed to create page: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000100e0c358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x0000000100e03aba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000100898380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x000000010086caa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001009188a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x000000010093772c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x000000010090ffc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x00000001008dc217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x00000001008dce81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000100dca220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x0000000100dce18f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x0000000100da55c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000100dceaef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000100d93d84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x0000000100df12b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x0000000100df1480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x0000000100e03681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-19 22:39:21,328 - __main__ - ERROR - Failed to create page for Bruce Springsteen San Siro 2025: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=137.0.7151.104)
+Stacktrace:
+0   undetected_chromedriver             0x0000000100e0c358 undetected_chromedriver + 6136664
+1   undetected_chromedriver             0x0000000100e03aba undetected_chromedriver + 6101690
+2   undetected_chromedriver             0x0000000100898380 undetected_chromedriver + 418688
+3   undetected_chromedriver             0x000000010086caa0 undetected_chromedriver + 240288
+4   undetected_chromedriver             0x00000001009188a8 undetected_chromedriver + 944296
+5   undetected_chromedriver             0x000000010093772c undetected_chromedriver + 1070892
+6   undetected_chromedriver             0x000000010090ffc3 undetected_chromedriver + 909251
+7   undetected_chromedriver             0x00000001008dc217 undetected_chromedriver + 696855
+8   undetected_chromedriver             0x00000001008dce81 undetected_chromedriver + 700033
+9   undetected_chromedriver             0x0000000100dca220 undetected_chromedriver + 5866016
+10  undetected_chromedriver             0x0000000100dce18f undetected_chromedriver + 5882255
+11  undetected_chromedriver             0x0000000100da55c2 undetected_chromedriver + 5715394
+12  undetected_chromedriver             0x0000000100dceaef undetected_chromedriver + 5884655
+13  undetected_chromedriver             0x0000000100d93d84 undetected_chromedriver + 5643652
+14  undetected_chromedriver             0x0000000100df12b8 undetected_chromedriver + 6025912
+15  undetected_chromedriver             0x0000000100df1480 undetected_chromedriver + 6026368
+16  undetected_chromedriver             0x0000000100e03681 undetected_chromedriver + 6100609
+17  libsystem_pthread.dylib             0x00007ff80326adf1 _pthread_start + 99
+18  libsystem_pthread.dylib             0x00007ff803266857 thread_start + 15
+
+2025-06-19 22:39:30,548 - src.telemetry.data_tracker - WARNING - Data spike detected: 1.26 MB in 1.0s
+2025-06-19 22:39:34,557 - src.telemetry.data_tracker - WARNING - Data spike detected: 3.49 MB in 1.0s

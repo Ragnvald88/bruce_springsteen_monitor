@@ -23,3 +23,11 @@
 {"timestamp": "2025-06-19T18:18:49.528815", "bytes_sent": 48128, "bytes_recv": 10253312, "total_mb": 9.82421875, "duration_seconds": 1.0019452571868896, "rate_mbps": 78.44116176632608}
 {"timestamp": "2025-06-19T18:18:50.531279", "bytes_sent": 135168, "bytes_recv": 1179648, "total_mb": 1.25390625, "duration_seconds": 1.0024669170379639, "rate_mbps": 10.006564635209914}
 {"timestamp": "2025-06-19T18:18:52.533210", "bytes_sent": 2313216, "bytes_recv": 23552, "total_mb": 2.228515625, "duration_seconds": 1.0003719329833984, "rate_mbps": 17.82149659760183}
+{"timestamp": "2025-06-19T22:38:55.968954", "bytes_sent": 67584, "bytes_recv": 9962496, "total_mb": 9.5654296875, "duration_seconds": 1.0129218101501465, "rate_mbps": 75.54723052972554}
+{"timestamp": "2025-06-19T22:38:56.976665", "bytes_sent": 135168, "bytes_recv": 20893696, "total_mb": 20.0546875, "duration_seconds": 1.0077142715454102, "rate_mbps": 159.20931610302225}
+{"timestamp": "2025-06-19T22:38:57.979213", "bytes_sent": 234496, "bytes_recv": 1558528, "total_mb": 1.7099609375, "duration_seconds": 1.0025520324707031, "rate_mbps": 13.644865360541525}
+{"timestamp": "2025-06-19T22:39:02.694441", "bytes_sent": 558080, "bytes_recv": 1423360, "total_mb": 1.8896484375, "duration_seconds": 4.7152259349823, "rate_mbps": 3.206036721983026}
+{"timestamp": "2025-06-19T22:39:10.492273", "bytes_sent": 2146304, "bytes_recv": 36192256, "total_mb": 36.5625, "duration_seconds": 7.797832012176514, "rate_mbps": 37.510425916235924}
+{"timestamp": "2025-06-19T22:39:11.515353", "bytes_sent": 11920384, "bytes_recv": 11920384, "total_mb": 22.736328125, "duration_seconds": 1.0230798721313477, "rate_mbps": 177.78731646931283}
+{"timestamp": "2025-06-19T22:39:30.546150", "bytes_sent": 111616, "bytes_recv": 1212416, "total_mb": 1.2626953125, "duration_seconds": 1.0014419555664062, "rate_mbps": 10.087017469012121}
+{"timestamp": "2025-06-19T22:39:34.554634", "bytes_sent": 3614720, "bytes_recv": 44032, "total_mb": 3.4892578125, "duration_seconds": 1.0017948150634766, "rate_mbps": 27.86405168031468}

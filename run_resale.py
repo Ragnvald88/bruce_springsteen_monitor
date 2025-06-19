@@ -19,52 +19,44 @@ if sys.version_info >= (3, 12):
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Check if we should use the lite version or enhanced existing
-use_lite = "--lite" in sys.argv
+print("Starting StealthMaster with FanSale/VivaTicket focus...")
 
-if use_lite:
-    print("Starting StealthMaster Lite (recommended for speed)...")
-    from stealthmaster_lite import main
-    asyncio.run(main())
-else:
-    print("Starting StealthMaster with FanSale/VivaTicket focus...")
-    
-    # Modify config temporarily
-    import yaml
-    
-    config_path = project_root / "config.yaml"
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
-    
-    # Disable Ticketmaster, enable only FanSale and VivaTicket
-    for target in config['targets']:
-        if target['platform'] == 'ticketmaster':
-            target['enabled'] = False
-        elif target['platform'] in ['fansale', 'vivaticket']:
-            target['enabled'] = True
-            # Optimize intervals
-            target['interval_s'] = 2  # Fast checking
-            if 'burst_mode' in target:
-                target['burst_mode']['enabled'] = True
-                target['burst_mode']['min_interval_s'] = 1
-    
-    # Use stealth mode for better success
-    config['app_settings']['mode'] = 'stealth'
-    
-    # Save temporary config
-    temp_config_path = project_root / "config_temp.yaml"
-    with open(temp_config_path, 'w') as f:
-        yaml.dump(config, f)
-    
-    # Set environment variable to use temp config
-    os.environ['STEALTHMASTER_CONFIG'] = str(temp_config_path)
-    
-    # Run the main stealthmaster
-    from stealthmaster import main as original_main
-    
-    try:
-        asyncio.run(original_main())
-    finally:
-        # Cleanup temp config
-        if temp_config_path.exists():
-            temp_config_path.unlink()
+# Modify config temporarily
+import yaml
+
+config_path = project_root / "config.yaml"
+with open(config_path, 'r') as f:
+    config = yaml.safe_load(f)
+
+# Disable Ticketmaster, enable only FanSale and VivaTicket
+for target in config['targets']:
+    if target['platform'] == 'ticketmaster':
+        target['enabled'] = False
+    elif target['platform'] in ['fansale', 'vivaticket']:
+        target['enabled'] = True
+        # Optimize intervals
+        target['interval_s'] = 10  # Reasonable checking interval
+        if 'burst_mode' in target:
+            target['burst_mode']['enabled'] = True
+            target['burst_mode']['min_interval_s'] = 3
+
+# Use stealth mode for better success
+config['app_settings']['mode'] = 'stealth'
+
+# Save temporary config
+temp_config_path = project_root / "config_resale_temp.yaml"
+with open(temp_config_path, 'w') as f:
+    yaml.dump(config, f)
+
+# Set environment variable to use temp config
+os.environ['STEALTHMASTER_CONFIG'] = str(temp_config_path)
+
+# Run the main stealthmaster
+from stealthmaster import main as original_main
+
+try:
+    asyncio.run(original_main())
+finally:
+    # Cleanup temp config
+    if temp_config_path.exists():
+        temp_config_path.unlink()

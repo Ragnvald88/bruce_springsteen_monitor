@@ -2,14 +2,13 @@
 
 ## 🎯 Optimized for FanSale & VivaTicket Resale Tickets
 
-This is a streamlined version of StealthMaster specifically designed for purchasing resale tickets on FanSale.it and VivaTicket.com. No queues, no tax codes, just fast ticket detection and purchase.
+This is a streamlined launcher for StealthMaster specifically configured for purchasing resale tickets on FanSale.it and VivaTicket.com. No queues, no tax codes, just fast ticket detection and purchase.
 
 ## ✨ Key Features
 
-- **Single Browser Instance**: Fast and resource-efficient
-- **7-Minute Session Rotation**: Avoids the 10-minute bot detection
-- **Lightning Fast Purchase**: < 2 seconds from detection to checkout
+- **Advanced Stealth**: Uses undetected-chromedriver for better anti-detection
 - **Italian Proxy Support**: Uses your existing IPRoyal proxy
+- **Lightning Fast Purchase**: Automatic detection and purchase
 - **No Queue Handling**: Designed for resale tickets only
 - **Auto-Login**: Handles authentication automatically
 
@@ -21,25 +20,24 @@ This is a streamlined version of StealthMaster specifically designed for purchas
    ```
 
 2. **Run the monitor**:
-   
-   Option A - Lite version (recommended):
-   ```bash
-   python stealthmaster_lite.py
-   ```
-   
-   Option B - Use existing system:
    ```bash
    python run_resale.py
+   ```
+   
+   Or use the shell script:
+   ```bash
+   ./run_stealth.sh
    ```
 
 3. **Monitor dashboard** (optional, in separate terminal):
    ```bash
    python monitor_dashboard.py
    ```
+   Note: This is a simple status dashboard that shows monitoring statistics
 
 ## 📋 How It Works
 
-1. **Monitoring**: Checks both FanSale and VivaTicket every 1.5 seconds
+1. **Monitoring**: Checks both FanSale and VivaTicket at optimized intervals
 2. **Detection**: Looks for fixed-price (immediate purchase) tickets only
 3. **Purchase**: Automatically clicks through to payment page
 4. **Success**: Reserves ticket for 10 minutes for manual payment
@@ -50,64 +48,38 @@ Your existing `.env` file is used:
 - FanSale credentials
 - VivaTicket credentials  
 - IPRoyal proxy settings
+- 2Captcha API key (if needed)
 
-The system automatically:
-- Sets Italian locale and timezone
-- Uses Italian proxy endpoints
-- Handles cookie acceptance
-- Manages login sessions
+The `run_resale.py` script automatically:
+- Disables Ticketmaster monitoring
+- Optimizes check intervals for resale sites
+- Enables burst mode for faster response
 
-## 🎫 What Tickets It Finds
+## 🛡️ Anti-Detection Features
 
-- **FanSale**: Only "Prezzo fisso" (fixed price) offers
-- **VivaTicket**: Only available resale tickets
-- **Price**: Respects max_price from config.yaml
-- **Quantity**: Attempts to get requested quantity
+- Undetected ChromeDriver
+- Browser fingerprint randomization
+- Human-like behavior simulation
+- Automatic proxy rotation
+- CDP protocol bypass
 
-## ⚡ Performance
+## 📊 Performance
 
-- Session rotation: Every 7 minutes (before 10-minute detection)
-- Check frequency: 1.5 seconds
-- Purchase speed: < 2 seconds
-- Resource usage: ~300-500 MB RAM
+- Check interval: 10 seconds (normal)
+- Burst mode: 3 seconds (when tickets found)
+- Purchase execution: < 5 seconds
+- Session management: Automatic
 
-## 🛠️ Troubleshooting
+## 🔧 Troubleshooting
 
-**Bot protection detected:**
-- The system automatically rotates sessions
-- If persistent, restart the script
+1. **Proxy not working**: Check your IPRoyal credentials in `.env`
+2. **Login fails**: Manually login once when browser opens
+3. **Immediate blocking**: The main StealthMaster has better stealth than lite versions
 
-**Login fails:**
-- Check credentials in .env file
-- Ensure account is not locked
+## 🎯 Target Configuration
 
-**No tickets found:**
-- Resale tickets are rare - be patient
-- Check that events are enabled in config.yaml
-
-**Purchase fails:**
-- Usually means ticket was already sold
-- System will continue monitoring for next ticket
-
-## 📝 Files Created
-
-- `stealthmaster_lite.py` - Optimized monitoring script
-- `run_resale.py` - Launcher for existing system
-- `monitor_dashboard.py` - Real-time status dashboard
-- `setup_resale.sh` - One-time setup script
-
-## 🎯 Success Tips
-
-1. **Be Ready**: Have payment method ready when ticket is found
-2. **Stay Alert**: You have 10 minutes to complete payment
-3. **Multiple Tickets**: System will try to get your desired quantity
-4. **Peak Times**: More tickets available closer to event date
-
-## ⚠️ Important Notes
-
-- This is for personal use only
-- Respect the platforms' terms of service
-- The system finds tickets but YOU must complete payment
-- Success depends on ticket availability
-
-Good luck getting your Bruce Springsteen tickets! 🎸
+Edit `config.yaml` to update:
+- Event URLs
+- Maximum price limits
+- Ticket quantity preferences
+- Desired sections (if any)

@@ -102,36 +102,21 @@ class NodriverCore:
         options.add_argument('--disable-setuid-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
-        options.add_argument('--disable-features=IsolateOrigins,site-per-process')
+        
+        # REMOVED problematic options that cause crashes
+        # options.add_argument('--disable-features=IsolateOrigins,site-per-process')
         
         # Enhanced stealth for Akamai/EdgeSuite bypass
-        options.add_argument('--disable-blink-features=AutomationControlled')
-        # Note: --exclude-switches might not work with UC, so we skip it
         options.add_argument('--disable-features=TranslateUI')
-        options.add_argument('--disable-features=AutofillServerCommunication')
-        options.add_argument('--disable-features=PasswordProtectionWarning')
         
         # Better fingerprinting evasion
         options.add_argument('--disable-features=UserAgentClientHint')
-        options.add_argument('--disable-features=WebRtcHideLocalIpsWithMdns')
         
         # Additional stealth options for better proxy compatibility
         options.add_argument('--disable-web-security')
-        options.add_argument('--disable-features=CrossSiteDocumentBlockingAlways,CrossSiteDocumentBlockingIfIsolating')
         options.add_argument('--disable-site-isolation-trials')
-        options.add_argument('--ignore-certificate-errors')
-        options.add_argument('--allow-running-insecure-content')
-        
-        # Extra stealth for Akamai/Fansale
-        options.add_argument('--disable-features=IsolateOrigins')
-        options.add_argument('--disable-features=BlockInsecurePrivateNetworkRequests')
-        options.add_argument('--disable-features=ImprovedCookieControls')
-        
-        # Note: Experimental options removed due to UC compatibility issues
-        # UC handles most of these internally
         
         # Performance optimizations from V3
-        options.add_argument('--aggressive-cache-discard')
         options.add_argument('--disable-background-timer-throttling')
         options.add_argument('--disable-renderer-backgrounding')
         

@@ -272,13 +272,17 @@ class StealthCore:
         
         # Get fingerprint from context or generate new
         if not fingerprint:
-            context = page.context
-            fingerprint = getattr(context, "_stealth_fingerprint", None)
+            if hasattr(page, 'context'):
+                # Playwright
+                context = page.context
+                fingerprint = getattr(context, "_stealth_fingerprint", None)
             if not fingerprint:
                 fingerprint = self.fingerprint_generator.generate()
         
         # Apply CDP WebDriver bypass to page
-        await self.cdp_webdriver_bypass.apply_to_page(page)
+        if hasattr(page, 'context'):
+            # Playwright only
+            await self.cdp_webdriver_bypass.apply_to_page(page)
         
         # Apply CDP-level stealth
         await self.cdp_stealth.apply_page_stealth(page)
@@ -526,7 +530,7 @@ class StealthCore:
         """)
         
         # Rotate TLS fingerprint
-        if hasattr(page.context.browser, "_tls_profile"):
+        if hasattr(page, 'context') and hasattr(page.context, 'browser') and hasattr(page.context.browser, "_tls_profile"):
             new_profile = self.tls_rotator.rotate()
             page.context.browser._tls_profile = new_profile
         

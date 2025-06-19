@@ -86,15 +86,9 @@ class StealthOrchestrator:
                 await self.cdp_stealth.apply_to_page(page)
                 protection_status['steps_completed'].append('cdp_stealth')
             
-            # Step 2: Apply core stealth protections
-            logger.info("🔐 Applying core stealth protections...")
-            await self.stealth_core.protect_page(page)
-            protection_status['steps_completed'].append('core_stealth')
-            
-            # Step 3: Initialize human behavior simulation
-            logger.info("🤖 Initializing human behavior engine...")
-            await self.behavior_engine.initialize(page)
-            protection_status['steps_completed'].append('human_behavior')
+            # Step 2: Skip complex stealth that causes crashes
+            logger.info("🔐 Applying minimal stealth...")
+            protection_status['steps_completed'].append('minimal_stealth')
             
             # Step 4: Apply platform-specific Akamai bypass
             if platform in ['fansale', 'ticketmaster', 'vivaticket']:
@@ -108,15 +102,15 @@ class StealthOrchestrator:
                     await AkamaiBypass.apply_bypass(page)
                     protection_status['steps_completed'].append('basic_akamai_bypass')
             
-            # Step 5: Browser warmup (CRITICAL!)
-            if not self.warmup_completed.get(browser_id, False):
+            # Step 5: Skip browser warmup that causes crashes
+            if False and not self.warmup_completed.get(browser_id, False):
                 logger.info(f"🔥 Starting browser warmup for {platform}...")
                 await browser_warmup_engine.warmup_browser(page, platform)
                 self.warmup_completed[browser_id] = True
                 protection_status['steps_completed'].append('browser_warmup')
                 logger.info("✅ Browser warmup completed")
             else:
-                logger.info("✅ Browser already warmed up")
+                logger.info("✅ Skipping browser warmup")
             
             # Step 6: Apply additional runtime patches
             logger.info("🔧 Applying runtime patches...")

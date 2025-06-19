@@ -421,12 +421,19 @@ class StealthMasterUI:
                 # Create page if needed (reuse existing browser)
                 if page is None:
                     try:
-                        context_id = await self.browser_launcher.create_context(browser_id)
-                        page = await self.browser_launcher.new_page(context_id)
+                        # For Selenium, we don't need contexts - just use the driver directly
+                        browser_data = self.browsers[platform_name]
+                        page = browser_data['id']
                         
-                        # Store page reference for cleanup
-                        self.browsers[platform_name]['page'] = page
-                        self.browsers[platform_name]['context_id'] = context_id
+                        # Verify driver is still valid
+                        try:
+                            _ = page.window_handles
+                        except:
+                            logger.error(f"Browser for {platform_name} is dead, recreating...")
+                            await self._close_browser(platform_name)
+                            browser_id = await self.get_or_create_browser(platform_name)
+                            browser_data = self.browsers[platform_name]
+                            page = browser_data['id']
                         
                         if first_run:
                             console.print(f"[green]📄 Created dedicated tab for {target.event_name}[/green]")

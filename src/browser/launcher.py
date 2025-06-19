@@ -106,9 +106,12 @@ class NodriverBrowserLauncher:
             # Launch browser with nodriver core
             browser_data = await nodriver_core.create_stealth_browser(**kwargs)
             
-            # Store browser data
-            self.browsers[browser_id] = browser_data
-            self.fingerprints[browser_id] = browser_data.get("fingerprint", {})
+            # For Selenium, return the driver directly as browser data
+            if browser_data.get("type") == "undetected_chrome":
+                # Just store the driver, no need for complex structures
+                self.browsers[browser_id] = browser_data["driver"]
+            else:
+                self.browsers[browser_id] = browser_data
             
             # Track performance
             launch_time = (time.time() - start_time) * 1000
@@ -208,6 +211,14 @@ class NodriverBrowserLauncher:
             if "driver" in context_data:
                 # Selenium - open new tab
                 driver = context_data["driver"]
+                
+                # Check if driver is still valid
+                try:
+                    _ = driver.window_handles
+                except Exception as e:
+                    logger.error(f"Driver is no longer valid: {e}")
+                    raise ValueError("Browser window closed or crashed")
+                
                 driver.execute_script("window.open('');")
                 driver.switch_to.window(driver.window_handles[-1])
                 

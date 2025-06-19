@@ -292,8 +292,49 @@ class DataUsageTracker:
             pass
         
         # Fetch only ticket-specific elements instead of full page
-        ticket_data = await page.evaluate("""
-            () => {
+        if hasattr(page, 'evaluate'):
+            # Playwright
+            ticket_data = await page.evaluate("""
+                () => {
+                    const tickets = document.querySelectorAll('[class*="ticket"], [class*="offer"], [class*="biglietto"]');
+                    const data = {
+                        tickets: [],
+                        hasTickets: false,
+                        pageTitle: document.title,
+                        timestamp: Date.now()
+                    };
+                    
+                    tickets.forEach(ticket => {
+                        const ticketInfo = {
+                        text: ticket.innerText.slice(0, 200),  // Limit text
+                        available: !ticket.classList.contains('sold-out') && 
+                                  !ticket.classList.contains('esaurito'),
+                        price: null,
+                        section: null
+                    };
+                    
+                    // Extract price
+                    const priceEl = ticket.querySelector('[class*="price"], [class*="prezzo"]');
+                    if (priceEl) {
+                        ticketInfo.price = priceEl.innerText;
+                    }
+                    
+                    // Extract section
+                    const sectionEl = ticket.querySelector('[class*="section"], [class*="settore"]');
+                    if (sectionEl) {
+                        ticketInfo.section = sectionEl.innerText;
+                    }
+                    
+                    data.tickets.push(ticketInfo);
+                });
+                
+                data.hasTickets = data.tickets.length > 0;
+                return data;
+            }
+        """)
+        else:
+            # Selenium
+            ticket_data = page.execute_script("""
                 const tickets = document.querySelectorAll('[class*="ticket"], [class*="offer"], [class*="biglietto"]');
                 const data = {
                     tickets: [],
@@ -328,8 +369,7 @@ class DataUsageTracker:
                 
                 data.hasTickets = data.tickets.length > 0;
                 return data;
-            }
-        """)
+            """)
         
         # Cache the result
         self.request_cache[cache_key] = {

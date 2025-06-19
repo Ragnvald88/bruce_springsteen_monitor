@@ -33,11 +33,9 @@ class AkamaiBypass:
             logger.warning("Ultimate mode not available - missing dependencies")
     
     @staticmethod
-    async def apply_bypass(page: Page) -> None:
-        """Apply Akamai-specific bypass techniques."""
-        try:
-            # 1. Pre-inject critical overrides before page loads
-            await page.add_init_script("""
+    def get_bypass_script():
+        """Get the Akamai bypass JavaScript code."""
+        return """
                 // Critical: Override webdriver detection
                 Object.defineProperty(navigator, 'webdriver', {
                     get: () => false,
@@ -80,15 +78,6 @@ class AkamaiBypass:
                 // Override CDP detection
                 delete Object.getPrototypeOf(navigator).webdriver;
                 
-                // Fix permissions API
-                const originalQuery = navigator.permissions.query;
-                navigator.permissions.query = function(params) {
-                    if (params.name === 'notifications') {
-                        return Promise.resolve({ state: 'prompt', onchange: null });
-                    }
-                    return originalQuery.apply(this, arguments);
-                };
-                
                 // Akamai sensor data expectations
                 window._abck = window._abck || {};
                 
@@ -102,105 +91,65 @@ class AkamaiBypass:
                     get: () => ['en-US', 'en'],
                     configurable: false
                 });
+        """
+    
+    @staticmethod
+    async def apply_bypass(page: Page) -> None:
+        """Apply Akamai-specific bypass techniques."""
+        try:
+            # Check if this is Selenium or Playwright
+            if hasattr(page, 'execute_script'):
+                # Selenium - execute the bypass script directly
+                page.execute_script(AkamaiBypass.get_bypass_script())
+                logger.debug("Applied Akamai bypass for Selenium")
+            else:
+                # Playwright - use original implementation
+                # 1. Pre-inject critical overrides before page loads
+                await page.add_init_script(AkamaiBypass.get_bypass_script())
                 
-                // Fix platform inconsistencies
-                Object.defineProperty(navigator, 'platform', {
-                    get: () => 'MacIntel',
-                    configurable: false
-                });
+                # 2. Set proper user agent
+                await page.set_extra_http_headers({
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'none',
+                    'Sec-Fetch-User': '?1',
+                    'Upgrade-Insecure-Requests': '1'
+                })
                 
-                // Battery API (Akamai checks this)
-                if ('getBattery' in navigator) {
-                    navigator.getBattery = async () => ({
-                        charging: true,
-                        chargingTime: 0,
-                        dischargingTime: Infinity,
-                        level: 1,
-                        addEventListener: () => {},
-                        removeEventListener: () => {},
-                        dispatchEvent: () => true
+                # 3. Handle Akamai challenges and sensor data
+                await page.route('**/_bm/**', lambda route: route.continue_())
+                await page.route('**/akam/**', lambda route: route.continue_())
+                
+                # 4. Additional browser context fixes for Fansale
+                await page.evaluate("""
+                    // Fix for Fansale specifically
+                    window.bmak = window.bmak || {};
+                    window.bmak.js_post = false;
+                    window.bmak.fpcf = { f: () => 0, s: () => {} };
+                    window.bmak.sensor_data = '-1';
+                    
+                    // Mock touch support for consistency
+                    Object.defineProperty(navigator, 'maxTouchPoints', {
+                        get: () => 0,
+                        configurable: false
                     });
-                }
+                    
+                    // Fix hardwareConcurrency
+                    Object.defineProperty(navigator, 'hardwareConcurrency', {
+                        get: () => 8,
+                        configurable: false
+                    });
+                    
+                    // Fix deviceMemory
+                    Object.defineProperty(navigator, 'deviceMemory', {
+                        get: () => 8,
+                        configurable: false
+                    });
+                """)
                 
-                // Override toString methods that Akamai fingerprints
-                const nativeToStringFunction = Function.prototype.toString;
-                Function.prototype.toString = function() {
-                    if (this === navigator.permissions.query) {
-                        return 'function query() { [native code] }';
-                    }
-                    return nativeToStringFunction.call(this);
-                };
-                
-                // Fix Notification API
-                const OriginalNotification = window.Notification;
-                window.Notification = function(title, options) {
-                    if (OriginalNotification.permission === 'granted') {
-                        return new OriginalNotification(title, options);
-                    }
-                };
-                window.Notification.permission = 'default';
-                window.Notification.requestPermission = () => Promise.resolve('default');
-                
-                // Canvas fingerprinting protection
-                const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
-                HTMLCanvasElement.prototype.toDataURL = function() {
-                    const context = this.getContext('2d');
-                    if (context) {
-                        const imageData = context.getImageData(0, 0, this.width, this.height);
-                        for (let i = 0; i < imageData.data.length; i += 4) {
-                            imageData.data[i] += (Math.random() * 0.5 - 0.25);
-                            imageData.data[i+1] += (Math.random() * 0.5 - 0.25);
-                            imageData.data[i+2] += (Math.random() * 0.5 - 0.25);
-                        }
-                        context.putImageData(imageData, 0, 0);
-                    }
-                    return originalToDataURL.apply(this, arguments);
-                };
-            """)
-            
-            # 2. Set proper user agent
-            await page.set_extra_http_headers({
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Sec-Fetch-Dest': 'document',
-                'Sec-Fetch-Mode': 'navigate',
-                'Sec-Fetch-Site': 'none',
-                'Sec-Fetch-User': '?1',
-                'Upgrade-Insecure-Requests': '1'
-            })
-            
-            # 3. Handle Akamai challenges and sensor data
-            await page.route('**/_bm/**', lambda route: route.continue_())
-            await page.route('**/akam/**', lambda route: route.continue_())
-            
-            # 4. Additional browser context fixes for Fansale
-            await page.evaluate("""
-                // Fix for Fansale specifically
-                window.bmak = window.bmak || {};
-                window.bmak.js_post = false;
-                window.bmak.fpcf = { f: () => 0, s: () => {} };
-                window.bmak.sensor_data = '-1';
-                
-                // Mock touch support for consistency
-                Object.defineProperty(navigator, 'maxTouchPoints', {
-                    get: () => 0,
-                    configurable: false
-                });
-                
-                // Fix hardwareConcurrency
-                Object.defineProperty(navigator, 'hardwareConcurrency', {
-                    get: () => 8,
-                    configurable: false
-                });
-                
-                // Fix deviceMemory
-                Object.defineProperty(navigator, 'deviceMemory', {
-                    get: () => 8,
-                    configurable: false
-                });
-            """)
-            
-            logger.info("Applied Akamai bypass techniques for Fansale")
+                logger.info("Applied Akamai bypass techniques")
             
         except Exception as e:
             logger.error(f"Failed to apply Akamai bypass: {e}")
@@ -210,20 +159,41 @@ class AkamaiBypass:
         """Handle Akamai challenge if detected."""
         try:
             # Check for Akamai challenge
-            content = await page.content()
+            if hasattr(page, 'content'):
+                # Playwright
+                content = await page.content()
+            else:
+                # Selenium
+                content = page.page_source
+            
             if '_abck' in content or 'akamai' in content.lower():
                 logger.info("Akamai challenge detected, waiting for sensor data...")
                 
                 # Wait for sensor data to be collected
-                await page.wait_for_timeout(3000)
-                
-                # Trigger some human-like events
-                await page.mouse.move(100, 100)
-                await page.mouse.move(200, 200)
-                await page.mouse.move(150, 150)
-                
-                # Wait for challenge to complete
-                await page.wait_for_timeout(2000)
+                if hasattr(page, 'wait_for_timeout'):
+                    # Playwright
+                    await page.wait_for_timeout(3000)
+                    
+                    # Trigger some human-like events
+                    await page.mouse.move(100, 100)
+                    await page.mouse.move(200, 200)
+                    await page.mouse.move(150, 150)
+                    
+                    # Wait for challenge to complete
+                    await page.wait_for_timeout(2000)
+                else:
+                    # Selenium - simple wait
+                    await asyncio.sleep(3)
+                    
+                    # Trigger mouse movement via JavaScript
+                    page.execute_script("""
+                        var event = new MouseEvent('mousemove', {
+                            clientX: 100, clientY: 100
+                        });
+                        document.dispatchEvent(event);
+                    """)
+                    
+                    await asyncio.sleep(2)
                 
                 return True
                 

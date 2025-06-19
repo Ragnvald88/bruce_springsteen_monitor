@@ -77,6 +77,7 @@ from src.utils.config_validator import ConfigValidator
 from src.utils.retry_manager import retry_manager, with_retry
 from src.stealth.akamai_bypass import AkamaiBypass
 from src.stealth.ultimate_bypass import UltimateAkamaiBypass, StealthMasterBot
+from src.stealth.stealth_orchestrator import stealth_orchestrator
 from src.telemetry.data_tracker import DataUsageTracker
 from src.detection.ticket_detector import TicketDetector
 # ADDED: New imports for enhancements
@@ -498,10 +499,26 @@ class StealthMasterUI:
                                 from src.browser.resource_blocker import apply_selective_blocking
                                 apply_selective_blocking(page)
                             
-                            # Apply Akamai bypass for platforms that need it
-                            if platform_name in ['ticketmaster', 'ticketone', 'fansale']:
-                                console.print(f"[cyan]🛡️ Applying Akamai bypass for {platform_name}[/cyan]")
-                                await AkamaiBypass.apply_bypass(page)
+                            # Apply FULL stealth orchestration
+                            console.print(f"[cyan]🛡️ Applying comprehensive stealth protection for {platform_name}...[/cyan]")
+                            
+                            # Initialize stealth orchestrator with settings
+                            stealth_orchestrator.settings = self.settings
+                            
+                            # Apply full stealth stack
+                            protection_status = await stealth_orchestrator.apply_full_stealth(
+                                page, 
+                                platform_name, 
+                                browser_id
+                            )
+                            
+                            if protection_status['success']:
+                                console.print(f"[green]✅ Full stealth protection applied successfully![/green]")
+                                console.print(f"[dim]   Steps completed: {', '.join(protection_status['steps_completed'])}[/dim]")
+                            else:
+                                console.print(f"[yellow]⚠️ Partial stealth protection applied[/yellow]")
+                                if protection_status['errors']:
+                                    console.print(f"[red]   Errors: {', '.join(protection_status['errors'])}[/red]")
                             
                             # Check IP to verify proxy (optional, can be disabled for speed)
                             if self.settings.proxy_settings.enabled:
@@ -526,6 +543,10 @@ class StealthMasterUI:
                         # Mark browser as potentially broken
                         self.browsers[platform_name]['broken'] = True
                         return
+                
+                # Maintain human behavior periodically
+                if random.random() < 0.1:  # 10% chance
+                    await stealth_orchestrator.maintain_human_behavior(page)
                 
                 # Navigate to URL with retry
                 url = str(target.url)

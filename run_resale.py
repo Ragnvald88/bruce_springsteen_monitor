@@ -9,6 +9,12 @@ import os
 import sys
 from pathlib import Path
 
+# Apply distutils patch for Python 3.12+ compatibility
+if sys.version_info >= (3, 12):
+    sys.path.insert(0, str(Path(__file__).parent))
+    from src.utils.uc_patch import patch_distutils
+    patch_distutils()
+
 # Setup paths
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))

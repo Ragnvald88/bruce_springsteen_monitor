@@ -12,6 +12,13 @@ from typing import Dict, List, Optional, Any
 from playwright.async_api import async_playwright, Page, Browser, BrowserContext
 import logging
 from pathlib import Path
+import sys
+
+# Apply distutils patch for Python 3.12+ compatibility
+if sys.version_info >= (3, 12):
+    sys.path.insert(0, str(Path(__file__).parent))
+    from src.utils.uc_patch import patch_distutils
+    patch_distutils()
 
 # Setup paths
 project_root = Path(__file__).parent

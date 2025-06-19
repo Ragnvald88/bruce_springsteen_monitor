@@ -12,6 +12,12 @@ import json
 import time
 from dotenv import load_dotenv
 
+# Apply distutils patch for Python 3.12+ compatibility
+if sys.version_info >= (3, 12):
+    sys.path.insert(0, str(Path(__file__).parent))
+    from src.utils.uc_patch import patch_distutils
+    patch_distutils()
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 

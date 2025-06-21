@@ -1,0 +1,168 @@
+[
+  {
+    "domain": ".fansale.it",
+    "expiry": 1750493231,
+    "httpOnly": false,
+    "name": "bm_sv",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "5DDE9C61C95858B9D12F349685F74D0E~YAAQWooUAjfK72CXAQAATSkZkRxai01+PBjFH3Zp5rGXOqlvul6XcpahWcPiDAqfH3Lwimx/EhvIUDI9IgzPnu/6npBjOFofBndxbG4dDQAH3sI0sU9wMfPaIr6dG27Hu+tOq6uPJIWxGHA1oFySY3467SsK0pBM5XlVC7X7nop6Usgdk4JYjw6UHYX+OXUxHkeKG0RX/GuGULF5Aj8Q9AxGKdDE91s24RBFHOdz9LyO3MnCWFDIwntZ09pAmU3o~1"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022034,
+    "httpOnly": false,
+    "name": "_abck",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "7042B8EC09F7AD732B4741A64C01B2EA~-1~YAAQWooUAjTK72CXAQAAmicZkQ5L7gC6OuCLB5BACf7N1LrP0H+91wDavtQj/1gz8qftq6AEG9e/54DCikeaSrlaI0AlX4QP7z3UShnXk1dkZZEInjG9vtT5uG4PPg7S8vSM0IBzFB7RUKEIbMl2jPTZHbwFnDmNEjioj/WDtQmkZc0yAVB7dvCDqk9odamRuXnoed6lwAPp333vNMIkugpl7cLT8ta38yXdHMxZMTKGM8oYfCIPnKrwCm1Nt9SiYzPxss6DIfcLoI2TcRyBGoZxi/t8c91MtZ+ywPwoRjKv2eM6Ct3ZpSDE0mq7elMj1c0oZBrYa30gqMfIDaDCEL8dp/bI9TjwfFlYrRP/bVxRFJk+hPnc9LYvgpsShi/zrIup+lHd2k+/OgJNdoDIkbP/I8pDcDxPSbkUswrhCg3G+NYiolYy1SglH/WMEK0shD2KFMN6Ih3SeFa7vcfeVMc24VrXpmb+gBJEK1nr9F9mrRHR9tygf0Og7hGnPKAez9BzGIGBRqZ9CfC/w4988EK+5Pum4TGdEfHmmdudZf9Sp4823/83OyH33z1lv8f76JUlKe9s1tdDtArXrNyLl5/G4y4bUKI59o2t9t1xkirmSvzMeVHrNb8CYKqCOs88AIeJgwsfxVLTTvhiPVKRwFJE63Hz1jjKqkaQ79xf20vJwV9TMC3FaBe0meahCXCeKmjRg2Aj2piKyjxtZla0Y4m7SVjWdjbgj1uHkd/Fy/Kcqo427mEvplxvA5NTzqlHNzwGbtxa2KZnN7FHXTbkqinbEzt/kJUjkwYYP8qYAk4PXjom~-1~||0||~-1"
+  },
+  {
+    "domain": "www.fansale.it",
+    "expiry": 1782022034,
+    "httpOnly": true,
+    "name": "access.FANSALE",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1750486034160"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1753164432,
+    "httpOnly": true,
+    "name": "sbsd",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "s5YgYdDiwXaHhxdztzCdAlKnPIUMY2EgrGAP5tPQNnq/3lFHozikAnSCE/1XmCfJ2ncBdwKCyCgIaYnvfNQWNLkUu0E7IHqMOhax195+XjKRsvf9EGgfA1biKwCVMGPGnAgYshED8PFBQuxxJ9aNk9+5CPCM1oURmZeBPplYieGsg+kDcJJA0ITSzH5ehAQX8QY04PxTpam5QnOuZA7b+18XGut4GdM51zEdAZ9SSZ9XmFuV3DETh03I3SCWuYAW+jFMPZtQhyYzQjxqGx1oKuKoRFIbM2fjrxB9LxHmxCWsTPWm8CwlEo51Q1OOKJP43Ocaj/vZr7xeMCKDtWRdz86GLW5Z3DEMOWayAYKkPEf8D2lTzzxdwSx4Fot5413E58puL8TlkN3bI91SQSscuhg=="
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022033,
+    "httpOnly": false,
+    "name": "__cmpcpc",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "__1__"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022033,
+    "httpOnly": false,
+    "name": "__cmpcvcx36054",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "__s94_s23_c20617_s1409_c10856__"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022033,
+    "httpOnly": false,
+    "name": "__cmpcpcx36054",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "__1__"
+  },
+  {
+    "domain": ".www.fansale.it",
+    "expiry": 1753078029,
+    "httpOnly": false,
+    "name": "bm_lso",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "3943C12EE837181E5821583AAD14FE27252D0C56018BC2F92230AB2E326C8D89~sFQMI0Xp5jIQASXt9TLLYXfYeYeJKQpIkfINx3c+s58WAlfRgOSZZz6LUxe0hswT02+tbBcENe+Y9eGYsqNbWoawr9bvz6ojIt3RlN+3xf2Y2koeuPGlC8bc0Zy2VtW68kC88h1XRDe6AAsbVZ5eoSyEAGyUv9vPPhYJjz9aRcNOMMgHOrkYAOA89Tye/b2v3Uht9YvB4HfEfVPjBzf8eHol0ZJxd53fWB3DaFMmpUjc=^1750486029863"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1750500429,
+    "httpOnly": false,
+    "name": "bm_sz",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1BDF012626FA65206CD234E4822F94D9~YAAQWooUAjPK72CXAQAAAScZkRxU1/s7PCxk4J1xMJsDX48n92NGE/Vg0t0OOFPt6uaPDgwyf6JBpxvDlIn5ePdykgvLgMzWkiHCKn8CdfGWQ6FWmDiBjEw1YjFBJDTgEb2n2xX2CEkr8hwh5SrtRw5Dv6So2EBoZSo/uxl2OPAwrbfAhDDIDuNYYdW7qZLcyfyZ7M1GD79UK/tkrmgfDiU1/zLOyLAlQx93iDQBVz+MuLNbKYveiaeyTwJWlFW62ML7O+Ztz79YHIm9AnPA4WZDBQU8wxsjmbF0VlpW49uU4mJIp1SsKlJOTwRJoKsTJ1XU4y2Wh+5p4vKyp9Ihw9dXuYXN/rp/Ho9g0sDdcUvnh/KS+lmzW68YVjB5YEPInZlAPn3+sTRPxVrOVykKBuNmqPryIybB/d3Ifw==~4605490~3225394"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1750572429,
+    "httpOnly": false,
+    "name": "sbsd_o",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "3943C12EE837181E5821583AAD14FE27252D0C56018BC2F92230AB2E326C8D89~sFQMI0Xp5jIQASXt9TLLYXfYeYeJKQpIkfINx3c+s58WAlfRgOSZZz6LUxe0hswT02+tbBcENe+Y9eGYsqNbWoawr9bvz6ojIt3RlN+3xf2Y2koeuPGlC8bc0Zy2VtW68kC88h1XRDe6AAsbVZ5eoSyEAGyUv9vPPhYJjz9aRcNOMMgHOrkYAOA89Tye/b2v3Uht9YvB4HfEfVPjBzf8eHol0ZJxd53fWB3DaFMmpUjc="
+  },
+  {
+    "domain": "www.fansale.it",
+    "httpOnly": false,
+    "name": "fansale.LOCALE",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "it"
+  },
+  {
+    "domain": "www.fansale.it",
+    "httpOnly": true,
+    "name": "AF",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "FIT"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1750493229,
+    "httpOnly": false,
+    "name": "ak_bmsc",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "584514B69A1EFF82C18E50185793558E~000000000000000000000000000000~YAAQWooUAg3K72CXAQAAKxgZkRzb+aBA66Tkb/+biwJqbPALUHVPPNDmwB6rX0n0KffCc1m3GcbEJs5t+QnS5c8KJJ+iFdsgPBLeBMGTJ9QnAZDDrj+fjdHEG/ovFiQD77upPsI0oSof5rVgD9vMuk7Eo6Y6G4a0NSmA2+h6osxQEtaFLPaVtwm/YlYX/1c6pHwrl69d8taZETJzOOMEZL85PxDQ2kFSuWPNgh/yEFA+EOdNKrB43QyawjeHGAsve/qz7tUXl0EhrRy9/VEMGGb8IsbpdFdh9LR4zKn42PxIHSwwnQhf0kAZC/59WxMDslgqgpts8OFSUhIaZmeIkjKrcJU7T4F5vbCRz/m5R5kStl5iSxFUWtbC5dpj1dn9+uc7fkZA+i2EcC0iwwSlXWhoIOLggX57vxwGvCEst+5Wf5jwzpKgGtxuA5BEBUoyNLHlFYuyjHFUf2c="
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022033,
+    "httpOnly": false,
+    "name": "__cmpcvc",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "__s94_s23_c20617_s1409_c10856__"
+  },
+  {
+    "domain": "www.fansale.it",
+    "httpOnly": true,
+    "name": "BIGipServer~WEB~tickets.fansale.de",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "rd1o00000000000000000000ffff0ac01076o80"
+  },
+  {
+    "domain": ".fansale.it",
+    "expiry": 1782022033,
+    "httpOnly": false,
+    "name": "__cmpiuid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "d57dadcf3cd3686b7bfdd164361798b9"
+  },
+  {
+    "domain": "www.fansale.it",
+    "httpOnly": true,
+    "name": "JSESSIONID",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "3F54C7F640F78F678C3FEF3007FC407C"
+  }
+]

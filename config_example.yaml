@@ -1,0 +1,33 @@
+# StealthMaster Ultimate Configuration Example
+# Copy this to config.yaml and fill in your details
+
+targets:
+  - platform: fansale
+    enabled: true
+    url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+    
+    # LOGIN CREDENTIALS (REQUIRED!)
+    email: "your-email@example.com"      # Your Fansale email
+    password: "your-password"            # Your Fansale password
+    
+    # Performance settings
+    check_interval: 5                    # Seconds between checks (lower = faster)
+    headless: true                       # Run without GUI (30% faster)
+    
+    # Auto-reserve settings
+    auto_reserve: true                   # Automatically reserve tickets when found
+    max_price: 500                      # Maximum price in EUR
+    quantity: 2                         # Number of tickets to reserve
+    
+    # Proxy settings (optional)
+    proxy: null                         # Format: "http://username:password@proxy-server:port"
+    
+    # Bandwidth optimization
+    minimize_bandwidth: true            # Block images, CSS, etc (saves 80-90% data)
+    cache_responses: true              # Smart caching to reduce requests
+
+# Example with proxy:
+# proxy: "http://myuser:mypass@proxy.example.com:8080"
+
+# Example for different event:
+# url: "https://www.fansale.it/fansale/tickets/all/taylor-swift/123456/789012"

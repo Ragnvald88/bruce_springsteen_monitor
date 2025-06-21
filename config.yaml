@@ -12,8 +12,8 @@ targets:
     
     # Auto-reserve settings
     auto_reserve: true                  # Automatically reserve tickets when found
-    max_price: 500                      # Maximum price in EUR
-    quantity: 1                         # Number of tickets to reserve
+    max_price: null                     # null = ANY price (no limit)
+    quantity: 4                         # Number of tickets to reserve
     
     # Performance settings
     check_interval: 5                   # Seconds between checks (lower = faster)

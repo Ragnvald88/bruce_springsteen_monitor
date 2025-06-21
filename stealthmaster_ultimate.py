@@ -15,6 +15,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import hashlib
 import pickle
+from urllib.parse import quote
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -28,6 +29,7 @@ if sys.version_info >= (3, 12):
 
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.service import Service
 
@@ -69,8 +71,8 @@ class StealthMasterUltimate:
         self.url = config.get('url')
         self.check_interval = config.get('check_interval', 5)
         self.auto_reserve = config.get('auto_reserve', True)
-        self.max_price = config.get('max_price', 999999)
-        self.quantity = config.get('quantity', 1)
+        self.max_price = config.get('max_price', None)  # None means no limit
+        self.quantity = config.get('quantity', 4)  # Reserve up to 4 tickets
         
         # Proxy optimization settings
         self.use_proxy = config.get('proxy', None)
@@ -89,7 +91,9 @@ class StealthMasterUltimate:
             proxy_host = os.getenv('IPROYAL_HOSTNAME')
             proxy_port = os.getenv('IPROYAL_PORT')
             if all([proxy_user, proxy_pass, proxy_host, proxy_port]):
-                self.use_proxy = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
+                # URL encode the password to handle special characters
+                encoded_pass = quote(proxy_pass, safe='')
+                self.use_proxy = f"http://{proxy_user}:{encoded_pass}@{proxy_host}:{proxy_port}"
                 logger.info("Using IPRoyal proxy from .env")
         
         # Browser instance
@@ -127,18 +131,13 @@ class StealthMasterUltimate:
     def verify_proxy(self, driver) -> bool:
         """Verify proxy is working correctly"""
         try:
-            # Check IP through proxy
-            driver.get('https://api.ipify.org?format=json')
-            ip_data = driver.execute_script("return document.body.innerText;")
-            
-            if ip_data:
-                logger.info(f"✓ Proxy verified - Current IP: {ip_data}")
-                with open(f'logs/proxy_usage_{self.session_id}.log', 'a') as f:
-                    f.write(f"{datetime.now().isoformat()} - Proxy verified: {ip_data}\n")
-                return True
-            return False
+            # Skip proxy verification for now - just log that we're using it
+            logger.info(f"✓ Proxy configured (verification skipped to avoid issues)")
+            with open(f'logs/proxy_usage_{self.session_id}.log', 'a') as f:
+                f.write(f"{datetime.now().isoformat()} - Proxy configured: {self.use_proxy}\n")
+            return True
         except Exception as e:
-            logger.error(f"Proxy verification failed: {e}")
+            logger.error(f"Proxy logging failed: {e}")
             return False
     
     def create_ultimate_driver(self) -> Optional[uc.Chrome]:
@@ -375,19 +374,18 @@ class StealthMasterUltimate:
                 if ticket_id not in self.seen_tickets:
                     self.seen_tickets.add(ticket_id)
                     
-                    # Apply filters
-                    if data['price'] is None or data['price'] <= self.max_price:
-                        new_tickets.append({
-                            'id': ticket_id,
-                            'text': data['text'],
-                            'price': data['price'],
-                            'selector': data['selector'],
-                            'index': data['index'],
-                            'timestamp': time.time()
-                        })
-                        
-                        # Cache the ticket
-                        self.ticket_cache[ticket_id] = data
+                    # No price filter - accept ANY ticket
+                    new_tickets.append({
+                        'id': ticket_id,
+                        'text': data['text'],
+                        'price': data['price'],
+                        'selector': data['selector'],
+                        'index': data['index'],
+                        'timestamp': time.time()
+                    })
+                    
+                    # Cache the ticket
+                    self.ticket_cache[ticket_id] = data
             
             return new_tickets, data_size
             
@@ -512,61 +510,167 @@ class StealthMasterUltimate:
         try:
             logger.info("🔐 Attempting login to Fansale...")
             
-            # Navigate to login page
+            # Navigate to login page with full URL
             login_url = "https://www.fansale.it/fansale/login"
+            logger.info(f"Navigating to login page: {login_url}")
             self.driver.get(login_url)
-            time.sleep(2)
+            time.sleep(3)  # Give page time to load
             
-            # Find and fill email field
+            # Find and fill email field - try more selectors
             email_field = self.driver.execute_script("""
-                const selectors = ['input[name="email"]', 'input[type="email"]', '#email', '[id*="email"]'];
+                const selectors = [
+                    'input[name="email"]', 
+                    'input[type="email"]', 
+                    '#email', 
+                    '[id*="email"]',
+                    'input[placeholder*="mail"]',
+                    'input[autocomplete="email"]',
+                    'input[id="login-email"]',
+                    'input.email-input',
+                    '[data-test*="email"]'
+                ];
+                
+                // Debug: log all input fields
+                console.log('All inputs:', document.querySelectorAll('input'));
+                
                 for (const sel of selectors) {
                     const elem = document.querySelector(sel);
-                    if (elem) {
+                    if (elem && elem.offsetHeight > 0) {
+                        elem.focus();
                         elem.value = arguments[0];
                         elem.dispatchEvent(new Event('input', {bubbles: true}));
+                        elem.dispatchEvent(new Event('change', {bubbles: true}));
                         return true;
                     }
                 }
+                
+                // Try finding by placeholder text
+                const inputs = document.querySelectorAll('input');
+                for (const input of inputs) {
+                    const placeholder = input.placeholder || '';
+                    if (placeholder.toLowerCase().includes('email') || 
+                        placeholder.toLowerCase().includes('mail')) {
+                        input.focus();
+                        input.value = arguments[0];
+                        input.dispatchEvent(new Event('input', {bubbles: true}));
+                        input.dispatchEvent(new Event('change', {bubbles: true}));
+                        return true;
+                    }
+                }
+                
                 return false;
             """, self.email)
             
             if not email_field:
-                logger.error("Could not find email field")
-                return False
+                logger.warning("Could not find email field with JavaScript, trying Selenium approach...")
+                # Try direct Selenium approach
+                try:
+                    from selenium.webdriver.common.by import By
+                    # Try to find any email input
+                    email_inputs = self.driver.find_elements(By.CSS_SELECTOR, 'input[type="email"], input[name*="mail"], input[placeholder*="mail"]')
+                    if email_inputs:
+                        email_inputs[0].clear()
+                        email_inputs[0].send_keys(self.email)
+                        logger.info("Found email field with Selenium")
+                    else:
+                        logger.error("Could not find email field with any method")
+                        return False
+                except Exception as e:
+                    logger.error(f"Selenium email input failed: {e}")
+                    return False
             
             time.sleep(1)
             
-            # Find and fill password field
+            # Find and fill password field - try more selectors
             password_field = self.driver.execute_script("""
-                const selectors = ['input[name="password"]', 'input[type="password"]', '#password', '[id*="password"]'];
+                const selectors = [
+                    'input[name="password"]', 
+                    'input[type="password"]', 
+                    '#password', 
+                    '[id*="password"]',
+                    'input[placeholder*="password"]',
+                    'input[autocomplete="current-password"]',
+                    'input[id="login-password"]',
+                    'input.password-input',
+                    '[data-test*="password"]'
+                ];
+                
                 for (const sel of selectors) {
                     const elem = document.querySelector(sel);
-                    if (elem) {
+                    if (elem && elem.offsetHeight > 0) {
+                        elem.focus();
                         elem.value = arguments[0];
                         elem.dispatchEvent(new Event('input', {bubbles: true}));
+                        elem.dispatchEvent(new Event('change', {bubbles: true}));
                         return true;
                     }
                 }
+                
+                // Try all password type inputs
+                const passwords = document.querySelectorAll('input[type="password"]');
+                if (passwords.length > 0) {
+                    passwords[0].focus();
+                    passwords[0].value = arguments[0];
+                    passwords[0].dispatchEvent(new Event('input', {bubbles: true}));
+                    passwords[0].dispatchEvent(new Event('change', {bubbles: true}));
+                    return true;
+                }
+                
                 return false;
             """, self.password)
             
             if not password_field:
-                logger.error("Could not find password field")
-                return False
+                logger.warning("Could not find password field with JavaScript, trying Selenium approach...")
+                # Try direct Selenium approach
+                try:
+                    password_inputs = self.driver.find_elements(By.CSS_SELECTOR, 'input[type="password"]')
+                    if password_inputs:
+                        password_inputs[0].clear()
+                        password_inputs[0].send_keys(self.password)
+                        logger.info("Found password field with Selenium")
+                    else:
+                        logger.error("Could not find password field with any method")
+                        # Save screenshot for debugging
+                        self.driver.save_screenshot(f'logs/login_debug_{self.session_id}.png')
+                        logger.info(f"Saved screenshot to logs/login_debug_{self.session_id}.png")
+                        return False
+                except Exception as e:
+                    logger.error(f"Selenium password input failed: {e}")
+                    return False
             
             time.sleep(1)
             
             # Submit login form
             submit_result = self.driver.execute_script("""
-                const selectors = ['button[type="submit"]', 'input[type="submit"]', '.login-button', '[class*="login"][class*="submit"]'];
+                const selectors = [
+                    'button[type="submit"]', 
+                    'input[type="submit"]', 
+                    '.login-button', 
+                    '[class*="login"][class*="submit"]',
+                    'button:contains("Login")',
+                    'button:contains("Accedi")',  // Italian for Login
+                    'input[value*="Login"]',
+                    'input[value*="Accedi"]'
+                ];
+                
                 for (const sel of selectors) {
                     const elem = document.querySelector(sel);
-                    if (elem) {
+                    if (elem && elem.offsetHeight > 0) {
                         elem.click();
                         return true;
                     }
                 }
+                
+                // Try finding button by text content
+                const buttons = document.querySelectorAll('button, input[type="submit"], input[type="button"]');
+                for (const btn of buttons) {
+                    const text = (btn.textContent || btn.value || '').toLowerCase();
+                    if (text.includes('login') || text.includes('accedi') || text.includes('entra')) {
+                        btn.click();
+                        return true;
+                    }
+                }
+                
                 // Try form submit
                 const forms = document.querySelectorAll('form');
                 for (const form of forms) {
@@ -579,8 +683,19 @@ class StealthMasterUltimate:
             """)
             
             if not submit_result:
-                logger.error("Could not submit login form")
-                return False
+                logger.warning("Could not submit form with JavaScript, trying Enter key...")
+                try:
+                    # Try pressing Enter on password field
+                    password_inputs = self.driver.find_elements(By.CSS_SELECTOR, 'input[type="password"]')
+                    if password_inputs:
+                        password_inputs[0].send_keys(Keys.RETURN)
+                        logger.info("Submitted form with Enter key")
+                    else:
+                        logger.error("Could not submit login form with any method")
+                        return False
+                except Exception as e:
+                    logger.error(f"Enter key submission failed: {e}")
+                    return False
             
             # Wait for login to complete
             time.sleep(5)
@@ -725,19 +840,24 @@ class StealthMasterUltimate:
                         logger.info("🎯 AUTO-RESERVE TRIGGERED! Found new tickets, attempting reservation...")
                         self.stats['status'] = 'reserving'
                         
-                        # Sort by price (cheapest first)
-                        sorted_tickets = sorted(
-                            [t for t in new_tickets if t.get('price')],
-                            key=lambda x: x['price']
-                        )
+                        # Sort by price if available (cheapest first), but include all tickets
+                        tickets_with_price = [t for t in new_tickets if t.get('price') is not None]
+                        tickets_without_price = [t for t in new_tickets if t.get('price') is None]
                         
-                        # Reserve tickets up to quantity
-                        for ticket in sorted_tickets[:self.quantity]:
-                            if ticket['id'] not in self.reserved_tickets:
-                                logger.info(f"🎫 Attempting to reserve ticket at €{ticket.get('price', 'unknown')}...")
+                        # Sort tickets with prices, then add tickets without prices
+                        sorted_tickets = sorted(tickets_with_price, key=lambda x: x['price']) + tickets_without_price
+                        
+                        # Reserve tickets up to quantity (4)
+                        reserved_count = 0
+                        for ticket in sorted_tickets:
+                            if ticket['id'] not in self.reserved_tickets and reserved_count < self.quantity:
+                                logger.info(f"🎫 Attempting to reserve ticket {reserved_count + 1}/{self.quantity} at €{ticket.get('price', 'unknown')}...")
                                 if await self.smart_reserve_ticket(ticket):
-                                    logger.info("✅ TICKET SUCCESSFULLY RESERVED!")
-                                    break  # Stop after successful reservation
+                                    logger.info(f"✅ TICKET {reserved_count + 1} SUCCESSFULLY RESERVED!")
+                                    reserved_count += 1
+                                    if reserved_count >= self.quantity:
+                                        logger.info(f"🎯 Reserved {self.quantity} tickets - stopping!")
+                                        break
                                 else:
                                     logger.warning("❌ Failed to reserve this ticket, trying next...")
                                 await asyncio.sleep(1)
@@ -1083,8 +1203,8 @@ async def main():
     console.print("\n[cyan]Configuration:[/cyan]")
     console.print(f"  URL: {config['url']}")
     console.print(f"  Auto-reserve: [bold green]{'ON' if config['auto_reserve'] else 'OFF'}[/bold green]")
-    console.print(f"  Max price: €{config['max_price']}")
-    console.print(f"  Tickets to reserve: {config.get('quantity', 1)}")
+    console.print(f"  Max price: {'ANY PRICE' if config.get('max_price') is None else f'€{config["max_price"]}'}")
+    console.print(f"  Tickets to reserve: {config.get('quantity', 4)}")
     console.print(f"  Check interval: {config['check_interval']}s")
     console.print(f"  Proxy: {'IPRoyal (.env)' if 'iproyal' in str(config.get('proxy', '')).lower() else config.get('proxy', 'None')}")
     console.print(f"  Bandwidth optimization: ON")

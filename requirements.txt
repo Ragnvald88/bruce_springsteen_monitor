@@ -1,18 +1,17 @@
-# FanSale Sniper Ultimate - Requirements
+# FanSale Sniper - Requirements for Python 3.13+
 
-# Core Dependencies
-undetected-chromedriver>=3.5.5     # Stealth browser automation
-selenium>=4.15.0                   # Browser control
-selenium-wire>=5.1.0               # Proxy support
+# Core browser automation
+undetected-chromedriver>=3.5.5
+selenium>=4.0.0
+selenium-wire>=5.1.0
 
-# Configuration
-python-dotenv>=1.0.0               # Environment variables
-PyYAML>=6.0.1                      # Config file parsing
+# Environment and configuration
+python-dotenv>=1.0.0
+PyYAML>=6.0.1
 
-# Optional but recommended
-requests>=2.31.0                   # For notifications
-colorlog>=6.8.0                    # Colored logging
+# Utilities
+requests>=2.31.0
+colorlog>=6.8.0
 
-# Note: Make sure you have Chrome/Chromium installed
-# Ubuntu/Debian: sudo apt-get install chromium-browser
-# macOS: brew install --cask google-chrome
+# Python 3.13 compatibility
+setuptools>=70.0.0  # Required for distutils compatibility

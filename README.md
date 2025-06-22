@@ -1,147 +1,198 @@
-# 🎸 Bruce Springsteen Ticket Hunter - StealthMaster AI v2.0
+# StealthMaster - Advanced Ticket Reservation Bot
 
-## 🎉 UPDATE: WE GOT 4 PRATO B TICKETS! THE HUNT FOR PRATO A CONTINUES! 🎯
+StealthMaster is a sophisticated, high-performance bot designed to monitor and automatically reserve tickets on Fansale.it. Built with advanced stealth capabilities, robust error handling, and intelligent automation features.
 
----
+## 🚀 Features
 
-## 🚀 What's New in v2.0 - The StealthMaster AI Revolution
+- **Advanced Stealth Mode**: Undetected Chrome driver with anti-bot detection measures
+- **Session Persistence**: Maintains login state across restarts
+- **Proxy Support**: Built-in proxy authentication with IPRoyal integration
+- **CAPTCHA Solving**: Automatic CAPTCHA detection and solving via 2Captcha
+- **Real-time Notifications**: Telegram and Pushover support for instant alerts
+- **Adaptive Delays**: Smart rate limiting to avoid detection
+- **Resource Optimization**: Blocks unnecessary resources for faster performance
+- **Multi-State Management**: Intelligent state machine for reliable operation
 
-### 🔥 MASSIVE UPDATE (June 7th 2025)
+## 📋 Prerequisites
 
-We completely rebuilt the entire system from the ground up. Here's what changed and why:
+- Python 3.8 or higher
+- Google Chrome browser
+- Valid Fansale.it account
+- (Optional) IPRoyal proxy credentials
+- (Optional) 2Captcha API key
+- (Optional) Telegram bot token or Pushover credentials
 
-### What Changed:
+## 🔧 Installation
 
-1. **One Handler To Rule Them All** 🏆
-   - **Before**: 3 separate files for FanSale, Ticketmaster, and Vivaticket (1,500+ lines of code)
-   - **After**: 1 unified handler that adapts to any platform (400 lines)
-   - **Why**: Easier to maintain, faster to execute, and bugs can't hide in duplicated code
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/stealthmaster.git
+   cd stealthmaster
+   ```
 
-2. **Undetectable Browser Automation** 🥷
-   - **Before**: Basic Playwright that sites could detect in seconds
-   - **After**: StealthMaster Engine with CDP bypass, neural behavior simulation, and polymorphic fingerprinting
-   - **Why**: Ticketmaster was blocking us. Now we're invisible. Like a ninja at a Springsteen concert.
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. **Lightning-Fast Strike Force** ⚡
-   - **Before**: Check ticket → Think about it → Try to buy → Usually fail
-   - **After**: Quantum-coordinated strikes with multiple profiles attacking simultaneously
-   - **Why**: When tickets appear, milliseconds matter. We're now 5x faster.
+3. **Configure environment variables**:
+   Create a `.env` file in the project root with your credentials:
+   ```env
+   # Fansale Credentials (REQUIRED)
+   FANSALE_EMAIL="your_email@example.com"
+   FANSALE_PASSWORD="your_password"
 
-4. **Smart Proxy Rotation** 🌐
-   - **Before**: One IP address = Easy to block
-   - **After**: Automatic rotation through Italian residential proxies
-   - **Why**: Italian sites want Italian visitors. Now we look like we're browsing from Milano.
+   # Proxy Configuration (OPTIONAL)
+   IPROYAL_USERNAME="your_proxy_username"
+   IPROYAL_PASSWORD="your_proxy_password"
+   IPROYAL_HOSTNAME="geo.iproyal.com"
+   IPROYAL_PORT="12321"
 
-5. **Self-Healing System** 🔧
-   - **Before**: Get blocked → Cry → Restart manually
-   - **After**: Get blocked → Auto-rotate proxy → Switch profile → Continue hunting
-   - **Why**: The bot now fixes itself while you sleep
+   # 2Captcha API Key (OPTIONAL)
+   TWOCAPTCHA_API_KEY="your_2captcha_api_key"
 
-### In Human Terms:
+   # Telegram Notifications (OPTIONAL)
+   TELEGRAM_BOT_TOKEN="your_telegram_bot_token"
+   TELEGRAM_CHAT_ID="your_telegram_chat_id"
 
-Imagine you're trying to get into an exclusive Springsteen concert:
+   # Pushover Notifications (OPTIONAL)
+   PUSHOVER_USER_KEY="your_pushover_user_key"
+   PUSHOVER_API_TOKEN="your_pushover_api_token"
+   ```
 
-- **v1.0**: You walk up to the door with a fake mustache. Security laughs and blocks you.
-- **v2.0**: You have 10 different disguises, know all the security patterns, move like a local, and if one identity fails, another takes over instantly.
+4. **Configure the bot**:
+   Edit `config.yaml` to set your target event and preferences:
+   ```yaml
+   target:
+     url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+     
+   browser:
+     headless: false  # Set to true for background operation
+     window_size: [1280, 720]
+     
+   monitoring:
+     check_interval: 5  # Seconds between checks
+     max_tickets: 4     # Maximum tickets to reserve
+   ```
 
-### Real Results:
-- **Detection Rate**: Dropped from 70% to <5%
-- **Success Rate**: Jumped from 20% to 85%
-- **Speed**: 5x faster (catches tickets in 1.5 seconds instead of 8)
-- **Reliability**: Runs 24/7 without crashing
+## 🎯 Usage
 
----
+### Basic Usage
 
-## 🏆 Current Score: 4 Prato B Tickets Secured!
-
-But we're not stopping until we get those Prato A seats. The Boss deserves nothing less than the best view! 
-
----
-
-## 🎯 What This Bot Does
-
-This is an advanced ticket acquisition system specifically designed for Bruce Springsteen concerts on Italian ticketing platforms. It monitors multiple sites simultaneously, detects available tickets instantly, and attempts to secure them faster than any human could click.
-
-### Supported Platforms:
-- ✅ **FanSale.it** - Primary target, where we got our 4 tickets!
-- ✅ **Ticketmaster.it** - The fortress we've now breached
-- ✅ **VivaTicket.com** - Also monitoring for any surprises
-
-### Key Features:
-- 🤖 **Fully Automated**: Set it up once, let it run forever
-- 👁️ **Invisible Mode**: Websites can't detect it's a bot
-- 🚀 **Lightning Fast**: Reacts in milliseconds when tickets appear
-- 🔄 **Smart Recovery**: Automatically handles blocks and errors
-- 📱 **Real-time Alerts**: Get notified instantly when tickets are found
-- 🎭 **Multiple Identities**: Uses different profiles to avoid detection
-
----
-
-## ⚡ Quick Start
-
+Run the bot with default configuration:
 ```bash
-# 1. Clone the repo
-git clone https://github.com/yourusername/bruce-springsteen-ticket-hunter.git
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Set up your credentials
-cp .env.example .env
-# Edit .env with your FanSale login and proxy details
-
-# 4. Configure your targets
-# Edit config/config.yaml to set your preferences (sections, max price, etc.)
-
-# 5. Start hunting!
-python src/main.py
+python stealthmaster.py
 ```
 
----
+### Test Notifications
 
-## 🛡️ Why StealthMaster AI v2.0 Works
+Test your notification setup:
+```bash
+python notifications.py
+```
 
-### The Problem We Solved:
-Ticketing sites have gotten smart. They use advanced bot detection from companies like Akamai, Imperva, and Cloudflare. They check for:
-- Browser automation signatures
-- Unusual clicking patterns  
-- Same IP making multiple requests
-- JavaScript execution anomalies
-- Consistent browser fingerprints
+### Check 2Captcha Balance
 
-### Our Solution:
-We built StealthMaster AI to be undetectable by:
-- **Hiding automation traces** at the browser engine level
-- **Simulating human behavior** with AI-driven mouse movements and typing
-- **Rotating identities** with different browser fingerprints
-- **Using residential proxies** from Italian ISPs
-- **Learning from failures** and adapting strategies
+Verify your CAPTCHA solver configuration:
+```bash
+python captcha_solver.py
+```
 
----
+## 🔍 How It Works
 
----
+1. **Initialization**: Bot loads configuration and creates a stealth Chrome instance
+2. **Session Management**: Checks for existing session or performs fresh login
+3. **Monitoring**: Continuously monitors the target page for available tickets
+4. **Detection**: Uses multiple strategies to find available tickets
+5. **Reservation**: Automatically clicks and adds tickets to cart
+6. **Notification**: Sends alerts when tickets are successfully reserved
+7. **Error Handling**: Manages blocks, CAPTCHAs, and connection issues
 
-## 🎸 The Mission Continues
+## ⚙️ Configuration Options
 
-We've proven the system works with 4 Prato B tickets, but we're not satisfied. Prato A is the goal - closest to The Boss, where you can see the sweat and feel the energy. 
+### config.yaml
 
-This isn't just about tickets. It's about engineering excellence in pursuit of experiencing one of the greatest performers of all time.
+| Option | Description | Default |
+|--------|-------------|---------|
+| `target.url` | The Fansale URL to monitor | Required |
+| `browser.headless` | Run in headless mode | `false` |
+| `browser.window_size` | Browser window dimensions | `[1280, 720]` |
+| `monitoring.check_interval` | Seconds between page checks | `5` |
+| `monitoring.max_tickets` | Maximum tickets to reserve | `4` |
 
-### Current Hunt Status:
-- **Prato B**: ✅ SECURED (4 tickets)
-- **Prato A**: 🎯 HUNTING (StealthMaster AI v2.0 engaged)
+### Environment Variables
 
----
+All credentials should be stored in the `.env` file. See the installation section for the complete list.
+
+## 🛡️ Security Features
+
+- **Stealth Mode**: Hides automation indicators from detection scripts
+- **Proxy Support**: Route traffic through residential proxies
+- **Session Encryption**: Secure storage of login sessions
+- **Resource Blocking**: Prevents tracking and reduces fingerprinting
+
+## 🔧 Troubleshooting
+
+### Bot Gets Blocked
+- Enable proxy support in `.env`
+- Increase `check_interval` in `config.yaml`
+- Ensure 2Captcha is configured for CAPTCHA solving
+
+### Login Failures
+- Verify credentials in `.env`
+- Check if Fansale has changed their login process
+- Delete session files in `session/` directory
+
+### No Tickets Found
+- Verify the target URL is correct
+- Check if the event has tickets available
+- Review logs in `logs/` directory for details
+
+### Notifications Not Working
+- Test with `python notifications.py`
+- Verify bot tokens and API keys
+- Check network connectivity
+
+## 📁 Project Structure
+
+```
+stealthmaster/
+├── stealthmaster.py      # Main bot script
+├── notifications.py      # Notification system
+├── captcha_solver.py     # CAPTCHA solving integration
+├── config.yaml          # Bot configuration
+├── .env                 # Credentials (create this)
+├── requirements.txt     # Python dependencies
+├── README.md           # This file
+├── logs/               # Log files directory
+└── session/            # Session storage directory
+```
+
+## 📊 Monitoring & Logs
+
+- **Console Output**: Real-time status updates
+- **Log Files**: Detailed logs in `logs/` directory with timestamps
+- **Notifications**: Instant alerts for successful reservations
+
+## ⚠️ Disclaimer
+
+This bot is for educational purposes only. Using automated tools may violate the terms of service of ticketing websites. Users are responsible for compliance with all applicable terms and laws.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- Bruce Springsteen - For being The Boss and making this all worthwhile
-- The 4 friends who will be rocking in Prato B with us
-- The open-source community for the amazing tools
-- RCChems -
-
----
-
-*"No retreat, no surrender" - Bruce Springsteen*
-
-**The hunt continues... 🎸**
+- [undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver) for stealth capabilities
+- [2Captcha](https://2captcha.com) for CAPTCHA solving services
+- The Python community for excellent libraries and tools

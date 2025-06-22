@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-21T08:01:39.287185",
+  "http_request": {
+    "status_code": 403,
+    "html_size": 445,
+    "found_elements": {},
+    "script_count": 0,
+    "data_scripts": 0,
+    "api_endpoints": [],
+    "has_ticket_data": false
+  },
+  "browser_rendering": {
+    "html_size": 80068,
+    "found_elements": {},
+    "has_ticket_data": false,
+    "blocked": false
+  }
+}

@@ -1,33 +1,25 @@
-# StealthMaster AI v3.0 - Minimal Requirements
-# Only essential dependencies for maximum efficiency
+# Core dependencies
+selenium==4.16.0
+undetected-chromedriver==3.5.4
+webdriver-manager==4.0.1
 
-# Core async framework
-playwright==1.48.0
-
-# HTTP client for lightweight checks
-httpx==0.28.1
-
-# Configuration
-pyyaml==6.0.1
+# Configuration and environment
+PyYAML==6.0.1
 python-dotenv==1.0.0
 
-# GUI for detection monitor
-# Note: tkinter comes with Python, no need to install
+# HTTP and networking
+requests==2.31.0
+urllib3==2.1.0
 
-# Performance monitoring
-psutil==5.9.8
+# Captcha solving
+2captcha-python==1.2.5
 
-# Scientific computing for adaptive scheduling
-numpy==1.26.2
+# Notifications
+python-telegram-bot==20.7
 
-# Logging enhancements
+# Utilities
 colorama==0.4.6
+typing-extensions==4.9.0
 
-# Async utilities
-aiofiles==24.1.0
-
-# Development/Testing (optional)
-pytest==8.0.0
-pytest-asyncio==0.23.3
-
-# Total size: ~50MB vs ~200MB in v2
+# Python 3.12+ compatibility
+setuptools==69.0.2

@@ -1,0 +1,339 @@
+{
+  "timestamp": "2025-06-15T12:27:52.335365",
+  "import_errors": [
+    {
+      "file": "src/main.py",
+      "error": "name 'Any' is not defined",
+      "type": "import_error"
+    },
+    {
+      "file": "src/orchestration/workflow.py",
+      "error": "name 'BasePlatformHandler' is not defined",
+      "type": "import_error"
+    },
+    {
+      "file": "src/profiles/persistence.py",
+      "error": "no running event loop",
+      "type": "import_error"
+    },
+    {
+      "file": "src/detection/adaptive_response.py",
+      "error": "no running event loop",
+      "type": "import_error"
+    }
+  ],
+  "runtime_errors": [],
+  "duplicate_classes": [
+    {
+      "class": "MockPage",
+      "locations": [
+        {
+          "file": "test_enhancements.py",
+          "line": 24
+        },
+        {
+          "file": "tests/test_enhancements.py",
+          "line": 59
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "MonitoringLevel",
+      "locations": [
+        {
+          "file": "src/config.py",
+          "line": 50
+        },
+        {
+          "file": "src/detection/monitor.py",
+          "line": 32
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "ProxyBinding",
+      "locations": [
+        {
+          "file": "src/config.py",
+          "line": 233
+        },
+        {
+          "file": "src/profiles/models.py",
+          "line": 122
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "DetectionType",
+      "locations": [
+        {
+          "file": "src/constants.py",
+          "line": 21
+        },
+        {
+          "file": "src/detection/monitor.py",
+          "line": 18
+        },
+        {
+          "file": "src/detection/recovery.py",
+          "line": 17
+        },
+        {
+          "file": "src/detection/adaptive_response.py",
+          "line": 22
+        }
+      ],
+      "count": 4
+    },
+    {
+      "class": "ProfileStatus",
+      "locations": [
+        {
+          "file": "src/constants.py",
+          "line": 57
+        },
+        {
+          "file": "src/profiles/models.py",
+          "line": 13
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "StealthMasterDashboard",
+      "locations": [
+        {
+          "file": "src/ui/terminal_dashboard.py",
+          "line": 48
+        },
+        {
+          "file": "src/ui/web_dashboard.py",
+          "line": 21
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "SessionState",
+      "locations": [
+        {
+          "file": "src/network/session.py",
+          "line": 23
+        },
+        {
+          "file": "src/profiles/persistence.py",
+          "line": 25
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "CachedResponse",
+      "locations": [
+        {
+          "file": "src/network/interceptor.py",
+          "line": 29
+        },
+        {
+          "file": "src/network/interceptor.py",
+          "line": 519
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "InterceptRule",
+      "locations": [
+        {
+          "file": "src/network/interceptor.py",
+          "line": 39
+        },
+        {
+          "file": "src/network/interceptor.py",
+          "line": 474
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "PatternAnalyzer",
+      "locations": [
+        {
+          "file": "src/network/interceptor.py",
+          "line": 47
+        },
+        {
+          "file": "src/network/interceptor.py",
+          "line": 539
+        },
+        {
+          "file": "src/detection/adaptive_response.py",
+          "line": 668
+        }
+      ],
+      "count": 3
+    },
+    {
+      "class": "TLSProfile",
+      "locations": [
+        {
+          "file": "src/network/tls_fingerprint.py",
+          "line": 20
+        },
+        {
+          "file": "src/stealth/tls_randomizer.py",
+          "line": 17
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "DataUsageMetrics",
+      "locations": [
+        {
+          "file": "src/browser/pool.py",
+          "line": 58
+        },
+        {
+          "file": "src/telemetry/data_tracker.py",
+          "line": 25
+        }
+      ],
+      "count": 2
+    },
+    {
+      "class": "DetectionEvent",
+      "locations": [
+        {
+          "file": "src/detection/monitor.py",
+          "line": 41
+        },
+        {
+          "file": "src/detection/adaptive_response.py",
+          "line": 45
+        }
+      ],
+      "count": 2
+    }
+  ],
+  "unused_files": [
+    "__init__.py",
+    "src/browser/context.py",
+    "src/browser/pool.py",
+    "src/constants.py",
+    "src/detection/adaptive_response.py",
+    "src/detection/captcha.py",
+    "src/detection/monitor.py",
+    "src/main.py",
+    "src/network/interceptor.py",
+    "src/network/rate_limiter.py",
+    "src/network/session.py",
+    "src/network/tls_fingerprint.py",
+    "src/orchestration/purchase/__init__.py",
+    "src/orchestration/scheduler.py",
+    "src/orchestration/state.py",
+    "src/orchestration/workflow.py",
+    "src/platforms/base.py",
+    "src/platforms/ticketmaster.py",
+    "src/platforms/vivaticket.py",
+    "src/profiles/models.py",
+    "src/profiles/persistence.py",
+    "src/stealth/behaviors.py",
+    "src/stealth/browser_warmup.py",
+    "src/stealth/cdp_bypass_engine.py",
+    "src/stealth/cdp_webdriver_bypass.py",
+    "src/stealth/core.py",
+    "src/stealth/extension/__init__.py",
+    "src/stealth/fingerprint.py",
+    "src/stealth/injections.py",
+    "src/stealth/resource_manager.py",
+    "src/stealth/tls_randomizer.py",
+    "src/ui/enhanced_dashboard.py",
+    "src/ui/static/__init__.py",
+    "src/ui/templates/__init__.py",
+    "src/utils/enhanced_logging.py",
+    "src/utils/ip_checker.py",
+    "src/utils/proxy_auth_extension.py",
+    "src/utils/uc_patch.py",
+    "tests/__init__.py",
+    "tests/performance/test_suite.py",
+    "tests/test_basic_functionality.py",
+    "tests/test_enhancements.py",
+    "tests/test_fansale_login.py",
+    "tests/test_monitoring.py",
+    "tests/test_simple.py"
+  ],
+  "benchmarks": {
+    "stealthmaster.py": {
+      "description": "Main modular version",
+      "file_size": 54021,
+      "line_count": 1109,
+      "import_time": 0.5116589069366455,
+      "memory_usage": null,
+      "complexity_metrics": {
+        "classes": 1,
+        "functions": 8,
+        "imports": 41
+      }
+    },
+    "stealthmaster_working.py": {
+      "description": "Simplified working version",
+      "file_size": 16464,
+      "line_count": 423,
+      "import_time": 0.0011301040649414062,
+      "memory_usage": null,
+      "complexity_metrics": {
+        "classes": 1,
+        "functions": 5,
+        "imports": 19
+      }
+    },
+    "stealthmaster_final.py": {
+      "description": "Enhanced standalone version",
+      "file_size": 30600,
+      "line_count": 799,
+      "import_time": 0.0015571117401123047,
+      "memory_usage": null,
+      "complexity_metrics": {
+        "classes": 1,
+        "functions": 8,
+        "imports": 23
+      }
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "category": "Code Quality",
+      "issue": "Found 13 duplicate class definitions",
+      "action": "Remove duplicate class definitions, especially PatternAnalyzer in interceptor.py"
+    },
+    {
+      "priority": "HIGH",
+      "category": "Project Structure",
+      "issue": "Multiple versions of main script exist",
+      "action": "Keep only stealthmaster.py as the main version, move others to examples/ or archive/"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Project Structure",
+      "issue": "Found 45 potentially unused files",
+      "action": "Review and remove unused files from src/ directory"
+    },
+    {
+      "priority": "HIGH",
+      "category": "Code Quality",
+      "issue": "Found 4 files with import errors",
+      "action": "Fix import errors to ensure all modules are properly loadable"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Documentation",
+      "issue": "Multiple overlapping documentation files",
+      "action": "Consolidate documentation into README.md and a single ARCHITECTURE.md"
+    }
+  ]
+}

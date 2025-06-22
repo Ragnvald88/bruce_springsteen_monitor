@@ -1,0 +1,116 @@
+2025-06-22 18:32:02 | DEBUG    | StealthMaster | Loading configuration from config.yaml
+2025-06-22 18:32:02 | INFO     | StealthMaster | Configuration loaded successfully
+2025-06-22 18:32:02 | WARNING  | StealthMaster.Notifications | No notification channels configured
+2025-06-22 18:32:02 | INFO     | StealthMaster | StealthMaster initialized for ronaldhoogenberg@hotmail.com
+2025-06-22 18:32:02 | DEBUG    | StealthMaster | Target URL: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:02 | DEBUG    | StealthMaster | Max tickets: 4
+2025-06-22 18:32:02 | INFO     | StealthMaster | 🚀 StealthMaster starting...
+2025-06-22 18:32:02 | INFO     | StealthMaster | Creating stealth Chrome driver...
+2025-06-22 18:32:02 | DEBUG    | StealthMaster | Creating proxy authentication extension...
+2025-06-22 18:32:02 | DEBUG    | StealthMaster | Proxy extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_55030.zip
+2025-06-22 18:32:02 | INFO     | StealthMaster | Proxy authentication extension loaded
+2025-06-22 18:32:04 | INFO     | StealthMaster | ✅ Stealth Chrome driver created successfully
+2025-06-22 18:32:04 | DEBUG    | StealthMaster | Current state: initializing
+2025-06-22 18:32:04 | DEBUG    | StealthMaster | Initializing bot...
+2025-06-22 18:32:04 | DEBUG    | StealthMaster | No session file found
+2025-06-22 18:32:04 | INFO     | StealthMaster | Navigating to https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:10 | DEBUG    | StealthMaster | No cookie consent button found (might not be needed)
+2025-06-22 18:32:10 | INFO     | StealthMaster | Login required
+2025-06-22 18:32:10 | DEBUG    | StealthMaster | Current state: logging_in
+2025-06-22 18:32:10 | INFO     | StealthMaster | Starting login process...
+2025-06-22 18:32:10 | DEBUG    | StealthMaster | Navigating to login page...
+2025-06-22 18:32:11 | DEBUG    | StealthMaster | Clicked login button
+2025-06-22 18:32:16 | DEBUG    | StealthMaster | No cookie consent button found (might not be needed)
+2025-06-22 18:32:16 | DEBUG    | StealthMaster | Looking for TicketOne iframe...
+2025-06-22 18:32:16 | INFO     | StealthMaster | Switched to TicketOne iframe
+2025-06-22 18:32:26 | DEBUG    | StealthMaster | Fansale selectors not found, trying generic IDs
+2025-06-22 18:32:27 | DEBUG    | StealthMaster | Filled username field
+2025-06-22 18:32:27 | DEBUG    | StealthMaster | Filled password field
+2025-06-22 18:32:27 | INFO     | StealthMaster | Submitted login form
+2025-06-22 18:32:32 | INFO     | StealthMaster | ✅ Login successful!
+2025-06-22 18:32:32 | DEBUG    | StealthMaster | Session saved to session/ronaldhoogenberg_at_hotmail.com.json
+2025-06-22 18:32:32 | DEBUG    | StealthMaster | Navigating back to target: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:35 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:35 | INFO     | StealthMaster | 🔍 Check #1 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:35 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:38 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:38 | INFO     | StealthMaster | 🔍 Check #2 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:38 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:41 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:41 | INFO     | StealthMaster | 🔍 Check #3 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:41 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:45 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:45 | INFO     | StealthMaster | 🔍 Check #4 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:45 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:48 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:48 | INFO     | StealthMaster | 🔍 Check #5 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:48 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:51 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:51 | INFO     | StealthMaster | 🔍 Check #6 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:51 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:54 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:54 | INFO     | StealthMaster | 🔍 Check #7 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:54 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:32:57 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:32:57 | INFO     | StealthMaster | 🔍 Check #8 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:32:57 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:01 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:01 | INFO     | StealthMaster | 🔍 Check #9 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:01 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:04 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:04 | INFO     | StealthMaster | 🔍 Check #10 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:04 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:07 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:07 | INFO     | StealthMaster | 🔍 Check #11 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:07 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:10 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:10 | INFO     | StealthMaster | 🔍 Check #12 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:10 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:13 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:13 | INFO     | StealthMaster | 🔍 Check #13 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:13 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:16 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:16 | INFO     | StealthMaster | 🔍 Check #14 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:16 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:20 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:20 | INFO     | StealthMaster | 🔍 Check #15 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:20 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:23 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:23 | INFO     | StealthMaster | 🔍 Check #16 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:23 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:26 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:26 | INFO     | StealthMaster | 🔍 Check #17 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:26 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:29 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:29 | INFO     | StealthMaster | 🔍 Check #18 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:29 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:32 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:32 | INFO     | StealthMaster | 🔍 Check #19 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:32 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:36 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:36 | INFO     | StealthMaster | 🔍 Check #20 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:36 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:39 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:39 | INFO     | StealthMaster | 🔍 Check #21 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:39 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:42 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:42 | INFO     | StealthMaster | 🔍 Check #22 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:42 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:45 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:45 | INFO     | StealthMaster | 🔍 Check #23 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:45 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:48 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:48 | INFO     | StealthMaster | 🔍 Check #24 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:48 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:52 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:52 | INFO     | StealthMaster | 🔍 Check #25 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:52 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:55 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:55 | INFO     | StealthMaster | 🔍 Check #26 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:55 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:33:58 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:33:58 | INFO     | StealthMaster | 🔍 Check #27 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:33:58 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:34:01 | DEBUG    | StealthMaster | Current state: monitoring
+2025-06-22 18:34:01 | INFO     | StealthMaster | 🔍 Check #28 | Reserved: 0/4 | Delay: 5s
+2025-06-22 18:34:01 | WARNING  | StealthMaster | Not on target page, navigating back to: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388

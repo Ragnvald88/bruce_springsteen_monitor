@@ -1,24 +1,20 @@
-# StealthMaster Ultimate Configuration
-# Simple, clean configuration for stealthmaster_ultimate.py
+# StealthMaster Configuration
+# Configuration for the ticket reservation bot
 
-targets:
-  - platform: fansale
-    enabled: true
-    url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
-    
-    # Login credentials (loaded from .env if available)
-    email: ""                           # Leave empty to use FANSALE_EMAIL from .env
-    password: ""                        # Leave empty to use FANSALE_PASSWORD from .env
-    
-    # Auto-reserve settings
-    auto_reserve: true                  # Automatically reserve tickets when found
-    max_price: null                     # null = ANY price (no limit)
-    quantity: 4                         # Number of tickets to reserve
-    
-    # Performance settings
-    check_interval: 5                   # Seconds between checks (lower = faster)
-    headless: true                      # Run without GUI (faster, less CPU)
-    minimize_bandwidth: true            # Block images/CSS (saves 80-90% data)
-    
-    # Proxy (optional - leave null if not using proxy)
-    proxy: null                         # Format: "http://username:password@proxy:port"
+target:
+  # The URL of the event page to monitor
+  url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+
+browser:
+  # Run in headless mode (no GUI) - faster but harder to debug
+  headless: false
+  # Browser window size [width, height]
+  window_size: [1280, 720]
+
+monitoring:
+  # Time in seconds between page checks
+  check_interval: 5
+  # Maximum number of tickets to reserve
+  max_tickets: 4
+  
+# Note: All credentials (email, password, proxy, etc.) should be in .env file

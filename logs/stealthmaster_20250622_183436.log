@@ -1,0 +1,12 @@
+2025-06-22 18:34:36 | DEBUG    | StealthMaster | Loading configuration from config.yaml
+2025-06-22 18:34:36 | INFO     | StealthMaster | Configuration loaded successfully
+2025-06-22 18:34:36 | WARNING  | StealthMaster.Notifications | No notification channels configured
+2025-06-22 18:34:36 | INFO     | StealthMaster | StealthMaster initialized for ronaldhoogenberg@hotmail.com
+2025-06-22 18:34:36 | DEBUG    | StealthMaster | Target URL: https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388
+2025-06-22 18:34:36 | DEBUG    | StealthMaster | Max tickets: 4
+2025-06-22 18:34:36 | INFO     | StealthMaster | Creating stealth Chrome driver...
+2025-06-22 18:34:36 | DEBUG    | StealthMaster | Creating proxy authentication extension...
+2025-06-22 18:34:36 | DEBUG    | StealthMaster | Proxy extension created at: /var/folders/_z/1s23zc196pv7w_gjjrnbmms40000gn/T/proxy_auth_55646.zip
+2025-06-22 18:34:36 | INFO     | StealthMaster | Proxy authentication extension loaded
+2025-06-22 18:34:38 | INFO     | StealthMaster | ✅ Stealth Chrome driver created successfully
+2025-06-22 18:34:40 | DEBUG    | StealthMaster | No cookie consent button found (might not be needed)

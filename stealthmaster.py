@@ -20,8 +20,12 @@ from typing import Optional, Dict, Any, List
 
 # Python 3.12+ compatibility fix
 if sys.version_info >= (3, 12):
-    import setuptools._distutils_hack
-    setuptools._distutils_hack.ensure_shim()
+    try:
+        import setuptools._distutils_hack
+        setuptools._distutils_hack.ensure_shim()
+    except ImportError:
+        # Fallback if setuptools is not available
+        pass
 
 import yaml
 import undetected_chromedriver as uc
@@ -147,6 +151,10 @@ class StealthMaster:
         
         if not self.email or not self.password:
             raise ValueError("Missing FANSALE_EMAIL or FANSALE_PASSWORD in environment")
+        
+        # Track last login check time
+        self.last_login_check = datetime.now()
+        self.login_check_interval = 300  # 5 minutes in seconds
         
         # Extract proxy settings if available
         self.proxy_username = os.getenv('IPROYAL_USERNAME')
@@ -322,8 +330,9 @@ class StealthMaster:
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-web-security')
         options.add_argument('--disable-features=IsolateOrigins,site-per-process')
-        options.add_experimental_option('excludeSwitches', ['enable-automation'])
-        options.add_experimental_option('useAutomationExtension', False)
+        # Undetected chromedriver handles these automatically
+        # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        # options.add_experimental_option("useAutomationExtension", False)
         
         # Performance options - Block unnecessary resources
         prefs = {
@@ -445,6 +454,9 @@ class StealthMaster:
             
             # Wait for page to load
             time.sleep(3)
+            
+            # Handle cookie consent on first visit
+            self._handle_cookie_consent()
         
         # Check if we need to login
         if self._is_logged_in():
@@ -494,24 +506,46 @@ class StealthMaster:
             except TimeoutException:
                 logger.debug("No TicketOne iframe found, trying direct login")
             
-            # Fill login form
+            # Fill login form with Fansale-specific selectors
             try:
-                # Wait for username field
-                username_field = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "username"))
-                )
+                # Try Fansale-specific selectors first
+                username_selector = "[data-qa='loginEmail']"
+                password_selector = "[data-qa='loginPassword']"
+                login_button_selector = "[data-qa='loginSubmit']"
+                
+                # Wait for and fill email field
+                try:
+                    username_field = WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, username_selector))
+                    )
+                    logger.debug("Found Fansale-specific email field")
+                except TimeoutException:
+                    # Fallback to generic ID
+                    logger.debug("Fansale selectors not found, trying generic IDs")
+                    username_field = WebDriverWait(self.driver, 5).until(
+                        EC.presence_of_element_located((By.ID, "username"))
+                    )
+                
                 username_field.clear()
                 username_field.send_keys(self.email)
                 logger.debug("Filled username field")
                 
                 # Fill password field
-                password_field = self.driver.find_element(By.ID, "password")
+                try:
+                    password_field = self.driver.find_element(By.CSS_SELECTOR, password_selector)
+                except:
+                    password_field = self.driver.find_element(By.ID, "password")
+                
                 password_field.clear()
                 password_field.send_keys(self.password)
                 logger.debug("Filled password field")
                 
                 # Click login button
-                login_button = self.driver.find_element(By.ID, "loginCustomerButton")
+                try:
+                    login_button = self.driver.find_element(By.CSS_SELECTOR, login_button_selector)
+                except:
+                    login_button = self.driver.find_element(By.ID, "loginCustomerButton")
+                
                 login_button.click()
                 logger.info("Submitted login form")
                 
@@ -572,37 +606,60 @@ class StealthMaster:
     def _handle_cookie_consent(self):
         """Handle cookie consent popups if they appear"""
         try:
-            # Common cookie consent selectors
+            # Wait a bit for cookie popup to potentially appear
+            time.sleep(2)
+            
+            # Fansale-specific cookie consent - from claude_instruct.md
             cookie_selectors = [
-                "button[id*='accept']",
-                "button[class*='accept']",
-                "button[onclick*='accept']",
-                "a[id*='accept']",
-                "button:contains('Accetta')",
-                "button:contains('Accept')",
+                # Primary Fansale cookie button
+                "//button[contains(text(), 'ACCETTA TUTTI I COOKIE')]",
+                "//button[contains(text(), 'Accetta tutti i cookie')]",
+                "//button[contains(text(), 'Accetta')]",
+                # Common cookie consent IDs/classes
                 "#onetrust-accept-btn-handler",
-                "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"
+                "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll",
+                "button[id*='accept-all']",
+                "button[class*='accept-all']",
+                # Additional patterns
+                "//button[contains(@class, 'cookie') and contains(text(), 'Accept')]",
+                "//a[contains(text(), 'Accetta cookie')]"
             ]
             
             for selector in cookie_selectors:
                 try:
-                    if selector.startswith("button:contains") or selector.startswith("a:contains"):
-                        # Use XPath for text content
-                        xpath = f"//{selector.split(':')[0]}[contains(text(), '{selector.split('(')[1].split(')')[0]}')]"
-                        cookie_btn = self.driver.find_element(By.XPATH, xpath)
+                    if selector.startswith("//"):
+                        # XPath selector
+                        elements = self.driver.find_elements(By.XPATH, selector)
                     else:
-                        cookie_btn = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        # CSS selector
+                        elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
                     
-                    if cookie_btn.is_displayed() and cookie_btn.is_enabled():
-                        cookie_btn.click()
-                        logger.debug(f"Clicked cookie consent button: {selector}")
-                        time.sleep(1)
-                        return
-                except:
+                    for element in elements:
+                        if element.is_displayed() and element.is_enabled():
+                            # Scroll to element first
+                            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+                            time.sleep(0.5)
+                            
+                            # Try regular click first
+                            try:
+                                element.click()
+                            except:
+                                # JavaScript click as fallback
+                                self.driver.execute_script("arguments[0].click();", element)
+                            
+                            logger.info(f"✅ Clicked cookie consent button: {selector}")
+                            time.sleep(2)
+                            return True
+                except Exception as e:
+                    logger.debug(f"Cookie selector {selector} not found or clickable: {e}")
                     continue
+            
+            logger.debug("No cookie consent button found (might not be needed)")
+            return False
                     
         except Exception as e:
-            logger.debug(f"Error handling cookie consent: {e}")
+            logger.error(f"Error handling cookie consent: {e}")
+            return False
     
     def _handle_monitoring(self):
         """Handle monitoring state - continuously check for tickets"""
@@ -611,17 +668,25 @@ class StealthMaster:
         # Status update
         logger.info(f"🔍 Check #{self.checks_performed} | Reserved: {self.tickets_reserved}/{self.config['monitoring']['max_tickets']} | Delay: {self.current_delay}s")
         
-        # Check if we're still logged in
-        if not self._is_logged_in():
-            logger.warning("Session expired, need to login again")
-            self.state = BotState.LOGGING_IN
-            return
+        # Check if 5 minutes have passed since last login check
+        time_since_check = (datetime.now() - self.last_login_check).total_seconds()
+        if time_since_check >= self.login_check_interval:
+            logger.debug("Performing 5-minute login status check...")
+            self.last_login_check = datetime.now()
+            
+            if not self._is_logged_in():
+                logger.warning("Session expired, need to login again")
+                self.state = BotState.LOGGING_IN
+                return
+            else:
+                logger.debug("Still logged in ✓")
         
         # Check if we're on the correct page
         current_url = self.driver.current_url
         target_url = self.config['target']['url']
         
-        if target_url not in current_url:
+        # More flexible URL matching - check for key parts
+        if not any(part in current_url for part in ['bruce-springsteen', 'tickets', 'fansale']):
             logger.warning(f"Not on target page, navigating back to: {target_url}")
             self.driver.get(target_url)
             time.sleep(3)
@@ -746,17 +811,30 @@ class StealthMaster:
             List of WebElements representing available tickets
         """
         try:
-            # Primary selector for tickets
-            tickets = self.driver.find_elements(By.CSS_SELECTOR, ".offer-item:not(.offer-item-sold)")
+            # First check if there are no tickets available - Fansale-specific text
+            no_tickets_text = "Sfortunatamente non sono state trovate offerte adeguate"
+            try:
+                no_tickets_element = self.driver.find_element(By.XPATH, f"//*[contains(text(), '{no_tickets_text}')]")
+                if no_tickets_element.is_displayed():
+                    logger.debug("Found 'no tickets' message in Italian")
+                    return []
+            except:
+                # No "no tickets" message found, continue looking for tickets
+                pass
+            
+            # Primary Fansale-specific selector from claude_instruct.md
+            tickets = self.driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
             
             if tickets:
-                logger.debug(f"Found {len(tickets)} tickets with primary selector")
+                logger.info(f"Found {len(tickets)} tickets with Fansale-specific selector!")
                 return tickets[:10]  # Limit to first 10 to avoid too many attempts
             
             # Fallback selectors
             fallback_selectors = [
+                ".offer-item:not(.offer-item-sold)",
                 "[class*='ticket']:not([class*='sold'])",
                 "[class*='offer']:not([class*='sold'])",
+                "a.js-Button-inOfferEntryList",  # From claude_instruct.md
                 "[data-testid*='ticket']:not([class*='sold'])",
                 ".listing-item:not(.sold-out)"
             ]
@@ -825,24 +903,31 @@ class StealthMaster:
             True if successful, False otherwise
         """
         try:
-            # Common add to cart selectors
+            # Fansale-specific and common add to cart selectors
             selectors = [
+                # Fansale-specific from claude_instruct.md
+                "[data-qa='buyNowButton']",
+                # Common Italian selectors
                 "button[class*='add-to-cart']",
                 "button[class*='aggiungi']",
                 "button[onclick*='cart']",
                 "a[class*='add-to-cart']",
-                "button:contains('Aggiungi al carrello')",
-                "button:contains('Add to cart')",
-                "[data-testid*='add-to-cart']"
+                "//button[contains(text(), 'Aggiungi al carrello')]",
+                "//button[contains(text(), 'Acquista')]",
+                "//button[contains(text(), 'Compra ora')]",
+                "//button[contains(text(), 'Add to cart')]",
+                "[data-testid*='add-to-cart']",
+                ".buy-button",
+                ".purchase-button"
             ]
             
             for selector in selectors:
                 try:
-                    if ":contains" in selector:
-                        # XPath for text content
-                        text = selector.split("'")[1]
-                        elements = self.driver.find_elements(By.XPATH, f"//button[contains(text(), '{text}')]")
+                    if selector.startswith("//"):
+                        # XPath selector
+                        elements = self.driver.find_elements(By.XPATH, selector)
                     else:
+                        # CSS selector
                         elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
                     
                     for element in elements:
@@ -1059,12 +1144,43 @@ class StealthMaster:
     
     def _is_logged_in(self) -> bool:
         """Check if user is logged in"""
-        # Basic check - will be enhanced in Phase 3.1
         try:
-            # Check for login button absence
+            # Multiple checks for logged-in state
+            
+            # Check 1: Look for logout button/link (most reliable)
+            logout_selectors = [
+                "[data-qa='user-logout']",  # Fansale-specific
+                "//a[contains(text(), 'Esci')]",  # Italian "Exit"
+                "//a[contains(text(), 'Logout')]",
+                "[class*='logout']",
+                "[href*='logout']"
+            ]
+            
+            for selector in logout_selectors:
+                try:
+                    if selector.startswith("//"):
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                    else:
+                        elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                    
+                    if elements and any(e.is_displayed() for e in elements):
+                        logger.debug("Found logout element - user is logged in")
+                        return True
+                except:
+                    continue
+            
+            # Check 2: Login button should NOT be visible
             login_elements = self.driver.find_elements(By.XPATH, "//a[contains(text(), 'Accedi')]")
-            return len(login_elements) == 0
-        except:
+            visible_login = [e for e in login_elements if e.is_displayed()]
+            
+            # Check 3: Not on login page
+            if "login" not in self.driver.current_url.lower() and not visible_login:
+                return True
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Error checking login status: {e}")
             return False
     
     def _save_session(self):

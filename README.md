@@ -1,90 +1,198 @@
-# StealthMaster Advanced - No BS Edition
+# StealthMaster - Advanced Ticket Reservation Bot
 
-A highly advanced, undetectable ticket monitoring system for Fansale.it (and expandable to other platforms).
+StealthMaster is a sophisticated, high-performance bot designed to monitor and automatically reserve tickets on Fansale.it. Built with advanced stealth capabilities, robust error handling, and intelligent automation features.
 
-## What This Actually Does
+## 🚀 Features
 
-- Monitors ticket availability in real-time
-- Avoids detection using REAL stealth techniques (not quantum BS)
-- Alerts you instantly when tickets become available
-- Works reliably without getting blocked
+- **Advanced Stealth Mode**: Undetected Chrome driver with anti-bot detection measures
+- **Session Persistence**: Maintains login state across restarts
+- **Proxy Support**: Built-in proxy authentication with IPRoyal integration
+- **CAPTCHA Solving**: Automatic CAPTCHA detection and solving via 2Captcha
+- **Real-time Notifications**: Telegram and Pushover support for instant alerts
+- **Adaptive Delays**: Smart rate limiting to avoid detection
+- **Resource Optimization**: Blocks unnecessary resources for faster performance
+- **Multi-State Management**: Intelligent state machine for reliable operation
 
-## Quick Start
+## 📋 Prerequisites
 
-1. **Install dependencies:**
+- Python 3.8 or higher
+- Google Chrome browser
+- Valid Fansale.it account
+- (Optional) IPRoyal proxy credentials
+- (Optional) 2Captcha API key
+- (Optional) Telegram bot token or Pushover credentials
+
+## 🔧 Installation
+
+1. **Clone the repository**:
    ```bash
-   pip install -r requirements_simple.txt
+   git clone https://github.com/yourusername/stealthmaster.git
+   cd stealthmaster
    ```
 
-2. **Configure** (edit `config_simple.yaml`):
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure environment variables**:
+   Create a `.env` file in the project root with your credentials:
+   ```env
+   # Fansale Credentials (REQUIRED)
+   FANSALE_EMAIL="your_email@example.com"
+   FANSALE_PASSWORD="your_password"
+
+   # Proxy Configuration (OPTIONAL)
+   IPROYAL_USERNAME="your_proxy_username"
+   IPROYAL_PASSWORD="your_proxy_password"
+   IPROYAL_HOSTNAME="geo.iproyal.com"
+   IPROYAL_PORT="12321"
+
+   # 2Captcha API Key (OPTIONAL)
+   TWOCAPTCHA_API_KEY="your_2captcha_api_key"
+
+   # Telegram Notifications (OPTIONAL)
+   TELEGRAM_BOT_TOKEN="your_telegram_bot_token"
+   TELEGRAM_CHAT_ID="your_telegram_chat_id"
+
+   # Pushover Notifications (OPTIONAL)
+   PUSHOVER_USER_KEY="your_pushover_user_key"
+   PUSHOVER_API_TOKEN="your_pushover_api_token"
+   ```
+
+4. **Configure the bot**:
+   Edit `config.yaml` to set your target event and preferences:
    ```yaml
-   targets:
-     - platform: "fansale"
-       event_name: "Your Event Name"
-       url: "https://www.fansale.it/..."
-       enabled: true
-       interval_s: 30
+   target:
+     url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+     
+   browser:
+     headless: false  # Set to true for background operation
+     window_size: [1280, 720]
+     
+   monitoring:
+     check_interval: 5  # Seconds between checks
+     max_tickets: 4     # Maximum tickets to reserve
    ```
 
-3. **Run:**
-   ```bash
-   python stealthmaster_advanced.py
-   ```
+## 🎯 Usage
 
-## How It Actually Works
+### Basic Usage
 
-Unlike the previous overcomplicated mess, this version:
-
-1. **Uses undetected-chromedriver properly** - No conflicting stealth libraries
-2. **Smart page checking** - Uses JavaScript instead of Selenium selectors (less detectable)
-3. **Realistic behavior** - Random viewports, user agents, and subtle human simulation
-4. **Intelligent intervals** - Adjusts check frequency based on time of day and ticket availability
-5. **Proper error handling** - Recovers from blocks and errors gracefully
-
-## Key Features
-
-- **No proxy required** - Works directly (proxies were causing blocks)
-- **Session persistence** - Handles cookies properly
-- **Live dashboard** - See real-time stats without cluttering logs
-- **Smart detection** - Checks page state before actions to avoid triggers
-- **Exponential backoff** - Handles blocks intelligently
-
-## Architecture (Simple)
-
-```
-stealthmaster_advanced.py   # Main monitor (475 lines of working code)
-├── AdvancedStealth        # Real stealth configuration
-├── SmartMonitor           # Intelligent monitoring logic
-└── config_simple.yaml     # Simple configuration
+Run the bot with default configuration:
+```bash
+python stealthmaster.py
 ```
 
-## What Was Removed
+### Test Notifications
 
-- Quantum coordination (WTF was that??)
-- ML optimization (no ML code existed)
-- 459 lines of CDP bypass that crashes
-- "Ultimate" mode that gets you blocked faster
-- TLS fingerprinting (UC already does this)
-- Overcomplicated error handlers
-- Multiple logging systems
-- Unused GUI code
-- And tons more bloat...
+Test your notification setup:
+```bash
+python notifications.py
+```
 
-## Future Improvements
+### Check 2Captcha Balance
 
-1. **Proxy support** - When you find proxies that actually work
-2. **Multi-site support** - Expand to Ticketmaster, Vivaticket
-3. **Auto-purchase** - Add purchasing capability
-4. **Better notifications** - Email, Discord, SMS
+Verify your CAPTCHA solver configuration:
+```bash
+python captcha_solver.py
+```
 
-## Tips for Staying Undetected
+## 🔍 How It Works
 
-1. **Don't use proxies** unless they're residential and high quality
-2. **Keep intervals reasonable** - 30 seconds is fine
-3. **Run one instance per event** - Don't overload
-4. **Use different browsers** for different sites
-5. **Clear cookies occasionally** if you get blocked
+1. **Initialization**: Bot loads configuration and creates a stealth Chrome instance
+2. **Session Management**: Checks for existing session or performs fresh login
+3. **Monitoring**: Continuously monitors the target page for available tickets
+4. **Detection**: Uses multiple strategies to find available tickets
+5. **Reservation**: Automatically clicks and adds tickets to cart
+6. **Notification**: Sends alerts when tickets are successfully reserved
+7. **Error Handling**: Manages blocks, CAPTCHAs, and connection issues
 
-## License
+## ⚙️ Configuration Options
 
-Do whatever you want with it. Just don't sell it as "Quantum Ticket Master Pro" 😂
+### config.yaml
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `target.url` | The Fansale URL to monitor | Required |
+| `browser.headless` | Run in headless mode | `false` |
+| `browser.window_size` | Browser window dimensions | `[1280, 720]` |
+| `monitoring.check_interval` | Seconds between page checks | `5` |
+| `monitoring.max_tickets` | Maximum tickets to reserve | `4` |
+
+### Environment Variables
+
+All credentials should be stored in the `.env` file. See the installation section for the complete list.
+
+## 🛡️ Security Features
+
+- **Stealth Mode**: Hides automation indicators from detection scripts
+- **Proxy Support**: Route traffic through residential proxies
+- **Session Encryption**: Secure storage of login sessions
+- **Resource Blocking**: Prevents tracking and reduces fingerprinting
+
+## 🔧 Troubleshooting
+
+### Bot Gets Blocked
+- Enable proxy support in `.env`
+- Increase `check_interval` in `config.yaml`
+- Ensure 2Captcha is configured for CAPTCHA solving
+
+### Login Failures
+- Verify credentials in `.env`
+- Check if Fansale has changed their login process
+- Delete session files in `session/` directory
+
+### No Tickets Found
+- Verify the target URL is correct
+- Check if the event has tickets available
+- Review logs in `logs/` directory for details
+
+### Notifications Not Working
+- Test with `python notifications.py`
+- Verify bot tokens and API keys
+- Check network connectivity
+
+## 📁 Project Structure
+
+```
+stealthmaster/
+├── stealthmaster.py      # Main bot script
+├── notifications.py      # Notification system
+├── captcha_solver.py     # CAPTCHA solving integration
+├── config.yaml          # Bot configuration
+├── .env                 # Credentials (create this)
+├── requirements.txt     # Python dependencies
+├── README.md           # This file
+├── logs/               # Log files directory
+└── session/            # Session storage directory
+```
+
+## 📊 Monitoring & Logs
+
+- **Console Output**: Real-time status updates
+- **Log Files**: Detailed logs in `logs/` directory with timestamps
+- **Notifications**: Instant alerts for successful reservations
+
+## ⚠️ Disclaimer
+
+This bot is for educational purposes only. Using automated tools may violate the terms of service of ticketing websites. Users are responsible for compliance with all applicable terms and laws.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- [undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver) for stealth capabilities
+- [2Captcha](https://2captcha.com) for CAPTCHA solving services
+- The Python community for excellent libraries and tools

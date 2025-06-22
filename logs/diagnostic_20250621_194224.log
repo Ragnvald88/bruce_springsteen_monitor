@@ -1,0 +1,111 @@
+[19:42:24] Starting diagnostic test...
+[19:42:24] Email: ronaldhoogenberg@hotmail.com
+[19:42:24] Target: Bruce Springsteen tickets
+
+[19:42:24] STEP 1: Creating driver...
+[19:42:26] 
+STEP 2: Going to Fansale main page...
+[19:42:30] 
+============================================================
+[19:42:30] PAGE INFO After loading main page
+[19:42:30] URL: https://www.fansale.it/
+[19:42:30] Title: fanSALE - Il mercato TicketOne per lo scambio di biglietti da fan a fan.
+[19:42:30] Has 'Accedi' button: True
+[19:42:30] Has logout button: False
+[19:42:30] Has cookie banner: True
+[19:42:30] Has iframes: True
+[19:42:30] ============================================================
+
+[19:42:30] 
+STEP 3: Checking for cookies on main page...
+[19:42:30] No OneTrust cookie button found
+[19:42:30] No cookie popup found or already accepted
+[19:42:30] 
+STEP 4: Going to Bruce Springsteen ticket page...
+[19:42:34] 
+============================================================
+[19:42:34] PAGE INFO After loading Bruce page
+[19:42:34] URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+[19:42:34] Title: I migliori biglietti per Bruce Springsteen su fanSALE!
+[19:42:34] Has 'Accedi' button: True
+[19:42:34] Has logout button: True
+[19:42:34] Has cookie banner: True
+[19:42:34] Has iframes: True
+[19:42:34] ============================================================
+
+[19:42:34] 
+STEP 5: Checking if login is needed...
+[19:42:34] Found 4 'Accedi' links
+[19:42:34] 
+STEP 6: Clicking Accedi...
+[19:42:34] Clicking Accedi link: https://www.fansale.it/forwardToReferer.htm?detailb_new
+[19:42:39] 
+============================================================
+[19:42:39] PAGE INFO After clicking Accedi
+[19:42:39] URL: https://www.fansale.it/login.htm?forwardUrl=https%3A%2F%2Fwww.fansale.it%2FforwardToReferer.htm%3Fdetailb_new
+[19:42:39] Title: Accedi a fanSALE - Acquista e vendi biglietti
+[19:42:39] Has 'Accedi' button: True
+[19:42:39] Has logout button: False
+[19:42:39] Has cookie banner: True
+[19:42:39] Has iframes: True
+[19:42:39] ============================================================
+
+[19:42:39] 
+STEP 7: Looking for login iframe...
+[19:42:39] Found 4 iframes
+[19:42:39] Iframe 0: https://www.ticketone.it/signon/signonserver/noapp?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F...
+[19:42:39] Switching to TicketOne iframe
+[19:42:41] 
+STEP 8: Filling login form...
+[19:42:41] Found username field
+[19:42:41] Filled username
+[19:42:41] Found password field
+[19:42:41] Filled password
+[19:42:41] Found login button: Accedi
+[19:42:41] Clicked login button
+[19:42:41] 
+STEP 9: Waiting for login to complete...
+[19:42:51] 
+============================================================
+[19:42:51] PAGE INFO After login attempt
+[19:42:51] URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+[19:42:51] Title: I migliori biglietti per Bruce Springsteen su fanSALE!
+[19:42:51] Has 'Accedi' button: True
+[19:42:51] Has logout button: True
+[19:42:51] Has cookie banner: True
+[19:42:51] Has iframes: True
+[19:42:51] ============================================================
+
+[19:42:51] 
+Current URL after login: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+[19:42:51] Not on Bruce page, navigating back...
+[19:42:55] 
+============================================================
+[19:42:55] PAGE INFO After navigating back to Bruce page
+[19:42:55] URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+[19:42:55] Title: I migliori biglietti per Bruce Springsteen su fanSALE!
+[19:42:55] Has 'Accedi' button: True
+[19:42:55] Has logout button: True
+[19:42:55] Has cookie banner: True
+[19:42:55] Has iframes: True
+[19:42:55] ============================================================
+
+[19:42:55] 
+STEP 10: Looking for tickets...
+[19:42:55] Found 1 elements with €
+[19:42:55] Ticket 0: 
+[19:42:55] 
+FINAL STATUS:
+[19:42:55] 
+============================================================
+[19:42:55] PAGE INFO Final check
+[19:42:55] URL: https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388
+[19:42:55] Title: I migliori biglietti per Bruce Springsteen su fanSALE!
+[19:42:55] Has 'Accedi' button: True
+[19:42:55] Has logout button: True
+[19:42:55] Has cookie banner: True
+[19:42:55] Has iframes: True
+[19:42:55] ============================================================
+
+[19:42:55] 
+Diagnostic log saved to: logs/diagnostic_20250621_194224.log

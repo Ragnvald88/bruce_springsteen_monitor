@@ -1,53 +1,25 @@
-# Core Web Automation
-selenium>=4.15.0
-undetected-chromedriver>=3.5.3
-playwright>=1.40.0
+# Core dependencies
+selenium==4.16.0
+undetected-chromedriver==3.5.4
+webdriver-manager==4.0.1
 
-# Async and Networking
-aiohttp>=3.9.1
-httpx>=0.25.2
-requests>=2.31.0
-websockets>=12.0
-python-socks[asyncio]>=2.4.0
-aiofiles>=23.2.1
+# Configuration and environment
+PyYAML==6.0.1
+python-dotenv==1.0.0
 
-# Data Processing
-pydantic>=2.5.2
-pydantic-settings>=2.1.0
-PyYAML>=6.0.1
-email-validator>=2.1.0
+# HTTP and networking
+requests==2.31.0
+urllib3==2.1.0
 
-# UI and Visualization
-textual>=0.44.0
-rich>=13.7.0
+# Captcha solving
+2captcha-python==1.2.5
 
-# Performance and Monitoring
-psutil>=5.9.6
-
-# Ultimate Mode (optional but recommended)
-pyautogui>=0.9.54  # For OS-level input simulation in ultimate mode
-Pillow>=10.2.0     # Required by pyautogui
+# Notifications
+python-telegram-bot==20.7
 
 # Utilities
-python-dotenv>=1.0.0
-cryptography>=41.0.7
-pytz>=2023.3
-setuptools>=70.0.0  # Required for Python 3.12+
+colorama==0.4.6
+typing-extensions==4.9.0
 
-# Development Tools (optional)
-black>=23.12.0
-flake8>=6.1.0
-mypy>=1.7.1
-pytest>=7.4.3
-pytest-asyncio>=0.21.1
-
-# Web Dashboard
-flask>=3.0.0
-flask-cors>=4.0.0
-
-# Database
-aiosqlite>=0.19.0
-sqlalchemy>=2.0.0
-
-# Additional dependencies for enhancements
-tinydb>=4.8.2      # For history tracking
+# Python 3.12+ compatibility
+setuptools==69.0.2

@@ -1,0 +1,37 @@
+# FanSale Sniper Ultimate Configuration
+# Optimized for maximum speed and minimal proxy bandwidth usage
+
+# Target Event URL - REQUIRED
+target_url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
+
+# Speed Settings
+check_interval: 0.3      # 300ms between checks (very fast)
+use_javascript: true     # Always use JS for speed
+smart_refresh: true      # Only refresh when needed
+
+# Session Management
+session_check_minutes: 5    # Check login status every 5 minutes
+save_cookies: true          # Save session for fast restart
+proxy_rotation_minutes: 30  # Rotate proxy session every 30 min
+
+# Purchase Settings
+max_purchase_attempts: 3    # Retry failed purchases
+purchase_timeout: 5         # Max seconds to wait for elements
+
+# Performance Optimizations
+disable_images: true        # Save bandwidth
+disable_css: false          # Keep CSS (needed for selectors)
+disable_javascript: false   # Keep JS enabled (critical)
+aggressive_timeouts: true   # Fail fast, retry quick
+
+# Error Handling
+max_consecutive_errors: 3   # Before full page reload
+error_recovery_delay: 2     # Seconds to wait after error
+
+# Notifications (optional)
+enable_notifications: false
+notification_webhook: null
+
+# Debug Settings
+save_screenshots: false     # Only on success/error
+verbose_logging: false      # Minimal logs for speed

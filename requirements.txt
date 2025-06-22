@@ -1,25 +1,18 @@
-# Core dependencies
-selenium==4.16.0
-undetected-chromedriver==3.5.4
-webdriver-manager==4.0.1
+# FanSale Sniper Ultimate - Requirements
 
-# Configuration and environment
-PyYAML==6.0.1
-python-dotenv==1.0.0
+# Core Dependencies
+undetected-chromedriver>=3.5.5     # Stealth browser automation
+selenium>=4.15.0                   # Browser control
+selenium-wire>=5.1.0               # Proxy support
 
-# HTTP and networking
-requests==2.31.0
-urllib3==2.1.0
+# Configuration
+python-dotenv>=1.0.0               # Environment variables
+PyYAML>=6.0.1                      # Config file parsing
 
-# Captcha solving
-2captcha-python==1.2.5
+# Optional but recommended
+requests>=2.31.0                   # For notifications
+colorlog>=6.8.0                    # Colored logging
 
-# Notifications
-python-telegram-bot==20.7
-
-# Utilities
-colorama==0.4.6
-typing-extensions==4.9.0
-
-# Python 3.12+ compatibility
-setuptools==69.0.2
+# Note: Make sure you have Chrome/Chromium installed
+# Ubuntu/Debian: sudo apt-get install chromium-browser
+# macOS: brew install --cask google-chrome

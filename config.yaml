@@ -1,20 +1,239 @@
-# StealthMaster Configuration
-# Configuration for the ticket reservation bot
+# StealthMaster Advanced Configuration
+# Comprehensive settings for maximum performance and stealth
 
+# Application settings
+app:
+  mode: adaptive  # Options: stealth, beast, ultra_stealth, adaptive, hybrid
+  version: "3.0.0"
+  dry_run: false  # Test mode without actual purchases
+  debug: false    # Enable debug logging
+
+# Target configuration
 target:
-  # The URL of the event page to monitor
   url: "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
-
-browser:
-  # Run in headless mode (no GUI) - faster but harder to debug
-  headless: false
-  # Browser window size [width, height]
-  window_size: [1280, 720]
-
-monitoring:
-  # Time in seconds between page checks
-  check_interval: 5
-  # Maximum number of tickets to reserve
-  max_tickets: 4
+  platform: fansale  # Options: fansale, ticketmaster, vivaticket
   
-# Note: All credentials (email, password, proxy, etc.) should be in .env file
+  # Event monitoring
+  event_name: "Bruce Springsteen"
+  venue: "Auto-detect"
+  date: "Auto-detect"
+
+# Browser configuration
+browser:
+  # Display settings
+  headless: false  # Run without GUI (faster but easier to detect)
+  window_size: [1920, 1080]  # Larger = more human-like
+  start_maximized: false
+  
+  # Stealth settings
+  stealth_level: maximum  # Options: basic, enhanced, maximum
+  disable_automation_features: true
+  hide_webdriver: true
+  spoof_plugins: true
+  randomize_fingerprint: true
+  
+  # Performance settings
+  page_load_strategy: eager  # Options: normal, eager, none
+  disable_images: false  # Don't disable - looks suspicious
+  disable_css: false     # Don't disable - breaks detection
+  
+  # Browser profile
+  use_persistent_profile: true
+  profile_name: "fansale_user"
+  clear_cookies_on_start: false
+  
+  # Advanced options
+  chrome_binary_path: null  # Auto-detect
+  driver_executable_path: null  # Auto-detect
+
+# Monitoring configuration  
+monitoring:
+  # Timing settings
+  check_interval: 5  # Base interval in seconds
+  randomize_interval: true  # Add 0-2 seconds randomly
+  min_interval: 3
+  max_interval: 10
+  
+  # Ticket settings
+  max_tickets: 4
+  auto_reserve: true
+  
+  # Price limits (null = no limit)
+  max_price_per_ticket: null
+  min_price_per_ticket: null
+  
+  # Seat preferences
+  preferred_sections: []  # Empty = any section
+  avoid_sections: []
+  
+  # Advanced monitoring
+  use_quantum_optimization: true
+  parallel_monitoring: false
+  smart_refresh: true  # Only refresh when needed
+
+# Authentication settings
+auth:
+  # Credentials loaded from .env file
+  use_saved_session: true
+  session_timeout_minutes: 240  # 4 hours
+  auto_relogin: true
+  login_retry_attempts: 3
+
+# Proxy configuration
+proxy:
+  enabled: true
+  type: http  # Options: http, https, socks5
+  
+  # Rotation settings
+  rotation_strategy: intelligent  # Options: none, round_robin, random, intelligent
+  rotate_on_block: true
+  rotate_interval_minutes: 30
+  
+  # Proxy pool (loaded from .env)
+  use_residential: true
+  fallback_to_datacenter: true
+  
+  # Location preferences
+  country: "IT"  # Italy for Fansale
+  city: null     # Any city
+
+# Anti-detection configuration
+anti_detection:
+  # Fingerprinting
+  randomize_canvas: true
+  spoof_webgl: true
+  randomize_audio_context: true
+  spoof_timezone: true
+  randomize_screen_resolution: false  # Keep consistent
+  
+  # Behavior simulation
+  human_typing: true
+  typing_speed_wpm: 40  # Words per minute
+  mouse_movements: true
+  random_scrolling: true
+  random_delays: true
+  
+  # Detection evasion
+  detect_honeypots: true
+  avoid_detection_triggers: true
+  monitor_detection_level: high  # Options: low, medium, high, paranoid
+  
+  # Recovery
+  on_detection_action: rotate_proxy  # Options: wait, rotate_proxy, restart
+  detection_cooldown_minutes: 10
+
+# Resource management
+resources:
+  # What to block (be careful - blocking too much is suspicious)
+  block_list:
+    - "*://*.google-analytics.com/*"
+    - "*://*.googletagmanager.com/*"
+    - "*://*.doubleclick.net/*"
+    - "*://*.facebook.com/tr/*"
+    - "*://*.hotjar.com/*"
+    - "*://*.newrelic.com/*"
+    - "*://*.amplitude.com/*"
+    - "*://*.mixpanel.com/*"
+    - "*://*.segment.io/*"
+    - "*://*.sentry.io/*"
+  
+  # What to always allow
+  allow_list:
+    - "*://*.fansale.it/*"
+    - "*://*.ticketone.it/*"
+  
+  # Cache settings
+  cache_static_resources: true
+  cache_duration_seconds: 300
+
+# Performance optimization
+performance:
+  # Connection settings
+  max_concurrent_connections: 6
+  connection_timeout_seconds: 30
+  read_timeout_seconds: 30
+  
+  # Memory management
+  clear_memory_interval_minutes: 60
+  max_memory_usage_mb: 2048
+  
+  # CPU optimization
+  limit_cpu_usage: false
+  max_cpu_percent: 80
+
+# Notification settings
+notifications:
+  # Methods
+  telegram_enabled: false  # Configure in .env
+  pushover_enabled: false  # Configure in .env
+  email_enabled: false     # Configure in .env
+  sound_enabled: true
+  
+  # When to notify
+  on_ticket_found: true
+  on_ticket_reserved: true
+  on_error: true
+  on_block_detected: true
+  on_session_expired: true
+
+# CAPTCHA handling
+captcha:
+  solver_service: twocaptcha  # Options: twocaptcha, anticaptcha, manual
+  auto_solve: true
+  max_solve_time_seconds: 180
+  
+  # Detection
+  check_for_captcha: true
+  captcha_selectors:
+    - '[class*="captcha"]'
+    - '[id*="captcha"]'
+    - 'iframe[src*="recaptcha"]'
+    - '[class*="challenge"]'
+
+# Logging configuration
+logging:
+  # Levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  console_level: INFO
+  file_level: DEBUG
+  
+  # File settings
+  log_directory: "logs"
+  max_file_size_mb: 50
+  keep_files: 10
+  
+  # What to log
+  log_requests: false  # Verbose
+  log_responses: false  # Very verbose
+  log_cookies: false
+  log_detection_tests: true
+
+# Advanced features
+advanced:
+  # Ultimate mode (requires additional setup)
+  ultimate_mode: false
+  
+  # Quantum coordination
+  quantum_sync: false
+  quantum_entanglement_key: null
+  
+  # Machine learning
+  use_ml_optimization: false
+  ml_model_path: null
+  
+  # Distributed operation
+  enable_clustering: false
+  cluster_nodes: []
+
+# Testing settings
+testing:
+  # Detection tests
+  run_detection_tests: true
+  test_interval_minutes: 30
+  
+  # Performance benchmarks
+  benchmark_on_start: true
+  continuous_benchmarking: false
+  
+  # Success tracking
+  track_success_rate: true
+  success_log_path: "logs/success.json"

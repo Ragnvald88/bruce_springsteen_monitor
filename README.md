@@ -1,85 +1,51 @@
-# FanSale Sniper Ultimate 🎯
+# FanSale Ticket Bot - FINAL Version
 
-Lightning-fast ticket sniper optimized specifically for FanSale.it
+A simple, effective ticket bot for FanSale.it with CORRECT timing logic.
 
-## 🚀 Quick Start
+## Quick Start
 
-1. **Setup Environment**
+1. **Install dependencies:**
    ```bash
-   # Create .env file with your credentials
-   FANSALE_EMAIL=your_email@example.com
-   FANSALE_PASSWORD=your_password
+   pip install -r requirements.txt
+   ```
+
+2. **Configure `.env`:**
+   ```
+   FANSALE_EMAIL="your_email@example.com"
+   FANSALE_PASSWORD="your_password"
    
-   # Optional IPRoyal proxy
-   IPROYAL_USERNAME=your_username
-   IPROYAL_PASSWORD=your_password
-   IPROYAL_HOSTNAME=geo.iproyal.com
-   IPROYAL_PORT=12321
+   # IPRoyal Proxy (optional but recommended)
+   IPROYAL_USERNAME="your_username"
+   IPROYAL_PASSWORD="your_password"
+   IPROYAL_HOSTNAME="geo.iproyal.com"
+   IPROYAL_PORT="12321"
    ```
 
-2. **Configure Target**
-   - Edit `config_ultimate.yaml`
-   - Set your `target_url` to the event page
+3. **Set target URL in `config.yaml`**
 
-3. **Run the Bot**
+4. **Run:**
    ```bash
-   python3 fansale_sniper_ultimate.py
+   python3 fansale_final.py
    ```
 
-## 📁 Project Structure
+## Why This Works
 
-```
-stealthmaster/
-├── fansale_sniper_ultimate.py    # Main bot (fastest version)
-├── fansale_sniper_v4_PRO.py      # Your revised version
-├── config_ultimate.yaml           # Optimized configuration
-├── .env                          # Your credentials (not in git)
-├── utilities/                    # Helper modules
-│   ├── notifications.py          # Alert system
-│   ├── captcha_solver.py         # CAPTCHA handling
-│   └── speed_optimizations.py   # Performance tweaks
-├── logs/                         # Runtime logs
-├── browser_profiles/             # Persistent sessions
-├── session/                      # Saved cookies
-└── archive/                      # Old versions
-```
+- **Correct Timing**: Refreshes FIRST, then waits (never blind to new tickets)
+- **Smart Patterns**: Human-like timing to avoid detection
+- **Bandwidth Efficient**: Aggressively blocks images/ads to save proxy data
+- **Battle-tested**: Based on proven scraping patterns
 
-## ⚡ Performance Features
+## The Critical Difference
 
-- **Ultra-Fast Detection**: JavaScript-based ticket checking (~100ms)
-- **Smart Refresh**: Only refreshes when necessary
-- **Session Persistence**: No repeated logins
-- **Bandwidth Optimization**: 70% less proxy data usage
-- **Error Recovery**: Automatic recovery from failures
+❌ WRONG: Check → Wait → Refresh (gives competitors time!)
+✅ RIGHT: Check → Refresh → Wait (see new tickets instantly!)
 
-## 🎯 Success Tips
+## Features
 
-1. **Run on a VPS** near FanSale servers (Italy/EU)
-2. **Use wired connection** instead of WiFi
-3. **Close unnecessary programs** for maximum CPU
-4. **Monitor the logs** to track performance
-5. **Test during non-peak hours** first
+- ✅ Automatic login with session persistence
+- ✅ Human-like patterns (applied AFTER refresh)
+- ✅ Aggressive bandwidth optimization
+- ✅ Micro-optimized purchase flow
+- ✅ Simple, maintainable code
 
-## 📊 Performance Comparison
-
-| Version | Check Speed | Bandwidth | Reliability |
-|---------|------------|-----------|-------------|
-| Original StealthMaster | ~3s | High | Medium |
-| Your v4 PRO | ~0.5s | Medium | High |
-| Ultimate | ~0.1s | Low | Very High |
-
-## 🔧 Troubleshooting
-
-- **Session expires**: Bot will auto re-login
-- **Proxy errors**: Check your IPRoyal credentials
-- **No tickets found**: Verify the URL is correct
-- **Purchase fails**: Check if you're logged in manually first
-
-## 📈 Monitoring
-
-Watch the logs in real-time:
-```bash
-tail -f logs/fansale_sniper_ultimate_*.log
-```
-
-Good luck sniping those tickets! 🎫✨
+Good luck getting those tickets! 🎫

@@ -33,10 +33,18 @@ load_dotenv()
 # Configure logging
 logger = logging.getLogger('FanSaleBot')
 logger.setLevel(logging.INFO)
+logger.handlers.clear()  # Clear any existing handlers
 
+# Add debug handler for more details
+debug_handler = logging.FileHandler('debug.log')
+debug_handler.setLevel(logging.DEBUG)
+debug_handler.setFormatter(logging.Formatter('%(asctime)s | %(levelname)s | %(message)s', datefmt='%H:%M:%S'))
+logger.addHandler(debug_handler)
+
+# Console handler
 handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter('%(asctime)s | %(message)s', datefmt='%H:%M:%S'))
-logger.handlers = [handler]
+logger.addHandler(handler)
 
 
 class FanSaleBot:
@@ -57,6 +65,7 @@ class FanSaleBot:
         # State management
         self.browsers = []
         self.shutdown_event = threading.Event()
+        self.purchase_lock = threading.Lock()  # Thread safety for purchases
         self.tickets_secured = 0
         self.stats = {
             'checks': 0,
@@ -115,24 +124,43 @@ class FanSaleBot:
             return None
 
     def verify_login(self, driver: uc.Chrome) -> bool:
-        """Check if browser is logged in - FIXED METHOD"""
+        """Check if browser is logged in - PROPERLY FIXED"""
         try:
             page_source = driver.page_source.lower()
             
-            # Check for logged-in indicators
-            logged_in_indicators = ['my fansale', 'mio account', 'logout', 'esci', 'il mio fansale']
+            # First check if we're on a login page
+            if 'login' in driver.current_url or '/login.htm' in driver.current_url:
+                return False
+            
+            # Look for login button/link that indicates NOT logged in
+            not_logged_indicators = [
+                'accedi per acquistare',  # Login to purchase
+                'effettua il login',      # Please login
+                'registrati/accedi',       # Register/Login
+                '>login<',                 # Login button
+                '>accedi<'                 # Login button in Italian
+            ]
+            
+            # If we find these, we're NOT logged in
+            if any(indicator in page_source for indicator in not_logged_indicators):
+                return False
+            
+            # Positive indicators of being logged in
+            logged_in_indicators = [
+                'il mio fansale',
+                'my fansale', 
+                'mio account',
+                'logout',
+                'esci',
+                'ciao,'  # Hello, username
+            ]
+            
+            # If we find these, we ARE logged in
             if any(indicator in page_source for indicator in logged_in_indicators):
                 return True
-            
-            # Check for login page indicators
-            login_indicators = ['login', 'accedi', 'registrati', 'password']
-            if any(indicator in page_source for indicator in login_indicators):
-                # Make sure we're not just seeing a login link in header
-                if 'ticket' not in driver.current_url and 'login' in driver.current_url:
-                    return False
-                    
-            # If we're on the ticket page and no clear login indicators, assume logged in
-            return 'tickets' in driver.current_url
+                
+            # Default to not logged in to be safe
+            return False
             
         except Exception as e:
             logger.debug(f"Login check error: {e}")
@@ -147,10 +175,19 @@ class FanSaleBot:
             driver.get(self.target_url)
             time.sleep(3)
             
-            # Check if already logged in - FIXED: Added 'if self.'
+            # Debug: Show what we see on the page
+            page_title = driver.title
+            logger.info(f"Page title: {page_title}")
+            
+            # Check if already logged in
             if self.verify_login(driver):
                 logger.info(f"✅ Browser {browser_id} already logged in!")
                 return True
+            
+            # Check if we see any login prompts
+            page_source = driver.page_source.lower()
+            if 'accedi per' in page_source or 'effettua il login' in page_source:
+                logger.info(f"⚠️ Browser {browser_id}: Login required - found login prompt")
             
             # Need to login
             logger.info(f"📝 Login required for Browser {browser_id}")
@@ -173,7 +210,7 @@ class FanSaleBot:
                 logger.info(f"✅ Browser {browser_id} logged in successfully!")
                 return True
             else:
-                logger.error(f"❌ Browser {browser_id} login failed")
+                logger.error(f"❌ Browser {browser_id} login failed - still seeing login prompts")
                 return False
                 
         except Exception as e:
@@ -186,6 +223,7 @@ class FanSaleBot:
         
         check_count = 0
         last_refresh = time.time()
+        no_ticket_count = 0
         
         while not self.shutdown_event.is_set() and self.tickets_secured < self.max_tickets:
             try:
@@ -207,19 +245,28 @@ class FanSaleBot:
                     logger.info(f"🎫 HUNTER {browser_id}: {len(tickets)} TICKETS FOUND!")
                     
                     for ticket in tickets[:self.max_tickets - self.tickets_secured]:
-                        if self.purchase_ticket(driver, ticket, browser_id):
-                            self.tickets_secured += 1
-                            self.stats['purchases'] += 1
-                            
+                        with self.purchase_lock:  # Thread safety
                             if self.tickets_secured >= self.max_tickets:
-                                logger.info(f"🎉 Max tickets secured!")
-                                return
+                                break
+                            if self.purchase_ticket(driver, ticket, browser_id):
+                                self.tickets_secured += 1
+                                self.stats['purchases'] += 1
+                                
+                                if self.tickets_secured >= self.max_tickets:
+                                    logger.info(f"🎉 Max tickets secured!")
+                                    return
+                else:
+                    no_ticket_count += 1
+                    # Log every 10 checks when no tickets
+                    if no_ticket_count % 10 == 0:
+                        logger.info(f"Hunter {browser_id}: No tickets (checked {check_count} times)")
                 
                 # Smart refresh with jitter
                 refresh_time = random.uniform(2.5, 3.5)
                 
                 # Full page refresh every 30 seconds to avoid stale elements
                 if time.time() - last_refresh > 30:
+                    logger.debug(f"Hunter {browser_id}: Refreshing page...")
                     driver.refresh()
                     last_refresh = time.time()
                 else:
@@ -229,9 +276,10 @@ class FanSaleBot:
                 # Log progress
                 if check_count % 50 == 0:
                     rate = (check_count * 60) / (time.time() - self.stats['start_time'])
-                    logger.info(f"Hunter {browser_id}: {check_count} checks @ {rate:.1f}/min")
+                    logger.info(f"📊 Hunter {browser_id}: {check_count} checks @ {rate:.1f}/min")
                     
             except TimeoutException:
+                logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")
                 driver.refresh()
                 time.sleep(2)
                 
@@ -239,6 +287,7 @@ class FanSaleBot:
                 if "invalid session" in str(e).lower():
                     logger.error(f"Hunter {browser_id}: Session died")
                     break
+                logger.error(f"Hunter {browser_id}: Browser error, continuing...")
                 time.sleep(5)
                 
             except Exception as e:
@@ -372,12 +421,24 @@ class FanSaleBot:
                 thread.start()
                 threads.append(thread)
             
-            # Monitor progress
+            # Monitor progress with periodic updates
             print("\n🎯 HUNTING ACTIVE! Press Ctrl+C to stop.\n")
             
             try:
+                last_update = time.time()
                 while self.tickets_secured < self.max_tickets:
                     time.sleep(1)
+                    
+                    # Show status every 30 seconds
+                    if time.time() - last_update > 30:
+                        elapsed = time.time() - self.stats['start_time']
+                        rate = self.stats['checks'] / (elapsed / 60) if elapsed > 0 else 0
+                        print(f"\n📊 Status Update:")
+                        print(f"   • Total checks: {self.stats['checks']}")
+                        print(f"   • Check rate: {rate:.1f}/min")
+                        print(f"   • Tickets found: {self.stats['tickets_found']}")
+                        print(f"   • Active browsers: {len([t for t in threads if t.is_alive()])}")
+                        last_update = time.time()
                     
                 logger.info(f"\n🎉 SUCCESS! {self.tickets_secured} tickets secured!")
                 

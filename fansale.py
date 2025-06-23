@@ -362,21 +362,43 @@ class FanSaleBot:
             return False
     
     def verify_login(self, driver: uc.Chrome) -> bool:
-        """Verify if browser is logged in"""
+        """Verify if browser is logged in - PROPERLY FIXED"""
         try:
-            # Check for login indicators
             page_source = driver.page_source.lower()
             
-            # Logged in indicators
-            if any(indicator in page_source for indicator in ['my fansale', 'mio account', 'logout', 'esci']):
+            # First check if we're on a login page
+            if 'login' in driver.current_url or '/login.htm' in driver.current_url:
+                return False
+            
+            # Look for login button/link that indicates NOT logged in
+            not_logged_indicators = [
+                'accedi per acquistare',  # Login to purchase
+                'effettua il login',      # Please login
+                'registrati/accedi',       # Register/Login
+                '>login<',                 # Login button
+                '>accedi<'                 # Login button in Italian
+            ]
+            
+            # If we find these, we're NOT logged in
+            if any(indicator in page_source for indicator in not_logged_indicators):
+                return False
+            
+            # Positive indicators of being logged in
+            logged_in_indicators = [
+                'il mio fansale',
+                'my fansale', 
+                'mio account',
+                'logout',
+                'esci',
+                'ciao,'  # Hello, username
+            ]
+            
+            # If we find these, we ARE logged in
+            if any(indicator in page_source for indicator in logged_in_indicators):
                 return True
                 
-            # Not logged in indicators
-            if any(indicator in page_source for indicator in ['login', 'accedi', 'registrati']):
-                return False
-                
-            # Default to assuming logged in if on the right page
-            return 'fansale.it' in driver.current_url
+            # Default to not logged in to be safe
+            return False
             
         except:
             return False

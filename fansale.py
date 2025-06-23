@@ -314,6 +314,7 @@ class FanSaleBot:
             driver.get(self.target_url)
             time.sleep(2)
             
+            
             if self.verify_login(driver):
                 logger.info(f"✅ Browser {browser_id} already logged in!")
                 return True

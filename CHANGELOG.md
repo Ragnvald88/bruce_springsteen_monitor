@@ -10,11 +10,12 @@
 ### File Hierarchy (Current State)
 ```
 PRODUCTION:
-├── fansale_stealth.py     # RECOMMENDED - Streamlined, battle-tested (495 lines)
+├── fansale_no_login.py    # RECOMMENDED - No login required! (357 lines)
+├── fansale_stealth.py     # Previous streamlined version (495 lines)
 
 EXPERIMENTAL:
 ├── fansale.py             # Original full-featured version (1151 lines)
-├── fansale_new_test.py    # Terminal UI experiment (not recommended)
+├── fansale_new_test.py    # Terminal UI experiment (archived)
 
 UTILITIES:
 ├── test_login.py          # Quick login detection tester
@@ -22,6 +23,15 @@ UTILITIES:
 ```
 
 ### Version History
+
+#### v4.0 - fansale_no_login.py (LATEST - NO LOGIN REQUIRED!)
+- Major discovery: Login is NOT required to reserve tickets!
+- Removed all login checks and credential requirements
+- Goes directly to event page
+- Added comprehensive ticket filtering system
+- Enhanced 404 block detection and recovery
+- Preventive session refresh every 15 minutes
+- Improved statistics tracking
 
 #### v3.0 - fansale_stealth.py (CURRENT RECOMMENDED)
 - Streamlined from 1151 to 495 lines

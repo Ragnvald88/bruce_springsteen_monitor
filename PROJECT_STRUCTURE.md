@@ -2,8 +2,9 @@
 
 ## Active Files (Focus Here)
 ```
-├── fansale_stealth.py     # ⭐ MAIN BOT - Use this (495 lines, stable)
-├── fansale.py             # Alternative full version (1151 lines, complex)
+├── fansale_no_login.py    # ⭐ MAIN BOT - No login required! (357 lines)
+├── fansale_stealth.py     # Previous version - requires login (495 lines)
+├── fansale.py             # Original full version (1151 lines, complex)
 ├── test_login.py          # Utility to test login detection
 ├── requirements.txt       # Python dependencies
 ├── .env                   # Configuration (git-ignored)
@@ -47,16 +48,16 @@
 ## Decision Tree for Claude Code
 
 1. **Making changes to the bot?**
-   → Edit `fansale_stealth.py` (recommended)
+   → Edit `fansale_no_login.py` (no login required!)
    
-2. **Need to understand history?**
+2. **Need login functionality?**
+   → Use `fansale_stealth.py` or `fansale.py`
+   
+3. **Need to understand history?**
    → Read `CHANGELOG.md`
    
-3. **Testing login detection?**
+4. **Testing login detection?**
    → Run `test_login.py`
-   
-4. **Need complex features?**
-   → Look at `fansale.py` (but prefer stealth version)
    
 5. **Old code for reference?**
    → Check `archive/` folder

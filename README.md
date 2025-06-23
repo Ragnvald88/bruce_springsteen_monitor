@@ -1,6 +1,6 @@
 # StealthMaster - FanSale Ticket Bot 🎫
 
-A ticket purchasing bot for FanSale.it with anti-detection measures.
+A ticket purchasing bot for FanSale.it with anti-detection measures. **No login required!**
 
 ## Quick Start
 
@@ -9,15 +9,13 @@ A ticket purchasing bot for FanSale.it with anti-detection measures.
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file
+# Create .env file (only URL needed!)
 FANSALE_TARGET_URL=https://www.fansale.it/fansale/tickets/...
-FANSALE_EMAIL=optional@email.com      # Only if using login
-FANSALE_PASSWORD=optional_password     # Only if using login
 ```
 
 2. **Run**:
 ```bash
-python fansale_stealth.py  # Recommended - streamlined version
+python fansale_no_login.py  # Recommended - no login required!
 ```
 
 ## Key Features
@@ -31,8 +29,9 @@ python fansale_stealth.py  # Recommended - streamlined version
 ## File Structure
 
 ```
-fansale_stealth.py    # ← Main bot (recommended)
-fansale.py           # Full-featured version
+fansale_no_login.py   # ← Main bot (no login required!)
+fansale_stealth.py    # Previous streamlined version
+fansale.py           # Original full-featured version
 test_login.py        # Test login detection
 claude.md            # Guide for Claude AI
 CHANGELOG.md         # Version history & lessons
@@ -40,9 +39,10 @@ CHANGELOG.md         # Version history & lessons
 
 ## Important Notes
 
+- **No Login Required**: Tickets can be reserved without authentication!
 - **404 Blocks**: Clear browser data if you get 404 errors after extended use
-- **Login Optional**: Tickets can be viewed without authentication
 - **Max Browsers**: Use 1-2 browsers to avoid detection
+- **Ticket Filtering**: Specify sections like "Prato A", "Tribuna", etc.
 
 ## Configuration
 

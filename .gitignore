@@ -28,8 +28,6 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/version info into it.
 *.manifest
 *.spec
 
@@ -70,3 +68,45 @@ venv.bak/
 
 # macOS
 .DS_Store
+
+# ===== PROJECT SPECIFIC =====
+
+# Browser profiles (these change constantly and are huge)
+browser_profiles/
+
+# Log files
+*.log
+logs/
+
+# Statistics file (changes every run)
+stats.json
+
+# Screenshots (generated during runs)
+ticket_*.png
+screenshot_*.png
+checkout_*.png
+*.png
+
+# Backup files
+*_backup.py
+*_old.py
+
+# Archive folder (optional - uncomment if you want to exclude)
+# archive/
+
+# Claude editor files
+.claude/
+
+# Selenium wire ca cert
+ca.crt
+ca.key
+
+# Test files
+test_*.py
+
+# Temporary files
+*.tmp
+*.temp
+fansale_original_backup.py
+# .gitignore additions for browser profiles
+browser_profiles/

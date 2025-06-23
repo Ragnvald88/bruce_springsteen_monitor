@@ -1,32 +1,29 @@
-# FanSale Bot - Enhanced Hunter-Buyer Edition 🎯
+# FanSale Bot 🎫
 
-## 🚀 Lightning-Fast Ticket Sniping
+A powerful ticket bot for FanSale.it with multi-browser support, intelligent filtering, and automatic purchasing.
 
-The ultimate FanSale.it ticket bot with blazing-fast purchase execution and aggressive checking rates.
+## Features
 
-```bash
-python3 fansale.py
-```
+- **Multi-Browser Support**: Run 1-5 browsers simultaneously
+- **Smart Ticket Filtering**: Target specific sections (e.g., Prato A, Tribuna)
+- **Auto-Purchase**: Reserves up to 4 tickets automatically
+- **Proxy Support**: Data-saving mode when using proxy
+- **Persistent Login**: Browser profiles save login state
+- **Login Verification**: Checks login status every 5 minutes
+- **Statistics Tracking**: Detailed logging of all activities
+- **Checkout Alarm**: Audio alert when tickets secured
+- **Screenshot Capture**: Saves screenshots on successful checkout
 
-## ⚡ Key Features
-
-- **Hunter-Buyer Architecture**: Each browser hunts AND buys instantly
-- **Aggressive Checking**: 20-60 checks/minute total
-- **Lightning Purchase**: <1 second from detection to buy click
-- **Pattern Variation**: Automatic switching between burst/normal/slow/random
-- **Advanced Stealth**: Comprehensive anti-detection measures
-- **Manual Login**: More secure than automation
-
-## 🏃 Quick Start
+## Quick Start
 
 1. **Setup Environment**:
 ```bash
-# Create .env file with your credentials
+# Create .env file
 FANSALE_EMAIL=your@email.com
 FANSALE_PASSWORD=yourpassword
 FANSALE_TARGET_URL=https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554
 
-# Optional proxy settings
+# Optional proxy
 IPROYAL_USERNAME=your_username
 IPROYAL_PASSWORD=your_password
 IPROYAL_HOSTNAME=geo.iproyal.com
@@ -35,129 +32,90 @@ IPROYAL_PORT=12321
 
 2. **Install Dependencies**:
 ```bash
-pip3 install -r requirements.txt
+pip install undetected-chromedriver selenium-wire python-dotenv
 ```
 
-3. **Run the Bot**:
+3. **Run Bot**:
 ```bash
-python3 fansale.py
+python fansale.py
 ```
 
-## 🎮 Configuration Options
+## Usage
 
-The bot will prompt you for:
-- **Number of Browsers** (1-5, recommended 2-3)
-- **Proxy Usage** (recommended for multiple browsers)
-- **Ultra-Lite Mode** (blocks images/CSS for speed)
-- **Stealth Enhancements** (advanced anti-detection)
+The bot provides a menu with these options:
 
-## 📊 Performance by Browser Count
+1. **Start Bot** - Configure and run the ticket hunter
+2. **Clear Browser Profiles** - Remove saved login data
+3. **Show Statistics** - View performance metrics
+4. **Test Filters** - Debug mode to test ticket filtering
+5. **Exit** - Close the program
 
-| Browsers | Checks/Browser/Min | Total Checks/Min | Risk Level |
-|----------|-------------------|------------------|------------|
-| 1 | 15-20 | 15-20 | Low |
-| 2 | 12-15 | 25-30 | Low-Medium |
-| 3 | 10-12 | 30-36 | Medium |
-| 4 | 8-10 | 32-40 | Medium-High |
-| 5 | 8-10 | 40-50 | High |
+## Ticket Filtering
 
-## 🏗️ How It Works
+The bot can filter tickets by keywords found in the ticket description:
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│ Hunter-Buyer 1  │     │ Hunter-Buyer 2  │     │ Hunter-Buyer 3  │
-├─────────────────┤     ├─────────────────┤     ├─────────────────┤
-│ ✓ Hunts tickets │     │ ✓ Hunts tickets │     │ ✓ Hunts tickets │
-│ ✓ Buys instant  │     │ ✓ Buys instant  │     │ ✓ Buys instant  │
-│ ✓ Independent   │     │ ✓ Independent   │     │ ✓ Independent   │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-         │                       │                       │
-         └───────────────────────┴───────────────────────┘
-                                │
-                        [Purchase Lock]
-                                │
-                    First to find = First to buy!
-```
+### Common Italian Concert Sections:
+- **Prato** - Lawn/standing area (e.g., "Prato A", "Prato B")
+- **Parterre** - Floor/pit area
+- **Tribuna** - Tribune/stands
+- **Settore** - Sector (e.g., "Settore 1", "Settore 2")
+- **Anello** - Ring level
+- **Numerato** - Numbered seats
 
-## 🛡️ Anti-Detection Features
+### Filter Examples:
+- `Prato A` - Only tickets containing "Prato A"
+- `Tribuna` - Any tribune tickets
+- `Settore 1, Settore 2` - Tickets from sector 1 OR sector 2
+- `Prato, Gold` - Tickets containing "Prato" OR "Gold"
 
-- **Pattern Variation**: Switches between burst/normal/slow/random patterns
-- **Timing Randomization**: No predictable refresh intervals
-- **Human Behaviors**: Random mouse movements and scrolling
-- **Viewport Changes**: Random window size variations
-- **Multiple Refresh Methods**: Alternates between JS and normal refresh
-- **Browser Fingerprinting Protection**: Comprehensive stealth JavaScript
+### Filter Modes:
+- **ANY**: Accepts tickets matching ANY of the keywords (default)
+- **ALL**: Only accepts tickets matching ALL keywords
 
-## ⚠️ Important Warnings
+## Configuration Options
 
-### Detection Risks
-- Multiple logged-in sessions increase detection risk
-- Aggressive checking rates (20-60/min) are similar to professional bots
-- Always use proxies for multiple browsers
-- Monitor for rate limiting or blocks
+- **Browsers**: 1-5 (recommended 2-3)
+- **Proxy**: Enable for data saving (blocks images/CSS)
+- **Max Tickets**: Automatically reserves up to 4
+- **Filters**: Optional keywords to target specific sections
 
-### Best Practices
-1. **Start Small**: Test with 1-2 browsers first
-2. **Use Proxies**: Italian proxies recommended for FanSale.it
-3. **Take Breaks**: Don't run continuously for hours
-4. **Monitor Activity**: Watch for captchas or blocks
+## Performance
 
-## 🔧 Troubleshooting
+| Browsers | Checks/Minute |
+|----------|--------------|
+| 1 | ~20 |
+| 2 | ~30 |
+| 3 | ~35 |
+| 4+ | ~40 |
 
-**Browser won't start?**
-- Check Chrome/Chromium is installed
-- Clear browser_profiles/ directory
-- Reduce number of browsers
+## Tips
 
-**Login fails?**
-- Verify credentials in .env
-- Check for captcha requirements
-- Try one browser first
+- Use filters to target the best sections
+- Test filters first using option 4 before starting the hunt
+- Start with 2-3 browsers for optimal balance
+- Use proxy to save data costs
+- Browser profiles persist logins between runs
+- Check `fansale_bot.log` for detailed activity
+- Screenshots saved as `checkout_[timestamp].png`
 
-**Getting blocked?**
-- Reduce number of browsers
-- Enable proxy
-- Increase refresh intervals
-- Take longer breaks
+## Statistics Tracked
 
-## 📁 Project Structure
+- Total checks performed
+- Times no tickets found
+- Times tickets detected (matching filters)
+- Successful checkouts
+- Already reserved tickets
 
-```
-stealthmaster/
-├── fansale.py                    # Main entry point
-├── fansale_hunter_buyer.py       # Core implementation
-├── utilities/
-│   ├── stealth_improvements.py   # Anti-detection measures
-│   └── speed_optimizations.py    # Performance enhancements
-├── browser_profiles/             # Persistent browser data
-├── .env                          # Your credentials (create this)
-└── requirements.txt              # Python dependencies
-```
+## Example Workflow
 
-## 🚀 Advanced Usage
-
-### Compare Implementations
-```bash
-python3 compare_implementations.py
-```
-
-### Manual Timing Adjustment
-Edit `calculate_smart_refresh_timing()` in `fansale_hunter_buyer.py` to customize rates.
-
-### Stealth Testing
-The bot automatically tests stealth measures and shows a score (0-100).
-
-## 📈 Future Enhancements
-
-- [ ] AI-powered ticket detection
-- [ ] Distributed multi-machine support
-- [ ] Advanced analytics dashboard
-- [ ] Auto-recovery on failures
-- [ ] Mobile app notifications
+1. Run `python fansale.py`
+2. Choose option 4 to test filters
+3. Enter "Prato A" to only get Prato A tickets
+4. Verify filters work correctly
+5. Choose option 1 to start bot
+6. Configure 2-3 browsers
+7. Let it hunt for matching tickets!
 
 ---
 
-**⚡ Remember**: Speed is everything in ticket sniping. First to find = First to buy!
-
-*Version 2.0 - Enhanced Hunter-Buyer Edition*
-*Last Updated: June 2025*
+**Note**: Use responsibly and in accordance with FanSale's terms of service.

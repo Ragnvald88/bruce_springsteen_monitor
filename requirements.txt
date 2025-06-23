@@ -12,6 +12,7 @@ PyYAML>=6.0.1
 # Utilities
 requests>=2.31.0
 colorlog>=6.8.0
+numpy>=1.24.0  # For stealth enhancements
 
 # Python 3.13 compatibility
 setuptools>=70.0.0  # Required for distutils compatibility

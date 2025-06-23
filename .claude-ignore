@@ -1,0 +1,37 @@
+# Files and directories for Claude to ignore
+
+# Archives and old versions
+archive/
+fansale_new_test.py
+
+# Generated/temporary files
+*.pyc
+__pycache__/
+*.log
+stats.json
+
+# Browser data
+browser_profiles/
+
+# Virtual environment
+venv/
+
+# Screenshots (reference only when needed)
+screenshots/
+
+# IDE configs
+.vscode/
+.idea/
+
+# Git
+.git/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment (sensitive)
+.env
+
+# Claude settings
+.claude/

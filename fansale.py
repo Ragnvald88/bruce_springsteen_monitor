@@ -409,3 +409,261 @@ class FanSaleBot:
                 time.sleep(5)
         
         logger.info(f"Hunter {browser_id}: Stopped. Secured {local_tickets_secured} tickets.")
+    
+    def execute_purchase(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
+        """Execute the purchase of a ticket"""
+        try:
+            logger.info(f"⚡ Hunter {browser_id}: Attempting purchase...")
+            
+            # Bring window to front
+            driver.switch_to.window(driver.current_window_handle)
+            
+            # Click ticket
+            driver.execute_script("arguments[0].scrollIntoView(true);", ticket_element)
+            driver.execute_script("arguments[0].click();", ticket_element)
+            
+            # Look for buy button
+            buy_button = None
+            for selector in ["button[data-qa='buyNowButton']", "button.buy-button", "//button[contains(text(), 'Acquista')]"]:
+                try:
+                    if selector.startswith('//'):
+                        buy_button = WebDriverWait(driver, 3).until(
+                            EC.element_to_be_clickable((By.XPATH, selector))
+                        )
+                    else:
+                        buy_button = WebDriverWait(driver, 3).until(
+                            EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                        )
+                    break
+                except:
+                    continue
+            
+            if buy_button:
+                driver.execute_script("arguments[0].click();", buy_button)
+                logger.info(f"✅ Hunter {browser_id}: PURCHASE CLICKED! Check browser for checkout.")
+                return True
+            else:
+                # Check if ticket was already reserved
+                page_text = driver.page_source.lower()
+                if any(term in page_text for term in ['già riservato', 'already reserved', 'non disponibile']):
+                    self.stats['already_reserved'] += 1
+                    logger.warning(f"⚠️ Hunter {browser_id}: Ticket already reserved by someone else")
+                else:
+                    logger.error(f"❌ Hunter {browser_id}: Buy button not found")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Purchase failed for Hunter {browser_id}: {e}")
+            return False
+    
+    def clear_browser_profiles(self):
+        """Clear all browser profiles"""
+        profiles_dir = Path("browser_profiles")
+        if profiles_dir.exists():
+            try:
+                shutil.rmtree(profiles_dir)
+                logger.info("✅ All browser profiles cleared")
+                print("\n✅ Browser profiles cleared successfully!\n")
+            except Exception as e:
+                logger.error(f"Failed to clear profiles: {e}")
+                print(f"\n❌ Error clearing profiles: {e}\n")
+        else:
+            print("\n📁 No browser profiles found to clear.\n")
+    
+    def show_menu(self):
+        """Display main menu"""
+        print("\n" + "="*60)
+        print("🎫 FANSALE BOT - ULTIMATE EDITION")
+        print("="*60)
+        print("\n1. Start Bot")
+        print("2. Clear Browser Profiles")
+        print("3. Show Statistics")
+        print("4. Exit")
+        print("\nEnter your choice (1-4): ", end='')
+    
+    def handle_statistics(self):
+        """Show statistics from previous runs"""
+        stats_file = Path('stats.json')
+        if stats_file.exists():
+            try:
+                with open(stats_file, 'r') as f:
+                    saved_stats = json.load(f)
+                print("\n📊 SAVED STATISTICS:")
+                print(f"   Total Checks: {saved_stats.get('total_checks', 0)}")
+                print(f"   No Tickets: {saved_stats.get('no_ticket_found', 0)}")
+                print(f"   Tickets Found: {saved_stats.get('tickets_found', 0)}")
+                print(f"   Successful Checkouts: {saved_stats.get('successful_checkouts', 0)}")
+                print(f"   Already Reserved: {saved_stats.get('already_reserved', 0)}")
+            except:
+                print("\n❌ Error reading statistics")
+        else:
+            print("\n📊 No statistics found yet. Run the bot first!")
+        
+        input("\nPress Enter to continue...")
+    
+    def run_bot(self):
+        """Main bot execution"""
+        print("\n🔧 BOT CONFIGURATION")
+        print("="*40)
+        
+        # Get number of browsers
+        while True:
+            try:
+                num = input("\n🌐 Number of browsers (1-5, recommended 2-3): ").strip()
+                self.num_browsers = int(num)
+                if 1 <= self.num_browsers <= 5:
+                    break
+                print("❌ Please enter 1-5")
+            except ValueError:
+                print("❌ Invalid number")
+        
+        # Proxy option
+        proxy_choice = input("\n🔐 Use proxy? (y/n, default n): ").strip().lower()
+        self.use_proxy = proxy_choice == 'y'
+        
+        # Calculate expected performance
+        if self.num_browsers == 1:
+            checks_per_min = 20
+        elif self.num_browsers == 2:
+            checks_per_min = 30
+        elif self.num_browsers == 3:
+            checks_per_min = 35
+        else:
+            checks_per_min = 40
+            
+        print(f"\n📋 CONFIGURATION:")
+        print(f"   • Browsers: {self.num_browsers}")
+        print(f"   • Proxy: {'✅ Yes (data-saving)' if self.use_proxy else '❌ No'}")
+        print(f"   • Expected rate: ~{checks_per_min} checks/minute")
+        print(f"   • Max tickets: {self.max_tickets}")
+        print(f"   • Target: {self.target_url}")
+        
+        try:
+            # Create browsers
+            print(f"\n🚀 Starting {self.num_browsers} browsers...")
+            
+            for i in range(1, self.num_browsers + 1):
+                driver = self.create_browser(i)
+                if not driver:
+                    logger.error(f"Failed to create browser {i}")
+                    continue
+                    
+                # Manual login
+                if not self.manual_login(i, driver):
+                    logger.error(f"Failed to login browser {i}")
+                    driver.quit()
+                    continue
+                    
+                self.browsers.append(driver)
+            
+            if not self.browsers:
+                logger.error("❌ No browsers created successfully")
+                return
+                
+            logger.info(f"✅ {len(self.browsers)} browsers ready!")
+            input("\n✋ Press Enter to START HUNTING...")
+            
+            # Start statistics
+            self.stats['start_time'] = time.time()
+            
+            # Start hunter threads
+            for i, driver in enumerate(self.browsers):
+                thread = threading.Thread(
+                    target=self.hunt_and_buy,
+                    args=(i + 1, driver),
+                    daemon=True
+                )
+                thread.start()
+                self.browser_threads.append(thread)
+            
+            # Start stats display thread
+            def periodic_stats():
+                while not self.shutdown_event.is_set():
+                    time.sleep(60)  # Every minute
+                    self.log_stats()
+            
+            stats_thread = threading.Thread(target=periodic_stats, daemon=True)
+            stats_thread.start()
+            
+            logger.info("\n🎯 HUNTING ACTIVE! Press Ctrl+C to stop.\n")
+            
+            # Wait for completion or interrupt
+            while self.tickets_secured < self.max_tickets and not self.shutdown_event.is_set():
+                time.sleep(1)
+                
+            if self.tickets_secured >= self.max_tickets:
+                logger.info(f"\n🎉 SUCCESS! All {self.max_tickets} tickets secured!")
+                self.play_alarm()
+                input("\nPress Enter to close browsers and exit...")
+                
+        except KeyboardInterrupt:
+            logger.info("\n🛑 Shutdown requested...")
+            
+        except Exception as e:
+            logger.error(f"Fatal error: {e}")
+            traceback.print_exc()
+            
+        finally:
+            # Final stats
+            self.log_stats()
+            
+            # Cleanup
+            self.shutdown_event.set()
+            logger.info("🧹 Cleaning up...")
+            
+            for driver in self.browsers:
+                try:
+                    driver.quit()
+                except:
+                    pass
+                    
+            logger.info("✅ Shutdown complete")
+    
+    def run(self):
+        """Main entry point with menu"""
+        while True:
+            self.show_menu()
+            
+            choice = input().strip()
+            
+            if choice == '1':
+                self.run_bot()
+            elif choice == '2':
+                self.clear_browser_profiles()
+            elif choice == '3':
+                self.handle_statistics()
+            elif choice == '4':
+                print("\n👋 Goodbye!")
+                break
+            else:
+                print("\n❌ Invalid choice. Please try again.")
+
+
+def main():
+    """Entry point"""
+    # Check dependencies
+    try:
+        import undetected_chromedriver
+        from dotenv import load_dotenv
+    except ImportError as e:
+        print(f"❌ Missing dependency: {e}")
+        print("Please run: pip install undetected-chromedriver selenium-wire python-dotenv")
+        sys.exit(1)
+    
+    # Check credentials
+    load_dotenv()
+    if not os.getenv('FANSALE_EMAIL') or not os.getenv('FANSALE_PASSWORD'):
+        print("❌ Missing credentials!")
+        print("\nCreate a .env file with:")
+        print("FANSALE_EMAIL=your@email.com")
+        print("FANSALE_PASSWORD=yourpassword")
+        print("FANSALE_TARGET_URL=https://www.fansale.it/...")
+        sys.exit(1)
+    
+    # Run bot
+    bot = FanSaleBot()
+    bot.run()
+
+
+if __name__ == "__main__":
+    main()

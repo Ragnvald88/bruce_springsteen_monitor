@@ -1,2 +1,3 @@
-2025/06/23-13:25:11.780 83dd64 Creating DB /Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/browser_profiles/hunter_buyer_1/Default/Sync Data/LevelDB since it was missing.
-2025/06/23-13:25:11.788 83dd64 Reusing MANIFEST /Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/browser_profiles/hunter_buyer_1/Default/Sync Data/LevelDB/MANIFEST-000001
+2025/06/23-13:35:55.216 8420d9 Reusing MANIFEST /Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/browser_profiles/hunter_buyer_1/Default/Sync Data/LevelDB/MANIFEST-000001
+2025/06/23-13:35:55.217 8420d9 Recovering log #3
+2025/06/23-13:35:55.217 8420d9 Reusing old log /Users/macbookpro_ronald/Documents/Personal/Projects/stealthmaster/browser_profiles/hunter_buyer_1/Default/Sync Data/LevelDB/000003.log 

@@ -36,10 +36,38 @@ Each browser operates independently as both:
 | Feature | Old (Unified) | New (Hunter-Buyer) |
 |---------|---------------|-------------------|
 | Purchase Speed | 3-5 seconds | <1 second |
+| Check Rate | 3-4/minute | 20-60/minute |
 | Architecture | Queue-based | Direct execution |
 | Code Complexity | High | Medium |
 | Resource Usage | Higher | Optimized |
 | Detection Risk | Lower | Managed with stealth |
+
+## 🚀 Check Rates by Browser Count
+
+| Browsers | Checks/Browser/Min | Total Checks/Min |
+|----------|-------------------|------------------|
+| 1 | 15-20 | 15-20 |
+| 2 | 12-15 | 25-30 |
+| 3 | 10-12 | 30-36 |
+| 4 | 8-10 | 32-40 |
+| 5 | 8-10 | 40-50 |
+
+## ⚡ Advanced Features
+
+### Pattern Variation
+The bot automatically switches between different checking patterns to avoid detection:
+- **Normal**: Standard timing
+- **Burst**: Short periods of rapid checking (2-3s)
+- **Slow**: Longer waits to balance activity
+- **Random**: Highly variable timing
+
+### Anti-Detection Measures
+1. **Timing Randomization**: No predictable patterns
+2. **Viewport Variation**: Random window sizes
+3. **Zoom Levels**: 95-105% variation
+4. **Storage Data**: Fake localStorage/cookies
+5. **Refresh Methods**: Alternates between JS and normal refresh
+6. **Human Behaviors**: Random mouse movements and scrolling
 
 ## 🔧 Configuration Options
 
@@ -107,6 +135,25 @@ python fansale.py
 1. **Detection Risk**: Multiple logged-in sessions may trigger security
 2. **Resource Usage**: Each browser uses ~200-400MB RAM
 3. **Network Load**: Monitor total request rate
+4. **Aggressive Checking**: The new rates (20-60 checks/min) are similar to professional bots
+   - Use at your own risk
+   - Consider using proxy to distribute load
+   - Monitor for any rate limiting or blocks
+   - Start with fewer browsers to test
+
+## 🛡️ Risk Mitigation
+
+1. **Use Proxies**: Essential for multiple browsers
+   - Italian proxies recommended for FanSale.it
+   - Rotate sessions every 30 minutes
+   
+2. **Start Small**: Test with 1-2 browsers first
+   - Monitor for blocks or captchas
+   - Gradually increase if no issues
+   
+3. **Time Your Runs**: Avoid running for extended periods
+   - Take breaks between ticket drops
+   - Don't run 24/7
 
 ## 🔍 Troubleshooting
 

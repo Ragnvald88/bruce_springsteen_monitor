@@ -204,6 +204,36 @@ class FanSaleHunterBuyerBot:
             logger.error(f"❌ Failed to create browser {browser_id}: {e}")
             raise
     
+    def apply_anti_detection_measures(self, driver: uc.Chrome, browser_id: int):
+        """Apply additional anti-detection measures"""
+        try:
+            # Randomize viewport size slightly
+            width = 380 + random.randint(-20, 20)
+            height = 320 + random.randint(-20, 20)
+            driver.set_window_size(width, height)
+            
+            # Set random zoom level (95-105%)
+            zoom = random.uniform(0.95, 1.05)
+            driver.execute_script(f"document.body.style.zoom = '{zoom}'")
+            
+            # Add random browser storage data to appear more human
+            driver.execute_script("""
+                // Add some localStorage data
+                try {
+                    localStorage.setItem('lastVisit', Date.now());
+                    localStorage.setItem('visits', Math.floor(Math.random() * 10) + 1);
+                    sessionStorage.setItem('session_id', Math.random().toString(36));
+                } catch(e) {}
+                
+                // Add some cookies
+                document.cookie = "returning_user=true; path=/";
+                document.cookie = `browser_id=${Math.random().toString(36)}; path=/`;
+            """)
+            
+            logger.debug(f"Browser {browser_id}: Anti-detection measures applied")
+        except Exception as e:
+            logger.warning(f"Failed to apply some anti-detection measures: {e}")
+    
     def manual_login_browser(self, browser_id: int, driver: uc.Chrome) -> bool:
         """Handle manual login for a browser"""
         logger.info(f"🔐 Manual login required for Browser {browser_id}")
@@ -228,6 +258,9 @@ class FanSaleHunterBuyerBot:
             logger.info(f"Navigating Browser {browser_id} to target page...")
             driver.get(self.target_url)
             time.sleep(3)  # Let page fully load
+            
+            # Apply anti-detection measures after login
+            self.apply_anti_detection_measures(driver, browser_id)
             
             # Quick verification
             if "fansale" in driver.current_url.lower():
@@ -503,15 +536,21 @@ class FanSaleHunterBuyerBot:
         
         # Calculate and display configuration
         refresh_timing = self.calculate_smart_refresh_timing()
-        total_rate = self.num_browsers * (60 / ((refresh_timing[0] + refresh_timing[1]) / 2))
+        
+        # Calculate expected checks per minute
+        avg_wait = (refresh_timing[0] + refresh_timing[1]) / 2
+        checks_per_browser = 60 / avg_wait
+        total_checks_per_min = self.num_browsers * checks_per_browser
         
         print(f"\n📋 CONFIGURATION SUMMARY:")
         print(f"   • Browsers: {self.num_browsers} hunter-buyers")
-        print(f"   • Refresh: {refresh_timing[0]:.1f}-{refresh_timing[1]:.1f}s per browser")
-        print(f"   • Total rate: ~{total_rate:.1f} checks/minute")
+        print(f"   • Timing per browser: {refresh_timing[0]:.1f}-{refresh_timing[1]:.1f}s")
+        print(f"   • Expected rate: ~{checks_per_browser:.1f} checks/min per browser")
+        print(f"   • TOTAL RATE: ~{total_checks_per_min:.1f} checks/minute 🚀")
         print(f"   • Proxy: {'✅ Enabled' if self.use_proxy else '❌ Disabled'}")
         print(f"   • Lite mode: {'✅ Ultra-fast' if self.use_lite_mode else '❌ Normal'}")
         print(f"   • Stealth: {'✅ Enhanced' if self.use_stealth else '❌ Basic'}")
+        print(f"   • Pattern variation: ✅ Enabled (burst/normal/slow/random)")
         print(f"   • Target: {self.target_url}")
         
         try:

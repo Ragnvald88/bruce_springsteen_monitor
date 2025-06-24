@@ -208,102 +208,157 @@ class FanSaleBot:
         }
     
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create a browser with optimal settings"""
+        """Create a browser with optimal settings and version handling"""
         logger.info(f"🚀 Creating Browser {browser_id}...")
         
-        options = uc.ChromeOptions()
-        
-        # Persistent profile
-        profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
-        profile_dir.mkdir(parents=True, exist_ok=True)
-        options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
-        
-        # Apply enhanced stealth if available
-        if ENHANCED_MODE:
-            for arg in self.stealth.get_enhanced_chrome_options():
+        def create_chrome_options():
+            """Create fresh ChromeOptions instance"""
+            options = uc.ChromeOptions()
+            
+            # Persistent profile
+            profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
+            profile_dir.mkdir(parents=True, exist_ok=True)
+            options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
+            
+            # Apply enhanced stealth if available
+            if ENHANCED_MODE:
+                for arg in self.stealth.get_enhanced_chrome_options():
+                    options.add_argument(arg)
+                for arg in self.optimizer.get_performance_chrome_options():
+                    options.add_argument(arg)
+            
+            # Essential stealth options (always enabled)
+            stealth_args = [
+                '--disable-blink-features=AutomationControlled',
+                '--disable-dev-shm-usage',
+                '--no-sandbox',
+                '--disable-infobars',
+                '--disable-gpu-sandbox',
+                '--disable-background-timer-throttling',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-renderer-backgrounding',
+                '--disable-features=TranslateUI',
+                '--disable-ipc-flooding-protection',
+            ]
+            
+            for arg in stealth_args:
                 options.add_argument(arg)
-            for arg in self.optimizer.get_performance_chrome_options():
-                options.add_argument(arg)
-        
-        # Essential stealth options (always enabled)
-        stealth_args = [
-            '--disable-blink-features=AutomationControlled',
-            '--disable-dev-shm-usage',
-            '--no-sandbox',
-            '--disable-infobars',
-            '--disable-gpu-sandbox',
-            '--disable-background-timer-throttling',
-            '--disable-backgrounding-occluded-windows',
-            '--disable-renderer-backgrounding',
-            '--disable-features=TranslateUI',
-            '--disable-ipc-flooding-protection',
-        ]
-        
-        for arg in stealth_args:
-            options.add_argument(arg)
-        
-        # Data saving when using proxy
-        if self.use_proxy:
-            prefs = {
-                "profile.managed_default_content_settings": {
-                    "images": 2,  # Block images
-                    "plugins": 2,  # Block plugins
-                    "popups": 2,  # Block popups
-                    "geolocation": 2,  # Block location
-                    "notifications": 2,  # Block notifications
-                    "media_stream": 2,  # Block media
+            
+            # Data saving when using proxy
+            if self.use_proxy:
+                prefs = {
+                    "profile.managed_default_content_settings": {
+                        "images": 2,  # Block images
+                        "plugins": 2,  # Block plugins
+                        "popups": 2,  # Block popups
+                        "geolocation": 2,  # Block location
+                        "notifications": 2,  # Block notifications
+                        "media_stream": 2,  # Block media
+                    }
                 }
-            }
-            options.add_experimental_option("prefs", prefs)
-            logger.info(f"  💾 Browser {browser_id}: Data-saving mode enabled")
+                options.add_experimental_option("prefs", prefs)
+                logger.info(f"  📻 Browser {browser_id}: Data-saving mode enabled")
+            
+            # Window positioning
+            positions = [(0, 0), (420, 0), (840, 0), (0, 350), (420, 350)]
+            if browser_id <= len(positions):
+                x, y = positions[browser_id - 1]
+            else:
+                x, y = (0, 0)
+            options.add_argument(f'--window-position={x},{y}')
+            options.add_argument('--window-size=400,320')
+            
+            return options
         
-        # Window positioning
-        positions = [(0, 0), (420, 0), (840, 0), (0, 350), (420, 350)]
-        if browser_id <= len(positions):
-            x, y = positions[browser_id - 1]
-        else:
-            x, y = (0, 0)
-        options.add_argument(f'--window-position={x},{y}')
-        options.add_argument('--window-size=400,320')
-        
-        # Create browser
+        # Get proxy config
         proxy_config = self.get_proxy_config()
         
-        try:
-            driver = uc.Chrome(options=options, seleniumwire_options=proxy_config)
-            driver.set_page_load_timeout(20)
-            
-            # Inject stealth JavaScript
-            if ENHANCED_MODE:
-                driver.execute_script(self.stealth.get_stealth_javascript())
-                driver.execute_script(self.optimizer.get_fast_page_load_script())
-                self.optimizer.optimize_dom_queries(driver)
-            else:
-                # Basic stealth
-                driver.execute_script("""
-                    // Remove webdriver property
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => undefined
-                    });
+        # Try multiple approaches for version compatibility
+        driver = None
+        attempts = [
+            (137, "Chrome 137"),      # Try Chrome 137 first (current version)
+            (None, "auto-detection"), # Fall back to auto-detection
+            (138, "Chrome 138"),      # Try Chrome 138 as last resort
+        ]
+        
+        for version_main, desc in attempts:
+            try:
+                logger.info(f"🔄 Attempting with {desc}...")
+                options = create_chrome_options()
+                
+                if proxy_config:
+                    driver = uc.Chrome(options=options, seleniumwire_options=proxy_config, version_main=version_main)
+                else:
+                    driver = uc.Chrome(options=options, version_main=version_main)
+                
+                driver.set_page_load_timeout(20)
+                
+                # Test if driver works
+                driver.execute_script("return navigator.userAgent")
+                
+                # Inject stealth JavaScript
+                if ENHANCED_MODE:
+                    driver.execute_script(self.stealth.get_stealth_javascript())
+                    driver.execute_script(self.optimizer.get_fast_page_load_script())
+                    self.optimizer.optimize_dom_queries(driver)
+                else:
+                    # Basic stealth
+                    driver.execute_script("""
+                        // Remove webdriver property
+                        Object.defineProperty(navigator, 'webdriver', {
+                            get: () => undefined
+                        });
+                        
+                        // Add chrome object
+                        window.chrome = {
+                            runtime: {},
+                            loadTimes: function() {},
+                            csi: function() {},
+                            app: {}
+                        };
+                        
+                        // Enhanced stealth
+                        Object.defineProperty(navigator, 'plugins', {
+                            get: () => [1, 2, 3, 4, 5]
+                        });
+                        
+                        Object.defineProperty(navigator, 'languages', {
+                            get: () => ['en-US', 'en']
+                        });
+                        
+                        // Console log to verify
+                        console.log('Stealth mode activated');
+                    """)
+                
+                logger.info(f"✅ Browser {browser_id} created successfully using {desc}")
+                return driver
+                
+            except Exception as e:
+                if driver:
+                    try:
+                        driver.quit()
+                    except:
+                        pass
+                        
+                if "version" in str(e).lower():
+                    logger.warning(f"Version mismatch with {desc}")
+                    continue
+                elif attempt < len(attempts) - 1:
+                    continue
+                else:
+                    # Final attempt failed
+                    logger.error(f"❌ Failed to create browser {browser_id}: {e}")
                     
-                    // Add chrome object
-                    window.chrome = {
-                        runtime: {},
-                        loadTimes: function() {},
-                        csi: function() {},
-                        app: {}
-                    };
+                    if "version" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🚨 CHROMEDRIVER VERSION MISMATCH!")
+                        logger.error("="*60)
+                        logger.error("Please run: python3 fix_chromedriver.py")
+                        logger.error("="*60 + "\n")
                     
-                    // Console log to verify
-                    console.log('Stealth mode activated');
-                """)
-            
-            logger.info(f"✅ Browser {browser_id} created successfully")
-            return driver
-            
-        except Exception as e:
-            logger.error(f"❌ Failed to create browser {browser_id}: {e}")
-            return None
+                    return None
+        
+        return None
     
     def manual_login(self, browser_id: int, driver: uc.Chrome) -> bool:
         """Handle login for a browser (manual or automatic)"""
@@ -1005,9 +1060,11 @@ class FanSaleBot:
         proxy_choice = input("\n🔐 Use proxy? (y/n, default n): ").strip().lower()
         self.use_proxy = proxy_choice == 'y'
         
-        # Auto-login option
+        # Auto-login option - DEFAULT TO YES
         if ENHANCED_MODE:
-            auto_login_choice = input("\n🤖 Use automatic login? (y/n, default y): ").strip().lower()
+            auto_login_choice = input("
+🤖 Use automatic login? (y/n, default y): ").strip().lower()
+            # Default to YES if empty or 'y'
             self.use_auto_login = auto_login_choice != 'n'
         else:
             self.use_auto_login = False

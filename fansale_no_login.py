@@ -367,7 +367,9 @@ class FanSaleBot:
                 'row': '',
                 'seat': '',
                 'price': '',
-                'category': 'other'
+                'category': 'other',
+                'entrance': '',
+                'ring': ''
             }
             
             # Get all text from the ticket element
@@ -380,27 +382,34 @@ class FanSaleBot:
             for line in lines:
                 line_lower = line.lower()
                 
-                # Extract section info
+                # Extract section info (Prato, Settore, Tribuna, etc.)
                 if any(x in line_lower for x in ['prato', 'settore', 'tribuna', 'parterre']):
                     ticket_info['section'] = line.strip()
                 
                 # Extract row/fila
-                if 'fila' in line_lower or 'row' in line_lower:
-                    match = re.search(r'(?:fila|row)\s*[:\s]*(\w+)', line, re.I)
-                    if match:
-                        ticket_info['row'] = match.group(1)
+                fila_match = re.search(r'fila\s*[:\s]*(\w+)', line, re.I)
+                if fila_match:
+                    ticket_info['row'] = fila_match.group(1)
                 
                 # Extract seat/posto
-                if 'posto' in line_lower or 'seat' in line_lower:
-                    match = re.search(r'(?:posto|seat)\s*[:\s]*(\d+)', line, re.I)
-                    if match:
-                        ticket_info['seat'] = match.group(1)
+                posto_match = re.search(r'posto\s*[:\s]*(\d+)', line, re.I)
+                if posto_match:
+                    ticket_info['seat'] = posto_match.group(1)
+                
+                # Extract entrance/ingresso
+                ingresso_match = re.search(r'ingresso\s*[:\s]*(\d+)', line, re.I)
+                if ingresso_match:
+                    ticket_info['entrance'] = ingresso_match.group(1)
+                
+                # Extract ring/anello (like "2 Anello Rosso")
+                anello_match = re.search(r'(\d+\s*anello\s*\w+)', line, re.I)
+                if anello_match:
+                    ticket_info['ring'] = anello_match.group(1)
                 
                 # Extract price
-                if '€' in line or 'eur' in line_lower:
-                    match = re.search(r'(\d+[,.]?\d*)\s*€', line)
-                    if match:
-                        ticket_info['price'] = match.group(0)
+                price_match = re.search(r'(\d+[,.]?\d*)\s*€', line)
+                if price_match:
+                    ticket_info['price'] = price_match.group(0)
             
             # Categorize the ticket
             ticket_info['category'] = self.categorize_ticket(full_text)
@@ -415,7 +424,9 @@ class FanSaleBot:
                 'row': '',
                 'seat': '',
                 'price': '',
-                'category': 'other'
+                'category': 'other',
+                'entrance': '',
+                'ring': ''
             }
     
     def log_new_ticket(self, ticket_info: Dict, browser_id: int):
@@ -430,10 +441,14 @@ class FanSaleBot:
         details = []
         if ticket_info['section']:
             details.append(f"Section: {ticket_info['section']}")
+        if ticket_info['entrance']:
+            details.append(f"Entrance: {ticket_info['entrance']}")
         if ticket_info['row']:
             details.append(f"Row: {ticket_info['row']}")
         if ticket_info['seat']:
             details.append(f"Seat: {ticket_info['seat']}")
+        if ticket_info['ring']:
+            details.append(f"Ring: {ticket_info['ring']}")
         if ticket_info['price']:
             details.append(f"Price: {ticket_info['price']}")
         
@@ -457,7 +472,7 @@ class FanSaleBot:
             logger.info(f"   └─ {detail_str}")
             logger.info("   " + "─" * 60)
         elif category == 'settore':
-            logger.info(f"🎫 NEW TICKET - SETTORE{hunt_indicator} - Hunter {browser_id}")
+            logger.info(f"🎫 NEW TICKET - SETTORE (SEATED){hunt_indicator} - Hunter {browser_id}")
             logger.info(f"   └─ {detail_str}")
             logger.info("   " + "─" * 60)
         else:
@@ -467,49 +482,122 @@ class FanSaleBot:
     
     @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create stealth browser with multi-monitor support"""
+        """Create stealth browser with multi-monitor support and version handling"""
         logger.info(f"🚀 Creating Browser {browser_id}...")
         
-        options = uc.ChromeOptions()
-        
-        # Stealth options
-        options.add_argument('--disable-blink-features=AutomationControlled')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-features=TranslateUI')
-        options.add_argument('--disable-infobars')
-        
-        # Performance
-        options.add_argument('--disable-logging')
-        options.add_argument('--disable-background-timer-throttling')
-        
-        # Multi-monitor window positioning
-        # Arrange browsers in a grid pattern across monitors
-        window_width = 450
-        window_height = 800
-        monitor_width = 1920  # Adjust based on your monitor resolution
-        
-        # Calculate position for multi-monitor setup
-        col = (browser_id - 1) % 4
-        row = (browser_id - 1) // 4
-        x = col * (window_width + 10)  # 10px gap between windows
-        y = row * 100  # Vertical offset for rows
-        
-        # If x position exceeds primary monitor, place on next monitor
-        monitor_num = x // monitor_width
-        x = x % monitor_width + (monitor_num * monitor_width)
-        
-        options.add_argument(f'--window-position={x},{y}')
-        options.add_argument(f'--window-size={window_width},{window_height}')
-        
-        # Profile persistence for cookies/storage
-        profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
-        profile_dir.mkdir(parents=True, exist_ok=True)
-        options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
+        def create_chrome_options():
+            """Create fresh ChromeOptions instance to avoid reuse errors"""
+            options = uc.ChromeOptions()
+            
+            # Stealth options
+            options.add_argument('--disable-blink-features=AutomationControlled')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--disable-features=TranslateUI')
+            options.add_argument('--disable-infobars')
+            
+            # Performance
+            options.add_argument('--disable-logging')
+            options.add_argument('--disable-background-timer-throttling')
+            
+            # Multi-monitor window positioning
+            # Arrange browsers in a grid pattern across monitors
+            window_width = 450
+            window_height = 800
+            monitor_width = 1920  # Adjust based on your monitor resolution
+            
+            # Calculate position for multi-monitor setup
+            col = (browser_id - 1) % 4
+            row = (browser_id - 1) // 4
+            x = col * (window_width + 10)  # 10px gap between windows
+            y = row * 100  # Vertical offset for rows
+            
+            # If x position exceeds primary monitor, place on next monitor
+            monitor_num = x // monitor_width
+            x = x % monitor_width + (monitor_num * monitor_width)
+            
+            options.add_argument(f'--window-position={x},{y}')
+            options.add_argument(f'--window-size={window_width},{window_height}')
+            
+            # Profile persistence for cookies/storage
+            profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
+            profile_dir.mkdir(parents=True, exist_ok=True)
+            options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
+            
+            return options, x, y
         
         try:
-            driver = uc.Chrome(options=options)
+            # Create fresh options
+            options, x, y = create_chrome_options()
+            
+            # Try multiple approaches to handle version mismatches
+            driver = None
+            attempts = [
+                (137, "Chrome 137"),       # Try Chrome 137 first (current version)
+                (None, "auto-detection"),  # Fall back to auto-detection
+                (138, "Chrome 138"),       # Try Chrome 138 as last resort
+            ]
+            
+            for version_main, desc in attempts:
+                try:
+                    logger.info(f"🔄 Attempting with {desc}...")
+                    driver = uc.Chrome(options=options, version_main=version_main)
+                    driver.set_page_load_timeout(20)
+                    
+                    # Test if driver works
+                    driver.execute_script("return navigator.userAgent")
+                    
+                    # Inject stealth JavaScript
+                    driver.execute_script("""
+                        Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                        window.chrome = {runtime: {}};
+                        Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
+                        Object.defineProperty(navigator, 'languages', {get: () => ['en-US', 'en']});
+                        Object.defineProperty(navigator, 'permissions', {
+                            get: () => ({
+                                query: () => Promise.resolve({state: 'granted'})
+                            })
+                        });
+                    """)
+                    
+                    logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y}) using {desc}")
+                    return driver
+                    
+                except Exception as e:
+                    if driver:
+                        try:
+                            driver.quit()
+                        except:
+                            pass
+                    if "version" in str(e).lower():
+                        logger.warning(f"Version mismatch with {desc}: {str(e)[:100]}...")
+                        # Create new options for next attempt
+                        options, x, y = create_chrome_options()
+                        continue
+                    else:
+                        raise
+            
+            # If all attempts failed, try one more time with driver update
+            logger.warning("⚠️ All version attempts failed, trying driver update...")
+            
+            # Clear driver cache
+            import shutil
+            cache_dirs = [
+                os.path.expanduser("~/.cache/selenium"),
+                os.path.expanduser("~/.cache/undetected_chromedriver"),
+                os.path.expanduser("~/.wdm"),
+            ]
+            for cache_dir in cache_dirs:
+                if os.path.exists(cache_dir):
+                    try:
+                        shutil.rmtree(cache_dir)
+                    except:
+                        pass
+            
+            # Try one more time with fresh cache
+            options, x, y = create_chrome_options()
+            driver = uc.Chrome(options=options, use_subprocess=True)
             driver.set_page_load_timeout(20)
             
             # Inject stealth JavaScript
@@ -519,12 +607,22 @@ class FanSaleBot:
                 Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
             """)
             
-            logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
+            logger.info(f"✅ Browser {browser_id} ready after cache clear")
             return driver
             
         except Exception as e:
             logger.error(f"❌ Failed to create browser {browser_id}: {e}")
-            return None
+            
+            # Provide helpful error message
+            if "version" in str(e).lower():
+                logger.error("\n" + "="*60)
+                logger.error("🚨 CHROMEDRIVER VERSION MISMATCH DETECTED!")
+                logger.error("="*60)
+                logger.error("Please run the following command to fix:")
+                logger.error("  python3 fix_chromedriver.py")
+                logger.error("="*60 + "\n")
+            
+            raise
     
     def is_blocked(self, driver: uc.Chrome) -> bool:
         """Check if we're getting 404 or blocked"""
@@ -804,6 +902,8 @@ class FanSaleBot:
         for key, (_, display, color) in available_types.items():
             if key == '3':
                 print(f"  {color}{key}. {display}{Colors.END} ⭐")
+            elif key == '4':
+                print(f"  {color}{key}. {display}{Colors.END} (Seated: Fila/Posto/Anello)")
             elif key == '6':
                 print(f"\n  {color}{key}. {display}{Colors.END}")
             else:

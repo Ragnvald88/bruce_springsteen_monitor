@@ -1,5 +1,10 @@
 # StealthMaster Project - Claude AI Guide
 
+## 🔴 IMPORTANT RULES FOR CLAUDE AI
+1. **NEVER CHANGE FILENAMES** - All existing filenames must remain exactly as they are
+2. Do not rename, move, or suggest renaming any files in the project
+3. Create new files with new names instead of renaming existing ones
+
 ## 🎯 Project Overview
 StealthMaster is an enterprise-grade ticket purchasing bot for FanSale.it that automatically detects and purchases concert/event tickets without requiring login.
 

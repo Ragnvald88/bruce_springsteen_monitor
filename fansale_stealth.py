@@ -12,7 +12,7 @@ import random
 import logging
 import threading
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -61,18 +61,125 @@ class FanSaleBot:
         self.num_browsers = 1
         self.use_proxy = False
         self.max_tickets = 4
+        self.ticket_filters = []  # Keywords to filter tickets
         
         # State management
         self.browsers = []
         self.shutdown_event = threading.Event()
         self.purchase_lock = threading.Lock()  # Thread safety for purchases
         self.tickets_secured = 0
+        
+        # Enhanced statistics with ticket type tracking
         self.stats = {
             'checks': 0,
             'tickets_found': 0,
+            'tickets_by_type': {
+                'prato_a': 0,
+                'prato_b': 0,
+                'seating': 0,
+                'tribuna': 0,
+                'parterre': 0,
+                'unknown': 0
+            },
+            'rejected_tickets': [],  # Tickets that didn't meet criteria
             'purchases': 0,
-            'start_time': None
+            'start_time': None,
+            'last_save': None
         }
+        
+        # Load existing stats if available
+        self.load_stats()
+
+    def load_stats(self):
+        """Load statistics from file if exists"""
+        stats_file = Path('ticket_stats.json')
+        if stats_file.exists():
+            try:
+                with open(stats_file, 'r') as f:
+                    saved_stats = json.load(f)
+                    # Merge with current stats
+                    for key in ['tickets_found', 'purchases']:
+                        if key in saved_stats:
+                            self.stats[key] = saved_stats[key]
+                    if 'tickets_by_type' in saved_stats:
+                        self.stats['tickets_by_type'].update(saved_stats['tickets_by_type'])
+                    logger.info(f"📊 Loaded stats: {self.stats['tickets_found']} tickets found previously")
+            except Exception as e:
+                logger.debug(f"Failed to load stats: {e}")
+    
+    def save_stats(self):
+        """Save statistics to file"""
+        try:
+            stats_to_save = {
+                'tickets_found': self.stats['tickets_found'],
+                'tickets_by_type': self.stats['tickets_by_type'],
+                'purchases': self.stats['purchases'],
+                'last_save': datetime.now().isoformat(),
+                'rejected_tickets': self.stats['rejected_tickets'][-50:]  # Keep last 50 rejected
+            }
+            with open('ticket_stats.json', 'w') as f:
+                json.dump(stats_to_save, f, indent=2)
+        except Exception as e:
+            logger.error(f"Failed to save stats: {e}")
+    
+    def detect_ticket_type(self, ticket_text: str) -> str:
+        """Detect ticket type from text"""
+        text_lower = ticket_text.lower()
+        
+        # Check for specific ticket types
+        if 'prato a' in text_lower:
+            return 'prato_a'
+        elif 'prato b' in text_lower:
+            return 'prato_b'
+        elif any(word in text_lower for word in ['tribuna', 'tribune']):
+            return 'tribuna'
+        elif 'parterre' in text_lower:
+            return 'parterre'
+        elif any(word in text_lower for word in ['settore', 'sector', 'posto', 'seat', 'fila', 'row']):
+            return 'seating'
+        else:
+            return 'unknown'
+    
+    def get_ticket_info(self, driver: uc.Chrome, ticket_element) -> dict:
+        """Extract detailed ticket information"""
+        try:
+            ticket_text = ""
+            price = "N/A"
+            
+            # Try to get text from ticket element
+            try:
+                ticket_text = ticket_element.text
+            except:
+                ticket_text = driver.execute_script("return arguments[0].innerText || arguments[0].textContent || ''", ticket_element)
+            
+            # Try to find price
+            try:
+                price_elem = ticket_element.find_element(By.CSS_SELECTOR, "[class*='price'], [class*='prezzo'], [class*='euro']")
+                price = price_elem.text
+            except:
+                pass
+            
+            # Detect type
+            ticket_type = self.detect_ticket_type(ticket_text)
+            
+            return {
+                'text': ticket_text[:100],  # First 100 chars
+                'type': ticket_type,
+                'price': price,
+                'time': datetime.now().strftime('%H:%M:%S')
+            }
+            
+        except Exception as e:
+            logger.debug(f"Error extracting ticket info: {e}")
+            return {'text': 'Unknown', 'type': 'unknown', 'price': 'N/A', 'time': datetime.now().strftime('%H:%M:%S')}
+    
+    def matches_filters(self, ticket_info: dict) -> bool:
+        """Check if ticket matches configured filters"""
+        if not self.ticket_filters:
+            return True
+            
+        ticket_text = ticket_info['text'].lower()
+        return any(filter_keyword.lower() in ticket_text for filter_keyword in self.ticket_filters)
 
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
         """Create stealth browser instance"""
@@ -218,11 +325,12 @@ class FanSaleBot:
             return False
 
     def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
-        """Main hunting loop - optimized for speed"""
+        """Main hunting loop - optimized for speed with enhanced logging"""
         logger.info(f"🎯 Hunter {browser_id} starting...")
         
         check_count = 0
         last_refresh = time.time()
+        last_stats_save = time.time()
         no_ticket_count = 0
         
         while not self.shutdown_event.is_set() and self.tickets_secured < self.max_tickets:
@@ -241,16 +349,50 @@ class FanSaleBot:
                 tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
                 
                 if tickets:
-                    self.stats['tickets_found'] += 1
-                    logger.info(f"🎫 HUNTER {browser_id}: {len(tickets)} TICKETS FOUND!")
+                    logger.info(f"\n{'='*60}")
+                    logger.info(f"🎫 HUNTER {browser_id}: {len(tickets)} TICKETS SPOTTED!")
                     
-                    for ticket in tickets[:self.max_tickets - self.tickets_secured]:
+                    tickets_to_buy = []
+                    
+                    for i, ticket in enumerate(tickets):
+                        ticket_info = self.get_ticket_info(driver, ticket)
+                        ticket_type = ticket_info['type']
+                        
+                        # Update statistics
+                        self.stats['tickets_found'] += 1
+                        self.stats['tickets_by_type'][ticket_type] += 1
+                        
+                        # Log ticket details
+                        type_emoji = {
+                            'prato_a': '🌱A',
+                            'prato_b': '🌱B', 
+                            'seating': '💺',
+                            'tribuna': '🏛️',
+                            'parterre': '🎭',
+                            'unknown': '❓'
+                        }.get(ticket_type, '❓')
+                        
+                        logger.info(f"  #{i+1} {type_emoji} {ticket_type.upper()}: {ticket_info['text'][:50]}... | {ticket_info['price']}")
+                        
+                        # Check if matches filters
+                        if self.matches_filters(ticket_info):
+                            tickets_to_buy.append((ticket, ticket_info))
+                            logger.info(f"     ✅ Matches criteria!")
+                        else:
+                            logger.info(f"     ❌ Doesn't match criteria")
+                            self.stats['rejected_tickets'].append(ticket_info)
+                    
+                    logger.info(f"{'='*60}\n")
+                    
+                    # Try to buy matching tickets
+                    for ticket, ticket_info in tickets_to_buy[:self.max_tickets - self.tickets_secured]:
                         with self.purchase_lock:  # Thread safety
                             if self.tickets_secured >= self.max_tickets:
                                 break
                             if self.purchase_ticket(driver, ticket, browser_id):
                                 self.tickets_secured += 1
                                 self.stats['purchases'] += 1
+                                logger.info(f"🎉 PURCHASED: {ticket_info['type']} ticket!")
                                 
                                 if self.tickets_secured >= self.max_tickets:
                                     logger.info(f"🎉 Max tickets secured!")
@@ -260,6 +402,11 @@ class FanSaleBot:
                     # Log every 10 checks when no tickets
                     if no_ticket_count % 10 == 0:
                         logger.info(f"Hunter {browser_id}: No tickets (checked {check_count} times)")
+                
+                # Save stats every 30 seconds
+                if time.time() - last_stats_save > 30:
+                    self.save_stats()
+                    last_stats_save = time.time()
                 
                 # Smart refresh with jitter
                 refresh_time = random.uniform(2.5, 3.5)
@@ -273,10 +420,14 @@ class FanSaleBot:
                     # Just wait and re-check
                     time.sleep(refresh_time)
                 
-                # Log progress
+                # Log progress with ticket type breakdown
                 if check_count % 50 == 0:
                     rate = (check_count * 60) / (time.time() - self.stats['start_time'])
-                    logger.info(f"📊 Hunter {browser_id}: {check_count} checks @ {rate:.1f}/min")
+                    logger.info(f"\n📊 Hunter {browser_id} Progress:")
+                    logger.info(f"   Checks: {check_count} @ {rate:.1f}/min")
+                    logger.info(f"   Total tickets seen: {self.stats['tickets_found']}")
+                    logger.info(f"   By type: " + ", ".join([f"{k}: {v}" for k, v in self.stats['tickets_by_type'].items() if v > 0]))
+                    logger.info("")
                     
             except TimeoutException:
                 logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")
@@ -375,10 +526,21 @@ class FanSaleBot:
         except:
             pass
         
+        # Ticket filters
+        print("\n🎯 TICKET FILTERING (optional)")
+        print("Common types: prato a, prato b, tribuna, parterre, settore")
+        filter_input = input("Enter keywords to filter (comma-separated, or press Enter for all): ").strip()
+        if filter_input:
+            self.ticket_filters = [f.strip() for f in filter_input.split(',') if f.strip()]
+            print(f"✅ Will only buy tickets matching: {self.ticket_filters}")
+        else:
+            print("✅ Will consider all ticket types")
+        
         print(f"\n📋 Configuration:")
         print(f"   • Browsers: {self.num_browsers}")
         print(f"   • Proxy: {'Yes' if self.use_proxy else 'No'}")
         print(f"   • Max tickets: {self.max_tickets}")
+        print(f"   • Filters: {self.ticket_filters if self.ticket_filters else 'None (all types)'}")
         print(f"   • Target: {self.target_url}")
     
     def run(self):
@@ -431,12 +593,25 @@ class FanSaleBot:
                     
                     # Show status every 30 seconds
                     if time.time() - last_update > 30:
+                        self.save_stats()  # Save current stats
                         elapsed = time.time() - self.stats['start_time']
                         rate = self.stats['checks'] / (elapsed / 60) if elapsed > 0 else 0
-                        print(f"\n📊 Status Update:")
+                        
+                        print(f"
+📊 Status Update at {datetime.now().strftime('%H:%M:%S')}:")
                         print(f"   • Total checks: {self.stats['checks']}")
                         print(f"   • Check rate: {rate:.1f}/min")
-                        print(f"   • Tickets found: {self.stats['tickets_found']}")
+                        print(f"   • Total tickets spotted: {self.stats['tickets_found']}")
+                        
+                        # Show ticket type breakdown
+                        type_breakdown = []
+                        for t_type, count in self.stats['tickets_by_type'].items():
+                            if count > 0:
+                                type_breakdown.append(f"{t_type}: {count}")
+                        if type_breakdown:
+                            print(f"   • By type: {', '.join(type_breakdown)}")
+                        
+                        print(f"   • Rejected (no match): {len(self.stats['rejected_tickets'])}")
                         print(f"   • Active browsers: {len([t for t in threads if t.is_alive()])}")
                         last_update = time.time()
                     
@@ -458,15 +633,35 @@ class FanSaleBot:
                 except:
                     pass
                     
-            # Show stats
+            # Save and show final stats
+            self.save_stats()
+            
             if self.stats['start_time']:
                 elapsed = time.time() - self.stats['start_time']
-                print(f"\n📊 Final Statistics:")
+                print(f"
+{'='*60}")
+                print(f"📊 FINAL STATISTICS")
+                print(f"{'='*60}")
+                print(f"   • Runtime: {elapsed/60:.1f} minutes")
                 print(f"   • Total checks: {self.stats['checks']}")
+                print(f"   • Check rate: {self.stats['checks']/(elapsed/60):.1f}/min")
                 print(f"   • Tickets found: {self.stats['tickets_found']}")
                 print(f"   • Purchases: {self.stats['purchases']}")
-                print(f"   • Runtime: {elapsed/60:.1f} minutes")
-                print(f"   • Check rate: {self.stats['checks']/(elapsed/60):.1f}/min")
+                
+                print(f"
+📈 Ticket Type Breakdown:")
+                for t_type, count in sorted(self.stats['tickets_by_type'].items()):
+                    if count > 0:
+                        percentage = (count / self.stats['tickets_found'] * 100) if self.stats['tickets_found'] > 0 else 0
+                        print(f"   • {t_type.upper()}: {count} ({percentage:.1f}%)")
+                
+                if self.stats['rejected_tickets']:
+                    print(f"
+❌ Rejected {len(self.stats['rejected_tickets'])} tickets that didn't match criteria")
+                
+                print(f"
+💾 Stats saved to ticket_stats.json")
+                print(f"{'='*60}")
 
 
 def main():

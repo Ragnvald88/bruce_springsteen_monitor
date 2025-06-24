@@ -1,4 +1,4 @@
-# StealthMaster - FanSale Ticket Bot 🎫
+# StealthMaster - FanSale Ticket Bot (NO LOGIN REQUIRED) 🎫
 
 A ticket purchasing bot for FanSale.it with anti-detection measures. **No login required!**
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-FanSale Bot - Stealth Edition v3.0
-Optimized for speed, stealth, and reliability
-Fixed all syntax errors and improved detection avoidance
+FanSale Bot - Stealth Edition v4.0 NO LOGIN REQUIRED
+Optimized for speed - skips login since it's not needed for checkout
+Enhanced with ticket type tracking and persistent statistics
 """
 
 import os
@@ -51,9 +51,7 @@ class FanSaleBot:
     """Streamlined FanSale bot with focus on speed and stealth"""
     
     def __init__(self):
-        # Credentials
-        self.email = os.getenv('FANSALE_EMAIL')
-        self.password = os.getenv('FANSALE_PASSWORD')
+        # No credentials needed - no login required!
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
                                     "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388")
         
@@ -74,6 +72,7 @@ class FanSaleBot:
             'checks': 0,
             'tickets_found': 0,
             'tickets_by_type': {
+                'prezzo': 0,  # General price tickets
                 'prato_a': 0,
                 'prato_b': 0,
                 'seating': 0,
@@ -81,10 +80,14 @@ class FanSaleBot:
                 'parterre': 0,
                 'unknown': 0
             },
+            'reservation_attempts': 0,
+            'successful_checkouts': 0,
+            'failed_reservations': 0,
             'rejected_tickets': [],  # Tickets that didn't meet criteria
             'purchases': 0,
             'start_time': None,
-            'last_save': None
+            'last_save': None,
+            'sessions': []  # Track all sessions
         }
         
         # Load existing stats if available
@@ -97,25 +100,55 @@ class FanSaleBot:
             try:
                 with open(stats_file, 'r') as f:
                     saved_stats = json.load(f)
-                    # Merge with current stats
-                    for key in ['tickets_found', 'purchases']:
+                    # Accumulate counts from previous sessions
+                    for key in ['tickets_found', 'purchases', 'reservation_attempts', 
+                               'successful_checkouts', 'failed_reservations']:
                         if key in saved_stats:
                             self.stats[key] = saved_stats[key]
+                    
+                    # Merge ticket type counts
                     if 'tickets_by_type' in saved_stats:
-                        self.stats['tickets_by_type'].update(saved_stats['tickets_by_type'])
-                    logger.info(f"📊 Loaded stats: {self.stats['tickets_found']} tickets found previously")
+                        for t_type, count in saved_stats['tickets_by_type'].items():
+                            if t_type in self.stats['tickets_by_type']:
+                                self.stats['tickets_by_type'][t_type] = count
+                    
+                    # Load session history
+                    if 'sessions' in saved_stats:
+                        self.stats['sessions'] = saved_stats['sessions']
+                    
+                    logger.info(f"📊 Loaded stats: {self.stats['tickets_found']} tickets seen, "
+                              f"{self.stats['successful_checkouts']} checkouts achieved")
             except Exception as e:
                 logger.debug(f"Failed to load stats: {e}")
     
     def save_stats(self):
         """Save statistics to file"""
         try:
+            # Add current session info if running
+            if self.stats['start_time']:
+                session_info = {
+                    'start': datetime.fromtimestamp(self.stats['start_time']).isoformat(),
+                    'duration_min': (time.time() - self.stats['start_time']) / 60,
+                    'checks': self.stats.get('session_checks', 0),
+                    'tickets_seen': self.stats.get('session_tickets', 0),
+                    'checkouts': self.stats.get('session_checkouts', 0)
+                }
+                
+                # Keep only last 50 sessions
+                sessions = self.stats['sessions'][-49:] if self.stats['sessions'] else []
+                sessions.append(session_info)
+                self.stats['sessions'] = sessions
+            
             stats_to_save = {
                 'tickets_found': self.stats['tickets_found'],
                 'tickets_by_type': self.stats['tickets_by_type'],
+                'reservation_attempts': self.stats['reservation_attempts'],
+                'successful_checkouts': self.stats['successful_checkouts'],
+                'failed_reservations': self.stats['failed_reservations'],
                 'purchases': self.stats['purchases'],
                 'last_save': datetime.now().isoformat(),
-                'rejected_tickets': self.stats['rejected_tickets'][-50:]  # Keep last 50 rejected
+                'rejected_tickets': self.stats['rejected_tickets'][-50:],  # Keep last 50 rejected
+                'sessions': self.stats['sessions']
             }
             with open('ticket_stats.json', 'w') as f:
                 json.dump(stats_to_save, f, indent=2)
@@ -131,6 +164,8 @@ class FanSaleBot:
             return 'prato_a'
         elif 'prato b' in text_lower:
             return 'prato_b'
+        elif 'prezzo' in text_lower and 'prato' not in text_lower:
+            return 'prezzo'
         elif any(word in text_lower for word in ['tribuna', 'tribune']):
             return 'tribuna'
         elif 'parterre' in text_lower:
@@ -230,14 +265,7 @@ class FanSaleBot:
             logger.error(f"❌ Failed to create browser: {e}")
             return None
 
-    def verify_login(self, driver: uc.Chrome) -> bool:
-        """Check if browser is logged in - PROPERLY FIXED"""
-        try:
-            page_source = driver.page_source.lower()
-            
-            # First check if we're on a login page
-            if 'login' in driver.current_url or '/login.htm' in driver.current_url:
-                return False
+
             
             # Look for login button/link that indicates NOT logged in
             not_logged_indicators = [
@@ -273,56 +301,7 @@ class FanSaleBot:
             logger.debug(f"Login check error: {e}")
             return False
     
-    def manual_login(self, browser_id: int, driver: uc.Chrome) -> bool:
-        """Handle manual login process"""
-        logger.info(f"🔐 Checking login status for Browser {browser_id}...")
-        
-        try:
-            # Navigate to target page first
-            driver.get(self.target_url)
-            time.sleep(3)
-            
-            # Debug: Show what we see on the page
-            page_title = driver.title
-            logger.info(f"Page title: {page_title}")
-            
-            # Check if already logged in
-            if self.verify_login(driver):
-                logger.info(f"✅ Browser {browser_id} already logged in!")
-                return True
-            
-            # Check if we see any login prompts
-            page_source = driver.page_source.lower()
-            if 'accedi per' in page_source or 'effettua il login' in page_source:
-                logger.info(f"⚠️ Browser {browser_id}: Login required - found login prompt")
-            
-            # Need to login
-            logger.info(f"📝 Login required for Browser {browser_id}")
-            driver.get("https://www.fansale.it/fansale/login.htm")
-            
-            print(f"\n{'='*60}")
-            print(f"🔐 MANUAL LOGIN REQUIRED - Browser #{browser_id}")
-            print(f"{'='*60}")
-            print(f"Please log in manually in the browser window")
-            print(f"Email: {self.email}")
-            print(f"{'='*60}\n")
-            
-            input(f"✋ Press Enter after you've logged in...")
-            
-            # Navigate back and verify
-            driver.get(self.target_url)
-            time.sleep(3)
-            
-            if self.verify_login(driver):
-                logger.info(f"✅ Browser {browser_id} logged in successfully!")
-                return True
-            else:
-                logger.error(f"❌ Browser {browser_id} login failed - still seeing login prompts")
-                return False
-                
-        except Exception as e:
-            logger.error(f"Login error: {e}")
-            return False
+    
 
     def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
         """Main hunting loop - optimized for speed with enhanced logging"""
@@ -337,13 +316,9 @@ class FanSaleBot:
             try:
                 check_count += 1
                 self.stats['checks'] += 1
+                self.stats['session_checks'] += 1
                 
-                # Periodic login check every 5 minutes
-                if check_count % 100 == 0:
-                    if not self.verify_login(driver):
-                        logger.warning(f"⚠️ Hunter {browser_id}: Re-login needed")
-                        if not self.manual_login(browser_id, driver):
-                            break
+
                 
                 # Quick ticket check
                 tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
@@ -361,9 +336,12 @@ class FanSaleBot:
                         # Update statistics
                         self.stats['tickets_found'] += 1
                         self.stats['tickets_by_type'][ticket_type] += 1
+                        self.stats.setdefault('session_tickets', 0)
+                        self.stats['session_tickets'] += 1
                         
                         # Log ticket details
                         type_emoji = {
+                            'prezzo': '💰',
                             'prato_a': '🌱A',
                             'prato_b': '🌱B', 
                             'seating': '💺',
@@ -446,14 +424,23 @@ class FanSaleBot:
                 time.sleep(5)
 
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
-        """Attempt to purchase a ticket"""
+        """Attempt to purchase a ticket with reservation tracking"""
         try:
             logger.info(f"⚡ Hunter {browser_id}: Attempting purchase...")
+            self.stats['reservation_attempts'] += 1
             
             # Click ticket
             driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", ticket_element)
             driver.execute_script("arguments[0].click();", ticket_element)
             time.sleep(1)
+            
+            # Check for error messages (ticket already reserved, etc.)
+            page_source = driver.page_source.lower()
+            if any(msg in page_source for msg in ['già riservato', 'already reserved', 
+                                                   'non disponibile', 'sold out']):
+                logger.info(f"❌ Hunter {browser_id}: Ticket already reserved by another user")
+                self.stats['failed_reservations'] += 1
+                return False
             
             # Find and click buy button
             buy_selectors = [
@@ -464,6 +451,7 @@ class FanSaleBot:
                 "//button[contains(text(), 'Buy')]"
             ]
             
+            buy_clicked = False
             for selector in buy_selectors:
                 try:
                     if selector.startswith('//'):
@@ -477,22 +465,43 @@ class FanSaleBot:
                     
                     driver.execute_script("arguments[0].click();", buy_btn)
                     logger.info(f"✅ Hunter {browser_id}: Buy button clicked!")
+                    buy_clicked = True
                     
-                    # Play alarm
-                    print('\a' * 3)  # System beep
+                    # Wait a moment to check if we reached checkout
+                    time.sleep(2)
                     
-                    # Take screenshot
-                    driver.save_screenshot(f"ticket_{int(time.time())}.png")
+                    # Check if we're in checkout
+                    if any(word in driver.current_url.lower() for word in ['cart', 'checkout', 'carrello']):
+                        logger.info(f"🎉 Hunter {browser_id}: Successfully reached checkout!")
+                        self.stats['successful_checkouts'] += 1
+                        self.stats.setdefault('session_checkouts', 0)
+                        self.stats['session_checkouts'] += 1
+                        
+                        # Play alarm
+                        print('\a' * 3)  # System beep
+                        
+                        # Take screenshot
+                        screenshot_path = f"screenshots/checkout_{int(time.time())}.png"
+                        Path("screenshots").mkdir(exist_ok=True)
+                        driver.save_screenshot(screenshot_path)
+                        logger.info(f"📸 Screenshot saved: {screenshot_path}")
+                        
+                        return True
                     
-                    return True
+                    break
                     
                 except:
                     continue
-                    
+            
+            if not buy_clicked:
+                logger.warning(f"⚠️ Hunter {browser_id}: No buy button found")
+                self.stats['failed_reservations'] += 1
+                
             return False
             
         except Exception as e:
             logger.debug(f"Purchase failed: {e}")
+            self.stats['failed_reservations'] += 1
             return False
 
     def configure(self):
@@ -557,9 +566,10 @@ class FanSaleBot:
                 if not driver:
                     continue
                     
-                if not self.manual_login(i, driver):
-                    driver.quit()
-                    continue
+                # Navigate directly to target page - no login needed!
+                driver.get(self.target_url)
+                time.sleep(2)
+                logger.info(f"✅ Browser {i} ready - no login required!")
                     
                 self.browsers.append(driver)
             
@@ -572,6 +582,9 @@ class FanSaleBot:
             
             # Start hunting
             self.stats['start_time'] = time.time()
+            self.stats['session_checks'] = 0
+            self.stats['session_tickets'] = 0
+            self.stats['session_checkouts'] = 0
             threads = []
             
             for i, driver in enumerate(self.browsers):
@@ -649,6 +662,15 @@ class FanSaleBot:
                 print(f"   • Purchases: {self.stats['purchases']}")
                 
                 print(f"
+📊 Reservation Statistics:")
+                print(f"   • Attempts: {self.stats['reservation_attempts']}")
+                print(f"   • Successful checkouts: {self.stats['successful_checkouts']}")
+                print(f"   • Failed reservations: {self.stats['failed_reservations']}")
+                if self.stats['reservation_attempts'] > 0:
+                    success_rate = (self.stats['successful_checkouts'] / self.stats['reservation_attempts']) * 100
+                    print(f"   • Success rate: {success_rate:.1f}%")
+                
+                print(f"
 📈 Ticket Type Breakdown:")
                 for t_type, count in sorted(self.stats['tickets_by_type'].items()):
                     if count > 0:
@@ -675,11 +697,8 @@ def main():
         print("Run: pip install undetected-chromedriver python-dotenv selenium")
         sys.exit(1)
     
-    # Check credentials
+    # Load environment (only for target URL now)
     load_dotenv()
-    if not os.getenv('FANSALE_EMAIL') or not os.getenv('FANSALE_PASSWORD'):
-        print("❌ Missing credentials in .env file!")
-        sys.exit(1)
     
     # Run bot
     bot = FanSaleBot()

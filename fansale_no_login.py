@@ -18,10 +18,15 @@ import threading
 import json
 import hashlib
 import re
+import functools
+import tempfile
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Set
-from collections import defaultdict
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from contextlib import contextmanager
 
 # Suppress verbose logs
 os.environ['WDM_LOG_LEVEL'] = '0'
@@ -32,11 +37,126 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import TimeoutException, WebDriverException, ElementNotInteractableException, StaleElementReferenceException
 from selenium.webdriver.remote.webelement import WebElement
 
 from dotenv import load_dotenv
 load_dotenv()
+
+# Configuration dataclass
+@dataclass
+class BotConfig:
+    """Bot configuration with defaults"""
+    browsers_count: int = 2
+    max_tickets: int = 2
+    refresh_interval: int = 30
+    session_timeout: int = 900
+    min_wait: float = 2.0
+    max_wait: float = 4.0
+    retry_attempts: int = 3
+    retry_delay: float = 1.0
+    
+    @classmethod
+    def from_file(cls, path: Path) -> 'BotConfig':
+        """Load config from JSON file if exists"""
+        if path.exists():
+            with open(path, 'r') as f:
+                data = json.load(f)
+                return cls(**data)
+        return cls()
+    
+    def save(self, path: Path):
+        """Save config to JSON file"""
+        with open(path, 'w') as f:
+            json.dump(self.__dict__, f, indent=2)
+
+# Advanced retry decorator
+def retry(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0, 
+          exceptions: tuple = (Exception,)):
+    """Sophisticated retry decorator with exponential backoff"""
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            attempt = 0
+            current_delay = delay
+            
+            while attempt < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    attempt += 1
+                    if attempt >= max_attempts:
+                        logging.error(f"{func.__name__} failed after {max_attempts} attempts: {e}")
+                        raise
+                    
+                    logging.warning(f"{func.__name__} attempt {attempt} failed: {e}, "
+                                  f"retrying in {current_delay:.1f}s...")
+                    time.sleep(current_delay)
+                    current_delay *= backoff
+                    
+            return None
+        return wrapper
+    return decorator
+
+# Thread-safe statistics manager
+class StatsManager:
+    """Thread-safe statistics manager with atomic operations"""
+    def __init__(self, stats_file: Path):
+        self.stats_file = stats_file
+        self.lock = threading.Lock()
+        self.stats = self.load()
+    
+    def load(self) -> Dict:
+        """Load stats from file"""
+        if self.stats_file.exists():
+            try:
+                with open(self.stats_file, 'r') as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.warning(f"Could not load stats: {e}")
+        
+        return {
+            'total_checks': 0,
+            'total_tickets_found': 0,
+            'unique_tickets_found': 0,
+            'tickets_by_type': {
+                'prato_a': 0,
+                'prato_b': 0,
+                'settore': 0,
+                'other': 0
+            },
+            'purchases': 0,
+            'blocks_encountered': 0,
+            'all_time_runtime': 0
+        }
+    
+    def save(self):
+        """Save stats to file with atomic write"""
+        with self.lock:
+            # Write to temp file first
+            temp_file = self.stats_file.with_suffix('.tmp')
+            try:
+                with open(temp_file, 'w') as f:
+                    json.dump(self.stats, f, indent=2)
+                # Atomic rename
+                temp_file.replace(self.stats_file)
+            except Exception as e:
+                logging.error(f"Failed to save stats: {e}")
+                if temp_file.exists():
+                    temp_file.unlink()
+    
+    def increment(self, key: str, value: int = 1):
+        """Thread-safe increment"""
+        with self.lock:
+            if key in self.stats:
+                self.stats[key] += value
+            else:
+                # Handle nested keys like 'tickets_by_type.prato_a'
+                keys = key.split('.')
+                current = self.stats
+                for k in keys[:-1]:
+                    current = current.setdefault(k, {})
+                current[keys[-1]] = current.get(keys[-1], 0) + value
 
 # ANSI color codes for beautiful terminal output
 class Colors:
@@ -49,6 +169,84 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
+
+# Notification Manager
+class NotificationManager:
+    """Manages notifications for ticket discoveries"""
+    def __init__(self, enabled: bool = False):
+        self.enabled = enabled
+        self.notification_queue = deque(maxlen=100)
+    
+    def notify(self, title: str, message: str, priority: str = "normal"):
+        """Send notification (can be extended for email/SMS)"""
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        notification = {
+            'timestamp': timestamp,
+            'title': title,
+            'message': message,
+            'priority': priority
+        }
+        self.notification_queue.append(notification)
+        
+        if self.enabled:
+            # For now, just enhanced logging
+            if priority == "high":
+                logger.info(f"\n{'🚨' * 5} ALERT {'🚨' * 5}")
+                logger.info(f"{Colors.BOLD}{Colors.RED}{title}{Colors.END}")
+                logger.info(f"{Colors.YELLOW}{message}{Colors.END}")
+                logger.info(f"{'🚨' * 5} ALERT {'🚨' * 5}\n")
+            else:
+                logger.info(f"📢 {title}: {message}")
+
+# Health Monitor
+class HealthMonitor:
+    """Monitors browser and system health"""
+    def __init__(self):
+        self.metrics = defaultdict(dict)
+        self.last_check = time.time()
+        
+    def check_browser_health(self, browser_id: int, driver: uc.Chrome) -> bool:
+        """Check if browser is healthy"""
+        try:
+            # Check if browser is responsive
+            driver.execute_script("return document.readyState")
+            
+            # Update metrics
+            self.metrics[browser_id] = {
+                'last_check': time.time(),
+                'status': 'healthy',
+                'checks_performed': self.metrics[browser_id].get('checks_performed', 0) + 1
+            }
+            return True
+            
+        except Exception as e:
+            self.metrics[browser_id] = {
+                'last_check': time.time(),
+                'status': 'unhealthy',
+                'error': str(e)
+            }
+            return False
+    
+    def get_system_health(self) -> Dict:
+        """Get system resource usage"""
+        try:
+            # Basic system metrics
+            return {
+                'memory_percent': self._get_memory_usage(),
+                'active_threads': threading.active_count(),
+                'uptime_seconds': time.time() - self.metrics.get('start_time', time.time())
+            }
+        except Exception as e:
+            return {'error': str(e)}
+    
+    def _get_memory_usage(self) -> float:
+        """Get current process memory usage percentage"""
+        try:
+            import resource
+            usage = resource.getrusage(resource.RUSAGE_SELF)
+            return round(usage.ru_maxrss / 1024 / 1024, 2)  # MB
+        except:
+            return 0.0
 
 # Configure logging with custom formatter
 class ColoredFormatter(logging.Formatter):
@@ -84,14 +282,17 @@ logger.addHandler(file_handler)
 class FanSaleBot:
     """Enhanced FanSale bot with ticket type tracking - No login required"""
     
-    def __init__(self):
+    def __init__(self, config: Optional[BotConfig] = None):
+        # Load configuration
+        self.config = config or BotConfig()
+        
         # Get target URL from env or use default
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
                                     "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554")
         
         # Configuration
-        self.num_browsers = 1
-        self.max_tickets = 4
+        self.num_browsers = self.config.browsers_count
+        self.max_tickets = self.config.max_tickets
         self.ticket_filters = []  # Will be set to track specific types
         self.ticket_types_to_hunt = {'prato_a', 'prato_b'}  # Default to Prato types
         
@@ -105,67 +306,26 @@ class FanSaleBot:
         self.seen_tickets = set()  # Store hashes of seen tickets
         self.ticket_details_cache = {}  # Store full details of tickets
         
-        # Load persistent statistics
+        # Load persistent statistics using thread-safe manager
         self.stats_file = Path("fansale_stats.json")
-        self.load_stats()
+        self.stats_manager = StatsManager(self.stats_file)
+        self.stats = self.stats_manager.stats
         
         # Performance monitoring
         self.session_start_time = time.time()
+        
+        # Health monitoring and notifications
+        self.health_monitor = HealthMonitor()
+        self.notification_manager = NotificationManager(enabled=True)
 
-    def load_stats(self):
-        """Load persistent statistics from file"""
-        if self.stats_file.exists():
-            try:
-                with open(self.stats_file, 'r') as f:
-                    saved_stats = json.load(f)
-                    # Merge with default stats structure
-                    self.stats = {
-                        'total_checks': saved_stats.get('total_checks', 0),
-                        'total_tickets_found': saved_stats.get('total_tickets_found', 0),
-                        'unique_tickets_found': saved_stats.get('unique_tickets_found', 0),
-                        'tickets_by_type': {
-                            'prato_a': saved_stats.get('tickets_by_type', {}).get('prato_a', 0),
-                            'prato_b': saved_stats.get('tickets_by_type', {}).get('prato_b', 0),
-                            'settore': saved_stats.get('tickets_by_type', {}).get('settore', 0),
-                            'other': saved_stats.get('tickets_by_type', {}).get('other', 0)
-                        },
-                        'purchases': saved_stats.get('purchases', 0),
-                        'blocks_encountered': saved_stats.get('blocks_encountered', 0),
-                        'all_time_runtime': saved_stats.get('all_time_runtime', 0)
-                    }
-                logger.info(f"📊 Loaded stats: {self.stats['unique_tickets_found']} unique tickets tracked historically")
-            except Exception as e:
-                logger.warning(f"Could not load stats: {e}, starting fresh")
-                self.init_fresh_stats()
-        else:
-            self.init_fresh_stats()
-    
-    def init_fresh_stats(self):
-        """Initialize fresh statistics structure"""
-        self.stats = {
-            'total_checks': 0,
-            'total_tickets_found': 0,
-            'unique_tickets_found': 0,
-            'tickets_by_type': {
-                'prato_a': 0,
-                'prato_b': 0,
-                'settore': 0,
-                'other': 0
-            },
-            'purchases': 0,
-            'blocks_encountered': 0,
-            'all_time_runtime': 0
-        }
-    
+
     def save_stats(self):
         """Save statistics to file"""
         try:
             # Update runtime
             session_time = time.time() - self.session_start_time
             self.stats['all_time_runtime'] += session_time
-            
-            with open(self.stats_file, 'w') as f:
-                json.dump(self.stats, f, indent=2)
+            self.stats_manager.save()
         except Exception as e:
             logger.error(f"Failed to save stats: {e}")
     
@@ -179,8 +339,12 @@ class FanSaleBot:
         # Check for Prato B
         elif 'prato b' in ticket_lower or 'prato gold b' in ticket_lower:
             return 'prato_b'
-        # Check for Settore
-        elif 'settore' in ticket_lower or 'settore numerato' in ticket_lower:
+        # Check for Settore/Seated tickets - improved detection
+        elif any(keyword in ticket_lower for keyword in [
+            'settore', 'fila', 'posto', 'anello', 'tribuna', 
+            'poltrona', 'numerato', 'seat', 'row', 'ring',
+            'rosso', 'blu', 'verde', 'giallo', 'ingresso'
+        ]):
             return 'settore'
         else:
             return 'other'
@@ -275,6 +439,14 @@ class FanSaleBot:
         
         detail_str = " | ".join(details) if details else ticket_info['raw_text'][:100]
         
+        # Send notification if hunting this type
+        if is_hunting:
+            self.notification_manager.notify(
+                f"🎫 NEW {category.upper()} TICKET FOUND!",
+                detail_str,
+                priority="high"
+            )
+        
         # Log with appropriate formatting based on category
         if category == 'prato_a':
             logger.info(f"🎫 NEW TICKET - PRATO A{hunt_indicator} - Hunter {browser_id}")
@@ -293,6 +465,7 @@ class FanSaleBot:
             logger.info(f"   └─ {detail_str}")
             logger.info("   " + "─" * 60)
     
+    @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
         """Create stealth browser with multi-monitor support"""
         logger.info(f"🚀 Creating Browser {browser_id}...")
@@ -368,7 +541,8 @@ class FanSaleBot:
                 return True
                 
             return False
-        except:
+        except Exception as e:
+            logger.debug(f"Block check error: {e}")
             return False
 
     def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
@@ -390,7 +564,7 @@ class FanSaleBot:
             
             # Navigate to blank page
             driver.get("about:blank")
-            time.sleep(1)
+            time.sleep(random.uniform(0.8, 1.5))
             
             logger.info(f"✅ Browser {browser_id} data cleared")
             self.stats['blocks_encountered'] += 1
@@ -406,7 +580,7 @@ class FanSaleBot:
         # Navigate to event page
         logger.info(f"📍 Navigating to: {self.target_url}")
         driver.get(self.target_url)
-        time.sleep(3)
+        time.sleep(random.uniform(2.5, 3.5))
         
         check_count = 0
         last_refresh = time.time()
@@ -423,7 +597,7 @@ class FanSaleBot:
                     logger.warning(f"⚠️ Hunter {browser_id}: 404 block detected!")
                     self.clear_browser_data(driver, browser_id)
                     driver.get(self.target_url)
-                    time.sleep(3)
+                    time.sleep(random.uniform(2.5, 3.5))
                     continue
                 
                 # Session refresh every 15 minutes
@@ -514,7 +688,7 @@ class FanSaleBot:
             except TimeoutException:
                 logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")
                 driver.refresh()
-                time.sleep(2)
+                time.sleep(random.uniform(1.5, 2.5))
                 
             except WebDriverException as e:
                 if "invalid session" in str(e).lower():
@@ -527,6 +701,7 @@ class FanSaleBot:
                 logger.error(f"Hunter {browser_id} error: {e}")
                 time.sleep(5)
     
+    @retry(max_attempts=2, delay=0.5, exceptions=(ElementNotInteractableException, StaleElementReferenceException))
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
         """Attempt to purchase a ticket"""
         try:
@@ -535,7 +710,7 @@ class FanSaleBot:
             # Click the ticket
             driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", ticket_element)
             driver.execute_script("arguments[0].click();", ticket_element)
-            time.sleep(1)
+            time.sleep(random.uniform(0.8, 1.2))
             
             # Find and click buy button
             buy_selectors = [
@@ -571,7 +746,7 @@ class FanSaleBot:
                     
                     return True
                     
-                except:
+                except Exception as e:
                     continue
                     
             logger.warning(f"Hunter {browser_id}: Couldn't find buy button")
@@ -610,66 +785,6 @@ class FanSaleBot:
         
         print(f"\n{Colors.BOLD}{'═' * 60}{Colors.END}\n")
     
-    def configure_ticket_filters(self):
-        """Configure which ticket types to hunt for"""
-        print(f"\n{Colors.BOLD}🎯 TICKET TYPE SELECTION{Colors.END}")
-        print(f"{Colors.BOLD}{'=' * 50}{Colors.END}")
-        print("\nAvailable ticket types:")
-        print(f"  1. {Colors.GREEN}Prato A{Colors.END} - Usually front lawn/standing area")
-        print(f"  2. {Colors.BLUE}Prato B{Colors.END} - Usually back lawn/standing area")
-        print(f"  3. {Colors.YELLOW}Settore{Colors.END} - Numbered sector seats")
-        print(f"  4. {Colors.CYAN}All types{Colors.END} - Hunt for any of the above")
-        print(f"  5. {Colors.RED}Other/Unknown{Colors.END} - Tickets that don't match above categories")
-        
-        while True:
-            choice = input(f"\n{Colors.BOLD}Select ticket types to hunt (comma-separated, e.g., 1,2 or 4 for all):{Colors.END} ").strip()
-            
-            if not choice:
-                print(f"{Colors.RED}❌ Please make a selection{Colors.END}")
-                continue
-                
-            try:
-                selections = [int(x.strip()) for x in choice.split(',')]
-                
-                # Validate selections
-                if any(s < 1 or s > 5 for s in selections):
-                    print(f"{Colors.RED}❌ Invalid selection. Please use numbers 1-5{Colors.END}")
-                    continue
-                
-                # Process selections
-                self.ticket_types_to_hunt.clear()
-                
-                if 4 in selections:  # All types
-                    self.ticket_types_to_hunt = {'prato_a', 'prato_b', 'settore'}
-                    print(f"\n{Colors.GREEN}✅ Hunting for: ALL ticket types (Prato A, B, Settore){Colors.END}")
-                else:
-                    type_map = {
-                        1: 'prato_a',
-                        2: 'prato_b', 
-                        3: 'settore',
-                        5: 'other'
-                    }
-                    
-                    for s in selections:
-                        if s in type_map:
-                            self.ticket_types_to_hunt.add(type_map[s])
-                    
-                    # Display selected types
-                    display_names = {
-                        'prato_a': f"{Colors.GREEN}Prato A{Colors.END}",
-                        'prato_b': f"{Colors.BLUE}Prato B{Colors.END}",
-                        'settore': f"{Colors.YELLOW}Settore{Colors.END}",
-                        'other': f"{Colors.RED}Other/Unknown{Colors.END}"
-                    }
-                    
-                    selected_display = [display_names[t] for t in self.ticket_types_to_hunt]
-                    print(f"\n{Colors.GREEN}✅ Hunting for: {', '.join(selected_display)}{Colors.END}")
-                
-                break
-                
-            except ValueError:
-                print(f"{Colors.RED}❌ Invalid input. Please enter numbers separated by commas{Colors.END}")
-
     def configure_ticket_filters(self):
         """Allow user to select which ticket types to hunt for"""
         print(f"\n{Colors.BOLD}🎯 SELECT TICKET TYPES TO HUNT{Colors.END}")
@@ -773,8 +888,62 @@ class FanSaleBot:
             except ValueError:
                 print(f"{Colors.RED}❌ Invalid number{Colors.END}")
         
-2
+        # Max tickets
+        while True:
+            try:
+                max_t = input(f"\n{Colors.BOLD}🎫 Max tickets to reserve (1-4, default 2):{Colors.END} ").strip()
+                if not max_t:
+                    self.max_tickets = 2
+                    break
+                self.max_tickets = int(max_t)
+                if 1 <= self.max_tickets <= 4:
+                    break
+                print(f"{Colors.RED}❌ Please enter 1-4{Colors.END}")
+            except ValueError:
+                print(f"{Colors.RED}❌ Invalid number{Colors.END}")
+        
+        # Configure ticket type filters
+        self.configure_ticket_filters()
+        
+        # Summary
+        print(f"\n{Colors.BOLD}📋 Configuration Summary:{Colors.END}")
+        print(f"   • Browsers: {self.num_browsers}")
+        print(f"   • Max tickets: {self.max_tickets}")
+        
+        # Show selected ticket types
+        type_display = {
+            'prato_a': 'Prato A',
+            'prato_b': 'Prato B',
+            'settore': 'Settore',
+            'other': 'Other/Unknown'
+        }
+        selected = [type_display[t] for t in sorted(self.ticket_types_to_hunt)]
+        print(f"   • Hunting for: {', '.join(selected)}")
+        
+        print(f"   • Target URL: {self.target_url[:50]}...")
+        print(f"\n{Colors.GREEN}⚡ NO LOGIN REQUIRED - Direct ticket hunting!{Colors.END}")
+    
+    def run(self):
+        """Main execution with enhanced tracking"""
+        try:
+            # Configure
+            self.configure()
+            
+            # Create browsers
+            print(f"\n{Colors.BOLD}🚀 Starting {self.num_browsers} browser(s)...{Colors.END}")
+            
+            for i in range(1, self.num_browsers + 1):
+                driver = self.create_browser(i)
+                if driver:
+                    self.browsers.append(driver)
+            
+            if not self.browsers:
+                logger.error("❌ No browsers created")
+                return
 
+            logger.info(f"✅ {len(self.browsers)} browser(s) ready!")
+            
+            # Show tip about monitoring
             print(f"\n{Colors.CYAN}💡 TIP: Browsers are positioned for multi-monitor setups{Colors.END}")
             print(f"{Colors.CYAN}   Move them to your preferred monitors if needed{Colors.END}")
             
@@ -823,8 +992,8 @@ class FanSaleBot:
             for driver in self.browsers:
                 try:
                     driver.quit()
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug(f"Error closing browser: {e}")
             
             # Show final statistics
             print(f"\n{Colors.BOLD}{Colors.CYAN}📊 FINAL SESSION STATISTICS{Colors.END}")
@@ -832,15 +1001,17 @@ class FanSaleBot:
 
 
 def main():
-    """Entry point"""
+    """Enhanced entry point with configuration support"""
     print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
-    print(f"{Colors.BOLD}{Colors.CYAN}🎫 FANSALE BOT - ENHANCED NO LOGIN EDITION{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.CYAN}🎫 FANSALE BOT - ENTERPRISE EDITION{Colors.END}")
     print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
-    print(f"\n{Colors.GREEN}✨ Featuring:{Colors.END}")
+    print(f"\n{Colors.GREEN}✨ Features:{Colors.END}")
     print("  • Ticket type tracking (Prato A, B, Settore)")
-    print("  • Duplicate detection")
+    print("  • Duplicate detection with notifications")
     print("  • Persistent statistics")
     print("  • Multi-monitor support")
+    print("  • Health monitoring")
+    print("  • Advanced retry logic")
     
     # Check dependencies
     try:
@@ -854,17 +1025,35 @@ def main():
     # Load environment
     load_dotenv()
     
+    # Load configuration
+    config_path = Path("bot_config.json")
+    config = BotConfig.from_file(config_path)
+    
+    # Save default config if not exists
+    if not config_path.exists():
+        config.save(config_path)
+        print(f"\n{Colors.YELLOW}📝 Created default configuration: {config_path}{Colors.END}")
+    
     # Check for target URL
     if not os.getenv('FANSALE_TARGET_URL'):
         print(f"\n{Colors.YELLOW}⚠️  No target URL in .env file{Colors.END}")
         print("Using default Bruce Springsteen URL")
         print("To change, add to .env file:")
         print("FANSALE_TARGET_URL=https://www.fansale.it/fansale/tickets/...")
-        time.sleep(2)
+        time.sleep(random.uniform(1.5, 2.5))
     
-    # Run bot
-    bot = FanSaleBot()
-    bot.run()
+    # Run bot with configuration
+    bot = FanSaleBot(config)
+    
+    try:
+        bot.run()
+    except KeyboardInterrupt:
+        print(f"\n{Colors.YELLOW}👋 Graceful shutdown initiated...{Colors.END}")
+    except Exception as e:
+        print(f"\n{Colors.RED}❌ Fatal error: {e}{Colors.END}")
+        logging.exception("Fatal error in main")
+    finally:
+        print(f"\n{Colors.GREEN}✅ Thank you for using FanSale Bot!{Colors.END}")
 
 
 if __name__ == "__main__":

@@ -1,14 +1,14 @@
 {
-  "total_checks": 3239,
-  "total_tickets_found": 1631,
-  "unique_tickets_found": 11,
+  "total_checks": 5754,
+  "total_tickets_found": 1890,
+  "unique_tickets_found": 12,
   "tickets_by_type": {
     "prato_a": 0,
     "prato_b": 0,
     "settore": 0,
-    "other": 11
+    "other": 12
   },
   "purchases": 0,
-  "blocks_encountered": 10,
-  "all_time_runtime": 26773.769543886185
+  "blocks_encountered": 18,
+  "all_time_runtime": 46115.42093253136
 }

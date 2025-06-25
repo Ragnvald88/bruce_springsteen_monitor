@@ -1,1241 +1,1298 @@
 #!/usr/bin/env python3
 """
-FanSale Bot - Ultimate Single-File Edition
-Optimized for speed, stability, and session management
+FanSale Ticket Hunter Bot - Fixed Version
+Fixes false block detection and ensures fast ticket purchasing
 """
 
-import os
-import sys
+import json
 import time
 import random
 import logging
+import hashlib
+import os
+import sys
 import threading
-import traceback
-import json
-import shutil
+import subprocess
+import tempfile
 from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-
-# Suppress verbose WebDriver logs
-os.environ['WDM_LOG_LEVEL'] = '0'
-logging.getLogger('selenium').setLevel(logging.WARNING)
-logging.getLogger('urllib3').setLevel(logging.WARNING)
-logging.getLogger('seleniumwire').setLevel(logging.WARNING)
+from typing import Optional, Dict, List, Set
+from concurrent.futures import ThreadPoolExecutor
+from functools import wraps
 
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
-
+from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
+
+# Load environment variables
 load_dotenv()
 
-# Import enhanced utilities if available
-try:
-    from utilities.stealth_enhancements import StealthEnhancements
-    from utilities.speed_optimizer import SpeedOptimizer, FastTicketChecker
-    from utilities.session_manager import SessionManager
-    ENHANCED_MODE = True
-except ImportError:
-    ENHANCED_MODE = False
-
-# Configure cleaner logging
-class CleanFormatter(logging.Formatter):
-    """Custom formatter to suppress WebDriver stack traces"""
-    def format(self, record):
-        msg = str(record.msg)
-        if "Stacktrace:" in msg:
-            # Extract just the error message
-            msg = msg.split('\n')[0]
-            record.msg = msg
-        return super().format(record)
-
-# Set up logging
-logging.basicConfig(level=logging.WARNING)  # Suppress most logs
-logger = logging.getLogger('FanSaleBot')
-logger.setLevel(logging.INFO)
-
-# Console handler with clean formatter
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(CleanFormatter('%(asctime)s | %(threadName)-10s | %(message)s', datefmt='%H:%M:%S'))
-logger.handlers = [console_handler]
-
-# Also log to file
-file_handler = logging.FileHandler('fansale_bot.log')
-file_handler.setFormatter(CleanFormatter('%(asctime)s | %(threadName)-10s | %(message)s', datefmt='%H:%M:%S'))
-logger.addHandler(file_handler)
-
-
-class FanSaleBot:
-    """The definitive FanSale ticket bot - handles 404s and session management"""
-    
+# Configuration
+class BotConfig:
+    """Bot configuration with all settings"""
     def __init__(self):
-        # Load saved configuration
-        self.config = self.load_configuration()
+        self.browsers_count = 2
+        self.max_tickets = 4
+        self.refresh_interval = 60  # seconds
+        self.session_timeout = 900  # 15 minutes
         
-        # Credentials from env
-        self.email = os.getenv('FANSALE_EMAIL')
-        self.password = os.getenv('FANSALE_PASSWORD')
-        self.target_url = os.getenv('FANSALE_TARGET_URL', 
-                                    "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388")
+        # Check frequency settings
+        self.checks_per_minute = 120  # Default: 2 checks per second
+        self.min_wait = 0.4  # Minimum wait between checks
+        self.max_wait = 0.6  # Maximum wait between checks
         
-        # Apply configuration
-        self.num_browsers = self.config.get('num_browsers', 2)
-        self.use_proxy = self.config.get('use_proxy', False)
-        self.use_auto_login = self.config.get('use_auto_login', True)
-        self.max_tickets = self.config.get('max_tickets', 4)
-        self.ticket_filters = self.config.get('ticket_filters', [])
-        self.filter_mode = self.config.get('filter_mode', 'any')
-        self.session_refresh_interval = self.config.get('session_refresh_interval', 900)
-        self.clear_profiles_on_start = self.config.get('clear_profiles_on_start', False)
+        # Logging settings
+        self.log_level = "INFO"
+        self.status_update_interval = 50  # Update status every N checks
+        self.detailed_logging = False
+        self.debug_mode = False  # NEW: For debugging ticket detection
         
-        # Browser management
-        self.browsers = []
-        self.browser_threads = []
-        self.purchase_lock = threading.Lock()
-        self.tickets_secured = 0
-        self.shutdown_event = threading.Event()
+        self.retry_attempts = 2
+        self.retry_delay = 0.5
+        self.ticket_types_to_hunt = ['prato_b', 'prato_a']
+        self.ticket_filters = []
+    
+    def calculate_wait_time(self):
+        """Calculate wait time based on desired checks per minute"""
+        # Calculate base wait time for desired rate
+        base_wait = 60.0 / self.checks_per_minute
         
-        # Enhanced statistics tracking
-        self.stats = {
-            'total_checks': 0,
-            'no_ticket_found': 0,
-            'tickets_found': 0,
-            'successful_checkouts': 0,
-            'already_reserved': 0,
-            'start_time': None,
-            'ticket_categories': {
-                'prato_a': 0,
-                'prato_b': 0,
-                'settore': 0,
-                'tribuna': 0,
-                'other': 0
-            }
+        # Add some randomization within min/max bounds
+        return max(self.min_wait, min(self.max_wait, 
+                   base_wait + random.uniform(-0.1, 0.1)))
+    
+    def to_dict(self):
+        return {
+            'browsers_count': self.browsers_count,
+            'max_tickets': self.max_tickets,
+            'refresh_interval': self.refresh_interval,
+            'session_timeout': self.session_timeout,
+            'checks_per_minute': self.checks_per_minute,
+            'min_wait': self.min_wait,
+            'max_wait': self.max_wait,
+            'log_level': self.log_level,
+            'status_update_interval': self.status_update_interval,
+            'detailed_logging': self.detailed_logging,
+            'debug_mode': self.debug_mode,
+            'retry_attempts': self.retry_attempts,
+            'retry_delay': self.retry_delay,
+            'ticket_types_to_hunt': self.ticket_types_to_hunt,
+            'ticket_filters': self.ticket_filters
         }
+    
+    def from_dict(self, data):
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+# Enhanced retry decorator
+def retry(max_attempts=3, delay=1.0, exceptions=(Exception,)):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt < max_attempts - 1:
+                        logger.warning(f"Attempt {attempt + 1} failed: {e}. Retrying...")
+                        time.sleep(delay)
+                    else:
+                        raise
+            return None
+        return wrapper
+    return decorator
+
+# Statistics Manager
+class StatsManager:
+    """Manages bot statistics with persistence"""
+    def __init__(self, stats_file='fansale_stats_fixed.json'):
+        self.stats_file = stats_file
+        self.stats = self.load_stats()
+    
+    def load_stats(self):
+        """Load statistics from file"""
+        if os.path.exists(self.stats_file):
+            try:
+                with open(self.stats_file, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
         
-        # Session management
-        self.last_login_check = {}
-        self.login_check_interval = 300  # 5 minutes
-        self.last_session_refresh = {}
-        
-        # Enhanced features if available
-        if ENHANCED_MODE:
-            self.stealth = StealthEnhancements()
-            self.optimizer = SpeedOptimizer()
-            self.session_manager = SessionManager()
-        
-    def play_alarm(self, success=True):
-        """Play alarm sound when ticket is secured"""
-        try:
-            if sys.platform == "win32":
-                # Windows
-                import winsound
-                frequency = 1000 if success else 500
-                duration = 500
-                for _ in range(3):
-                    winsound.Beep(frequency, duration)
-                    time.sleep(0.1)
-            elif sys.platform == "darwin":
-                # macOS
-                os.system('afplay /System/Library/Sounds/Glass.aiff')
-            else:
-                # Linux - use system bell
-                for _ in range(3):
-                    print('\a', end='', flush=True)
-                    time.sleep(0.1)
-        except:
-            # Fallback - just log
-            logger.info("🔔🔔🔔 ALARM: TICKET IN CHECKOUT! 🔔🔔🔔")
+        return {
+            'total_checks': 0,
+            'total_tickets_found': 0,
+            'unique_tickets_found': 0,
+            'tickets_by_type': {'prato_a': 0, 'prato_b': 0, 'settore': 0},
+            'purchases': 0,
+            'blocks_encountered': 0,
+            'all_time_runtime': 0.0,
+            'sessions': []
+        }
     
     def save_stats(self):
         """Save statistics to file"""
-        stats_file = Path('stats.json')
         try:
-            with open(stats_file, 'w') as f:
+            with open(self.stats_file, 'w') as f:
                 json.dump(self.stats, f, indent=2)
         except Exception as e:
             logger.error(f"Failed to save stats: {e}")
+
+# Color codes for terminal
+class Colors:
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    END = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+# Notification Manager
+class NotificationManager:
+    """Handles system notifications for important events"""
     
-    def log_stats(self):
-        """Log current statistics"""
-        elapsed = time.time() - self.stats['start_time'] if self.stats['start_time'] else 0
-        minutes = int(elapsed // 60)
-        
-        logger.info("="*60)
-        logger.info(f"📊 STATISTICS - Running for {minutes} minutes")
-        logger.info(f"   Total Checks: {self.stats['total_checks']}")
-        logger.info(f"   No Tickets Found: {self.stats['no_ticket_found']}")
-        logger.info(f"   Tickets Detected: {self.stats['tickets_found']}")
-        logger.info(f"   Successful Checkouts: {self.stats['successful_checkouts']}")
-        logger.info(f"   Already Reserved: {self.stats['already_reserved']}")
-        logger.info(f"   Check Rate: {self.stats['total_checks'] / (elapsed / 60):.1f}/min" if elapsed > 0 else "N/A")
-        
-        if self.ticket_filters:
-            logger.info(f"   Active Filters: {', '.join(self.ticket_filters)} ({self.filter_mode})")
-        
-        logger.info("="*60)
-        
-        self.save_stats()
+    @staticmethod
+    def send_notification(title, message):
+        """Send desktop notification"""
+        try:
+            if sys.platform == 'darwin':  # macOS
+                subprocess.run([
+                    'osascript', '-e',
+                    f'display notification "{message}" with title "{title}"'
+                ])
+            elif sys.platform.startswith('linux'):
+                subprocess.run(['notify-send', title, message])
+            # Windows would use win10toast or similar
+        except:
+            pass  # Fail silently if notifications not available
+
+# Health Monitor
+class HealthMonitor:
+    """Monitors bot health and performance"""
+    def __init__(self):
+        self.start_time = time.time()
+        self.check_counts = {}
+        self.error_counts = {}
+        self.last_ticket_time = {}
     
-    def get_proxy_config(self):
-        """Get proxy configuration with data-saving features"""
-        if not self.use_proxy:
-            return None
-            
-        required_vars = ['IPROYAL_USERNAME', 'IPROYAL_PASSWORD', 'IPROYAL_HOSTNAME', 'IPROYAL_PORT']
-        if not all(os.getenv(k) for k in required_vars):
-            logger.warning("⚠️  Proxy credentials incomplete. Running without proxy.")
-            return None
-            
-        proxy_auth = f"{os.getenv('IPROYAL_USERNAME')}:{os.getenv('IPROYAL_PASSWORD')}"
-        proxy_server = f"{os.getenv('IPROYAL_HOSTNAME')}:{os.getenv('IPROYAL_PORT')}"
-        
-        # Data-saving request interceptor
-        def block_resources(request):
-            # Block these resource types to save data
-            block_patterns = [
-                '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp',
-                'font', '.woff', '.woff2', '.ttf',
-                '.css',  # Block CSS when using proxy
-                'analytics', 'google-analytics', 'googletagmanager',
-                'facebook', 'doubleclick', 'amazon-adsystem',
-                'tracking', 'hotjar', 'cloudflare'
-            ]
-            
-            if any(pattern in request.url.lower() for pattern in block_patterns):
-                request.abort()
-                
-        logger.info("🔐 Proxy configured with data-saving mode")
-        
-        return {
-            'proxy': {
-                'http': f'http://{proxy_auth}@{proxy_server}',
-                'https': f'https://{proxy_auth}@{proxy_server}'
-            },
-            'request_interceptor': block_resources,
-            'suppress_connection_errors': True
-        }
+    def record_check(self, browser_id):
+        self.check_counts[browser_id] = self.check_counts.get(browser_id, 0) + 1
     
-    def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create a browser with optimal settings and version handling"""
-        logger.info(f"🚀 Creating Browser {browser_id}...")
+    def record_error(self, browser_id, error_type):
+        if browser_id not in self.error_counts:
+            self.error_counts[browser_id] = {}
+        self.error_counts[browser_id][error_type] = \
+            self.error_counts[browser_id].get(error_type, 0) + 1
+    
+    def get_health_status(self):
+        """Get overall health status"""
+        runtime = time.time() - self.start_time
+        total_checks = sum(self.check_counts.values())
+        total_errors = sum(sum(errors.values()) for errors in self.error_counts.values())
         
-        def create_chrome_options():
-            """Create fresh ChromeOptions instance"""
-            options = uc.ChromeOptions()
+        if runtime > 0:
+            checks_per_minute = (total_checks / runtime) * 60
+            error_rate = total_errors / max(total_checks, 1)
             
-            # Persistent profile
-            profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
-            profile_dir.mkdir(parents=True, exist_ok=True)
-            options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
-            
-            # Apply enhanced stealth if available
-            if ENHANCED_MODE:
-                for arg in self.stealth.get_enhanced_chrome_options():
-                    options.add_argument(arg)
-                for arg in self.optimizer.get_performance_chrome_options():
-                    options.add_argument(arg)
-            
-            # Essential stealth options (always enabled)
-            stealth_args = [
-                '--disable-blink-features=AutomationControlled',
-                '--disable-dev-shm-usage',
-                '--no-sandbox',
-                '--disable-infobars',
-                '--disable-gpu-sandbox',
-                '--disable-background-timer-throttling',
-                '--disable-backgrounding-occluded-windows',
-                '--disable-renderer-backgrounding',
-                '--disable-features=TranslateUI',
-                '--disable-ipc-flooding-protection',
-            ]
-            
-            for arg in stealth_args:
-                options.add_argument(arg)
-            
-            # Data saving when using proxy
-            if self.use_proxy:
-                prefs = {
-                    "profile.managed_default_content_settings": {
-                        "images": 2,  # Block images
-                        "plugins": 2,  # Block plugins
-                        "popups": 2,  # Block popups
-                        "geolocation": 2,  # Block location
-                        "notifications": 2,  # Block notifications
-                        "media_stream": 2,  # Block media
-                    }
-                }
-                options.add_experimental_option("prefs", prefs)
-                logger.info(f"  📻 Browser {browser_id}: Data-saving mode enabled")
-            
-            # Window positioning
-            positions = [(0, 0), (420, 0), (840, 0), (0, 350), (420, 350)]
-            if browser_id <= len(positions):
-                x, y = positions[browser_id - 1]
-            else:
-                x, y = (0, 0)
-            options.add_argument(f'--window-position={x},{y}')
-            options.add_argument('--window-size=400,320')
-            
-            return options
+            return {
+                'runtime': runtime,
+                'total_checks': total_checks,
+                'checks_per_minute': checks_per_minute,
+                'total_errors': total_errors,
+                'error_rate': error_rate,
+                'status': 'healthy' if error_rate < 0.1 else 'degraded'
+            }
         
-        # Get proxy config
-        proxy_config = self.get_proxy_config()
+        return {'status': 'starting'}
+
+# Enhanced Colored Formatter with log levels
+class ColoredFormatter(logging.Formatter):
+    """Custom formatter with colors and improved formatting"""
+    
+    COLORS = {
+        'DEBUG': Colors.CYAN,
+        'INFO': Colors.GREEN,
+        'WARNING': Colors.YELLOW,
+        'ERROR': Colors.RED,
+        'CRITICAL': Colors.RED + Colors.BOLD
+    }
+    
+    def format(self, record):
+        # Add color based on level
+        levelname = record.levelname
+        if levelname in self.COLORS:
+            record.levelname = f"{self.COLORS[levelname]}{levelname}{Colors.END}"
         
-        # Try multiple approaches for version compatibility
-        driver = None
-        attempts = [
-            (137, "Chrome 137"),      # Try Chrome 137 first (current version)
-            (None, "auto-detection"), # Fall back to auto-detection
-            (138, "Chrome 138"),      # Try Chrome 138 as last resort
-        ]
+        # Color specific message patterns
+        if record.levelname == 'INFO':
+            if 'PRATO A' in record.msg:
+                record.msg = f"{Colors.GREEN}{Colors.BOLD}{record.msg}{Colors.END}"
+            elif 'PRATO B' in record.msg:
+                record.msg = f"{Colors.BLUE}{Colors.BOLD}{record.msg}{Colors.END}"
+            elif 'SETTORE' in record.msg:
+                record.msg = f"{Colors.YELLOW}{Colors.BOLD}{record.msg}{Colors.END}"
+            elif 'NEW TICKET' in record.msg:
+                record.msg = f"{Colors.CYAN}{Colors.BOLD}{record.msg}{Colors.END}"
+            elif '🎫' in record.msg:
+                record.msg = f"{Colors.BOLD}{record.msg}{Colors.END}"
         
-        for version_main, desc in attempts:
+        return super().format(record)
+
+# Configure logging
+logger = logging.getLogger('FanSaleBot')
+logger.setLevel(logging.INFO)
+logger.handlers.clear()
+
+# Console handler with colors
+console_handler = logging.StreamHandler()
+console_formatter = ColoredFormatter(
+    '%(asctime)s | %(levelname)-8s | %(message)s',
+    datefmt='%H:%M:%S'
+)
+console_handler.setFormatter(console_formatter)
+logger.addHandler(console_handler)
+
+# File handler
+file_handler = logging.FileHandler('fansale_bot.log')
+file_formatter = logging.Formatter(
+    '%(asctime)s | %(levelname)-8s | %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+class FanSaleBot:
+    """Main bot class with fixed block detection and fast purchasing"""
+    
+    def __init__(self):
+        # Load configuration
+        self.config = BotConfig()
+        self._load_saved_config()
+        
+        # Apply log level from config
+        logger.setLevel(getattr(logging, self.config.log_level))
+        
+        # Target URL from environment or default
+        self.target_url = os.getenv('FANSALE_TARGET_URL', 
+            'https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388')
+        
+        # Initialize from config
+        self.num_browsers = self.config.browsers_count
+        self.max_tickets = self.config.max_tickets
+        self.ticket_filters = self.config.ticket_filters
+        self.ticket_types_to_hunt = self.config.ticket_types_to_hunt
+        
+        # State management
+        self.browsers = []
+        self.shutdown_event = threading.Event()
+        self.purchase_lock = threading.Lock()
+        self.tickets_secured = 0
+        
+        # Tracking
+        self.seen_tickets = set()
+        self.ticket_details_cache = {}
+        
+        # Statistics
+        self.stats_file = 'fansale_stats_fixed.json'
+        self.stats_manager = StatsManager(self.stats_file)
+        self.stats = self.stats_manager.stats
+        
+        # Session tracking
+        self.session_start_time = time.time()
+        
+        # Health monitoring
+        self.health_monitor = HealthMonitor()
+        self.notification_manager = NotificationManager()
+
+    
+    def _load_saved_config(self):
+        """Load saved configuration"""
+        config_file = 'bot_config_fixed.json'
+        if os.path.exists(config_file):
             try:
-                logger.info(f"🔄 Attempting with {desc}...")
-                options = create_chrome_options()
-                
-                if proxy_config:
-                    driver = uc.Chrome(options=options, seleniumwire_options=proxy_config, version_main=version_main)
-                else:
-                    driver = uc.Chrome(options=options, version_main=version_main)
-                
-                driver.set_page_load_timeout(20)
-                
-                # Test if driver works
-                driver.execute_script("return navigator.userAgent")
-                
-                # Inject stealth JavaScript
-                if ENHANCED_MODE:
-                    driver.execute_script(self.stealth.get_stealth_javascript())
-                    driver.execute_script(self.optimizer.get_fast_page_load_script())
-                    self.optimizer.optimize_dom_queries(driver)
-                else:
-                    # Basic stealth
-                    driver.execute_script("""
-                        // Remove webdriver property
-                        Object.defineProperty(navigator, 'webdriver', {
-                            get: () => undefined
-                        });
-                        
-                        // Add chrome object
-                        window.chrome = {
-                            runtime: {},
-                            loadTimes: function() {},
-                            csi: function() {},
-                            app: {}
-                        };
-                        
-                        // Enhanced stealth
-                        Object.defineProperty(navigator, 'plugins', {
-                            get: () => [1, 2, 3, 4, 5]
-                        });
-                        
-                        Object.defineProperty(navigator, 'languages', {
-                            get: () => ['en-US', 'en']
-                        });
-                        
-                        // Console log to verify
-                        console.log('Stealth mode activated');
-                    """)
-                
-                logger.info(f"✅ Browser {browser_id} created successfully using {desc}")
-                return driver
-                
+                with open(config_file, 'r') as f:
+                    data = json.load(f)
+                    self.config.from_dict(data)
+                    logger.info("✅ Loaded saved configuration")
             except Exception as e:
-                if driver:
-                    try:
-                        driver.quit()
-                    except:
-                        pass
-                        
-                if "version" in str(e).lower():
-                    logger.warning(f"Version mismatch with {desc}")
-                    continue
-                elif attempt < len(attempts) - 1:
-                    continue
-                else:
-                    # Final attempt failed
-                    logger.error(f"❌ Failed to create browser {browser_id}: {e}")
-                    
-                    if "version" in str(e).lower():
-                        logger.error("\n" + "="*60)
-                        logger.error("🚨 CHROMEDRIVER VERSION MISMATCH!")
-                        logger.error("="*60)
-                        logger.error("Please run: python3 fix_chromedriver.py")
-                        logger.error("="*60 + "\n")
-                    
-                    return None
+                logger.warning(f"Failed to load config: {e}")
+    
+    def _save_config(self):
+        """Save current configuration"""
+        try:
+            with open('bot_config_fixed.json', 'w') as f:
+                json.dump(self.config.to_dict(), f, indent=2)
+            logger.info("✅ Configuration saved")
+        except Exception as e:
+            logger.error(f"Failed to save config: {e}")
+    
+    def _keep_browser_alive(self, driver, browser_id):
+        """Check if browser is still responsive"""
+        try:
+            driver.execute_script("return 1")
+            return True
+        except:
+            logger.error(f"Browser {browser_id} is not responsive")
+            return False
+    
+    def detect_chrome_version(self):
+        """Detect installed Chrome version"""
+        try:
+            if sys.platform == 'darwin':
+                result = subprocess.run(
+                    ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '--version'],
+                    capture_output=True, text=True
+                )
+            elif sys.platform == 'win32':
+                result = subprocess.run(
+                    [r"C:\Program Files\Google\Chrome\Application\chrome.exe", "--version"],
+                    capture_output=True, text=True
+                )
+            else:
+                result = subprocess.run(
+                    ["google-chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            
+            if result.returncode == 0:
+                version_string = result.stdout.strip()
+                version_parts = version_string.split()[-1].split('.')
+                if version_parts:
+                    return int(version_parts[0])
+        except Exception as e:
+            logger.debug(f"Could not detect Chrome version: {e}")
         
         return None
     
-    def manual_login(self, browser_id: int, driver: uc.Chrome) -> bool:
-        """Handle login for a browser (manual or automatic)"""
-        logger.info(f"🔐 Login required for Browser {browser_id}")
-        
+    def save_stats(self):
+        """Save statistics with session info"""
         try:
-            # Check if already logged in
-            driver.get(self.target_url)
-            time.sleep(2)
+            # Update session info
+            session_runtime = time.time() - self.session_start_time
+            current_session = {
+                'start_time': datetime.fromtimestamp(self.session_start_time).isoformat(),
+                'runtime': session_runtime,
+                'tickets_found': self.stats['unique_tickets_found'],
+                'purchases': self.stats['purchases'],
+                'checks': self.stats['total_checks']
+            }
             
+            # Keep only last 10 sessions
+            if 'sessions' not in self.stats:
+                self.stats['sessions'] = []
             
-            if self.verify_login(driver):
-                logger.info(f"✅ Browser {browser_id} already logged in!")
-                return True
-            
-            # Auto-login if enabled and utilities available
-            if self.use_auto_login and ENHANCED_MODE:
-                logger.info(f"🤖 Attempting automatic login for Browser {browser_id}...")
-                if self.session_manager.auto_login(driver, self.email, self.password):
-                    driver.get(self.target_url)
-                    time.sleep(2)
-                    if self.verify_login(driver):
-                        logger.info(f"✅ Browser {browser_id} auto-logged in successfully!")
-                        self.last_login_check[browser_id] = time.time()
-                        self.last_session_refresh[browser_id] = time.time()
-                        return True
-                logger.warning(f"Auto-login failed for Browser {browser_id}, falling back to manual...")
-            
-            # Manual login
-            driver.get("https://www.fansale.it/fansale/login.htm")
-            
-            print(f"\n{'='*60}")
-            print(f"🔐 LOGIN REQUIRED - BROWSER #{browser_id}")
-            print(f"{'='*60}")
-            print(f"Email: {self.email}")
-            print(f"Password: {'*' * len(self.password)}")
-            print(f"{'='*60}\n")
-            
-            input(f"✋ Press Enter after Browser #{browser_id} is logged in...")
-            
-            # Navigate back to target
-            driver.get(self.target_url)
-            time.sleep(2)
-            
-            if self.verify_login(driver):
-                logger.info(f"✅ Browser {browser_id} logged in successfully!")
-                self.last_login_check[browser_id] = time.time()
-                self.last_session_refresh[browser_id] = time.time()
-                return True
+            # Update or add current session
+            if self.stats['sessions'] and \
+               self.stats['sessions'][-1]['start_time'] == current_session['start_time']:
+                self.stats['sessions'][-1] = current_session
             else:
-                logger.error(f"❌ Browser {browser_id} login verification failed")
-                return False
-                
+                self.stats['sessions'].append(current_session)
+                if len(self.stats['sessions']) > 10:
+                    self.stats['sessions'] = self.stats['sessions'][-10:]
+            
+            # Update all-time runtime
+            self.stats['all_time_runtime'] = sum(s['runtime'] for s in self.stats['sessions'])
+            
+            # Save to file
+            self.stats_manager.stats = self.stats
+            self.stats_manager.save_stats()
+            
         except Exception as e:
-            logger.error(f"Login error for Browser {browser_id}: {e}")
-            return False
+            logger.error(f"Error saving stats: {e}")
     
-    def verify_login(self, driver: uc.Chrome) -> bool:
-        """Verify if browser is logged in - PROPERLY FIXED"""
+    def categorize_ticket(self, ticket_text):
+        """Categorize ticket based on text content"""
+        text_lower = ticket_text.lower()
+        
+        if 'prato a' in text_lower:
+            return 'prato_a'
+        elif 'prato b' in text_lower:
+            return 'prato_b'
+        elif 'settore' in text_lower or 'tribuna' in text_lower:
+            return 'settore'
+        else:
+            return 'settore'
+    
+    def generate_ticket_hash(self, ticket_text):
+        """Generate unique hash for ticket identification"""
+        # Normalize text by removing extra spaces and converting to lowercase
+        normalized = ' '.join(ticket_text.lower().split())
+        return hashlib.md5(normalized.encode()).hexdigest()
+    
+    def extract_full_ticket_info(self, driver, ticket_element):
+        """Extract comprehensive ticket information"""
         try:
-            page_source = driver.page_source.lower()
+            ticket_info = {
+                'raw_text': '',
+                'price': 'N/A',
+                'location': 'N/A',
+                'quantity': 1,
+                'category': 'unknown',
+                'element': ticket_element,
+                'timestamp': datetime.now().isoformat()
+            }
             
-            # First check if we're on a login page
-            if 'login' in driver.current_url or '/login.htm' in driver.current_url:
-                return False
+            # Get raw text
+            try:
+                ticket_info['raw_text'] = ticket_element.text.strip()
+            except:
+                ticket_info['raw_text'] = 'Text extraction failed'
             
-            # Look for login button/link that indicates NOT logged in
-            not_logged_indicators = [
-                'accedi per acquistare',  # Login to purchase
-                'effettua il login',      # Please login
-                'registrati/accedi',       # Register/Login
-                '>login<',                 # Login button
-                '>accedi<'                 # Login button in Italian
-            ]
+            # Extract price
+            try:
+                price_elem = ticket_element.find_element(By.CSS_SELECTOR, "[data-qa='ticketPrice']")
+                ticket_info['price'] = price_elem.text.strip()
+            except:
+                pass
             
-            # If we find these, we're NOT logged in
-            if any(indicator in page_source for indicator in not_logged_indicators):
-                return False
+            # Extract location details
+            try:
+                location_elem = ticket_element.find_element(By.CSS_SELECTOR, "[data-qa='ticketLocation']")
+                ticket_info['location'] = location_elem.text.strip()
+            except:
+                pass
             
-            # Positive indicators of being logged in
-            logged_in_indicators = [
-                'il mio fansale',
-                'my fansale', 
-                'mio account',
-                'logout',
-                'esci',
-                'ciao,'  # Hello, username
-            ]
+            # Extract quantity
+            try:
+                quantity_elem = ticket_element.find_element(By.CSS_SELECTOR, "[data-qa='ticketQuantity']")
+                qty_text = quantity_elem.text.strip()
+                if qty_text.isdigit():
+                    ticket_info['quantity'] = int(qty_text)
+            except:
+                pass
             
-            # If we find these, we ARE logged in
-            if any(indicator in page_source for indicator in logged_in_indicators):
-                return True
+            # Categorize based on full text
+            full_text = f"{ticket_info['raw_text']} {ticket_info['location']}"
+            ticket_info['category'] = self.categorize_ticket(full_text)
+            
+            return ticket_info
+            
+        except Exception as e:
+            logger.error(f"Error extracting ticket info: {e}")
+            return {
+                'raw_text': 'Error extracting info',
+                'price': 'N/A',
+                'location': 'N/A',
+                'quantity': 1,
+                'category': 'unknown',
+                'element': ticket_element,
+                'timestamp': datetime.now().isoformat()
+            }
+    
+    def log_new_ticket(self, ticket_info, browser_id):
+        """Log newly discovered ticket with emojis and colors"""
+        category = ticket_info['category']
+        
+        # Choose emoji and color based on category
+        if category == 'prato_a':
+            emoji = '🟢'
+            category_display = f"{Colors.GREEN}{Colors.BOLD}PRATO A{Colors.END}"
+        elif category == 'prato_b':
+            emoji = '🔵'
+            category_display = f"{Colors.BLUE}{Colors.BOLD}PRATO B{Colors.END}"
+        else:
+            emoji = '🟡'
+            category_display = f"{Colors.YELLOW}{Colors.BOLD}SETTORE{Colors.END}"
+        
+        # Build log message
+        log_parts = [
+            f"\n{Colors.CYAN}{'='*60}{Colors.END}",
+            f"{emoji} {Colors.BOLD}NEW TICKET FOUND!{Colors.END} {emoji}",
+            f"Browser: {browser_id} | Type: {category_display}",
+            f"Price: {Colors.BOLD}{ticket_info['price']}{Colors.END}",
+            f"Location: {ticket_info['location']}",
+            f"Quantity: {ticket_info['quantity']}",
+            f"Time: {datetime.now().strftime('%H:%M:%S')}",
+            f"{Colors.CYAN}{'='*60}{Colors.END}"
+        ]
+        
+        # Log to console
+        for line in log_parts:
+            logger.info(line)
+        
+        # Send notification for matching tickets
+        if category in self.ticket_types_to_hunt:
+            self.notification_manager.send_notification(
+                "🎫 FanSale Ticket Found!",
+                f"{category.upper()} ticket available - {ticket_info['price']}"
+            )
+    
+    def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
+        """Create browser with optimized configuration and NO POPUPS"""
+        logger.info(f"🚀 Creating Browser {browser_id}...")
+        
+        max_retries = 3
+        for retry in range(max_retries):
+            try:
+                # Detect Chrome version once
+                if not hasattr(self, '_chrome_version'):
+                    self._chrome_version = self.detect_chrome_version()
+                    if self._chrome_version:
+                        logger.info(f"🔍 Detected Chrome version: {self._chrome_version}")
                 
-            # Default to not logged in to be safe
-            return False
-            
-        except:
-            return False
-    
-    def is_blocked(self, driver: uc.Chrome) -> bool:
-        """Check if we're getting blocked or 404"""
-        try:
-            # Check for common block indicators
-            page_source = driver.page_source.lower()
-            current_url = driver.current_url.lower()
-            
-            # Check URL for error pages
-            if any(indicator in current_url for indicator in ['404', 'error', 'blocked']):
-                return True
-            
-            # Check page title
-            if '404' in driver.title.lower() or 'error' in driver.title.lower():
-                return True
-            
-            # Check page content
-            blocked_indicators = [
-                '404', 'not found', 'access denied', 'forbidden',
-                'blocked', 'pagina non trovata', 'errore'
-            ]
-            
-            for indicator in blocked_indicators:
-                if indicator in page_source:
-                    # Make sure it's not just a "no tickets found" message
-                    if 'non sono state trovate' not in page_source and 'sfortunatamente' not in page_source:
-                        return True
+                # Create fresh options for each retry
+                options = uc.ChromeOptions()
+                
+                # Workaround for undetected_chromedriver v3.5.3 bug
+                if not hasattr(options, 'headless'):
+                    options.headless = False
+                
+                # CRITICAL FLAGS TO PREVENT POPUPS
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-blink-features=AutomationControlled')
+                options.add_argument('--disable-notifications')  # Disable notifications
+                options.add_argument('--disable-popup-blocking')  # But allow our actions
+                options.add_argument('--disable-save-password-bubble')  # No password prompts
+                options.add_argument('--disable-translate')  # No translation bar
+                options.add_argument('--disable-features=TranslateUI')
+                options.add_argument('--disable-infobars')  # No info bars
+                
+                # Preferences to disable popups
+                prefs = {
+                    'profile.default_content_setting_values.notifications': 2,
+                    'profile.default_content_settings.popups': 0,
+                    'profile.managed_default_content_settings.popups': 0,
+                    'credentials_enable_service': False,
+                    'profile.password_manager_enabled': False,
+                    'translate': {'enabled': False}
+                }
+                options.add_experimental_option('prefs', prefs)
+                
+                # Window positioning
+                if browser_id == 1:
+                    x, y = 50, 50
+                elif browser_id == 2:
+                    x, y = 550, 150
+                else:
+                    x = 50 + ((browser_id - 1) * 500)
+                    y = 50 + ((browser_id - 1) // 3 * 400)
+                
+                logger.info(f"🖥️  Browser {browser_id} will appear at position ({x}, {y})")
+                options.add_argument(f'--window-position={x},{y}')
+                options.add_argument(f'--window-size=450,800')
+                
+                # Use temp dir for profile to avoid conflicts
+                temp_dir = tempfile.mkdtemp(prefix=f"browser_{browser_id}_")
+                options.add_argument(f'--user-data-dir={temp_dir}')
+                
+                # Create driver with version hint for faster startup
+                logger.info("Creating Chrome instance...")
+                
+                if self._chrome_version:
+                    driver = uc.Chrome(options=options, version_main=self._chrome_version, 
+                                     headless=False, use_subprocess=False)
+                else:
+                    driver = uc.Chrome(options=options, headless=False, use_subprocess=False)
+                
+                # Set page load timeout
+                driver.set_page_load_timeout(15)
+                
+                # Quick test
+                driver.get("data:text/html,<h1>Browser Ready</h1>")
+                
+                logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
+                return driver
+                
+            except AttributeError as e:
+                if "headless" in str(e):
+                    logger.error(f"⚠️ ChromeOptions headless attribute issue: {e}")
+                    # Try minimal Chrome instance
+                    try:
+                        logger.info("Trying minimal Chrome instance...")
+                        driver = uc.Chrome(headless=False, use_subprocess=False)
+                        driver.set_window_position(x, y)
+                        driver.set_window_size(450, 800)
+                        logger.info(f"✅ Browser {browser_id} ready (minimal config)")
+                        return driver
+                    except Exception as e2:
+                        logger.error(f"❌ Minimal approach also failed: {e2}")
+                else:
+                    raise
                     
+            except Exception as e:
+                logger.error(f"❌ Browser creation attempt {retry + 1} failed: {e}")
+                
+                if retry < max_retries - 1:
+                    logger.info(f"🔄 Retrying in 2 seconds...")
+                    time.sleep(2)
+                else:
+                    # Final failure - provide guidance
+                    if "version" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🔧 CHROMEDRIVER VERSION ISSUE")
+                        logger.error("Try: python3 fix_chromedriver.py")
+                        logger.error("="*60 + "\n")
+                    elif "chrome not reachable" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🔧 CHROME PROCESS ISSUE")
+                        logger.error("Try: python3 cleanup_chrome.py")
+                        logger.error("="*60 + "\n")
+                    
+                    return None
+
+    
+    def is_blocked(self, driver):
+        """Fixed block detection - matches original logic"""
+        try:
+            # Check URL for specific error patterns
+            current_url = driver.current_url.lower()
+            if any(x in current_url for x in ['404', 'error', 'blocked']):
+                logger.debug(f"Block detected in URL: {current_url}")
+                return True
+            
+            # Check title for Italian error messages
+            title_lower = driver.title.lower()
+            if any(x in title_lower for x in ['404', 'error', 'non trovata']):
+                logger.debug(f"Block detected in title: {driver.title}")
+                return True
+            
+            # Check page content for 404 ONLY if it's not "no tickets found"
+            page_source = driver.page_source.lower()
+            if '404' in page_source and 'non sono state trovate' not in page_source:
+                # Additional check: make sure it's actually a 404 page
+                if 'page not found' in page_source or 'pagina non trovata' in page_source:
+                    logger.debug("404 error page detected")
+                    return True
+            
             return False
             
-        except:
+        except Exception as e:
+            logger.debug(f"Block check error: {e}")
             return False
     
-    def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
-        """Clear browser data to reset session"""
+    def clear_browser_data(self, driver, browser_id):
+        """Clear browser data to avoid detection"""
         try:
-            logger.info(f"🧹 Clearing browser data for Hunter {browser_id}...")
+            logger.info(f"🧹 Clearing data for Browser {browser_id}...")
             
             # Clear cookies
             driver.delete_all_cookies()
             
-            # Clear storage via JavaScript
-            driver.execute_script("""
-                // Clear localStorage
-                try { window.localStorage.clear(); } catch(e) {}
-                
-                // Clear sessionStorage
-                try { window.sessionStorage.clear(); } catch(e) {}
-                
-                // Clear IndexedDB
-                if (window.indexedDB && indexedDB.databases) {
-                    indexedDB.databases().then(databases => {
-                        databases.forEach(db => indexedDB.deleteDatabase(db.name));
-                    }).catch(e => {});
-                }
-            """)
+            # Clear local storage
+            driver.execute_script("window.localStorage.clear();")
+            driver.execute_script("window.sessionStorage.clear();")
             
-            # Navigate to about:blank to fully reset
-            driver.get("about:blank")
-            time.sleep(1)
+            # Clear cache via DevTools
+            driver.execute_cdp_cmd('Network.clearBrowserCache', {})
+            driver.execute_cdp_cmd('Network.clearBrowserCookies', {})
             
-            logger.info(f"✅ Browser data cleared for Hunter {browser_id}")
-            
-            # Re-login will be needed
-            self.last_login_check[browser_id] = 0
+            logger.info(f"✅ Browser {browser_id} data cleared")
             
         except Exception as e:
-            logger.error(f"Failed to clear browser data: {e}")
+            logger.error(f"Error clearing browser data: {e}")
     
-    def refresh_session(self, driver: uc.Chrome, browser_id: int):
-        """Refresh browser session to avoid detection/blocks"""
-        try:
-            logger.info(f"🔄 Refreshing session for Hunter {browser_id}...")
-            
-            # Clear cookies and storage
-            self.clear_browser_data(driver, browser_id)
-            
-            # Navigate to home page first
-            driver.get("https://www.fansale.it")
-            time.sleep(2)
-            
-            # Re-login
-            if not self.manual_login(browser_id, driver):
-                logger.error(f"Failed to re-login Hunter {browser_id}")
-                return False
-            
-            logger.info(f"✅ Session refreshed for Hunter {browser_id}")
-            self.last_session_refresh[browser_id] = time.time()
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to refresh session: {e}")
-            return False
+    def _get_random_user_agent(self):
+        """Get random user agent for variety"""
+        user_agents = [
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+        ]
+        return random.choice(user_agents)
     
-    def get_ticket_text(self, driver: uc.Chrome, ticket_element) -> str:
-        """Extract all text from a ticket element"""
-        try:
-            # Try multiple methods to get ticket text
-            ticket_text = ""
-            
-            # Method 1: Direct text
-            try:
-                ticket_text = ticket_element.text
-            except:
-                pass
-            
-            # Method 2: JavaScript extraction
-            if not ticket_text:
-                try:
-                    ticket_text = driver.execute_script("return arguments[0].innerText || arguments[0].textContent", ticket_element)
-                except:
-                    pass
-            
-            # Method 3: Find all text elements within
-            if not ticket_text:
-                try:
-                    text_elements = ticket_element.find_elements(By.XPATH, ".//*[text()]")
-                    ticket_text = " ".join([elem.text for elem in text_elements if elem.text])
-                except:
-                    pass
-            
-            return ticket_text.lower() if ticket_text else ""
-            
-        except Exception as e:
-            logger.debug(f"Error extracting ticket text: {e}")
-            return ""
-    
-    def matches_filters(self, driver: uc.Chrome, ticket_element) -> bool:
-        """Check if ticket matches the configured filters"""
-        # If no filters set, accept all tickets
-        if not self.ticket_filters:
-            return True
-        
-        ticket_text = self.get_ticket_text(driver, ticket_element)
-        
-        if not ticket_text:
-            logger.warning("Could not extract text from ticket, skipping...")
-            return False
-        
-        # Log the ticket text for debugging
-        logger.debug(f"Ticket text: {ticket_text}")
-        
-        # Check filters
-        if self.filter_mode == 'any':
-            # Match if ANY keyword is found
-            for keyword in self.ticket_filters:
-                if keyword.lower() in ticket_text:
-                    logger.info(f"✓ Ticket matches filter: '{keyword}'")
-                    return True
-            logger.debug(f"✗ Ticket doesn't match any filter: {self.ticket_filters}")
-            return False
-        else:
-            # Match if ALL keywords are found
-            for keyword in self.ticket_filters:
-                if keyword.lower() not in ticket_text:
-                    logger.debug(f"✗ Ticket missing required keyword: '{keyword}'")
-                    return False
-            logger.info(f"✓ Ticket matches all filters: {self.ticket_filters}")
-            return True
-    
-    def configure_filters(self):
-        """Configure ticket filtering options"""
-        print("\n🎫 TICKET FILTERING CONFIGURATION")
-        print("="*50)
-        print("\nCommon sections: Prato, Parterre, Tribuna, Settore")
-        print("Examples:")
-        print("  - 'Prato A' - for specific prato section")
-        print("  - 'Tribuna' - for any tribune seat")
-        print("  - 'Settore 1' - for specific sector")
-        print("\nLeave empty to accept ALL tickets")
-        
-        filter_input = input("\nEnter keywords to filter (comma-separated): ").strip()
-        
-        if filter_input:
-            self.ticket_filters = [f.strip() for f in filter_input.split(',') if f.strip()]
-            
-            if len(self.ticket_filters) > 1:
-                mode = input("\nMatch mode - ANY keyword or ALL keywords? (any/all, default: any): ").strip().lower()
-                self.filter_mode = 'all' if mode == 'all' else 'any'
-            
-            print(f"\n✅ Filters configured:")
-            print(f"   Keywords: {self.ticket_filters}")
-            print(f"   Mode: {self.filter_mode}")
-            print(f"   Will {'accept' if self.filter_mode == 'any' else 'only accept'} tickets with {'any of' if self.filter_mode == 'any' else 'all of'} these keywords")
-        else:
-            self.ticket_filters = []
-            print("\n✅ No filters - will accept ALL available tickets")
-    
-    def hunt_and_buy(self, browser_id: int, driver: uc.Chrome):
-        """Core hunting loop for each browser with session management"""
-        thread_name = f"Hunter-{browser_id}"
-        threading.current_thread().name = thread_name
-        
+    def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
+        """Main hunting loop with FAST ticket detection and purchasing"""
         logger.info(f"🎯 Hunter {browser_id} starting...")
+        logger.info(f"📊 Target rate: {self.config.checks_per_minute} checks/minute")
         
+        # Navigate to event page
+        logger.info(f"📍 Navigating to: {self.target_url}")
+        
+        for nav_attempt in range(3):
+            try:
+                if not self._keep_browser_alive(driver, browser_id):
+                    logger.error(f"Browser {browser_id} session dead")
+                    return
+                
+                driver.get(self.target_url)
+                time.sleep(random.uniform(1.0, 1.5))  # Give page time to load
+                
+                if "fansale" in driver.current_url.lower():
+                    logger.info(f"✅ Browser {browser_id} successfully navigated")
+                    break
+                else:
+                    logger.warning(f"Navigation attempt {nav_attempt + 1} failed")
+                    
+            except Exception as e:
+                logger.error(f"Navigation error: {e}")
+                if nav_attempt < 2:
+                    time.sleep(2)
+                else:
+                    return
+        
+        # Main hunting loop
         check_count = 0
-        local_tickets_secured = 0
+        last_status_update = 0
+        last_session_refresh = time.time()
+        local_stats = {'prato_a': 0, 'prato_b': 0, 'settore': 0}
         consecutive_errors = 0
-        self.last_session_refresh[browser_id] = time.time()
+        empty_checks = 0  # Track empty results
+        last_block_check = time.time()
         
-        while not self.shutdown_event.is_set() and self.tickets_secured < self.max_tickets:
+        while not self.shutdown_event.is_set():
             try:
                 check_count += 1
                 self.stats['total_checks'] += 1
+                self.health_monitor.record_check(browser_id)
                 
-                # Periodic login check
-                if check_count % 100 == 0:  # Check every ~5 minutes at 20 checks/min
-                    if not self.verify_login(driver):
-                        logger.warning(f"⚠️ Hunter {browser_id}: Login expired, re-logging...")
-                        if not self.manual_login(browser_id, driver):
-                            logger.error(f"Failed to re-login Hunter {browser_id}")
-                            break
+                # Only check for blocks periodically (not every check)
+                if time.time() - last_block_check > 30:  # Check every 30 seconds
+                    if self.is_blocked(driver):
+                        logger.warning(f"⚠️ Hunter {browser_id}: Block detected!")
+                        self.stats['blocks_encountered'] += 1
+                        self.health_monitor.record_error(browser_id, 'block')
+                        self.clear_browser_data(driver, browser_id)
+                        driver.get(self.target_url)
+                        time.sleep(random.uniform(2.0, 3.0))
+                        last_block_check = time.time()
+                        continue
+                    last_block_check = time.time()
                 
-                # Periodic session refresh to avoid 404s (every 15 minutes)
-                if time.time() - self.last_session_refresh.get(browser_id, 0) > self.session_refresh_interval:
-                    logger.info(f"🔄 Hunter {browser_id}: Time for session refresh...")
-                    if self.refresh_session(driver, browser_id):
-                        consecutive_errors = 0
+                # Session refresh
+                if time.time() - last_session_refresh > self.config.session_timeout:
+                    logger.info(f"🔄 Hunter {browser_id}: Session refresh...")
+                    self.clear_browser_data(driver, browser_id)
+                    driver.get(self.target_url)
+                    time.sleep(3)
+                    last_session_refresh = time.time()
                     continue
                 
-                # Check if we're blocked
-                if self.is_blocked(driver):
-                    logger.warning(f"⚠️ Hunter {browser_id}: Detected 404/block - refreshing session...")
-                    if self.refresh_session(driver, browser_id):
-                        consecutive_errors = 0
-                    continue
+                # Look for tickets - CORE FUNCTIONALITY
+                tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
                 
-                # Fast ticket detection
-                if ENHANCED_MODE and hasattr(self, 'optimizer'):
-                    # Use enhanced fast checker
-                    if not hasattr(driver, '_fast_checker'):
-                        driver._fast_checker = FastTicketChecker(driver)
-                    
-                    has_tickets, ticket_count = driver._fast_checker.fast_ticket_check()
-                    if has_tickets and ticket_count > 0:
-                        # Get actual ticket elements for clicking
-                        tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
-                    else:
-                        tickets = []
-                else:
-                    # Fallback to standard detection
-                    tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
+                # Debug mode logging
+                if self.config.debug_mode and check_count % 10 == 0:
+                    logger.debug(f"Browser {browser_id}: Found {len(tickets)} ticket elements")
+                    if not tickets:
+                        # Check if we're on the right page
+                        if "tickets" in driver.current_url:
+                            logger.debug("On tickets page but no tickets found")
+                        else:
+                            logger.warning(f"Not on tickets page! URL: {driver.current_url}")
                 
                 if tickets:
-                    # Filter tickets based on criteria
-                    matching_tickets = []
-                    for ticket in tickets:
-                        if self.matches_filters(driver, ticket):
-                            matching_tickets.append(ticket)
+                    empty_checks = 0  # Reset empty counter
+                    self.stats['total_tickets_found'] += len(tickets)
                     
-                    if matching_tickets:
-                        self.stats['tickets_found'] += 1
-                        logger.info(f"🎫 HUNTER {browser_id}: {len(matching_tickets)} MATCHING TICKETS FOUND!")
-                        
-                        # Try to buy multiple tickets (up to max)
-                        for i, ticket in enumerate(matching_tickets):
-                            if self.tickets_secured >= self.max_tickets:
-                                break
+                    for ticket in tickets:
+                        try:
+                            ticket_info = self.extract_full_ticket_info(driver, ticket)
+                            ticket_hash = self.generate_ticket_hash(ticket_info['raw_text'])
+                            
+                            if ticket_hash not in self.seen_tickets:
+                                # NEW TICKET DISCOVERED!
+                                self.seen_tickets.add(ticket_hash)
+                                self.ticket_details_cache[ticket_hash] = ticket_info
                                 
-                            if self.purchase_lock.acquire(blocking=False):
-                                try:
-                                    if self.tickets_secured < self.max_tickets:
-                                        success = self.execute_purchase(driver, ticket, browser_id)
-                                        if success:
-                                            self.tickets_secured += 1
-                                            local_tickets_secured += 1
-                                            self.stats['successful_checkouts'] += 1
-                                            logger.info(f"✅ HUNTER {browser_id}: Secured ticket {self.tickets_secured}/{self.max_tickets}")
+                                self.stats['unique_tickets_found'] += 1
+                                category = ticket_info['category']
+                                self.stats['tickets_by_type'][category] += 1
+                                local_stats[category] += 1
+                                
+                                self.log_new_ticket(ticket_info, browser_id)
+                                self.save_stats()
+                                
+                                # FAST PURCHASE ATTEMPT
+                                if category in self.ticket_types_to_hunt:
+                                    with self.purchase_lock:
+                                        if self.tickets_secured < self.max_tickets:
+                                            logger.info(f"🎯 ATTEMPTING TO SECURE {category.upper()} TICKET!")
                                             
-                                            # Play alarm
-                                            self.play_alarm()
-                                            
-                                            # Take screenshot
-                                            screenshot_path = f"checkout_{int(time.time())}.png"
-                                            driver.save_screenshot(screenshot_path)
-                                            logger.info(f"📸 Screenshot saved: {screenshot_path}")
-                                finally:
-                                    self.purchase_lock.release()
-                    else:
-                        logger.debug(f"Hunter {browser_id}: {len(tickets)} tickets found but none match filters")
-                        self.stats['no_ticket_found'] += 1
+                                            # Click immediately!
+                                            try:
+                                                # Scroll into view first
+                                                driver.execute_script("arguments[0].scrollIntoView(true);", ticket)
+                                                time.sleep(0.1)  # Brief pause for scroll
+                                                
+                                                # Click the ticket
+                                                ticket.click()
+                                                logger.info("✅ Clicked on ticket!")
+                                                
+                                                # Wait for and click purchase button
+                                                try:
+                                                    purchase_btn = WebDriverWait(driver, 5).until(
+                                                        EC.element_to_be_clickable((By.CSS_SELECTOR, 
+                                                            "[data-qa='purchaseButton'], button[class*='purchase'], button[class*='buy']"))
+                                                    )
+                                                    purchase_btn.click()
+                                                    logger.info("✅ PURCHASE BUTTON CLICKED!")
+                                                    
+                                                    # Take screenshot
+                                                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                                    screenshot_path = f"screenshots/purchase_{timestamp}.png"
+                                                    os.makedirs("screenshots", exist_ok=True)
+                                                    driver.save_screenshot(screenshot_path)
+                                                    logger.info(f"📸 Screenshot saved: {screenshot_path}")
+                                                    
+                                                    self.tickets_secured += 1
+                                                    self.stats['purchases'] += 1
+                                                    self.save_stats()
+                                                    
+                                                    logger.info(f"🎉 TICKET SECURED! ({self.tickets_secured}/{self.max_tickets})")
+                                                    
+                                                    if self.tickets_secured >= self.max_tickets:
+                                                        logger.info("🏁 Maximum tickets secured! Shutting down...")
+                                                        self.shutdown_event.set()
+                                                        return
+                                                        
+                                                except TimeoutException:
+                                                    logger.warning("Purchase button not found in time")
+                                                except Exception as e:
+                                                    logger.error(f"Purchase flow error: {e}")
+                                                    
+                                            except Exception as e:
+                                                logger.error(f"Failed to click ticket: {e}")
+                                
+                        except Exception as e:
+                            logger.error(f"Error processing ticket: {e}")
                 else:
-                    self.stats['no_ticket_found'] += 1
+                    # Track empty results
+                    empty_checks += 1
+                    
+                    # If too many empty checks, might be a soft block
+                    if empty_checks > 100:
+                        logger.warning(f"Browser {browser_id}: Many empty results, possible soft block")
+                        empty_checks = 0
+                        # Do a light refresh
+                        driver.refresh()
+                        time.sleep(2)
                 
-                # Reset error counter on successful check
+                # Reset error count on successful check
                 consecutive_errors = 0
                 
-                # Progress logging
-                if check_count % 50 == 0:
-                    elapsed = time.time() - self.stats['start_time']
+                # Status update at configured interval
+                if check_count - last_status_update >= self.config.status_update_interval:
+                    last_status_update = check_count
+                    elapsed = time.time() - self.session_start_time
                     rate = (check_count * 60) / elapsed if elapsed > 0 else 0
-                    logger.info(f"Hunter {browser_id}: {check_count} checks | {rate:.1f}/min | Secured: {local_tickets_secured}")
+                    
+                    # Build status
+                    local_summary = []
+                    if local_stats['prato_a'] > 0:
+                        local_summary.append(f"PA:{local_stats['prato_a']}")
+                    if local_stats['prato_b'] > 0:
+                        local_summary.append(f"PB:{local_stats['prato_b']}")
+                    if local_stats['settore'] > 0:
+                        local_summary.append(f"S:{local_stats['settore']}")
+                    
+                    status = " | ".join(local_summary) if local_summary else "Hunting..."
+                    
+                    # Speed indicator
+                    if rate > self.config.checks_per_minute * 1.2:
+                        speed_icon = '🚀'
+                    elif rate > self.config.checks_per_minute * 0.8:
+                        speed_icon = '✅'
+                    else:
+                        speed_icon = '⚠️'
+                    
+                    logger.info(f"Browser {browser_id} | Checks: {check_count:>5} | "
+                               f"{speed_icon} {rate:>4.0f}/min | {status}")
                 
-                # Refresh and wait
-                driver.refresh()
-                
-                # Smart wait time based on number of browsers
-                if self.num_browsers == 1:
-                    wait_time = random.uniform(2.5, 3.5)
-                elif self.num_browsers == 2:
-                    wait_time = random.uniform(3.5, 4.5)
-                elif self.num_browsers == 3:
-                    wait_time = random.uniform(4.5, 5.5)
-                else:
-                    wait_time = random.uniform(5.5, 7.0)
-                
+                # Use configured wait time
+                wait_time = self.config.calculate_wait_time()
                 time.sleep(wait_time)
                 
             except TimeoutException:
                 consecutive_errors += 1
+                logger.warning(f"Hunter {browser_id}: Timeout (#{consecutive_errors})")
+                self.health_monitor.record_error(browser_id, 'timeout')
+                
                 if consecutive_errors > 5:
-                    logger.warning(f"Hunter {browser_id}: Too many timeouts, refreshing session...")
-                    if self.refresh_session(driver, browser_id):
-                        consecutive_errors = 0
-                else:
+                    logger.error(f"Hunter {browser_id}: Too many errors, refreshing...")
                     driver.refresh()
-                    time.sleep(2)
+                    consecutive_errors = 0
+                    
+                time.sleep(random.uniform(1.0, 2.0))
                 
             except WebDriverException as e:
-                if "target window already closed" in str(e).lower():
-                    logger.warning(f"Hunter {browser_id}: Browser closed")
-                    break
-                logger.error(f"Hunter {browser_id}: WebDriver error: {e}")
                 consecutive_errors += 1
-                if consecutive_errors > 3:
-                    if self.refresh_session(driver, browser_id):
-                        consecutive_errors = 0
-                time.sleep(5)
+                error_str = str(e).lower()
                 
-            except Exception as e:
-                logger.error(f"Hunter {browser_id}: Error: {e}")
-                traceback.print_exc()
-                time.sleep(5)
-        
-        logger.info(f"Hunter {browser_id}: Stopped. Secured {local_tickets_secured} tickets.")
-    
-    def execute_purchase(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
-        """Execute the purchase of a ticket"""
-        try:
-            logger.info(f"⚡ Hunter {browser_id}: Attempting purchase...")
-            
-            # Bring window to front
-            driver.switch_to.window(driver.current_window_handle)
-            
-            # First, check if this is a real available ticket
-            try:
-                # Check if ticket has a price (indicates it's available)
-                price_element = ticket_element.find_element(By.CSS_SELECTOR, "[class*='price'], [class*='prezzo']")
-                logger.info(f"Ticket price found: {price_element.text}")
-            except:
-                logger.debug(f"No price found on ticket - might be unavailable")
-            
-            # Click on ticket element
-            try:
-                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", ticket_element)
-                time.sleep(0.5)
-                driver.execute_script("arguments[0].click();", ticket_element)
-                logger.info("Clicked on ticket element")
-            except Exception as e:
-                logger.error(f"Failed to click ticket: {e}")
-                return False
-            
-            # Wait for page to load/modal to appear
-            time.sleep(2)
-            
-            # Check if there's a quantity selector (for multiple tickets)
-            try:
-                quantity_select = WebDriverWait(driver, 2).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "select[name*='quantity'], select[class*='quantity']"))
-                )
-                # Try to select maximum quantity (up to 4 - already secured)
-                remaining_needed = self.max_tickets - self.tickets_secured
-                if remaining_needed > 1:
-                    try:
-                        # Select the maximum available quantity
-                        driver.execute_script(f"""
-                            var select = arguments[0];
-                            var options = select.options;
-                            var maxValue = 1;
-                            for (var i = 0; i < options.length; i++) {{
-                                var val = parseInt(options[i].value);
-                                if (val <= {remaining_needed} && val > maxValue) {{
-                                    maxValue = val;
-                                }}
-                            }}
-                            select.value = maxValue;
-                            select.dispatchEvent(new Event('change'));
-                        """, quantity_select)
-                        logger.info(f"Selected quantity: {remaining_needed}")
-                    except:
-                        pass
-            except:
-                # No quantity selector, proceed with single ticket
-                pass
-            
-            # Try multiple methods to find and click buy button
-            buy_button_clicked = False
-            
-            # Multiple selectors for buy button
-            buy_selectors = [
-                "button[data-qa='buyNowButton']",
-                "button[class*='buy']",
-                "button[class*='acquista']",
-                "button[class*='purchase']",
-                "a[class*='buy']",
-                "a[class*='acquista']",
-                "//button[contains(text(), 'Acquista')]",
-                "//button[contains(text(), 'ACQUISTA')]",
-                "//button[contains(text(), 'Compra')]",
-                "//a[contains(text(), 'Acquista')]",
-                "//button[contains(@class, 'btn') and contains(@class, 'primary')]",
-                "//button[contains(@class, 'purchase')]"
-            ]
-            
-            for selector in buy_selectors:
-                try:
-                    if selector.startswith('//'):
-                        buy_button = WebDriverWait(driver, 2).until(
-                            EC.element_to_be_clickable((By.XPATH, selector))
-                        )
-                    else:
-                        buy_button = WebDriverWait(driver, 2).until(
-                            EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                        )
-                    
-                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", buy_button)
-                    driver.execute_script("arguments[0].click();", buy_button)
-                    logger.info(f"✅ Buy button clicked using selector: {selector}")
-                    buy_button_clicked = True
+                if "net::err" in error_str:
+                    logger.error(f"Hunter {browser_id}: Network error")
+                    self.health_monitor.record_error(browser_id, 'network')
+                elif "invalid session" in error_str:
+                    logger.error(f"Hunter {browser_id}: Session died")
+                    self.health_monitor.record_error(browser_id, 'session')
                     break
-                except:
-                    continue
-            
-            # Check if ticket was already reserved by someone else
-            if not buy_button_clicked:
-                page_text = driver.page_source.lower()
-                
-                # Common indicators that ticket is already reserved
-                reserved_indicators = [
-                    'già riservato', 'already reserved', 'non disponibile',
-                    'sold out', 'esaurito', 'not available', 'no longer available',
-                    'ticket non più disponibile', 'prenotato'
-                ]
-                
-                if any(indicator in page_text for indicator in reserved_indicators):
-                    self.stats['already_reserved'] += 1
-                    logger.info(f"⏱️ Hunter {browser_id}: Ticket already reserved by another user (this is normal)")
-                    return False
                 else:
-                    logger.warning(f"❓ Hunter {browser_id}: Buy button not found - page might have changed")
-                    return False
-            
-            # Check if we reached checkout
-            time.sleep(2)
-            if self.verify_checkout(driver):
-                logger.info(f"✅ Hunter {browser_id}: PURCHASE SUCCESSFUL! In checkout!")
-                return True
-            else:
-                return True  # We clicked buy, might be processing
-                
-        except Exception as e:
-            logger.error(f"Purchase failed for Hunter {browser_id}: {e}")
-            return False
-    
-    def verify_checkout(self, driver: uc.Chrome) -> bool:
-        """Verify if we're in checkout/cart"""
-        try:
-            checkout_indicators = [
-                'carrello', 'cart', 'checkout', 'pagamento', 'payment',
-                'conferma', 'confirm', 'riepilogo', 'summary'
-            ]
-            
-            current_url = driver.current_url.lower()
-            page_text = driver.page_source.lower()
-            
-            for indicator in checkout_indicators:
-                if indicator in current_url or indicator in page_text:
-                    return True
+                    logger.error(f"Hunter {browser_id}: Browser error")
+                    self.health_monitor.record_error(browser_id, 'browser')
                     
-            return False
-            
-        except:
-            return False
-    
-    def clear_browser_profiles(self):
-        """Clear all browser profiles"""
-        profiles_dir = Path("browser_profiles")
-        if profiles_dir.exists():
-            try:
-                shutil.rmtree(profiles_dir)
-                logger.info("✅ All browser profiles cleared")
-                print("\n✅ Browser profiles cleared successfully!\n")
+                time.sleep(2.0)
+                
             except Exception as e:
-                logger.error(f"Failed to clear profiles: {e}")
-                print(f"\n❌ Error clearing profiles: {e}\n")
+                consecutive_errors += 1
+                logger.error(f"Hunter {browser_id} unexpected error: {e}")
+                self.health_monitor.record_error(browser_id, 'unknown')
+                time.sleep(1.0)
+
+    
+    def show_statistics_dashboard(self):
+        """Enhanced statistics dashboard"""
+        os.system('clear' if os.name != 'nt' else 'cls')
+        
+        print(f"\n{Colors.CYAN}{'='*70}{Colors.END}")
+        print(f"{Colors.BOLD}📊 FANSALE BOT STATISTICS DASHBOARD{Colors.END}")
+        print(f"{Colors.CYAN}{'='*70}{Colors.END}\n")
+        
+        # Session info
+        session_runtime = time.time() - self.session_start_time
+        print(f"{Colors.BOLD}Current Session:{Colors.END}")
+        print(f"  Runtime: {self._format_duration(session_runtime)}")
+        print(f"  Checks: {self.stats['total_checks']:,}")
+        print(f"  Rate: {(self.stats['total_checks'] / session_runtime * 60):.1f} checks/min")
+        
+        # All-time stats
+        print(f"\n{Colors.BOLD}All-Time Statistics:{Colors.END}")
+        print(f"  Total Runtime: {self._format_duration(self.stats['all_time_runtime'])}")
+        print(f"  Total Checks: {self.stats['total_checks']:,}")
+        print(f"  Unique Tickets Found: {self.stats['unique_tickets_found']}")
+        print(f"  Purchases: {self.stats['purchases']}")
+        print(f"  Blocks Encountered: {self.stats['blocks_encountered']}")
+        
+        # Ticket breakdown
+        print(f"\n{Colors.BOLD}Tickets by Type:{Colors.END}")
+        for ticket_type, count in self.stats['tickets_by_type'].items():
+            emoji = {'prato_a': '🟢', 'prato_b': '🔵', 'settore': '🟡'}.get(ticket_type, '⚪')
+            print(f"  {emoji} {ticket_type.upper()}: {count}")
+        
+        # Health status
+        health = self.health_monitor.get_health_status()
+        if health['status'] != 'starting':
+            print(f"\n{Colors.BOLD}System Health:{Colors.END}")
+            status_color = Colors.GREEN if health['status'] == 'healthy' else Colors.YELLOW
+            print(f"  Status: {status_color}{health['status'].upper()}{Colors.END}")
+            print(f"  Error Rate: {health.get('error_rate', 0)*100:.1f}%")
+    
+    def _format_duration(self, seconds):
+        """Format duration in human-readable format"""
+        if seconds < 60:
+            return f"{seconds:.0f}s"
+        elif seconds < 3600:
+            return f"{seconds/60:.1f}m"
         else:
-            print("\n📁 No browser profiles found to clear.\n")
+            hours = seconds // 3600
+            minutes = (seconds % 3600) // 60
+            return f"{hours:.0f}h {minutes:.0f}m"
+    
+    def configure_performance(self):
+        """Configure performance settings"""
+        print(f"\n{Colors.BOLD}⚡ PERFORMANCE CONFIGURATION{Colors.END}")
+        print(f"{Colors.CYAN}{'='*50}{Colors.END}")
+        
+        print(f"\nCurrent settings:")
+        print(f"  Checks per minute: {self.config.checks_per_minute}")
+        print(f"  Min wait: {self.config.min_wait}s")
+        print(f"  Max wait: {self.config.max_wait}s")
+        
+        print(f"\n{Colors.BOLD}Presets:{Colors.END}")
+        print("  1. Conservative (60 checks/min) - Safest")
+        print("  2. Balanced (120 checks/min) - Recommended")
+        print("  3. Aggressive (240 checks/min) - Faster but riskier")
+        print("  4. Custom")
+        print("  5. Back")
+        
+        choice = input(f"\n{Colors.BOLD}Select option:{Colors.END} ").strip()
+        
+        if choice == '1':
+            self.config.checks_per_minute = 60
+            self.config.min_wait = 0.8
+            self.config.max_wait = 1.2
+            print(f"{Colors.GREEN}✅ Conservative mode set{Colors.END}")
+        elif choice == '2':
+            self.config.checks_per_minute = 120
+            self.config.min_wait = 0.4
+            self.config.max_wait = 0.6
+            print(f"{Colors.GREEN}✅ Balanced mode set{Colors.END}")
+        elif choice == '3':
+            self.config.checks_per_minute = 240
+            self.config.min_wait = 0.2
+            self.config.max_wait = 0.3
+            print(f"{Colors.YELLOW}⚠️ Aggressive mode set - monitor for blocks!{Colors.END}")
+        elif choice == '4':
+            try:
+                cpm = int(input("Checks per minute (30-600): "))
+                self.config.checks_per_minute = max(30, min(600, cpm))
+                print(f"{Colors.GREEN}✅ Set to {self.config.checks_per_minute} checks/min{Colors.END}")
+            except:
+                print(f"{Colors.RED}Invalid input{Colors.END}")
+        
+        self._save_config()
+    
+    def configure_ticket_filters(self):
+        """Configure ticket type selection"""
+        print(f"\n{Colors.BOLD}🎫 TICKET TYPE CONFIGURATION{Colors.END}")
+        print(f"{Colors.CYAN}{'='*50}{Colors.END}")
+        
+        # Show current selection
+        print(f"\n{Colors.BOLD}Currently hunting:{Colors.END}")
+        for ticket_type in self.config.ticket_types_to_hunt:
+            emoji = {'prato_a': '🟢', 'prato_b': '🔵', 'settore': '🟡'}.get(ticket_type, '⚪')
+            print(f"  {emoji} {ticket_type.upper()}")
+        
+        print(f"\n{Colors.BOLD}Available ticket types:{Colors.END}")
+        print("  1. PRATO A (Field A) 🟢")
+        print("  2. PRATO B (Field B) 🔵")
+        print("  3. SETTORE (Sector/Tribune) 🟡")
+        print("  4. All types")
+        print("  5. Back")
+        
+        choice = input(f"\n{Colors.BOLD}Select types to hunt (comma-separated):{Colors.END} ").strip()
+        
+        if choice == '5':
+            return
+        elif choice == '4':
+            self.config.ticket_types_to_hunt = ['prato_a', 'prato_b', 'settore']
+            print(f"{Colors.GREEN}✅ Hunting all ticket types{Colors.END}")
+        else:
+            type_map = {'1': 'prato_a', '2': 'prato_b', '3': 'settore'}
+            selected = []
+            
+            for c in choice.split(','):
+                c = c.strip()
+                if c in type_map:
+                    selected.append(type_map[c])
+            
+            if selected:
+                self.config.ticket_types_to_hunt = selected
+                self.ticket_types_to_hunt = selected
+                print(f"{Colors.GREEN}✅ Now hunting: {', '.join(selected)}{Colors.END}")
+            else:
+                print(f"{Colors.RED}No valid types selected{Colors.END}")
+        
+        self._save_config()
     
     def show_menu(self):
-        """Display main menu"""
-        print("\n" + "="*60)
-        print("🎫 FANSALE BOT - ULTIMATE EDITION")
-        print("="*60)
-        print("\n1. Start Bot")
-        print("2. Clear Browser Profiles")
-        print("3. Show Statistics")
-        print("4. Test Filters (Debug)")
-        print("5. Exit")
-        print("\nEnter your choice (1-5): ", end='')
-    
-    def handle_statistics(self):
-        """Show statistics from previous runs"""
-        stats_file = Path('stats.json')
-        if stats_file.exists():
-            try:
-                with open(stats_file, 'r') as f:
-                    saved_stats = json.load(f)
-                print("\n📊 SAVED STATISTICS:")
-                print(f"   Total Checks: {saved_stats.get('total_checks', 0)}")
-                print(f"   No Tickets: {saved_stats.get('no_ticket_found', 0)}")
-                print(f"   Tickets Found: {saved_stats.get('tickets_found', 0)}")
-                print(f"   Successful Checkouts: {saved_stats.get('successful_checkouts', 0)}")
-                print(f"   Already Reserved: {saved_stats.get('already_reserved', 0)}")
-            except:
-                print("\n❌ Error reading statistics")
-        else:
-            print("\n📊 No statistics found yet. Run the bot first!")
-        
-        input("\nPress Enter to continue...")
-    
-    def test_filters(self):
-        """Test filters on current page - debug mode"""
-        print("\n🔍 FILTER TEST MODE")
-        print("="*40)
-        
-        # Configure filters first
-        self.configure_filters()
-        
-        if not self.ticket_filters:
-            print("\nNo filters configured. Exiting test mode.")
-            return
-        
-        print("\nCreating test browser...")
-        driver = self.create_browser(1)
-        if not driver:
-            print("Failed to create browser")
-            return
-        
-        try:
-            print("Navigating to target page...")
-            driver.get(self.target_url)
-            time.sleep(3)
-            
-            print("\nSearching for tickets...")
-            tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
-            
-            if not tickets:
-                print("❌ No tickets found on page")
-            else:
-                print(f"\n✅ Found {len(tickets)} tickets total")
-                
-                matching = 0
-                for i, ticket in enumerate(tickets):
-                    text = self.get_ticket_text(driver, ticket)
-                    matches = self.matches_filters(driver, ticket)
-                    
-                    print(f"\nTicket {i+1}:")
-                    print(f"  Text: {text[:100]}..." if len(text) > 100 else f"  Text: {text}")
-                    print(f"  Matches: {'✅ YES' if matches else '❌ NO'}")
-                    
-                    if matches:
-                        matching += 1
-                
-                print(f"\n📊 Summary: {matching}/{len(tickets)} tickets match your filters")
-                
-        except Exception as e:
-            print(f"Error during test: {e}")
-            traceback.print_exc()
-        finally:
-            driver.quit()
-            
-        input("\nPress Enter to continue...")
-    
-    def run_bot(self):
-        """Main bot execution"""
-        print("\n🔧 BOT CONFIGURATION")
-        print("="*40)
-        
-        # Get number of browsers
+        """Main menu"""
         while True:
-            try:
-                num = input("\n🌐 Number of browsers (1-5, recommended 2-3): ").strip()
-                self.num_browsers = int(num)
-                if 1 <= self.num_browsers <= 5:
-                    break
-                print("❌ Please enter 1-5")
-            except ValueError:
-                print("❌ Invalid number")
-        
-        # Proxy option
-        proxy_choice = input("\n🔐 Use proxy? (y/n, default n): ").strip().lower()
-        self.use_proxy = proxy_choice == 'y'
-        
-        # Auto-login option - DEFAULT TO YES
-        if ENHANCED_MODE:
-            auto_login_choice = input("
-🤖 Use automatic login? (y/n, default y): ").strip().lower()
-            # Default to YES if empty or 'y'
-            self.use_auto_login = auto_login_choice != 'n'
-        else:
-            self.use_auto_login = False
-            print("\n⚠️  Enhanced utilities not available - manual login only")
-        
-        # Ticket filtering
-        self.configure_filters()
-        
-        # Calculate expected performance
-        if self.num_browsers == 1:
-            checks_per_min = 20
-        elif self.num_browsers == 2:
-            checks_per_min = 30
-        elif self.num_browsers == 3:
-            checks_per_min = 35
-        else:
-            checks_per_min = 40
+            os.system('clear' if os.name != 'nt' else 'cls')
             
-        print(f"\n📋 CONFIGURATION:")
-        print(f"   • Browsers: {self.num_browsers}")
-        print(f"   • Proxy: {'✅ Yes (data-saving)' if self.use_proxy else '❌ No'}")
-        print(f"   • Auto-login: {'✅ Yes' if self.use_auto_login else '❌ No (manual)'}")
-        print(f"   • Expected rate: ~{checks_per_min} checks/minute")
-        print(f"   • Max tickets: {self.max_tickets}")
-        
-        if self.ticket_filters:
-            print(f"   • Filters: {', '.join(self.ticket_filters)} ({self.filter_mode} match)")
-        else:
-            print(f"   • Filters: None (accepting ALL tickets)")
+            print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
+            print(f"{Colors.BOLD}🎯 FANSALE TICKET HUNTER - FIXED{Colors.END}")
+            print(f"{Colors.CYAN}{'='*60}{Colors.END}")
             
-        print(f"   • Target: {self.target_url}")
-        print(f"   • Session refresh: Every 15 minutes")
+            # Show current config summary
+            print(f"\n{Colors.BOLD}Current Configuration:{Colors.END}")
+            print(f"  Browsers: {self.config.browsers_count}")
+            print(f"  Check rate: {self.config.checks_per_minute}/min")
+            print(f"  Hunting: {', '.join(self.config.ticket_types_to_hunt)}")
+            print(f"  Max tickets: {self.config.max_tickets}")
+            
+            print(f"\n{Colors.BOLD}Menu:{Colors.END}")
+            print("  1. 🚀 Start Hunting")
+            print("  2. ⚙️  Configure Settings")
+            print("  3. 📊 View Statistics")
+            print("  4. 🐛 Toggle Debug Mode")
+            print("  5. ❌ Exit")
+            
+            choice = input(f"\n{Colors.BOLD}Select option (1-5):{Colors.END} ").strip()
+            
+            if choice == '1':
+                return True  # Start hunting
+            elif choice == '2':
+                self.configure_settings()
+            elif choice == '3':
+                self.show_statistics_dashboard()
+                input(f"\n{Colors.BOLD}Press Enter to continue...{Colors.END}")
+            elif choice == '4':
+                self.config.debug_mode = not self.config.debug_mode
+                status = "ON" if self.config.debug_mode else "OFF"
+                print(f"{Colors.GREEN}✅ Debug mode {status}{Colors.END}")
+                self._save_config()
+                time.sleep(1)
+            elif choice == '5':
+                return False  # Exit
+            else:
+                print(f"{Colors.RED}Invalid option{Colors.END}")
+                time.sleep(1)
+    
+    def configure_settings(self):
+        """Settings menu"""
+        while True:
+            print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
+            print(f"{Colors.BOLD}⚙️  CONFIGURATION MENU{Colors.END}")
+            print(f"{Colors.CYAN}{'='*60}{Colors.END}")
+            
+            print(f"\n{Colors.BOLD}Settings:{Colors.END}")
+            print("  1. 🎫 Ticket Types")
+            print("  2. ⚡ Performance")
+            print("  3. 🌐 Number of Browsers")
+            print("  4. 🎯 Max Tickets")
+            print("  5. ← Back")
+            
+            choice = input(f"\n{Colors.BOLD}Select option:{Colors.END} ").strip()
+            
+            if choice == '1':
+                self.configure_ticket_filters()
+            elif choice == '2':
+                self.configure_performance()
+            elif choice == '3':
+                try:
+                    count = int(input("Number of browsers (1-5): "))
+                    self.config.browsers_count = max(1, min(5, count))
+                    self.num_browsers = self.config.browsers_count
+                    print(f"{Colors.GREEN}✅ Set to {self.config.browsers_count} browser(s){Colors.END}")
+                    self._save_config()
+                except:
+                    print(f"{Colors.RED}Invalid input{Colors.END}")
+                time.sleep(1)
+            elif choice == '4':
+                try:
+                    max_t = int(input(f"Max tickets to purchase (1-10): "))
+                    self.config.max_tickets = max(1, min(10, max_t))
+                    self.max_tickets = self.config.max_tickets
+                    print(f"{Colors.GREEN}✅ Max tickets set to {self.config.max_tickets}{Colors.END}")
+                    self._save_config()
+                except:
+                    print(f"{Colors.RED}Invalid input{Colors.END}")
+                time.sleep(1)
+            elif choice == '5':
+                break
+            else:
+                print(f"{Colors.RED}Invalid option{Colors.END}")
+                time.sleep(1)
+    
+    def run(self):
+        """Main run method"""
+        print_banner()
         
-        try:
-            # Create browsers
-            print(f"\n🚀 Starting {self.num_browsers} browsers...")
+        # Show menu
+        if not self.show_menu():
+            print(f"\n{Colors.CYAN}Goodbye!{Colors.END}")
+            return
+        
+        # Start hunting
+        print(f"\n{Colors.BOLD}🚀 Starting {self.num_browsers} browser(s)...{Colors.END}")
+        
+        # Create browsers
+        with ThreadPoolExecutor(max_workers=self.num_browsers) as executor:
+            browser_futures = []
             
             for i in range(1, self.num_browsers + 1):
-                driver = self.create_browser(i)
-                if not driver:
-                    logger.error(f"Failed to create browser {i}")
-                    continue
-                    
-                # Manual login
-                if not self.manual_login(i, driver):
-                    logger.error(f"Failed to login browser {i}")
-                    driver.quit()
-                    continue
-                    
-                self.browsers.append(driver)
+                future = executor.submit(self.create_browser, i)
+                browser_futures.append((i, future))
             
-            if not self.browsers:
-                logger.error("❌ No browsers created successfully")
-                return
+            # Collect created browsers
+            for browser_id, future in browser_futures:
+                try:
+                    browser = future.result(timeout=30)
+                    if browser:
+                        self.browsers.append((browser_id, browser))
+                    else:
+                        logger.error(f"Failed to create browser {browser_id}")
+                except Exception as e:
+                    logger.error(f"Error creating browser {browser_id}: {e}")
+        
+        if not self.browsers:
+            logger.error("❌ No browsers created. Exiting...")
+            return
+        
+        logger.info(f"✅ {len(self.browsers)} browser(s) ready!")
+        
+        # Start hunting threads
+        hunt_threads = []
+        for browser_id, driver in self.browsers:
+            thread = threading.Thread(
+                target=self.hunt_tickets,
+                args=(browser_id, driver),
+                name=f"Hunter-{browser_id}"
+            )
+            thread.start()
+            hunt_threads.append(thread)
+        
+        # Monitor loop
+        try:
+            print(f"\n{Colors.BOLD}🎯 Hunting in progress...{Colors.END}")
+            print(f"{Colors.YELLOW}Press Ctrl+C to stop{Colors.END}\n")
+            
+            while not self.shutdown_event.is_set():
+                time.sleep(5)
                 
-            logger.info(f"✅ {len(self.browsers)} browsers ready!")
-            input("\n✋ Press Enter to START HUNTING...")
-            
-            # Start statistics
-            self.stats['start_time'] = time.time()
-            
-            # Start hunter threads
-            for i, driver in enumerate(self.browsers):
-                thread = threading.Thread(
-                    target=self.hunt_and_buy,
-                    args=(i + 1, driver),
-                    daemon=True
-                )
-                thread.start()
-                self.browser_threads.append(thread)
-            
-            # Start stats display thread
-            def periodic_stats():
-                while not self.shutdown_event.is_set():
-                    time.sleep(60)  # Every minute
-                    self.log_stats()
-            
-            stats_thread = threading.Thread(target=periodic_stats, daemon=True)
-            stats_thread.start()
-            
-            logger.info("\n🎯 HUNTING ACTIVE! Press Ctrl+C to stop.\n")
-            
-            # Wait for completion or interrupt
-            while self.tickets_secured < self.max_tickets and not self.shutdown_event.is_set():
-                time.sleep(1)
-                
-            if self.tickets_secured >= self.max_tickets:
-                logger.info(f"\n🎉 SUCCESS! All {self.max_tickets} tickets secured!")
-                self.play_alarm()
-                input("\nPress Enter to close browsers and exit...")
+                # Check if all threads are alive
+                alive_threads = sum(1 for t in hunt_threads if t.is_alive())
+                if alive_threads == 0:
+                    logger.warning("All hunting threads have stopped!")
+                    break
                 
         except KeyboardInterrupt:
             logger.info("\n🛑 Shutdown requested...")
-            
-        except Exception as e:
-            logger.error(f"Fatal error: {e}")
-            traceback.print_exc()
-            
-        finally:
-            # Final stats
-            self.log_stats()
-            
-            # Cleanup
-            self.shutdown_event.set()
-            logger.info("🧹 Cleaning up...")
-            
-            for driver in self.browsers:
-                try:
-                    driver.quit()
-                except:
-                    pass
-                    
-            logger.info("✅ Shutdown complete")
+        
+        # Cleanup
+        self.shutdown_event.set()
+        
+        # Wait for threads to finish
+        logger.info("Waiting for hunters to finish...")
+        for thread in hunt_threads:
+            thread.join(timeout=10)
+        
+        # Close browsers
+        logger.info("Closing browsers...")
+        for browser_id, driver in self.browsers:
+            try:
+                driver.quit()
+                logger.info(f"Browser {browser_id} closed")
+            except:
+                pass
+        
+        # Final statistics
+        session_runtime = time.time() - self.session_start_time
+        total_checks = self.stats['total_checks']
+        
+        print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
+        print(f"{Colors.BOLD}📊 SESSION SUMMARY{Colors.END}")
+        print(f"{Colors.CYAN}{'='*60}{Colors.END}")
+        print(f"Runtime: {self._format_duration(session_runtime)}")
+        print(f"Total Checks: {total_checks:,}")
+        print(f"Average Rate: {(total_checks / session_runtime * 60):.1f} checks/min")
+        print(f"Unique Tickets Found: {self.stats['unique_tickets_found']}")
+        print(f"Purchases: {self.stats['purchases']}")
+        print(f"Blocks Encountered: {self.stats['blocks_encountered']}")
+        
+        # Save final stats
+        self.save_stats()
+        
+        print(f"\n{Colors.GREEN}✅ Session complete!{Colors.END}")
+
+
+def print_banner():
+    """Print stylish banner"""
+    os.system('clear' if os.name != 'nt' else 'cls')
     
-    def run(self):
-        """Main entry point with menu"""
-        while True:
-            self.show_menu()
-            
-            choice = input().strip()
-            
-            if choice == '1':
-                self.run_bot()
-            elif choice == '2':
-                self.clear_browser_profiles()
-            elif choice == '3':
-                self.handle_statistics()
-            elif choice == '4':
-                self.test_filters()
-            elif choice == '5':
-                print("\n👋 Goodbye!")
-                break
-            else:
-                print("\n❌ Invalid choice. Please try again.")
+    print(f"{Colors.CYAN}")
+    print(r"""
+    ███████╗ █████╗ ███╗   ██╗███████╗ █████╗ ██╗     ███████╗
+    ██╔════╝██╔══██╗████╗  ██║██╔════╝██╔══██╗██║     ██╔════╝
+    █████╗  ███████║██╔██╗ ██║███████╗███████║██║     █████╗  
+    ██╔══╝  ██╔══██║██║╚██╗██║╚════██║██╔══██║██║     ██╔══╝  
+    ██║     ██║  ██║██║ ╚████║███████║██║  ██║███████╗███████╗
+    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝
+    """)
+    print(f"{Colors.END}")
+    print(f"{Colors.BOLD}             🎫 TICKET HUNTER v2.0 - FIXED 🎫{Colors.END}")
+    print(f"{Colors.CYAN}           Fast • Reliable • No False Blocks{Colors.END}")
+    print(f"{Colors.CYAN}{'='*60}{Colors.END}\n")
 
 
 def main():
-    """Entry point"""
-    # Check dependencies
+    """Main entry point"""
     try:
-        import undetected_chromedriver
-        from dotenv import load_dotenv
-    except ImportError as e:
-        print(f"❌ Missing dependency: {e}")
-        print("Please run: pip install undetected-chromedriver selenium-wire python-dotenv")
-        sys.exit(1)
-    
-    # Check credentials
-    load_dotenv()
-    if not os.getenv('FANSALE_EMAIL') or not os.getenv('FANSALE_PASSWORD'):
-        print("❌ Missing credentials!")
-        print("\nCreate a .env file with:")
-        print("FANSALE_EMAIL=your@email.com")
-        print("FANSALE_PASSWORD=yourpassword")
-        print("FANSALE_TARGET_URL=https://www.fansale.it/...")
-        sys.exit(1)
-    
-    # Run bot
-    bot = FanSaleBot()
-    bot.run()
+        bot = FanSaleBot()
+        bot.run()
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        import traceback
+        traceback.print_exc()
+    finally:
+        print(f"\n{Colors.CYAN}Thank you for using FanSale Bot!{Colors.END}")
 
 
 if __name__ == "__main__":

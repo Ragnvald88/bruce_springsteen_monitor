@@ -10,5 +10,15 @@
   },
   "purchases": 3,
   "blocks_encountered": 36,
-  "all_time_runtime": 149771.02262616158
+  "all_time_runtime": 149880.95248031616,
+  "sessions": [
+    {
+      "id": "20250625_090857",
+      "start": "2025-06-25T09:08:57.642619",
+      "duration": 109.92985415458679,
+      "checks": 10807,
+      "tickets_found": 26,
+      "purchases": 3
+    }
+  ]
 }

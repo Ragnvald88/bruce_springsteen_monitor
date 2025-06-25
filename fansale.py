@@ -72,19 +72,24 @@ class FanSaleBot:
     """The definitive FanSale ticket bot - handles 404s and session management"""
     
     def __init__(self):
-        # Credentials
+        # Load saved configuration
+        self.config = self.load_configuration()
+        
+        # Credentials from env
         self.email = os.getenv('FANSALE_EMAIL')
         self.password = os.getenv('FANSALE_PASSWORD')
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
-                                    "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554")
+                                    "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388")
         
-        # Configuration
-        self.num_browsers = 1
-        self.use_proxy = False
-        self.use_auto_login = False  # Will be set during configuration
-        self.max_tickets = 4  # Maximum tickets to reserve
-        self.ticket_filters = []  # Keywords to filter tickets by
-        self.filter_mode = 'any'  # 'any' or 'all' - match any keyword or all keywords
+        # Apply configuration
+        self.num_browsers = self.config.get('num_browsers', 2)
+        self.use_proxy = self.config.get('use_proxy', False)
+        self.use_auto_login = self.config.get('use_auto_login', True)
+        self.max_tickets = self.config.get('max_tickets', 4)
+        self.ticket_filters = self.config.get('ticket_filters', [])
+        self.filter_mode = self.config.get('filter_mode', 'any')
+        self.session_refresh_interval = self.config.get('session_refresh_interval', 900)
+        self.clear_profiles_on_start = self.config.get('clear_profiles_on_start', False)
         
         # Browser management
         self.browsers = []
@@ -93,20 +98,26 @@ class FanSaleBot:
         self.tickets_secured = 0
         self.shutdown_event = threading.Event()
         
-        # Statistics
+        # Enhanced statistics tracking
         self.stats = {
             'total_checks': 0,
             'no_ticket_found': 0,
             'tickets_found': 0,
             'successful_checkouts': 0,
             'already_reserved': 0,
-            'start_time': None
+            'start_time': None,
+            'ticket_categories': {
+                'prato_a': 0,
+                'prato_b': 0,
+                'settore': 0,
+                'tribuna': 0,
+                'other': 0
+            }
         }
         
         # Session management
         self.last_login_check = {}
         self.login_check_interval = 300  # 5 minutes
-        self.session_refresh_interval = 900  # 15 minutes
         self.last_session_refresh = {}
         
         # Enhanced features if available

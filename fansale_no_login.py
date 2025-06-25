@@ -528,9 +528,6 @@ class FanSaleBot:
             return options, x, y
         
         try:
-            # Create fresh options
-            options, x, y = create_chrome_options()
-            
             # Try multiple approaches to handle version mismatches
             driver = None
             attempts = [
@@ -542,6 +539,10 @@ class FanSaleBot:
             for version_main, desc in attempts:
                 try:
                     logger.info(f"🔄 Attempting with {desc}...")
+                    
+                    # IMPORTANT: Create fresh options for each attempt to avoid reuse error
+                    options, x, y = create_chrome_options()
+                    
                     driver = uc.Chrome(options=options, version_main=version_main)
                     driver.set_page_load_timeout(20)
                     
@@ -570,10 +571,8 @@ class FanSaleBot:
                             driver.quit()
                         except:
                             pass
-                    if "version" in str(e).lower():
-                        logger.warning(f"Version mismatch with {desc}: {str(e)[:100]}...")
-                        # Create new options for next attempt
-                        options, x, y = create_chrome_options()
+                    if "version" in str(e).lower() or "ChromeOptions" in str(e):
+                        logger.warning(f"Failed with {desc}: {str(e)[:100]}...")
                         continue
                     else:
                         raise
@@ -595,7 +594,7 @@ class FanSaleBot:
                     except:
                         pass
             
-            # Try one more time with fresh cache
+            # Try one more time with fresh cache and fresh options
             options, x, y = create_chrome_options()
             driver = uc.Chrome(options=options, use_subprocess=True)
             driver.set_page_load_timeout(20)

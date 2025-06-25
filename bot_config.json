@@ -1,10 +1,18 @@
 {
   "browsers_count": 2,
-  "max_tickets": 2,
-  "refresh_interval": 30,
+  "use_proxy": false,
+  "clear_profiles_on_start": false,
+  "max_tickets": 4,
+  "ticket_filters": [],
+  "filter_mode": "any",
+  "refresh_interval": 25,
   "session_timeout": 900,
   "min_wait": 2.0,
   "max_wait": 4.0,
   "retry_attempts": 3,
-  "retry_delay": 1.0
+  "retry_delay": 1.0,
+  "monitor_width": 1920,
+  "monitor_height": 1080,
+  "browsers_per_row": 2,
+  "target_url": "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554/17844388"
 }

@@ -19,9 +19,10 @@ import json
 import hashlib
 import re
 import functools
+from collections import defaultdict
 import tempfile
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Set
 from collections import defaultdict, deque
@@ -126,7 +127,7 @@ class StatsManager:
                 'prato_a': 0,
                 'prato_b': 0,
                 'settore': 0,
-                'other': 0
+                'settore': 0
             },
             'purchases': 0,
             'blocks_encountered': 0,
@@ -169,6 +170,8 @@ class Colors:
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     RED = '\033[91m'
+    MAGENTA = '\033[95m'
+    WHITE = '\033[97m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
@@ -293,11 +296,14 @@ class FanSaleBot:
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
                                     "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554")
         
-        # Configuration
+        # Load saved configuration from bot_config.json
+        self._load_saved_config()
+        
+        # Configuration from loaded settings
         self.num_browsers = self.config.browsers_count
         self.max_tickets = self.config.max_tickets
-        self.ticket_filters = []  # Will be set to track specific types
-        self.ticket_types_to_hunt = {'prato_a', 'prato_b'}  # Default to Prato types
+        self.ticket_filters = getattr(self, 'ticket_filters', [])
+        self.ticket_types_to_hunt = getattr(self, 'ticket_types_to_hunt', {'prato_a', 'prato_b'})
         
         # State management
         self.browsers = []
@@ -320,6 +326,24 @@ class FanSaleBot:
         # Health monitoring and notifications
         self.health_monitor = HealthMonitor()
         self.notification_manager = NotificationManager(enabled=True)
+
+    def _load_saved_config(self):
+        """Load saved configuration including ticket types"""
+        config_path = Path("bot_config.json")
+        if config_path.exists():
+            try:
+                with open(config_path, 'r') as f:
+                    saved_config = json.load(f)
+                    
+                # Load ticket hunting preferences
+                if 'ticket_types_to_hunt' in saved_config:
+                    self.ticket_types_to_hunt = set(saved_config['ticket_types_to_hunt'])
+                if 'ticket_filters' in saved_config:
+                    self.ticket_filters = saved_config['ticket_filters']
+                    
+                logger.info(f"✅ Loaded saved configuration")
+            except Exception as e:
+                logger.warning(f"Could not load saved config: {e}")
 
 
     def save_stats(self):
@@ -371,15 +395,10 @@ class FanSaleBot:
         # Check for Prato B
         elif 'prato b' in ticket_lower or 'prato gold b' in ticket_lower:
             return 'prato_b'
-        # Check for Settore/Seated tickets - improved detection
-        elif any(keyword in ticket_lower for keyword in [
-            'settore', 'fila', 'posto', 'anello', 'tribuna', 
-            'poltrona', 'numerato', 'seat', 'row', 'ring',
-            'rosso', 'blu', 'verde', 'giallo', 'ingresso'
-        ]):
-            return 'settore'
+        # Everything else is Settore (seated) - no more "other" category
         else:
-            return 'other'
+            # This includes all seated tickets and any tickets without explicit Prato designation
+            return 'settore'
     
     def generate_ticket_hash(self, ticket_text: str) -> str:
         """Generate unique hash for ticket to detect duplicates"""
@@ -399,7 +418,7 @@ class FanSaleBot:
                 'row': '',
                 'seat': '',
                 'price': '',
-                'category': 'other',
+                'category': 'settore',
                 'entrance': '',
                 'ring': ''
             }
@@ -456,7 +475,7 @@ class FanSaleBot:
                 'row': '',
                 'seat': '',
                 'price': '',
-                'category': 'other',
+                'category': 'settore',
                 'entrance': '',
                 'ring': ''
             }
@@ -543,10 +562,10 @@ class FanSaleBot:
             # Try multiple approaches to handle version mismatches
             driver = None
             attempts = [
-                (None, "auto-detection"),  # Try auto-detection first
-                (137, "Chrome 137"),       # Then Chrome 137
+                (137, "Chrome 137"),     # Detected Chrome version
+                (None, "auto-detection"),  # Fall back to auto-detection
+                (137, "Chrome 137"),       # Chrome 137
                 (136, "Chrome 136"),       # Chrome 136
-                (138, "Chrome 138"),       # Chrome 138 as last resort
             ]
             
             for version_main, desc in attempts:
@@ -558,15 +577,24 @@ class FanSaleBot:
                     
                     # Stealth options
                     options.add_argument('--disable-blink-features=AutomationControlled')
-                    options.add_argument('--disable-dev-shm-usage')
                     options.add_argument('--no-sandbox')
+                    options.add_argument('--disable-dev-shm-usage')
                     options.add_argument('--disable-gpu')
-                    options.add_argument('--disable-features=TranslateUI')
-                    options.add_argument('--disable-infobars')
+                    options.add_argument('--disable-web-security')
+                    options.add_argument('--disable-features=IsolateOrigins,site-per-process')
+                    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                    options.add_experimental_option('useAutomationExtension', False)
                     
-                    # Performance
-                    options.add_argument('--disable-logging')
-                    options.add_argument('--disable-background-timer-throttling')
+                    # Add prefs to avoid detection
+                    prefs = {
+                        'credentials_enable_service': False,
+                        'profile.password_manager_enabled': False,
+                        'profile.default_content_setting_values.notifications': 2
+                    }
+                    options.add_experimental_option('prefs', prefs)
+                    
+                    # User agent
+                    options.add_argument('user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36')
                     
                     # Multi-monitor window positioning
                     window_width = 450
@@ -592,11 +620,23 @@ class FanSaleBot:
                     options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
                     
                     # Create driver
-                    driver = uc.Chrome(options=options, version_main=version_main)
-                    driver.set_page_load_timeout(20)
+                    driver = uc.Chrome(options=options, version_main=version_main, driver_executable_path=None)
                     
-                    # Test if driver works
-                    driver.execute_script("return navigator.userAgent")
+                    # Give browser time to stabilize
+                    time.sleep(2)
+                    
+                    # Set timeouts
+                    driver.set_page_load_timeout(30)
+                    driver.implicitly_wait(10)
+                    
+                    # Test if driver works by navigating to a simple page first
+                    try:
+                        driver.get("data:text/html,<h1>Test</h1>")
+                        time.sleep(1)
+                        driver.execute_script("return navigator.userAgent")
+                    except Exception as e:
+                        logger.warning(f"Browser test failed: {e}")
+                        raise
                     
                     # Inject stealth JavaScript
                     driver.execute_script("""
@@ -697,10 +737,22 @@ class FanSaleBot:
         """Main hunting loop with ticket type tracking and duplicate detection"""
         logger.info(f"🎯 Hunter {browser_id} starting...")
         
-        # Navigate to event page
+        # Navigate to event page with error handling
         logger.info(f"📍 Navigating to: {self.target_url}")
-        driver.get(self.target_url)
-        time.sleep(random.uniform(2.5, 3.5))
+        try:
+            driver.get(self.target_url)
+            time.sleep(random.uniform(3.5, 5.0))  # Give more time for initial load
+            
+            # Verify we're on the right page
+            if "fansale" not in driver.current_url.lower():
+                logger.warning(f"Unexpected URL: {driver.current_url}")
+                time.sleep(2)
+                driver.get(self.target_url)
+        except Exception as e:
+            logger.error(f"Navigation error: {e}")
+            # Try one more time
+            time.sleep(2)
+            driver.get(self.target_url)
         
         check_count = 0
         last_refresh = time.time()
@@ -799,8 +851,7 @@ class FanSaleBot:
                         local_summary.append(f"Prato B: {local_stats['prato_b']}")
                     if local_stats['settore'] > 0:
                         local_summary.append(f"Settore: {local_stats['settore']}")
-                    if local_stats['other'] > 0:
-                        local_summary.append(f"Other: {local_stats['other']}")
+                    
                     
                     local_str = " | ".join(local_summary) if local_summary else "No new tickets"
                     # Animated spinner
@@ -968,7 +1019,7 @@ class FanSaleBot:
         
         # Group statistics by day
         daily_stats = defaultdict(lambda: {
-            'prato_a': 0, 'prato_b': 0, 'settore': 0, 'other': 0, 'total': 0
+            'prato_a': 0, 'prato_b': 0, 'settore': 0, 'settore': 0, 'total': 0
         })
         
         # Mock data for demonstration (in real implementation, this would come from session history)
@@ -981,7 +1032,7 @@ class FanSaleBot:
                     'prato_a': self.stats['tickets_by_type']['prato_a'],
                     'prato_b': self.stats['tickets_by_type']['prato_b'],
                     'settore': self.stats['tickets_by_type']['settore'],
-                    'other': self.stats['tickets_by_type']['other'],
+                    
                     'total': self.stats['unique_tickets_found']
                 }
             elif i < 3:  # Mock some data for recent days
@@ -989,19 +1040,19 @@ class FanSaleBot:
                     'prato_a': random.randint(0, 2),
                     'prato_b': random.randint(0, 3),
                     'settore': random.randint(0, 5),
-                    'other': random.randint(0, 2),
+                    
                     'total': 0
                 }
                 daily_stats[date_str]['total'] = sum([
                     daily_stats[date_str]['prato_a'],
                     daily_stats[date_str]['prato_b'],
                     daily_stats[date_str]['settore'],
-                    daily_stats[date_str]['other']
+                    0
                 ])
         
         # Table header
-        print(f"{Colors.CYAN}║{Colors.END} {'Date':^12} │ {'🔴 A':^6} │ {'🔵 B':^6} │ {'🟡 S':^6} │ {'⚪ O':^6} │ {'Total':^7} {Colors.CYAN}║{Colors.END}")
-        print(f"{Colors.CYAN}╟{'─' * 14}┼{'─' * 8}┼{'─' * 8}┼{'─' * 8}┼{'─' * 8}┼{'─' * 9}╢{Colors.END}")
+        print(f"{Colors.CYAN}║{Colors.END} {'Date':^12} │ {'🔴 A':^6} │ {'🔵 B':^6} │ {'🟡 S':^6} │ {'Total':^7} {Colors.CYAN}║{Colors.END}")
+        print(f"{Colors.CYAN}╟{'─' * 14}┼{'─' * 8}┼{'─' * 8}┼{'─' * 8}┼{'─' * 9}╢{Colors.END}")
         
         # Display daily data
         for date_str in sorted(daily_stats.keys(), reverse=True)[:7]:
@@ -1024,7 +1075,7 @@ class FanSaleBot:
             else:
                 total_color = Colors.GREEN
             
-            print(f"{Colors.CYAN}║{Colors.END} {date_display:^12} │ {stats['prato_a']:^6} │ {stats['prato_b']:^6} │ {stats['settore']:^6} │ {stats['other']:^6} │ {total_color}{stats['total']:^7}{Colors.END} {Colors.CYAN}║{Colors.END}")
+            print(f"{Colors.CYAN}║{Colors.END} {date_display:^12} │ {stats['prato_a']:^6} │ {stats['prato_b']:^6} │ {stats['settore']:^6}  │ {total_color}{stats['total']:^7}{Colors.END} {Colors.CYAN}║{Colors.END}")
         
         print(f"{Colors.CYAN}╚{'═' * 58}╝{Colors.END}")
         
@@ -1034,7 +1085,7 @@ class FanSaleBot:
             print(f"\n{Colors.BOLD}📊 All-Time Summary:{Colors.END}")
             print(f"   🎯 Most Found: ", end="")
             max_type = max(self.stats['tickets_by_type'].items(), key=lambda x: x[1])
-            type_names = {'prato_a': 'Prato A', 'prato_b': 'Prato B', 'settore': 'Settore', 'other': 'Other'}
+            type_names = {'prato_a': 'Prato A', 'prato_b': 'Prato B', 'settore': 'Settore'}
             print(f"{Colors.GREEN}{type_names[max_type[0]]} ({max_type[1]} tickets){Colors.END}")
             print(f"   📈 Success Rate: {Colors.YELLOW}{(self.stats['purchases'] / total_all_time * 100):.1f}%{Colors.END}" if total_all_time > 0 else "")
 
@@ -1044,7 +1095,7 @@ class FanSaleBot:
         from datetime import datetime, timedelta
         
         # Group tickets by date
-        daily_stats = defaultdict(lambda: {'prato_a': 0, 'prato_b': 0, 'settore': 0, 'other': 0, 'total': 0})
+        daily_stats = defaultdict(lambda: {'prato_a': 0, 'prato_b': 0, 'settore': 0, 'settore': 0, 'total': 0})
         
         # Parse session data if available
         if 'sessions' in self.stats:
@@ -1079,7 +1130,7 @@ class FanSaleBot:
             if date == today:
                 date_str = f"{Colors.GREEN}{date_str}{Colors.END}"
             
-            print(f"{Colors.MAGENTA}║{Colors.END} {date_str:^12} │ {stats['prato_a']:^6} │ {stats['prato_b']:^6} │ {stats['settore']:^6} │ {stats['other']:^6} │ {Colors.BOLD}{stats['total']:^6}{Colors.END} {Colors.MAGENTA}║{Colors.END}")
+            print(f"{Colors.MAGENTA}║{Colors.END} {date_str:^12} │ {stats['prato_a']:^6} │ {stats['prato_b']:^6} │ {stats['settore']:^6}  │ {Colors.BOLD}{stats['total']:^6}{Colors.END} {Colors.MAGENTA}║{Colors.END}")
         
         print(f"{Colors.MAGENTA}╚{'═' * 58}╝{Colors.END}")
         
@@ -1088,6 +1139,61 @@ class FanSaleBot:
         if total_all_time > 0:
             best_day = max(daily_stats.items(), key=lambda x: x[1]['total'])
             print(f"\n{Colors.CYAN}💡 Best day: {best_day[0].strftime('%d/%m/%Y')} with {best_day[1]['total']} tickets!{Colors.END}")
+
+    def show_live_dashboard(self, browser_stats: Dict[int, Dict]):
+        """Display a live dashboard during hunting"""
+        # Clear previous lines (ANSI escape codes)
+        num_browsers = len(browser_stats)
+        print(f"\033[{num_browsers + 8}A", end='')  # Move cursor up
+        
+        # Dashboard header
+        print(f"\n{Colors.CYAN}╔{'═' * 78}╗{Colors.END}")
+        print(f"{Colors.CYAN}║{Colors.END}{Colors.BOLD}{'🎯 LIVE HUNTING DASHBOARD'.center(78)}{Colors.END}{Colors.CYAN}║{Colors.END}")
+        print(f"{Colors.CYAN}╠{'═' * 78}╣{Colors.END}")
+        
+        # Browser status
+        for browser_id, stats in sorted(browser_stats.items()):
+            # Progress bar
+            checks = stats.get('checks', 0)
+            rate = stats.get('rate', 0)
+            tickets = stats.get('tickets_found', {})
+            
+            # Create mini progress bar
+            bar_length = 20
+            progress = (checks % 100) / 100
+            filled = int(bar_length * progress)
+            bar = '█' * filled + '░' * (bar_length - filled)
+            
+            # Speed color
+            if rate > 40:
+                speed_color = Colors.GREEN
+            elif rate > 20:
+                speed_color = Colors.YELLOW
+            else:
+                speed_color = Colors.RED
+            
+            # Browser line
+            print(f"{Colors.CYAN}║{Colors.END} Browser {browser_id} │ {bar} │ {speed_color}{rate:>4.1f}/min{Colors.END} │ ", end='')
+            
+            # Ticket counts
+            ticket_str = []
+            if tickets.get('prato_a', 0) > 0:
+                ticket_str.append(f"{Colors.RED}A:{tickets['prato_a']}{Colors.END}")
+            if tickets.get('prato_b', 0) > 0:
+                ticket_str.append(f"{Colors.BLUE}B:{tickets['prato_b']}{Colors.END}")
+            if tickets.get('settore', 0) > 0:
+                ticket_str.append(f"{Colors.YELLOW}S:{tickets['settore']}{Colors.END}")
+            
+            tickets_display = ' '.join(ticket_str) if ticket_str else "Hunting..."
+            print(f"{tickets_display:<25} {Colors.CYAN}║{Colors.END}")
+        
+        print(f"{Colors.CYAN}╚{'═' * 78}╝{Colors.END}")
+        
+        # Global stats summary
+        total_checks = sum(s.get('checks', 0) for s in browser_stats.values())
+        total_rate = sum(s.get('rate', 0) for s in browser_stats.values())
+        
+        print(f"\n{Colors.BOLD}Global:{Colors.END} {total_checks:,} checks @ {Colors.GREEN}{total_rate:.1f}/min{Colors.END}")
     
     def configure_ticket_filters(self):
         """Allow user to select which ticket types to hunt for"""
@@ -1100,7 +1206,7 @@ class FanSaleBot:
             '2': ('prato_b', 'Prato B', Colors.BLUE),
             '3': ('prato_all', 'All Prato (A + B)', Colors.CYAN),
             '4': ('settore', 'Settore', Colors.YELLOW),
-            '5': ('other', 'Other/Unknown', Colors.CYAN),
+            
             '6': ('all', 'ALL ticket types', Colors.BOLD)
         }
         
@@ -1128,7 +1234,7 @@ class FanSaleBot:
             
             # Check if user selected "all"
             if '6' in choices:
-                self.ticket_types_to_hunt = {'prato_a', 'prato_b', 'settore', 'other'}
+                self.ticket_types_to_hunt = {'prato_a', 'prato_b', 'settore'}
                 print(f"{Colors.GREEN}✅ Hunting for ALL ticket types{Colors.END}")
                 break
             
@@ -1174,14 +1280,17 @@ class FanSaleBot:
         
         # ASCII Art Header
         print(f"{Colors.CYAN}")
-        print("╔═══════════════════════════════════════════════════════════════╗")
-        print("║   _____ _____ _____ _____ _____ ___     _____ _____ _____    ║")
-        print("║  |   __|  _  |   | |   __|  _  |   |   |   __| __  |     |   ║")
-        print("║  |   __|     | | | |__   |     |   |   |   __| __ -|  |  |   ║")
-        print("║  |__|  |__|__|_|___|_____|__|__|___|   |_____|_____|_____|   ║")
-        print("║                                                               ║")
-        print("║              🎫 ENHANCED TICKET HUNTER v2.0 🎫                ║")
-        print("╚═══════════════════════════════════════════════════════════════╝")
+        print("=" * 72)
+        print("   _____ _             _ _   _       __  __           _            ")
+        print(r"  / ____| |           | | | | |     |  \/  |         | |           ")
+        print(r" | (___ | |_ ___  __ _| | |_| |__   | \  / | __ _ ___| |_ ___ _ __ ")
+        print(r"  \___ \| __/ _ \/ _` | | __| '_ \  | |\/| |/ _` / __| __/ _ \ '__|")
+        print("  ____) | ||  __/ (_| | | |_| | | | | |  | | (_| \__ \ ||  __/ |   ")
+        print(" |_____/ \__\___|\__,_|_|\__|_| |_| |_|  |_|\__,_|___/\__\___|_|   ")
+        print("")
+        print("               🎫 TICKET HUNTER CONFIGURATION 🎫")
+        print("                 Fast • Smart • Undetectable")
+        print("╚════════════════════════════════════════════════════════════════════════╝")
         print(f"{Colors.END}")
         
         print(f"\n{Colors.GREEN}✨ Features:{Colors.END}")
@@ -1254,7 +1363,7 @@ class FanSaleBot:
             'prato_a': '🔴 Prato A',
             'prato_b': '🔵 Prato B',
             'settore': '🟡 Settore',
-            'other': '⚪ Other'
+            'settore': '🟡 Settore'
         }
         selected = [type_display[t] for t in sorted(self.ticket_types_to_hunt)]
         hunting_str = ', '.join(selected)
@@ -1265,11 +1374,107 @@ class FanSaleBot:
         
         print(f"\n{Colors.GREEN}{Colors.BOLD}⚡ READY TO HUNT! No login required - Direct ticket access!{Colors.END}")
     
+
+    def show_menu(self):
+        """Display main menu with options"""
+        while True:
+            print(f"\n{Colors.CYAN}{'=' * 60}{Colors.END}")
+            print(f"{Colors.BOLD}🎯 FANSALE BOT MENU{Colors.END}")
+            print(f"{Colors.CYAN}{'=' * 60}{Colors.END}")
+            print("1. Start Hunting")
+            print("2. Configure Settings")
+            print("3. View Statistics")
+            print("4. Reset Statistics")
+            print("5. Exit")
+            
+            choice = input(f"\n{Colors.BOLD}Select option (1-5):{Colors.END} ").strip()
+            
+            if choice == '1':
+                return True  # Start hunting
+            elif choice == '2':
+                self.configure_settings()
+            elif choice == '3':
+                self.show_statistics_dashboard()
+                input("\nPress Enter to continue...")
+            elif choice == '4':
+                if input(f"{Colors.YELLOW}Reset all statistics? (y/n):{Colors.END} ").lower() == 'y':
+                    self.stats = {
+                        'total_checks': 0,
+                        'total_tickets_found': 0,
+                        'unique_tickets_found': 0,
+                        'tickets_by_type': {'prato_a': 0, 'prato_b': 0, 'settore': 0},
+                        'purchases': 0,
+                        'blocks_encountered': 0,
+                        'all_time_runtime': 0.0,
+                        'sessions': []
+                    }
+                    self.save_stats()
+                    print(f"{Colors.GREEN}✅ Statistics reset{Colors.END}")
+            elif choice == '5':
+                return False  # Exit
+            else:
+                print(f"{Colors.RED}Invalid option{Colors.END}")
+    
+    def configure_settings(self):
+        """Configure bot settings"""
+        print(f"\n{Colors.BOLD}⚙️  CONFIGURATION{Colors.END}")
+        print(f"{Colors.CYAN}{'─' * 40}{Colors.END}")
+        
+        # Browsers
+        while True:
+            try:
+                num = input(f"Number of browsers (1-8, current: {self.num_browsers}):{Colors.END} ").strip()
+                if not num:
+                    break
+                self.num_browsers = int(num)
+                if 1 <= self.num_browsers <= 8:
+                    break
+                print(f"{Colors.RED}Please enter 1-8{Colors.END}")
+            except ValueError:
+                print(f"{Colors.RED}Invalid number{Colors.END}")
+        
+        # Max tickets
+        while True:
+            try:
+                max_t = input(f"Max tickets (1-4, current: {self.max_tickets}):{Colors.END} ").strip()
+                if not max_t:
+                    break
+                self.max_tickets = int(max_t)
+                if 1 <= self.max_tickets <= 4:
+                    break
+                print(f"{Colors.RED}Please enter 1-4{Colors.END}")
+            except ValueError:
+                print(f"{Colors.RED}Invalid number{Colors.END}")
+        
+        # Ticket types
+        print(f"\n{Colors.BOLD}Current hunting:{Colors.END} {', '.join(self.ticket_types_to_hunt)}")
+        if input("Change ticket types? (y/n): ").lower() == 'y':
+            self.configure_ticket_filters()
+        
+        # Save configuration including ticket types
+        self.config.browsers_count = self.num_browsers
+        self.config.max_tickets = self.max_tickets
+        
+        # Save additional settings
+        config_data = self.config.__dict__.copy()
+        config_data['ticket_types_to_hunt'] = list(self.ticket_types_to_hunt)
+        config_data['ticket_filters'] = self.ticket_filters
+        
+        with open(Path("bot_config.json"), 'w') as f:
+            json.dump(config_data, f, indent=2)
+        
+        print(f"\n{Colors.GREEN}✅ Settings saved!{Colors.END}")
+
     def run(self):
         """Main execution with enhanced tracking"""
         try:
-            # Configure
-            self.configure()
+            # Show menu
+            if not self.show_menu():
+                print(f"{Colors.YELLOW}👋 Goodbye!{Colors.END}")
+                return
+            
+            # Configuration is now loaded from saved settings
+            # Only configure() when explicitly selected from menu
             
             # Create browsers
             print(f"\n{Colors.BOLD}🚀 Starting {self.num_browsers} browser(s)...{Colors.END}")
@@ -1315,7 +1520,7 @@ class FanSaleBot:
                 'prato_a': '🔴 PRATO A - Standing Area (Front)',
                 'prato_b': '🔵 PRATO B - Standing Area (Back)',
                 'settore': '🟡 SETTORE - Seated Sections',
-                'other': '⚪ OTHER - Miscellaneous Tickets'
+                
             }
             
             for ticket_type in self.ticket_types_to_hunt:
@@ -1361,16 +1566,27 @@ class FanSaleBot:
 
 def main():
     """Enhanced entry point with configuration support"""
-    print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
-    print(f"{Colors.BOLD}{Colors.CYAN}🎫 FANSALE BOT - ENTERPRISE EDITION{Colors.END}")
-    print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
+    # Cool ASCII art banner
+    print(f"{Colors.CYAN}")
+    print("=" * 80)
+    print("     _____                ___           _        ____          _   ")
+    print("    |  ___|__ _  _ __    / __|   __ _ | |  ___ | __ )   ___  | |_ ")
+    print("    | |_  / _` || '_ \  \__ \  / _` || | / _ \|  _ \  / _ \ | __|")
+    print("    |  _|| (_| || | | | |___/ | (_| || ||  __/| |_) || (_) || |_ ")
+    print("    |_|   \__,_||_| |_| |____/  \__,_||_| \___||____/  \___/  \__|")
+    print("")
+    print("                    ENTERPRISE TICKET HUNTER v2.0")
+    print("                   No Login Required • Fast • Smart")
+    print("=" * 80)
+    print(f"{Colors.END}")
+    
     print(f"\n{Colors.GREEN}✨ Features:{Colors.END}")
-    print("  • Ticket type tracking (Prato A, B, Settore)")
-    print("  • Duplicate detection with notifications")
-    print("  • Persistent statistics")
-    print("  • Multi-monitor support")
-    print("  • Health monitoring")
-    print("  • Advanced retry logic")
+    print(f"  {Colors.CYAN}•{Colors.END} Ticket type tracking (Prato A, B, Settore)")
+    print(f"  {Colors.CYAN}•{Colors.END} Duplicate detection with notifications")
+    print(f"  {Colors.CYAN}•{Colors.END} Persistent statistics across sessions")
+    print(f"  {Colors.CYAN}•{Colors.END} Multi-monitor browser support")
+    print(f"  {Colors.CYAN}•{Colors.END} Health monitoring & auto-recovery")
+    print(f"  {Colors.CYAN}•{Colors.END} Advanced retry logic with backoff")
     
     # Check dependencies
     try:

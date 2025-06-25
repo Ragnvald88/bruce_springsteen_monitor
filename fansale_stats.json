@@ -1,15 +1,15 @@
 {
-  "total_checks": 12866,
-  "total_tickets_found": 5082,
-  "unique_tickets_found": 43,
+  "total_checks": 12210,
+  "total_tickets_found": 4496,
+  "unique_tickets_found": 38,
   "tickets_by_type": {
     "prato_a": 0,
     "prato_b": 0,
-    "settore": 29,
+    "settore": 24,
     "other": 14
   },
   "purchases": 3,
-  "blocks_encountered": 41,
+  "blocks_encountered": 39,
   "all_time_runtime": 149880.95248031616,
   "sessions": [
     {
@@ -21,15 +21,15 @@
       "purchases": 3
     },
     {
-      "date": "2025-06-25T17:41:30.693966",
-      "duration": 1.052229881286621,
-      "checks": 12866,
-      "tickets_found": 43,
+      "date": "2025-06-25T20:00:54.417546",
+      "duration": 17.55803894996643,
+      "checks": 12210,
+      "tickets_found": 38,
       "purchases": 3,
       "tickets_by_type": {
         "prato_a": 0,
         "prato_b": 0,
-        "settore": 29,
+        "settore": 24,
         "other": 14
       }
     }

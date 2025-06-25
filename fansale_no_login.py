@@ -416,7 +416,7 @@ class FanSaleBot:
                 )
             elif sys.platform == "win32":  # Windows
                 result = subprocess.run(
-                    ["C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "--version"],
+                    [r"C:\Program Files\Google\Chrome\Application\chrome.exe", "--version"],
                     capture_output=True, text=True
                 )
             else:  # Linux
@@ -644,222 +644,122 @@ class FanSaleBot:
             print(f"{'─' * 70}\n")
     
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create browser with optimized version detection"""
+        """Create browser with optimized configuration for fast startup"""
         logger.info(f"🚀 Creating Browser {browser_id}...")
         
-        try:
-            # Detect Chrome version once for all browsers
-            if not hasattr(self, '_chrome_version'):
-                self._chrome_version = self.detect_chrome_version()
-                logger.info(f"🔍 Detected Chrome version: {self._chrome_version}")
-            
-            # Create options
-            options = uc.ChromeOptions()
-            
-            # Essential flags only
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--disable-blink-features=AutomationControlled')
-            
-            # User agent
-            options.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36')
-            
-            # Window positioning for better visibility
-            window_width = 450
-            window_height = 800
-            
-            # Stagger windows diagonally for visibility
-            if browser_id == 1:
-                x, y = 50, 50  # Top-left with margin
-            elif browser_id == 2:
-                x, y = 550, 150  # Offset right and down
-            elif browser_id == 3:
-                x, y = 1050, 250  # Further right and down
-            elif browser_id == 4:
-                x, y = 50, 450  # New row
-            else:
-                # Fallback for more browsers
-                col = (browser_id - 1) % 3
-                row = (browser_id - 1) // 3
-                x = 50 + col * 500
-                y = 50 + row * 400
-            
-            options.add_argument(f'--window-position={x},{y}')
-            options.add_argument(f'--window-size={window_width},{window_height}')
-            
-            # Log positioning for clarity
-            logger.info(f"🖥️  Browser {browser_id} will appear at position ({x}, {y})")
-            
-            # Profile directory
-            profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
-            profile_dir.mkdir(parents=True, exist_ok=True)
-            options.add_argument(f'--user-data-dir={str(profile_dir)}')
-            
-            # Create driver with detected version (single attempt for speed)
-            driver = uc.Chrome(
-                options=options,
-                version_main=self._chrome_version
-            )
-            
-            # Minimal wait for initialization
-            time.sleep(1.0)
-            
-            # Set timeouts
-            driver.set_page_load_timeout(20)
-            driver.implicitly_wait(3)
-            
-            # Quick health check
-            driver.get("data:text/html,<h1>Ready</h1>")
-            
-            logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
-            return driver
-            
-        except Exception as e:
-            logger.error(f"❌ Failed to create browser {browser_id}: {e}")
-            return None
-    
-    def is_blocked(self, driver: uc.Chrome) -> bool:
-        """Enhanced block detection with multiple indicators"""
-        try:
-            url_lower = driver.current_url.lower()
-            title_lower = driver.title.lower()
-            
-            # URL-based detection
-            blocked_url_patterns = [
-                '404', 'error', 'blocked', 'denied', 'forbidden',
-                'captcha', 'challenge', 'security', 'rate-limit'
-            ]
-            if any(pattern in url_lower for pattern in blocked_url_patterns):
-                logger.warning(f"Blocked URL pattern detected: {driver.current_url}")
-                return True
-            
-            # Title-based detection
-            blocked_title_patterns = [
-                '404', 'error', 'non trovata', 'not found', 
-                'access denied', 'forbidden', 'limite', 'bloccato'
-            ]
-            if any(pattern in title_lower for pattern in blocked_title_patterns):
-                logger.warning(f"Blocked title detected: {driver.title}")
-                return True
-            
-            # Content-based detection
+        max_retries = 3
+        for retry in range(max_retries):
             try:
-                # Check for specific elements that indicate blocks
-                error_selectors = [
-                    "div[class*='error']",
-                    "div[class*='404']",
-                    "div[id*='error']",
-                    "*[class*='captcha']",
-                    "*[class*='challenge']"
-                ]
+                # Detect Chrome version once
+                if not hasattr(self, '_chrome_version'):
+                    self._chrome_version = self.detect_chrome_version()
+                    if self._chrome_version:
+                        logger.info(f"🔍 Detected Chrome version: {self._chrome_version}")
                 
-                for selector in error_selectors:
-                    if driver.find_elements(By.CSS_SELECTOR, selector):
-                        logger.warning(f"Blocked element found: {selector}")
-                        return True
+                # Create fresh options for each retry
+                options = uc.ChromeOptions()
                 
-                # Check for empty ticket list (soft block)
-                ticket_container = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketList']")
-                if ticket_container and not driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']"):
-                    # Empty container might indicate soft block
-                    if not hasattr(self, '_empty_count'):
-                        self._empty_count = {}
-                    
-                    browser_id = id(driver)
-                    self._empty_count[browser_id] = self._empty_count.get(browser_id, 0) + 1
-                    
-                    if self._empty_count[browser_id] > 5:  # 5 consecutive empty results
-                        logger.warning("Potential soft block: repeated empty results")
-                        self._empty_count[browser_id] = 0
-                        return True
+                # Minimal flags for fastest startup
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-blink-features=AutomationControlled')
+                
+                # Window positioning
+                if browser_id == 1:
+                    x, y = 50, 50
+                elif browser_id == 2:
+                    x, y = 550, 150
+                else:
+                    x = 50 + ((browser_id - 1) * 500)
+                    y = 50 + ((browser_id - 1) // 3 * 400)
+                
+                logger.info(f"🖥️  Browser {browser_id} will appear at position ({x}, {y})")
+                options.add_argument(f'--window-position={x},{y}')
+                options.add_argument(f'--window-size=450,800')
+                
+                # Use temp dir for profile to avoid conflicts
+                import tempfile
+                temp_dir = tempfile.mkdtemp(prefix=f"browser_{browser_id}_")
+                options.add_argument(f'--user-data-dir={temp_dir}')
+                
+                # Create driver with version hint for faster startup
+                logger.info("Creating Chrome instance...")
+                
+                # Use version_main if we detected it
+                if self._chrome_version:
+                    driver = uc.Chrome(options=options, version_main=self._chrome_version)
+                else:
+                    driver = uc.Chrome(options=options)
+                
+                # Quick test
+                driver.set_page_load_timeout(10)
+                driver.get("data:text/html,<h1>Browser Ready</h1>")
+                
+                logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
+                return driver
                 
             except Exception as e:
-                logger.debug(f"Element check error: {e}")
-            
-            # Page source patterns (last resort as it's slower)
-            page_source = driver.page_source.lower()
-            blocked_content_patterns = [
-                ('404' in page_source and 'non sono state trovate' not in page_source),
-                'access denied' in page_source,
-                'rate limit' in page_source,
-                'too many requests' in page_source,
-                'cloudflare' in page_source and 'challenge' in page_source
-            ]
-            
-            if any(blocked_content_patterns):
-                logger.warning("Blocked content pattern detected")
+                logger.error(f"❌ Browser creation attempt {retry + 1} failed: {e}")
+                
+                if retry < max_retries - 1:
+                    logger.info(f"🔄 Retrying in 2 seconds...")
+                    time.sleep(2)
+                else:
+                    # Final failure - provide guidance
+                    if "version" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🔧 CHROMEDRIVER VERSION ISSUE")
+                        logger.error("Try: python3 fix_chromedriver.py")
+                        logger.error("="*60 + "\n")
+                    elif "chrome not reachable" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🔧 CHROME PROCESS ISSUE")
+                        logger.error("Try: python3 cleanup_chrome.py")
+                        logger.error("="*60 + "\n")
+                    
+                    return None
+    
+    def is_blocked(self, driver: uc.Chrome) -> bool:
+        """Check if we're getting 404 or blocked"""
+        try:
+            # Check URL and title for errors
+            if any(x in driver.current_url.lower() for x in ['404', 'error', 'blocked']):
                 return True
-            
-            return False
-            
-        except Exception as e:
-            logger.debug(f"Block check error: {e}")
+            if any(x in driver.title.lower() for x in ['404', 'error', 'non trovata']):
+                return True
+                
+            # Check page content for 404
+            page_source = driver.page_source.lower()
+            if '404' in page_source and 'non sono state trovate' not in page_source:
+                return True
+                
             return False
         except Exception as e:
             logger.debug(f"Block check error: {e}")
             return False
 
     def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
-        """Progressive recovery strategies for blocks"""
+        """Clear browser data to bypass blocks"""
         try:
-            # Track block frequency
-            if not hasattr(self, '_block_count'):
-                self._block_count = {}
+            logger.info(f"🧹 Clearing data for Browser {browser_id} to bypass block...")
             
-            self._block_count[browser_id] = self._block_count.get(browser_id, 0) + 1
-            block_count = self._block_count[browser_id]
-            
-            logger.info(f"🧹 Browser {browser_id} block #{block_count} - Applying recovery...")
-            
-            # Progressive recovery based on block frequency
-            if block_count <= 2:
-                # Level 1: Simple clear
-                logger.info("Recovery Level 1: Simple clear")
-                driver.delete_all_cookies()
-                driver.execute_script("""
-                    localStorage.clear();
-                    sessionStorage.clear();
-                """)
-                wait_time = random.uniform(1.0, 2.0)
-                
-            elif block_count <= 5:
-                # Level 2: Full clear with longer wait
-                logger.info("Recovery Level 2: Full clear + extended wait")
-                driver.delete_all_cookies()
-                driver.execute_script("""
-                    localStorage.clear();
-                    sessionStorage.clear();
-                    if (window.caches) {
-                        caches.keys().then(names => {
-                            names.forEach(name => caches.delete(name));
-                        });
-                    }
-                """)
-                wait_time = random.uniform(3.0, 5.0)
-                
-            else:
-                # Level 3: Full clear + user agent rotation
-                logger.info("Recovery Level 3: Full clear + UA rotation")
-                driver.delete_all_cookies()
-                
-                # Rotate user agent
-                new_ua = self._get_random_user_agent()
-                driver.execute_cdp_cmd('Network.setUserAgentOverride', {
-                    "userAgent": new_ua
-                })
-                
-                wait_time = random.uniform(5.0, 10.0)
-                
-                # Reset count after max recovery
-                if block_count > 10:
-                    logger.warning(f"Browser {browser_id} experiencing persistent blocks")
-                    self._block_count[browser_id] = 0
+            # Clear all browser data
+            driver.delete_all_cookies()
+            driver.execute_script("""
+                localStorage.clear();
+                sessionStorage.clear();
+                if (window.caches) {
+                    caches.keys().then(names => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+            """)
             
             # Navigate to blank page
             driver.get("about:blank")
-            time.sleep(wait_time)
+            time.sleep(random.uniform(1.0, 2.0))
             
-            logger.info(f"✅ Browser {browser_id} recovery complete (waited {wait_time:.1f}s)")
+            logger.info(f"✅ Browser {browser_id} data cleared")
             self.stats['blocks_encountered'] += 1
             self.save_stats()
             
@@ -1076,9 +976,6 @@ class FanSaleBot:
                     status_line = f"{spinner} Browser {browser_id} | {check_count:>4} checks | {speed_icon} {speed_color}{rate:>4.1f}/min{Colors.END} | {local_str}"
                     
                     logger.info(status_line)
-                    
-                    # Minimal delay between checks for maximum speed
-                    time.sleep(0.1)  # 10 checks per second per browser
                     
             except TimeoutException:
                 logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")

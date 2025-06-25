@@ -3,13 +3,23 @@
 Fansale ticket hunting bot
 """
 
+# Fix for Python 3.13+ distutils removal
+import sys
+if sys.version_info >= (3, 12):
+    try:
+        from setuptools import _distutils
+        sys.modules['distutils'] = _distutils
+        from setuptools._distutils import version
+        sys.modules['distutils.version'] = version
+    except ImportError:
+        pass
+
 import json
 import time
 import random
 import logging
 import hashlib
 import os
-import sys
 import threading
 import subprocess
 import tempfile
@@ -564,8 +574,6 @@ class FanSaleBot:
                     'translate': {'enabled': False}
                 }
                 options.add_experimental_option('prefs', prefs)
-                options.add_experimental_option('excludeSwitches', ['enable-automation'])
-                options.add_experimental_option('useAutomationExtension', False)
                 
                 # Window positioning
                 if browser_id == 1:

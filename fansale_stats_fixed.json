@@ -1,0 +1,22 @@
+{
+  "total_checks": 32,
+  "total_tickets_found": 0,
+  "unique_tickets_found": 0,
+  "tickets_by_type": {
+    "prato_a": 0,
+    "prato_b": 0,
+    "settore": 0
+  },
+  "purchases": 0,
+  "blocks_encountered": 0,
+  "all_time_runtime": 49.8953070640564,
+  "sessions": [
+    {
+      "start_time": "2025-06-25T23:40:53.027849",
+      "runtime": 49.8953070640564,
+      "tickets_found": 0,
+      "purchases": 0,
+      "checks": 32
+    }
+  ]
+}

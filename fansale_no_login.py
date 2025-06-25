@@ -9,6 +9,8 @@ Features:
 - Beautiful terminal logging with ticket details
 """
 
+import fix_distutils  # Python 3.13 compatibility fix
+
 import os
 import sys
 import time
@@ -35,6 +37,11 @@ logging.getLogger('selenium').setLevel(logging.WARNING)
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 import undetected_chromedriver as uc
+
+# Patch ChromeOptions for compatibility
+if not hasattr(uc.ChromeOptions, 'headless'):
+    uc.ChromeOptions.headless = False
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -288,6 +295,8 @@ logger.addHandler(file_handler)
 class FanSaleBot:
     """Enhanced FanSale bot with ticket type tracking - No login required"""
     
+    # Method removed - not needed with auto-detection
+
     def __init__(self, config: Optional[BotConfig] = None):
         # Load configuration
         self.config = config or BotConfig()
@@ -327,6 +336,36 @@ class FanSaleBot:
         self.health_monitor = HealthMonitor()
         self.notification_manager = NotificationManager(enabled=True)
 
+    def detect_chrome_version(self):
+        """Detect installed Chrome version for faster browser creation"""
+        try:
+            import subprocess
+            # Try to get Chrome version
+            if sys.platform == "darwin":  # macOS
+                result = subprocess.run(
+                    ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            elif sys.platform == "win32":  # Windows
+                result = subprocess.run(
+                    ["C:\Program Files\Google\Chrome\Application\chrome.exe", "--version"],
+                    capture_output=True, text=True
+                )
+            else:  # Linux
+                result = subprocess.run(
+                    ["google-chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            
+            if result.returncode == 0:
+                # Extract version number (e.g., "Google Chrome 137.0.5938.132" -> 137)
+                version_match = re.search(r'(\d+)\.', result.stdout)
+                if version_match:
+                    return int(version_match.group(1))
+        except:
+            pass
+        return None  # Let undetected-chromedriver auto-detect
+
     def _load_saved_config(self):
         """Load saved configuration including ticket types"""
         config_path = Path("bot_config.json")
@@ -344,6 +383,57 @@ class FanSaleBot:
                 logger.info(f"✅ Loaded saved configuration")
             except Exception as e:
                 logger.warning(f"Could not load saved config: {e}")
+
+    def _keep_browser_alive(self, driver: uc.Chrome, browser_id: int):
+        """Keep browser session alive with periodic checks"""
+        try:
+            # Execute a simple JavaScript to keep session active
+            driver.execute_script("return document.readyState")
+            return True
+        except Exception as e:
+            logger.warning(f"Browser {browser_id} session check failed: {e}")
+            return False
+    def _keep_browser_alive(self, driver: uc.Chrome, browser_id: int):
+        """Keep browser session alive with periodic checks"""
+        try:
+            # Execute a simple JavaScript to keep session active
+            driver.execute_script("return document.readyState")
+            return True
+        except Exception as e:
+            logger.warning(f"Browser {browser_id} session check failed: {e}")
+            return False
+
+    def detect_chrome_version(self):
+        """Detect installed Chrome version for faster browser creation"""
+        try:
+            import subprocess
+            import re
+            # Try to get Chrome version
+            if sys.platform == "darwin":  # macOS
+                result = subprocess.run(
+                    ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            elif sys.platform == "win32":  # Windows
+                result = subprocess.run(
+                    ["C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "--version"],
+                    capture_output=True, text=True
+                )
+            else:  # Linux
+                result = subprocess.run(
+                    ["google-chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            
+            if result.returncode == 0:
+                # Extract version number (e.g., "Google Chrome 137.0.5938.132" -> 137)
+                version_match = re.search(r'(\d+)\.', result.stdout)
+                if version_match:
+                    return int(version_match.group(1))
+        except:
+            pass
+        return None  # Let undetected-chromedriver auto-detect
+
 
 
     def save_stats(self):
@@ -553,206 +643,313 @@ class FanSaleBot:
         else:
             print(f"{'─' * 70}\n")
     
-    @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create stealth browser with multi-monitor support and version handling"""
+        """Create browser with optimized version detection"""
         logger.info(f"🚀 Creating Browser {browser_id}...")
         
         try:
-            # Try multiple approaches to handle version mismatches
-            driver = None
-            attempts = [
-                (137, "Chrome 137"),     # Detected Chrome version
-                (None, "auto-detection"),  # Fall back to auto-detection
-                (137, "Chrome 137"),       # Chrome 137
-                (136, "Chrome 136"),       # Chrome 136
-            ]
+            # Detect Chrome version once for all browsers
+            if not hasattr(self, '_chrome_version'):
+                self._chrome_version = self.detect_chrome_version()
+                logger.info(f"🔍 Detected Chrome version: {self._chrome_version}")
             
-            for version_main, desc in attempts:
-                try:
-                    logger.info(f"🔄 Attempting with {desc}...")
-                    
-                    # IMPORTANT: Create fresh options for each attempt to avoid reuse error
-                    options = uc.ChromeOptions()
-                    
-                    # Stealth options
-                    options.add_argument('--disable-blink-features=AutomationControlled')
-                    options.add_argument('--no-sandbox')
-                    options.add_argument('--disable-dev-shm-usage')
-                    options.add_argument('--disable-gpu')
-                    options.add_argument('--disable-web-security')
-                    options.add_argument('--disable-features=IsolateOrigins,site-per-process')
-                    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-                    options.add_experimental_option('useAutomationExtension', False)
-                    
-                    # Add prefs to avoid detection
-                    prefs = {
-                        'credentials_enable_service': False,
-                        'profile.password_manager_enabled': False,
-                        'profile.default_content_setting_values.notifications': 2
-                    }
-                    options.add_experimental_option('prefs', prefs)
-                    
-                    # User agent
-                    options.add_argument('user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36')
-                    
-                    # Multi-monitor window positioning
-                    window_width = 450
-                    window_height = 800
-                    monitor_width = 1920  # Adjust based on your monitor resolution
-                    
-                    # Calculate position for multi-monitor setup
-                    col = (browser_id - 1) % 4
-                    row = (browser_id - 1) // 4
-                    x = col * (window_width + 10)  # 10px gap between windows
-                    y = row * 100  # Vertical offset for rows
-                    
-                    # If x position exceeds primary monitor, place on next monitor
-                    monitor_num = x // monitor_width
-                    x = x % monitor_width + (monitor_num * monitor_width)
-                    
-                    options.add_argument(f'--window-position={x},{y}')
-                    options.add_argument(f'--window-size={window_width},{window_height}')
-                    
-                    # Profile persistence for cookies/storage
-                    profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
-                    profile_dir.mkdir(parents=True, exist_ok=True)
-                    options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
-                    
-                    # Create driver
-                    driver = uc.Chrome(options=options, version_main=version_main, driver_executable_path=None)
-                    
-                    # Give browser time to stabilize
-                    time.sleep(2)
-                    
-                    # Set timeouts
-                    driver.set_page_load_timeout(30)
-                    driver.implicitly_wait(10)
-                    
-                    # Test if driver works by navigating to a simple page first
-                    try:
-                        driver.get("data:text/html,<h1>Test</h1>")
-                        time.sleep(1)
-                        driver.execute_script("return navigator.userAgent")
-                    except Exception as e:
-                        logger.warning(f"Browser test failed: {e}")
-                        raise
-                    
-                    # Inject stealth JavaScript
-                    driver.execute_script("""
-                        Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
-                        window.chrome = {runtime: {}};
-                        Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
-                        Object.defineProperty(navigator, 'languages', {get: () => ['en-US', 'en']});
-                        Object.defineProperty(navigator, 'permissions', {
-                            get: () => ({
-                                query: () => Promise.resolve({state: 'granted'})
-                            })
-                        });
-                    """)
-                    
-                    logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y}) using {desc}")
-                    return driver
-                    
-                except Exception as e:
-                    if driver:
-                        try:
-                            driver.quit()
-                        except:
-                            pass
-                    if "version" in str(e).lower() or "chromedriver" in str(e).lower():
-                        logger.warning(f"Failed with {desc}: {str(e)[:100]}...")
-                        continue
-                    else:
-                        # For non-version related errors, log and continue
-                        logger.warning(f"Error with {desc}: {str(e)[:100]}...")
-                        continue
+            # Create options
+            options = uc.ChromeOptions()
             
-            # If all attempts failed
-            logger.error(f"❌ All Chrome versions failed for Browser {browser_id}")
+            # Essential flags only
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-blink-features=AutomationControlled')
             
-            # Provide helpful error message
-            logger.error("\n" + "="*60)
-            logger.error("🚨 CHROMEDRIVER VERSION MISMATCH DETECTED!")
-            logger.error("="*60)
-            logger.error("Please run one of the following commands:")
-            logger.error("  1. python3 fix_chromedriver.py")
-            logger.error("  2. python3 cleanup_chrome.py (if processes stuck)")
-            logger.error("="*60 + "\n")
+            # User agent
+            options.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36')
             
-            return None
+            # Window positioning for better visibility
+            window_width = 450
+            window_height = 800
+            
+            # Stagger windows diagonally for visibility
+            if browser_id == 1:
+                x, y = 50, 50  # Top-left with margin
+            elif browser_id == 2:
+                x, y = 550, 150  # Offset right and down
+            elif browser_id == 3:
+                x, y = 1050, 250  # Further right and down
+            elif browser_id == 4:
+                x, y = 50, 450  # New row
+            else:
+                # Fallback for more browsers
+                col = (browser_id - 1) % 3
+                row = (browser_id - 1) // 3
+                x = 50 + col * 500
+                y = 50 + row * 400
+            
+            options.add_argument(f'--window-position={x},{y}')
+            options.add_argument(f'--window-size={window_width},{window_height}')
+            
+            # Log positioning for clarity
+            logger.info(f"🖥️  Browser {browser_id} will appear at position ({x}, {y})")
+            
+            # Profile directory
+            profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
+            profile_dir.mkdir(parents=True, exist_ok=True)
+            options.add_argument(f'--user-data-dir={str(profile_dir)}')
+            
+            # Create driver with detected version (single attempt for speed)
+            driver = uc.Chrome(
+                options=options,
+                version_main=self._chrome_version
+            )
+            
+            # Minimal wait for initialization
+            time.sleep(1.0)
+            
+            # Set timeouts
+            driver.set_page_load_timeout(20)
+            driver.implicitly_wait(3)
+            
+            # Quick health check
+            driver.get("data:text/html,<h1>Ready</h1>")
+            
+            logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
+            return driver
             
         except Exception as e:
             logger.error(f"❌ Failed to create browser {browser_id}: {e}")
             return None
     
     def is_blocked(self, driver: uc.Chrome) -> bool:
-        """Check if we're getting 404 or blocked"""
+        """Enhanced block detection with multiple indicators"""
         try:
-            # Check URL and title for errors
-            if any(x in driver.current_url.lower() for x in ['404', 'error', 'blocked']):
+            url_lower = driver.current_url.lower()
+            title_lower = driver.title.lower()
+            
+            # URL-based detection
+            blocked_url_patterns = [
+                '404', 'error', 'blocked', 'denied', 'forbidden',
+                'captcha', 'challenge', 'security', 'rate-limit'
+            ]
+            if any(pattern in url_lower for pattern in blocked_url_patterns):
+                logger.warning(f"Blocked URL pattern detected: {driver.current_url}")
                 return True
-            if any(x in driver.title.lower() for x in ['404', 'error', 'non trovata']):
+            
+            # Title-based detection
+            blocked_title_patterns = [
+                '404', 'error', 'non trovata', 'not found', 
+                'access denied', 'forbidden', 'limite', 'bloccato'
+            ]
+            if any(pattern in title_lower for pattern in blocked_title_patterns):
+                logger.warning(f"Blocked title detected: {driver.title}")
                 return True
+            
+            # Content-based detection
+            try:
+                # Check for specific elements that indicate blocks
+                error_selectors = [
+                    "div[class*='error']",
+                    "div[class*='404']",
+                    "div[id*='error']",
+                    "*[class*='captcha']",
+                    "*[class*='challenge']"
+                ]
                 
-            # Check page content
+                for selector in error_selectors:
+                    if driver.find_elements(By.CSS_SELECTOR, selector):
+                        logger.warning(f"Blocked element found: {selector}")
+                        return True
+                
+                # Check for empty ticket list (soft block)
+                ticket_container = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketList']")
+                if ticket_container and not driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']"):
+                    # Empty container might indicate soft block
+                    if not hasattr(self, '_empty_count'):
+                        self._empty_count = {}
+                    
+                    browser_id = id(driver)
+                    self._empty_count[browser_id] = self._empty_count.get(browser_id, 0) + 1
+                    
+                    if self._empty_count[browser_id] > 5:  # 5 consecutive empty results
+                        logger.warning("Potential soft block: repeated empty results")
+                        self._empty_count[browser_id] = 0
+                        return True
+                
+            except Exception as e:
+                logger.debug(f"Element check error: {e}")
+            
+            # Page source patterns (last resort as it's slower)
             page_source = driver.page_source.lower()
-            if '404' in page_source and 'non sono state trovate' not in page_source:
+            blocked_content_patterns = [
+                ('404' in page_source and 'non sono state trovate' not in page_source),
+                'access denied' in page_source,
+                'rate limit' in page_source,
+                'too many requests' in page_source,
+                'cloudflare' in page_source and 'challenge' in page_source
+            ]
+            
+            if any(blocked_content_patterns):
+                logger.warning("Blocked content pattern detected")
                 return True
-                
+            
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Block check error: {e}")
             return False
         except Exception as e:
             logger.debug(f"Block check error: {e}")
             return False
 
     def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
-        """Clear browser data to bypass blocks"""
+        """Progressive recovery strategies for blocks"""
         try:
-            logger.info(f"🧹 Clearing data for Browser {browser_id} to bypass block...")
+            # Track block frequency
+            if not hasattr(self, '_block_count'):
+                self._block_count = {}
             
-            # Clear all browser data
-            driver.delete_all_cookies()
-            driver.execute_script("""
-                localStorage.clear();
-                sessionStorage.clear();
-                if (window.caches) {
-                    caches.keys().then(names => {
-                        names.forEach(name => caches.delete(name));
-                    });
-                }
-            """)
+            self._block_count[browser_id] = self._block_count.get(browser_id, 0) + 1
+            block_count = self._block_count[browser_id]
+            
+            logger.info(f"🧹 Browser {browser_id} block #{block_count} - Applying recovery...")
+            
+            # Progressive recovery based on block frequency
+            if block_count <= 2:
+                # Level 1: Simple clear
+                logger.info("Recovery Level 1: Simple clear")
+                driver.delete_all_cookies()
+                driver.execute_script("""
+                    localStorage.clear();
+                    sessionStorage.clear();
+                """)
+                wait_time = random.uniform(1.0, 2.0)
+                
+            elif block_count <= 5:
+                # Level 2: Full clear with longer wait
+                logger.info("Recovery Level 2: Full clear + extended wait")
+                driver.delete_all_cookies()
+                driver.execute_script("""
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    if (window.caches) {
+                        caches.keys().then(names => {
+                            names.forEach(name => caches.delete(name));
+                        });
+                    }
+                """)
+                wait_time = random.uniform(3.0, 5.0)
+                
+            else:
+                # Level 3: Full clear + user agent rotation
+                logger.info("Recovery Level 3: Full clear + UA rotation")
+                driver.delete_all_cookies()
+                
+                # Rotate user agent
+                new_ua = self._get_random_user_agent()
+                driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                    "userAgent": new_ua
+                })
+                
+                wait_time = random.uniform(5.0, 10.0)
+                
+                # Reset count after max recovery
+                if block_count > 10:
+                    logger.warning(f"Browser {browser_id} experiencing persistent blocks")
+                    self._block_count[browser_id] = 0
             
             # Navigate to blank page
             driver.get("about:blank")
-            time.sleep(random.uniform(0.8, 1.5))
+            time.sleep(wait_time)
             
-            logger.info(f"✅ Browser {browser_id} data cleared")
+            logger.info(f"✅ Browser {browser_id} recovery complete (waited {wait_time:.1f}s)")
             self.stats['blocks_encountered'] += 1
             self.save_stats()
             
         except Exception as e:
             logger.error(f"Failed to clear browser data: {e}")
     
+    def _get_random_user_agent(self):
+        """Get random user agent for rotation"""
+        user_agents = [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+        ]
+        return random.choice(user_agents)
+
     def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
         """Main hunting loop with ticket type tracking and duplicate detection"""
         logger.info(f"🎯 Hunter {browser_id} starting...")
         
-        # Navigate to event page with error handling
+        # Navigate to event page with enhanced error handling
         logger.info(f"📍 Navigating to: {self.target_url}")
-        try:
-            driver.get(self.target_url)
-            time.sleep(random.uniform(3.5, 5.0))  # Give more time for initial load
-            
-            # Verify we're on the right page
-            if "fansale" not in driver.current_url.lower():
-                logger.warning(f"Unexpected URL: {driver.current_url}")
-                time.sleep(2)
+        
+        # Retry navigation up to 3 times
+        for nav_attempt in range(3):
+            try:
+                # Check if browser is still alive
+                if not self._keep_browser_alive(driver, browser_id):
+                    logger.error(f"Browser {browser_id} session dead")
+                    return
+                
                 driver.get(self.target_url)
-        except Exception as e:
-            logger.error(f"Navigation error: {e}")
-            # Try one more time
-            time.sleep(2)
-            driver.get(self.target_url)
+                time.sleep(random.uniform(0.8, 1.2))  # Ultra-fast load
+                
+                # Verify successful navigation
+                if "fansale" in driver.current_url.lower():
+                    logger.info(f"✅ Browser {browser_id} successfully navigated")
+                    
+                    # Inject stealth JavaScript after navigation for better performance
+                    try:
+                        driver.execute_script("""
+                            // Remove webdriver property
+                            Object.defineProperty(navigator, 'webdriver', {
+                                get: () => undefined
+                            });
+                            
+                            // Add chrome object if missing
+                            if (!window.chrome) {
+                                window.chrome = {
+                                    runtime: {},
+                                    loadTimes: function() {},
+                                    csi: function() {}
+                                };
+                            }
+                            
+                            // Override permissions
+                            const originalQuery = window.navigator.permissions.query;
+                            if (originalQuery) {
+                                window.navigator.permissions.query = (parameters) => (
+                                    parameters.name === 'notifications' ?
+                                        Promise.resolve({ state: Notification.permission }) :
+                                        originalQuery(parameters)
+                                );
+                            }
+                            
+                            // Fix navigator properties
+                            Object.defineProperty(navigator, 'plugins', {
+                                get: () => [1, 2, 3, 4, 5]
+                            });
+                            
+                            Object.defineProperty(navigator, 'languages', {
+                                get: () => ['it-IT', 'it', 'en-US', 'en']
+                            });
+                        """)
+                        logger.debug("Stealth mode activated")
+                    except:
+                        pass  # Non-critical, continue anyway
+                    
+                    break
+                else:
+                    logger.warning(f"Unexpected URL: {driver.current_url}")
+                    if nav_attempt < 2:
+                        time.sleep(3)
+                        continue
+            except Exception as e:
+                logger.error(f"Navigation attempt {nav_attempt + 1} failed: {e}")
+                if nav_attempt == 2:
+                    logger.error(f"Browser {browser_id} failed to navigate after 3 attempts")
+                    return
+                time.sleep(3)
         
         check_count = 0
         last_refresh = time.time()
@@ -764,12 +961,18 @@ class FanSaleBot:
                 check_count += 1
                 self.stats['total_checks'] += 1
                 
+                # Validate session is still alive (less frequently for speed)
+                if check_count % 50 == 0:  # Check every 50 iterations
+                    if not self._keep_browser_alive(driver, browser_id):
+                        logger.error(f"Browser {browser_id} session lost, exiting hunter")
+                        break
+                
                 # Check for 404 blocks
                 if self.is_blocked(driver):
                     logger.warning(f"⚠️ Hunter {browser_id}: 404 block detected!")
                     self.clear_browser_data(driver, browser_id)
                     driver.get(self.target_url)
-                    time.sleep(random.uniform(2.5, 3.5))
+                    time.sleep(random.uniform(1.0, 1.5))
                     continue
                 
                 # Session refresh every 15 minutes
@@ -828,15 +1031,15 @@ class FanSaleBot:
                             logger.debug(f"Error processing ticket: {e}")
                             continue
                 
-                # Smart refresh strategy
-                refresh_time = random.uniform(2.5, 3.5)
-                
-                # Full page refresh every 30 seconds
+                # Ultra-fast refresh strategy for >100 checks/min
+                # Only sleep if we haven't refreshed recently
                 if time.time() - last_refresh > 30:
                     driver.refresh()
                     last_refresh = time.time()
+                    time.sleep(0.5)  # Brief pause after refresh
                 else:
-                    time.sleep(refresh_time)
+                    # Minimal delay between checks for maximum speed
+                    time.sleep(0.05)  # 50ms = 20 checks/second theoretical max
                 
                 # Progress update every 50 checks
                 if check_count % 25 == 0:
@@ -874,21 +1077,29 @@ class FanSaleBot:
                     
                     logger.info(status_line)
                     
+                    # Minimal delay between checks for maximum speed
+                    time.sleep(0.1)  # 10 checks per second per browser
+                    
             except TimeoutException:
                 logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")
                 driver.refresh()
-                time.sleep(random.uniform(1.5, 2.5))
+                time.sleep(random.uniform(1.0, 2.0))
                 
             except WebDriverException as e:
-                if "invalid session" in str(e).lower():
+                error_str = str(e).lower()
+                if "net::err" in error_str:
+                    logger.error(f"Hunter {browser_id}: Network error - {e}")
+                    time.sleep(random.uniform(2.0, 3.0))
+                elif "invalid session" in error_str:
                     logger.error(f"Hunter {browser_id}: Session died")
                     break
-                logger.error(f"Hunter {browser_id}: Browser error, continuing...")
-                time.sleep(5)
+                else:
+                    logger.error(f"Hunter {browser_id}: Browser error - {e}")
+                    time.sleep(1.5)
                 
             except Exception as e:
-                logger.error(f"Hunter {browser_id} error: {e}")
-                time.sleep(5)
+                logger.error(f"Hunter {browser_id} unexpected error: {e}")
+                time.sleep(1.0)
     
     @retry(max_attempts=2, delay=0.5, exceptions=(ElementNotInteractableException, StaleElementReferenceException))
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:

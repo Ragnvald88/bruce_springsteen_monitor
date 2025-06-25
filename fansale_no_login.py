@@ -348,7 +348,7 @@ class FanSaleBot:
                 )
             elif sys.platform == "win32":  # Windows
                 result = subprocess.run(
-                    ["C:\Program Files\Google\Chrome\Application\chrome.exe", "--version"],
+                    [r"C:\Program Files\Google\Chrome\Application\chrome.exe", "--version"],
                     capture_output=True, text=True
                 )
             else:  # Linux
@@ -659,6 +659,11 @@ class FanSaleBot:
                 # Create fresh options for each retry
                 options = uc.ChromeOptions()
                 
+                # Workaround for undetected_chromedriver v3.5.3 bug
+                # Add missing headless attribute that uc expects
+                if not hasattr(options, 'headless'):
+                    options.headless = False
+                
                 # Minimal flags for fastest startup
                 options.add_argument('--no-sandbox')
                 options.add_argument('--disable-dev-shm-usage')
@@ -685,11 +690,11 @@ class FanSaleBot:
                 # Create driver with version hint for faster startup
                 logger.info("Creating Chrome instance...")
                 
-                # Use version_main if we detected it
+                # Use version_main if we detected it, and add headless=False explicitly
                 if self._chrome_version:
-                    driver = uc.Chrome(options=options, version_main=self._chrome_version)
+                    driver = uc.Chrome(options=options, version_main=self._chrome_version, headless=False, use_subprocess=False)
                 else:
-                    driver = uc.Chrome(options=options)
+                    driver = uc.Chrome(options=options, headless=False, use_subprocess=False)
                 
                 # Quick test
                 driver.set_page_load_timeout(10)
@@ -698,6 +703,26 @@ class FanSaleBot:
                 logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
                 return driver
                 
+            except AttributeError as e:
+                if "headless" in str(e):
+                    logger.error(f"⚠️ ChromeOptions headless attribute issue: {e}")
+                    # Try alternative approach
+                    try:
+                        # Create minimal Chrome instance without options
+                        logger.info("Trying minimal Chrome instance...")
+                        driver = uc.Chrome(headless=False, use_subprocess=False)
+                        
+                        # Set window size after creation
+                        driver.set_window_position(x, y)
+                        driver.set_window_size(450, 800)
+                        
+                        logger.info(f"✅ Browser {browser_id} ready (minimal config)")
+                        return driver
+                    except Exception as e2:
+                        logger.error(f"❌ Minimal approach also failed: {e2}")
+                else:
+                    raise
+                    
             except Exception as e:
                 logger.error(f"❌ Browser creation attempt {retry + 1} failed: {e}")
                 
@@ -715,6 +740,12 @@ class FanSaleBot:
                         logger.error("\n" + "="*60)
                         logger.error("🔧 CHROME PROCESS ISSUE")
                         logger.error("Try: python3 cleanup_chrome.py")
+                        logger.error("="*60 + "\n")
+                    elif "headless" in str(e).lower():
+                        logger.error("\n" + "="*60)
+                        logger.error("🔧 UNDETECTED_CHROMEDRIVER BUG")
+                        logger.error("This is a known issue with undetected_chromedriver v3.5.3")
+                        logger.error("The bot will try alternative approaches")
                         logger.error("="*60 + "\n")
                     
                     return None
@@ -1393,8 +1424,8 @@ class FanSaleBot:
         print(r"  / ____| |           | | | | |     |  \/  |         | |           ")
         print(r" | (___ | |_ ___  __ _| | |_| |__   | \  / | __ _ ___| |_ ___ _ __ ")
         print(r"  \___ \| __/ _ \/ _` | | __| '_ \  | |\/| |/ _` / __| __/ _ \ '__|")
-        print("  ____) | ||  __/ (_| | | |_| | | | | |  | | (_| \__ \ ||  __/ |   ")
-        print(" |_____/ \__\___|\__,_|_|\__|_| |_| |_|  |_|\__,_|___/\__\___|_|   ")
+        print(r"  ____) | ||  __/ (_| | | |_| | | | | |  | | (_| \__ \ ||  __/ |   ")
+        print(r" |_____/ \__\___|\__,_|_|\__|_| |_| |_|  |_|\__,_|___/\__\___|_|   ")
         print("")
         print("               🎫 TICKET HUNTER CONFIGURATION 🎫")
         print("                 Fast • Smart • Undetectable")

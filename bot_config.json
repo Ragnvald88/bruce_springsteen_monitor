@@ -8,8 +8,8 @@
   "retry_attempts": 2,
   "retry_delay": 0.5,
   "ticket_types_to_hunt": [
-    "prato_b",
-    "prato_a"
+    "prato_a",
+    "prato_b"
   ],
   "ticket_filters": []
 }

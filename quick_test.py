@@ -1,91 +1,72 @@
 #!/usr/bin/env python3
-"""
-Final quick test of improved bot
-"""
-
-import subprocess
-import time
+"""Test the improved bot"""
 import sys
+sys.path.insert(0, '.')
 
-def final_test():
-    """Quick test to ensure bot works with all improvements"""
-    print("🧪 Final Bot Test")
-    print("=" * 50)
-    
-    # Check improvements in code
-    with open("fansale_no_login.py", 'r') as f:
-        content = f.read()
-    
-    critical_features = [
-        ("Block detection", "blocked_url_patterns"),
-        ("Progressive recovery", "_block_count"),
-        ("Error handling", "net::err"),
-        ("Soft blocks", "_empty_count")
-    ]
-    
-    print("✅ Code improvements verified:")
-    for name, pattern in critical_features:
-        if pattern in content:
-            print(f"  ✓ {name}")
-    
-    # Quick startup test
-    print("\n🚀 Testing bot startup...")
-    
-    process = subprocess.Popen(
-        ['python3', 'fansale_no_login.py'],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-    
+from fansale_no_login_improved import FanSaleBot, Colors
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def test_improved_bot():
+    """Test the improved bot configuration and features"""
     try:
-        # Send option 1
-        process.stdin.write("1\n")
-        process.stdin.flush()
+        logger.info("Testing improved FanSale bot...")
         
-        # Wait and check
-        time.sleep(20)
-        process.terminate()
+        # Create bot instance
+        bot = FanSaleBot()
         
-        # Get output
-        stdout, stderr = process.communicate(timeout=5)
+        # Test configuration
+        logger.info(f"\n{Colors.BOLD}Configuration Test:{Colors.END}")
+        logger.info(f"  Checks/min: {bot.config.checks_per_minute}")
+        logger.info(f"  Min wait: {bot.config.min_wait}s")
+        logger.info(f"  Max wait: {bot.config.max_wait}s")
+        logger.info(f"  Status interval: {bot.config.status_update_interval}")
         
-        # Check for success indicators
-        output = stdout + "\n" + stderr
+        # Test wait time calculation
+        wait_time = bot.config.calculate_wait_time()
+        logger.info(f"  Calculated wait: {wait_time:.2f}s")
         
-        if "ready" in output:
-            print("✅ Bot started successfully!")
+        # Test browser creation
+        logger.info(f"\n{Colors.BOLD}Browser Creation Test:{Colors.END}")
+        browser = bot.create_browser(1)
+        
+        if browser:
+            logger.info("✅ Browser created successfully!")
             
-            # Look for block detection logs
-            if "block" in output.lower():
-                print("✅ Block detection active")
+            # Test navigation
+            browser.get("https://www.fansale.it")
+            logger.info("✅ Navigation successful!")
+            
+            # Clean up
+            browser.quit()
+            
+            # Show statistics
+            logger.info(f"\n{Colors.BOLD}Statistics Test:{Colors.END}")
+            bot.show_statistics_dashboard()
             
             return True
         else:
-            print("❌ Bot startup issue")
+            logger.error("❌ Failed to create browser")
             return False
             
     except Exception as e:
-        print(f"❌ Test error: {e}")
+        logger.error(f"❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()
         return False
-    finally:
-        try:
-            process.kill()
-        except:
-            pass
 
 if __name__ == "__main__":
-    print("🔬 Running final bot test...\n")
-    
-    if final_test():
-        print("\n✅ SUCCESS! Bot is ready with all improvements:")
-        print("- Enhanced block detection (10+ patterns)")
-        print("- Progressive recovery (3 levels)")
-        print("- Smart error handling")
-        print("- Automatic adaptation")
-        print("\n🚀 Run 'python3 fansale_no_login.py' to start hunting!")
+    if test_improved_bot():
+        logger.info(f"\n{Colors.GREEN}✅ All tests passed!{Colors.END}")
+        logger.info("The improved bot is ready to use!")
+        logger.info("\nKey improvements:")
+        logger.info("- Configurable check frequency (60-600 checks/min)")
+        logger.info("- Better logging with adjustable verbosity")
+        logger.info("- Enhanced menu system with more options")
+        logger.info("- Performance presets for different risk levels")
+        logger.info("- Health monitoring and error tracking")
     else:
-        print("\n❌ Please check the bot and try again")
-    
-    sys.exit(0)
+        logger.error(f"\n{Colors.RED}❌ Tests failed{Colors.END}")

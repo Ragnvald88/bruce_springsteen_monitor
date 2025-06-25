@@ -1,0 +1,19 @@
+{
+  "browsers_count": 1,
+  "max_tickets": 4,
+  "refresh_interval": 60,
+  "session_timeout": 900,
+  "checks_per_minute": 60,
+  "min_wait": 0.8,
+  "max_wait": 1.2,
+  "log_level": "INFO",
+  "status_update_interval": 50,
+  "detailed_logging": false,
+  "retry_attempts": 2,
+  "retry_delay": 0.5,
+  "ticket_types_to_hunt": [
+    "prato_b",
+    "prato_a"
+  ],
+  "ticket_filters": []
+}

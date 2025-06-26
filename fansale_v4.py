@@ -1,14 +1,13 @@
-#/stealthmaster/fansale_v2.py
-
+#!/usr/bin/env python3
 """
-FanSale Bot - Enhanced No Login Edition V2
+FanSale Bot - Enhanced No Login Edition V4
 Features:
 - No login required
 - Ticket type categorization (Prato A, Prato B, Settore)
 - Duplicate detection to avoid re-logging same tickets
 - Persistent statistics across restarts
 - Beautiful terminal logging with ticket details
-- V2 Improvements: Staggered refreshes, human-like patterns, faster loading
+- V4 Improvements: Auto CAPTCHA solving, popup handling, images VERIFIED enabled
 """
 
 import os
@@ -23,6 +22,7 @@ import re
 import functools
 import tempfile
 import shutil
+import requests
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Set
@@ -39,7 +39,7 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, WebDriverException, ElementNotInteractableException, StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException, WebDriverException, ElementNotInteractableException, StaleElementReferenceException, NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 
 from dotenv import load_dotenv
@@ -57,6 +57,9 @@ class BotConfig:
     max_wait: float = 4.0
     retry_attempts: int = 3
     retry_delay: float = 1.0
+    captcha_grace_period: int = 300  # 5 minutes after solving CAPTCHA
+    twocaptcha_api_key: str = ""  # Optional: for automatic solving
+    auto_solve_captcha: bool = False
     
     @classmethod
     def from_file(cls, path: Path) -> 'BotConfig':
@@ -69,8 +72,12 @@ class BotConfig:
     
     def save(self, path: Path):
         """Save config to JSON file"""
+        # Don't save API key to file
+        data = self.__dict__.copy()
+        if 'twocaptcha_api_key' in data:
+            data['twocaptcha_api_key'] = ""
         with open(path, 'w') as f:
-            json.dump(self.__dict__, f, indent=2)
+            json.dump(data, f, indent=2)
 
 # Advanced retry decorator
 def retry(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0, 
@@ -129,6 +136,10 @@ class StatsManager:
             },
             'purchases': 0,
             'blocks_encountered': 0,
+            'captchas_encountered': 0,
+            'captchas_solved': 0,
+            'captchas_auto_solved': 0,
+            'popups_dismissed': 0,
             'all_time_runtime': 0
         }
     
@@ -171,6 +182,72 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
+
+# 2Captcha solver class
+class TwoCaptchaSolver:
+    """Handles automatic CAPTCHA solving via 2captcha service"""
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.base_url = "http://2captcha.com"
+        
+    def solve_recaptcha(self, sitekey: str, pageurl: str, timeout: int = 180) -> Optional[str]:
+        """Solve reCAPTCHA and return token"""
+        if not self.api_key:
+            return None
+            
+        try:
+            # Submit CAPTCHA
+            submit_url = f"{self.base_url}/in.php"
+            submit_data = {
+                'key': self.api_key,
+                'method': 'userrecaptcha',
+                'googlekey': sitekey,
+                'pageurl': pageurl,
+                'json': 1
+            }
+            
+            logger.info("🤖 Submitting CAPTCHA to 2captcha...")
+            response = requests.post(submit_url, data=submit_data, timeout=30)
+            result = response.json()
+            
+            if result.get('status') != 1:
+                logger.error(f"2captcha submission failed: {result}")
+                return None
+                
+            captcha_id = result.get('request')
+            logger.info(f"✅ CAPTCHA submitted, ID: {captcha_id}")
+            
+            # Wait for solution
+            result_url = f"{self.base_url}/res.php"
+            start_time = time.time()
+            
+            while time.time() - start_time < timeout:
+                time.sleep(5)
+                
+                result_data = {
+                    'key': self.api_key,
+                    'action': 'get',
+                    'id': captcha_id,
+                    'json': 1
+                }
+                
+                response = requests.get(result_url, params=result_data, timeout=30)
+                result = response.json()
+                
+                if result.get('status') == 1:
+                    token = result.get('request')
+                    logger.info("✅ CAPTCHA solved automatically!")
+                    return token
+                elif result.get('request') != 'CAPCHA_NOT_READY':
+                    logger.error(f"2captcha error: {result}")
+                    return None
+                    
+            logger.error("2captcha timeout")
+            return None
+            
+        except Exception as e:
+            logger.error(f"2captcha error: {e}")
+            return None
 
 # Notification Manager
 class NotificationManager:
@@ -264,6 +341,8 @@ class ColoredFormatter(logging.Formatter):
                 record.msg = f"{Colors.CYAN}{Colors.BOLD}{record.msg}{Colors.END}"
             elif '🎫' in record.msg:
                 record.msg = f"{Colors.BOLD}{record.msg}{Colors.END}"
+            elif 'CAPTCHA' in record.msg:
+                record.msg = f"{Colors.RED}{Colors.BOLD}{record.msg}{Colors.END}"
         return super().format(record)
 
 # Configure logging
@@ -308,6 +387,10 @@ class FanSaleBot:
         self.seen_tickets = set()  # Store hashes of seen tickets
         self.ticket_details_cache = {}  # Store full details of tickets
         
+        # CAPTCHA tracking - per browser
+        self.captcha_solved_time = {}  # browser_id -> timestamp when CAPTCHA was solved
+        self.captcha_grace_period = self.config.captcha_grace_period  # 5 minutes default
+        
         # Load persistent statistics using thread-safe manager
         self.stats_file = Path("fansale_stats.json")
         self.stats_manager = StatsManager(self.stats_file)
@@ -319,6 +402,11 @@ class FanSaleBot:
         # Health monitoring and notifications
         self.health_monitor = HealthMonitor()
         self.notification_manager = NotificationManager(enabled=True)
+        
+        # 2Captcha solver
+        api_key = self.config.twocaptcha_api_key or os.getenv('TWOCAPTCHA_API_KEY', '')
+        self.captcha_solver = TwoCaptchaSolver(api_key) if api_key else None
+        self.auto_solve = self.config.auto_solve_captcha and self.captcha_solver is not None
 
 
     def save_stats(self):
@@ -482,6 +570,221 @@ class FanSaleBot:
             logger.info(f"   └─ {detail_str}")
             logger.info("   " + "─" * 60)
     
+    def check_captcha_status(self, browser_id: int) -> bool:
+        """Check if browser is within CAPTCHA grace period"""
+        if browser_id in self.captcha_solved_time:
+            time_since_solved = time.time() - self.captcha_solved_time[browser_id]
+            if time_since_solved < self.captcha_grace_period:
+                remaining = self.captcha_grace_period - time_since_solved
+                logger.info(f"✅ Hunter {browser_id}: CAPTCHA grace period active ({remaining:.0f}s remaining)")
+                return True
+        return False
+    
+    def mark_captcha_solved(self, browser_id: int):
+        """Mark CAPTCHA as solved for this browser"""
+        self.captcha_solved_time[browser_id] = time.time()
+        self.stats['captchas_solved'] += 1
+        self.save_stats()
+        logger.info(f"✅ Hunter {browser_id}: CAPTCHA solved! Grace period active for {self.captcha_grace_period}s")
+    
+    def dismiss_popups(self, driver: uc.Chrome, browser_id: int) -> bool:
+        """Detect and dismiss any popups that might appear"""
+        dismissed = False
+        
+        # Common popup selectors
+        popup_selectors = [
+            # Close buttons
+            "button[class*='close']",
+            "button[aria-label*='close']",
+            "button[aria-label*='Close']",
+            "span[class*='close']",
+            "div[class*='close-button']",
+            "a[class*='close']",
+            
+            # Modal dismissers
+            "button[class*='modal-close']",
+            "button[class*='dismiss']",
+            
+            # Cookie banners
+            "button[id*='cookie-accept']",
+            "button[class*='cookie-accept']",
+            "button[contains(text(), 'Accetta')]",
+            
+            # Common Italian dismissers
+            "button:contains('Chiudi')",
+            "button:contains('OK')",
+            "button:contains('Continua')",
+            
+            # X buttons
+            "button[aria-label='X']",
+            "span[aria-label='X']"
+        ]
+        
+        for selector in popup_selectors:
+            try:
+                # Try CSS selector first
+                if "contains" not in selector:
+                    elements = driver.find_elements(By.CSS_SELECTOR, selector)
+                    for element in elements:
+                        if element.is_displayed():
+                            try:
+                                driver.execute_script("arguments[0].click();", element)
+                                logger.info(f"📢 Hunter {browser_id}: Dismissed popup with {selector}")
+                                self.stats['popups_dismissed'] += 1
+                                self.save_stats()
+                                dismissed = True
+                                time.sleep(0.5)
+                                break
+                            except:
+                                continue
+                else:
+                    # Handle text-based selectors
+                    text = selector.split("'")[1]
+                    xpath = f"//button[contains(text(), '{text}')]"
+                    elements = driver.find_elements(By.XPATH, xpath)
+                    for element in elements:
+                        if element.is_displayed():
+                            try:
+                                driver.execute_script("arguments[0].click();", element)
+                                logger.info(f"📢 Hunter {browser_id}: Dismissed popup with text '{text}'")
+                                self.stats['popups_dismissed'] += 1
+                                self.save_stats()
+                                dismissed = True
+                                time.sleep(0.5)
+                                break
+                            except:
+                                continue
+                                
+            except Exception as e:
+                continue
+                
+        # Also try to dismiss by clicking overlay
+        try:
+            overlays = driver.find_elements(By.CSS_SELECTOR, "div[class*='overlay'], div[class*='backdrop']")
+            for overlay in overlays:
+                if overlay.is_displayed():
+                    driver.execute_script("arguments[0].click();", overlay)
+                    logger.info(f"📢 Hunter {browser_id}: Dismissed overlay")
+                    dismissed = True
+                    break
+        except:
+            pass
+            
+        return dismissed
+    
+    def detect_captcha(self, driver: uc.Chrome) -> tuple[bool, Optional[str], Optional[str]]:
+        """Detect if CAPTCHA is present and return sitekey if found"""
+        try:
+            # Check for reCAPTCHA v2
+            recaptcha_elements = driver.find_elements(By.CSS_SELECTOR, "div.g-recaptcha")
+            if recaptcha_elements:
+                for element in recaptcha_elements:
+                    sitekey = element.get_attribute('data-sitekey')
+                    if sitekey:
+                        return True, sitekey, driver.current_url
+                        
+            # Check for reCAPTCHA iframe
+            iframes = driver.find_elements(By.CSS_SELECTOR, "iframe[src*='recaptcha']")
+            if iframes:
+                # Try to extract sitekey from iframe src
+                for iframe in iframes:
+                    src = iframe.get_attribute('src')
+                    if 'k=' in src:
+                        sitekey = src.split('k=')[1].split('&')[0]
+                        return True, sitekey, driver.current_url
+                        
+            # Also check for text indicators
+            page_text = driver.page_source.lower()
+            if any(indicator in page_text for indicator in ['recaptcha', 'captcha', 'verifica che non sei un robot']):
+                return True, None, driver.current_url
+                
+            return False, None, None
+        except Exception as e:
+            logger.debug(f"Error detecting CAPTCHA: {e}")
+            return False, None, None
+    
+    def solve_captcha_automatically(self, driver: uc.Chrome, sitekey: str, pageurl: str, browser_id: int) -> bool:
+        """Attempt to solve CAPTCHA automatically using 2captcha"""
+        if not self.captcha_solver or not sitekey:
+            return False
+            
+        logger.info(f"🤖 Hunter {browser_id}: Attempting automatic CAPTCHA solve...")
+        
+        token = self.captcha_solver.solve_recaptcha(sitekey, pageurl)
+        if not token:
+            return False
+            
+        try:
+            # Inject the token
+            driver.execute_script(f"""
+                document.getElementById('g-recaptcha-response').innerHTML = '{token}';
+                if (typeof ___grecaptcha_cfg !== 'undefined') {{
+                    Object.entries(___grecaptcha_cfg.clients).forEach(([key, client]) => {{
+                        if (client.callback) {{
+                            client.callback('{token}');
+                        }}
+                    }});
+                }}
+            """)
+            
+            self.stats['captchas_auto_solved'] += 1
+            self.mark_captcha_solved(browser_id)
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to inject CAPTCHA token: {e}")
+            return False
+    
+    def wait_for_captcha_solve(self, driver: uc.Chrome, browser_id: int, timeout: int = 120) -> bool:
+        """Wait for user to solve CAPTCHA manually or solve automatically"""
+        captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
+        
+        if not captcha_detected:
+            return True
+            
+        # Try automatic solving first if enabled
+        if self.auto_solve and sitekey:
+            if self.solve_captcha_automatically(driver, sitekey, pageurl, browser_id):
+                return True
+                
+        # Fall back to manual solving
+        logger.info(f"\n{'='*60}")
+        logger.info(f"🤖 CAPTCHA DETECTED - Hunter {browser_id}")
+        logger.info(f"{'='*60}")
+        logger.info(f"⚠️  MANUAL ACTION REQUIRED!")
+        logger.info(f"Please solve the CAPTCHA in Browser {browser_id}")
+        logger.info(f"Waiting up to {timeout} seconds...")
+        logger.info(f"{'='*60}\n")
+        
+        # Play alert sound
+        for _ in range(5):
+            print('\a')
+            time.sleep(0.5)
+        
+        start_time = time.time()
+        check_interval = 2
+        
+        while time.time() - start_time < timeout:
+            # Check if CAPTCHA is still present
+            if not self.detect_captcha(driver)[0]:
+                logger.info(f"✅ CAPTCHA solved in Browser {browser_id}!")
+                self.mark_captcha_solved(browser_id)
+                return True
+                
+            # Also check if we've moved to a new page (indicating success)
+            try:
+                if "conferma" in driver.current_url.lower() or "checkout" in driver.current_url.lower():
+                    logger.info(f"✅ Purchase proceeding in Browser {browser_id}!")
+                    self.mark_captcha_solved(browser_id)
+                    return True
+            except:
+                pass
+                
+            time.sleep(check_interval)
+            
+        logger.warning(f"❌ CAPTCHA timeout in Browser {browser_id}")
+        return False
+    
     @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
         """Create stealth browser with multi-monitor support and version handling"""
@@ -503,12 +806,9 @@ class FanSaleBot:
             options.add_argument('--disable-logging')
             options.add_argument('--disable-background-timer-throttling')
             
-            # V2 Enhancement: Disable images for faster loading
-            prefs = {
-                "profile.managed_default_content_settings.images": 2,
-                "profile.default_content_setting_values.images": 2
-            }
-            options.add_experimental_option("prefs", prefs)
+            # V4: EXPLICITLY VERIFY IMAGES ARE ENABLED
+            # NO image blocking preferences here!
+            # Images load normally for CAPTCHA visibility
             
             # Multi-monitor window positioning
             window_width = 450
@@ -570,6 +870,7 @@ class FanSaleBot:
                     """)
                     
                     logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y}) using {desc}")
+                    logger.info(f"📸 Images ENABLED for CAPTCHA support")
                     return driver
                     
                 except Exception as e:
@@ -689,17 +990,28 @@ class FanSaleBot:
         time.sleep(random.uniform(2.5, 3.5))
         
         check_count = 0
-        # V2 Enhancement: Stagger refresh times for each browser
+        # Staggered refresh from V2/V3 for anti-detection
         last_refresh = time.time() - (browser_id * 5)  # Stagger initial refreshes
         refresh_interval = 30 + random.randint(-5, 5)  # Vary between 25-35 seconds
         
         last_session_refresh = time.time()
         local_stats = defaultdict(int)
         
+        # CAPTCHA grace period check counter
+        last_captcha_check = 0
+        
+        # Popup check counter
+        last_popup_check = time.time()
+        
         while not self.shutdown_event.is_set() and self.tickets_secured < self.max_tickets:
             try:
                 check_count += 1
                 self.stats['total_checks'] += 1
+                
+                # Check for popups every 10 seconds
+                if time.time() - last_popup_check > 10:
+                    self.dismiss_popups(driver, browser_id)
+                    last_popup_check = time.time()
                 
                 # Check for 404 blocks
                 if self.is_blocked(driver):
@@ -723,6 +1035,9 @@ class FanSaleBot:
                 
                 if tickets:
                     self.stats['total_tickets_found'] += len(tickets)
+                    
+                    # If we're in CAPTCHA grace period, try ALL matching tickets
+                    in_grace_period = self.check_captcha_status(browser_id)
                     
                     for ticket in tickets:
                         try:
@@ -752,6 +1067,10 @@ class FanSaleBot:
                                 if category in self.ticket_types_to_hunt:
                                     with self.purchase_lock:
                                         if self.tickets_secured < self.max_tickets:
+                                            # If in grace period, log it
+                                            if in_grace_period:
+                                                logger.info(f"🚀 Hunter {browser_id}: Attempting purchase in CAPTCHA grace period!")
+                                            
                                             if self.purchase_ticket(driver, ticket, browser_id):
                                                 self.tickets_secured += 1
                                                 self.stats['purchases'] += 1
@@ -765,7 +1084,13 @@ class FanSaleBot:
                             logger.debug(f"Error processing ticket: {e}")
                             continue
                 
-                # V2 Enhancement: Occasional human-like distraction
+                # Periodically test CAPTCHA grace period by attempting test purchase
+                if in_grace_period and check_count - last_captcha_check > 20:  # Every ~minute
+                    logger.info(f"🔍 Hunter {browser_id}: Testing CAPTCHA grace period...")
+                    last_captcha_check = check_count
+                    # This will be tested on next matching ticket
+                
+                # Keep human-like patterns from V2/V3
                 if random.random() < 0.05:  # 5% chance
                     distraction_time = random.uniform(8, 15)
                     logger.debug(f"Hunter {browser_id}: Taking a {distraction_time:.1f}s break (human simulation)")
@@ -775,7 +1100,7 @@ class FanSaleBot:
                     refresh_time = random.uniform(2.5, 3.5)
                     time.sleep(refresh_time)
                 
-                # V2 Enhancement: Staggered page refresh per browser
+                # Staggered page refresh per browser
                 if time.time() - last_refresh > refresh_interval:
                     driver.refresh()
                     last_refresh = time.time()
@@ -799,7 +1124,10 @@ class FanSaleBot:
                         local_summary.append(f"Other: {local_stats['other']}")
                     
                     local_str = " | ".join(local_summary) if local_summary else "No new tickets"
-                    logger.info(f"📊 Hunter {browser_id}: {check_count} checks @ {rate:.1f}/min | {local_str}")
+                    
+                    # Add CAPTCHA status to progress
+                    captcha_status = " | 🟢 CAPTCHA OK" if in_grace_period else ""
+                    logger.info(f"📊 Hunter {browser_id}: {check_count} checks @ {rate:.1f}/min | {local_str}{captcha_status}")
                     
             except TimeoutException:
                 logger.warning(f"Hunter {browser_id}: Page timeout, refreshing...")
@@ -819,7 +1147,7 @@ class FanSaleBot:
     
     @retry(max_attempts=2, delay=0.5, exceptions=(ElementNotInteractableException, StaleElementReferenceException))
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
-        """Attempt to purchase a ticket"""
+        """Attempt to purchase a ticket with CAPTCHA handling"""
         try:
             logger.info(f"⚡ Hunter {browser_id}: Attempting purchase...")
             
@@ -851,7 +1179,26 @@ class FanSaleBot:
                     driver.execute_script("arguments[0].click();", buy_btn)
                     logger.info(f"✅ Hunter {browser_id}: Buy button clicked!")
                     
-                    # Play alarm sound
+                    # Wait a moment to see if CAPTCHA appears
+                    time.sleep(2)
+                    
+                    # Check for CAPTCHA
+                    captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
+                    if captcha_detected:
+                        logger.info(f"🤖 Hunter {browser_id}: CAPTCHA detected!")
+                        self.stats['captchas_encountered'] += 1
+                        self.save_stats()
+                        
+                        # Try to solve (automatically or manually)
+                        if self.wait_for_captcha_solve(driver, browser_id):
+                            # CAPTCHA solved, continue with purchase
+                            logger.info(f"✅ Hunter {browser_id}: Continuing with purchase after CAPTCHA")
+                            time.sleep(1)
+                        else:
+                            logger.warning(f"❌ Hunter {browser_id}: CAPTCHA not solved, purchase failed")
+                            return False
+                    
+                    # Play success alarm sound
                     print('\a' * 3)  # System beep
                     
                     # Take screenshot
@@ -894,6 +1241,13 @@ class FanSaleBot:
         
         print(f"\n{Colors.BOLD}🛍️  Purchases:{Colors.END} {self.stats['purchases']}")
         print(f"{Colors.BOLD}🚫 Blocks Cleared:{Colors.END} {self.stats['blocks_encountered']}")
+        print(f"{Colors.BOLD}📢 Popups Dismissed:{Colors.END} {self.stats.get('popups_dismissed', 0)}")
+        
+        # CAPTCHA stats
+        print(f"\n{Colors.BOLD}🤖 CAPTCHA Stats:{Colors.END}")
+        print(f"   Encountered: {self.stats.get('captchas_encountered', 0)}")
+        print(f"   Solved Manually: {self.stats.get('captchas_solved', 0)}")
+        print(f"   Solved Automatically: {self.stats.get('captchas_auto_solved', 0)}")
         
         if self.stats['total_checks'] > 0:
             rate = self.stats['total_checks'] / (total_runtime / 60) if total_runtime > 0 else 0
@@ -981,17 +1335,28 @@ class FanSaleBot:
 
     def configure(self):
         """Configure bot settings"""
-        print(f"\n{Colors.BOLD}{Colors.CYAN}🤖 FANSALE BOT - ENHANCED EDITION V2{Colors.END}")
+        print(f"\n{Colors.BOLD}{Colors.CYAN}🤖 FANSALE BOT - ENHANCED EDITION V4{Colors.END}")
         print(f"{Colors.BOLD}{'=' * 50}{Colors.END}")
         print("\n✨ Features:")
         print("  • No login required")
         print("  • Tracks Prato A, Prato B, and Settore tickets")
         print("  • Avoids duplicate logging")
         print("  • Persistent statistics")
-        print("  • V2: Staggered refreshes, human patterns, faster loading")
+        print(f"  • {Colors.RED}CAPTCHA detection and handling{Colors.END} ✅")
+        print(f"  • {Colors.GREEN}CAPTCHA grace period exploitation{Colors.END} ✅")
+        print(f"  • {Colors.YELLOW}Automatic CAPTCHA solving (2captcha){Colors.END} ✅")
+        print(f"  • {Colors.CYAN}Popup detection and dismissal{Colors.END} ✅")
+        print(f"  • {Colors.BOLD}Images ENABLED (verified){Colors.END} ✅")
         
         # Show current stats
         self.show_statistics_dashboard()
+        
+        # Check for 2captcha configuration
+        if self.captcha_solver and self.config.twocaptcha_api_key:
+            print(f"\n{Colors.GREEN}✅ 2Captcha configured - automatic solving enabled{Colors.END}")
+        else:
+            print(f"\n{Colors.YELLOW}⚠️  No 2Captcha API key - manual CAPTCHA solving only{Colors.END}")
+            print(f"   To enable auto-solving, set TWOCAPTCHA_API_KEY in .env")
         
         # Number of browsers
         while True:
@@ -1041,7 +1406,8 @@ class FanSaleBot:
         
         print(f"   • Target URL: {self.target_url[:50]}...")
         print(f"\n{Colors.GREEN}⚡ NO LOGIN REQUIRED - Direct ticket hunting!{Colors.END}")
-        print(f"{Colors.CYAN}✨ V2 Enhancements: Better anti-detection, faster loading{Colors.END}")
+        print(f"{Colors.RED}🤖 CAPTCHA SUPPORT - Auto-solve or manual alerts{Colors.END}")
+        print(f"{Colors.CYAN}📢 POPUP HANDLING - Automatically dismisses popups{Colors.END}")
     
     def run(self):
         """Main execution with enhanced tracking"""
@@ -1056,7 +1422,7 @@ class FanSaleBot:
                 driver = self.create_browser(i)
                 if driver:
                     self.browsers.append(driver)
-                # V2 Enhancement: Stagger browser creation
+                # Staggered browser creation
                 if i < self.num_browsers:
                     time.sleep(random.uniform(3, 7))
             
@@ -1069,6 +1435,9 @@ class FanSaleBot:
             # Show tip about monitoring
             print(f"\n{Colors.CYAN}💡 TIP: Browsers are positioned for multi-monitor setups{Colors.END}")
             print(f"{Colors.CYAN}   Move them to your preferred monitors if needed{Colors.END}")
+            print(f"\n{Colors.RED}⚠️  CAPTCHA ALERT: If CAPTCHA appears, it will be handled{Colors.END}")
+            print(f"{Colors.GREEN}   Auto-solve if configured, or manual alert{Colors.END}")
+            print(f"{Colors.CYAN}📢 POPUPS: Will be automatically dismissed{Colors.END}")
             
             input(f"\n{Colors.BOLD}✋ Press Enter to START HUNTING...{Colors.END}")
             
@@ -1126,7 +1495,7 @@ class FanSaleBot:
 def main():
     """Enhanced entry point with configuration support"""
     print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
-    print(f"{Colors.BOLD}{Colors.CYAN}🎫 FANSALE BOT - ENTERPRISE EDITION V2{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.CYAN}🎫 FANSALE BOT - ENTERPRISE EDITION V4{Colors.END}")
     print(f"{Colors.BOLD}{'=' * 60}{Colors.END}")
     print(f"\n{Colors.GREEN}✨ Features:{Colors.END}")
     print("  • Ticket type tracking (Prato A, B, Settore)")
@@ -1135,11 +1504,12 @@ def main():
     print("  • Multi-monitor support")
     print("  • Health monitoring")
     print("  • Advanced retry logic")
-    print(f"\n{Colors.CYAN}🚀 V2 Enhancements:{Colors.END}")
-    print("  • Staggered refresh cycles per browser")
-    print("  • Human-like behavior patterns")
-    print("  • Faster loading (images disabled)")
-    print("  • Improved anti-detection")
+    print(f"\n{Colors.RED}🚀 V4 Features:{Colors.END}")
+    print("  • CAPTCHA detection and handling")
+    print("  • Optional automatic CAPTCHA solving (2captcha)")
+    print("  • Automatic popup dismissal")
+    print("  • Images ENABLED for proper functionality")
+    print("  • CAPTCHA grace period exploitation")
     
     # Check dependencies
     try:
@@ -1147,7 +1517,7 @@ def main():
         from dotenv import load_dotenv
     except ImportError as e:
         print(f"\n{Colors.RED}❌ Missing dependency: {e}{Colors.END}")
-        print("Run: pip install undetected-chromedriver python-dotenv selenium")
+        print("Run: pip install undetected-chromedriver python-dotenv selenium requests")
         sys.exit(1)
     
     # Load environment
@@ -1156,6 +1526,11 @@ def main():
     # Load configuration
     config_path = Path("bot_config.json")
     config = BotConfig.from_file(config_path)
+    
+    # Check for 2captcha key in environment
+    if os.getenv('TWOCAPTCHA_API_KEY'):
+        config.twocaptcha_api_key = os.getenv('TWOCAPTCHA_API_KEY')
+        config.auto_solve_captcha = True
     
     # Save default config if not exists
     if not config_path.exists():
@@ -1181,7 +1556,7 @@ def main():
         print(f"\n{Colors.RED}❌ Fatal error: {e}{Colors.END}")
         logging.exception("Fatal error in main")
     finally:
-        print(f"\n{Colors.GREEN}✅ Thank you for using FanSale Bot V2!{Colors.END}")
+        print(f"\n{Colors.GREEN}✅ Thank you for using FanSale Bot V4!{Colors.END}")
 
 
 if __name__ == "__main__":

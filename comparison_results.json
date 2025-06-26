@@ -1,0 +1,21 @@
+{
+  "v1": {
+    "browser_creation_time": 1.0588867664337158,
+    "notes": {
+      "page_load_speed": "V2 should be faster due to image blocking",
+      "refresh_pattern": "V2 has staggered refresh (25-35s) vs V1 fixed (30s)",
+      "human_behavior": "V2 has 5% chance of 8-15s pauses",
+      "browser_startup": "V2 has 3-7s delays between browsers"
+    }
+  },
+  "v2": {
+    "browser_creation_time": 1.0356500148773193,
+    "notes": {
+      "page_load_speed": "V2 should be faster due to image blocking",
+      "refresh_pattern": "V2 has staggered refresh (25-35s) vs V1 fixed (30s)",
+      "human_behavior": "V2 has 5% chance of 8-15s pauses",
+      "browser_startup": "V2 has 3-7s delays between browsers"
+    }
+  },
+  "test_start": "2025-06-26T21:06:42.061920"
+}

@@ -1,62 +1,54 @@
 # Task Completion Checklist
 
-## Before Committing Code
+## After Making Code Changes
 
-### 1. Code Quality
-- [ ] Code follows PEP 8 style guidelines
-- [ ] No syntax errors or import issues
-- [ ] Removed debug print statements
-- [ ] Added appropriate logging statements
-- [ ] Docstrings for new methods/classes
+### 1. Code Quality Checks
+- [ ] Verify all imports are present and correct
+- [ ] Check that new code follows existing patterns
+- [ ] Ensure proper error handling with try-except blocks
+- [ ] Add appropriate logging statements
+- [ ] Verify thread safety for any shared state
 
 ### 2. Testing
-- [ ] Test basic functionality manually
-- [ ] Test with different configurations (1-3 browsers)
-- [ ] Test error handling (network issues, timeouts)
-- [ ] Verify filter functionality works correctly
-- [ ] Check performance metrics are accurate
+- [ ] Test the bot with minimal configuration (1 browser, short run)
+- [ ] Verify new features work as expected
+- [ ] Check that existing functionality isn't broken
+- [ ] Monitor logs for any new errors or warnings
 
-### 3. Dependencies
-- [ ] Update requirements.txt if new packages added
-- [ ] Verify all imports are used
-- [ ] Remove unused imports
-- [ ] Check compatibility with Python 3.8+
+### 3. Performance Validation
+- [ ] Check that changes don't significantly impact speed
+- [ ] Verify memory usage remains reasonable
+- [ ] Ensure browser creation/cleanup works properly
 
-### 4. Environment
-- [ ] Sensitive data in .env, not in code
-- [ ] Update .env.example if new variables added
-- [ ] No hardcoded credentials or URLs
+### 4. Documentation Updates
+- [ ] Update CLAUDE.md if architecture changes
+- [ ] Add comments for complex new logic
+- [ ] Update docstrings for modified methods
 
-### 5. Documentation
-- [ ] Update README.md if functionality changed
-- [ ] Update claude.md for AI assistant reference
-- [ ] Add comments for complex logic
-- [ ] Update CHANGELOG.md with changes
+### 5. Configuration
+- [ ] Update .env.example if new environment variables added
+- [ ] Update bot_config.json if new configuration options added
+- [ ] Document any new configuration requirements
 
-### 6. Performance
-- [ ] No unnecessary sleeps or waits
-- [ ] Efficient selectors for elements
-- [ ] Proper resource cleanup (browsers, threads)
-- [ ] Memory usage is reasonable
-
-### 7. Anti-Detection
-- [ ] Randomized wait times
-- [ ] Human-like interaction patterns
-- [ ] Proper user agent and headers
-- [ ] Session rotation working
-
-## Final Steps
+### 6. Pre-commit Checks
 ```bash
-# Format code (if black installed)
-black *.py
+# Check for syntax errors
+python3 -m py_compile fansale.py
 
-# Clean up
-rm -rf __pycache__
-rm -rf .pytest_cache
+# Quick run test (interrupt after successful start)
+python3 fansale.py
 
-# Git commands
-git add .
-git status
-git commit -m "descriptive message"
-git push
+# Check logs for errors
+tail -n 50 fansale_bot.log
 ```
+
+### 7. File Cleanup
+- [ ] Remove any test screenshots
+- [ ] Clear test browser profiles if needed
+- [ ] Reset statistics file if doing major testing
+
+## Important Reminders
+- The bot operates WITHOUT login - don't add login requirements
+- Speed is critical - minimize delays in ticket detection/purchase flow
+- Thread safety is essential - use locks for shared state
+- Browser stealth is important - maintain anti-detection measures

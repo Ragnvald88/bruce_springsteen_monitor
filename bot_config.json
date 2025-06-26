@@ -1,0 +1,10 @@
+{
+  "browsers_count": 2,
+  "max_tickets": 2,
+  "refresh_interval": 30,
+  "session_timeout": 900,
+  "min_wait": 2.0,
+  "max_wait": 4.0,
+  "retry_attempts": 3,
+  "retry_delay": 1.0
+}

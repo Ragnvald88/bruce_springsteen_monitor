@@ -1,22 +1,28 @@
-# StealthMaster Project Overview
+# Project Overview
 
 ## Purpose
-StealthMaster is a ticket purchasing bot for FanSale.it (Italian ticket resale platform) designed to automatically detect and purchase available tickets with anti-detection measures.
+FanSale Bot is an automated ticket monitoring and reservation system for FanSale.it. It operates without login requirements and uses multiple concurrent browsers to maximize ticket detection speed.
+
+## Tech Stack
+- **Language**: Python 3.x
+- **Core Libraries**:
+  - `undetected-chromedriver` (>=3.5.5) - For stealth browser automation
+  - `selenium` (>=4.0.0) - Web automation framework
+  - `python-dotenv` (>=1.0.0) - Environment variable management
+- **System**: Darwin (macOS)
+- **Browser**: Chrome with undetected ChromeDriver
 
 ## Key Features
-- **No Login Required**: Discovery that tickets can be reserved without authentication
-- **Anti-detection**: Uses undetected-chromedriver and stealth techniques
-- **Multi-browser support**: Can run 1-5 concurrent browsers for faster checking
-- **Smart filtering**: Can filter tickets by keywords (Prato, Tribuna, etc.)
-- **Session management**: Automatic refresh to avoid 404 blocks
-- **Performance tracking**: Real-time statistics and check rates
-- **Screenshot capture**: Saves screenshots on successful checkout
+1. **Multi-Browser Hunting**: Parallel browser threads for concurrent monitoring
+2. **Ticket Type Categorization**: Prato A, Prato B, Settore (seated), Other
+3. **Duplicate Detection**: MD5 hashing to avoid re-processing tickets
+4. **Persistent Statistics**: Thread-safe statistics tracking across sessions
+5. **Anti-Detection Mechanisms**: Stealth mode, session refreshing, block recovery
+6. **Health Monitoring**: System and browser health tracking
+7. **Notification System**: Alerts for ticket discoveries
 
-## Main Components
-- `fansale.py` - Original full-featured version with login support
-- `fansale_stealth.py` - Streamlined 350-line version
-- `fansale_no_login.py` - No-login required version (deleted but recoverable)
-- `/utilities` - Enhanced features (stealth, optimization, session management)
-
-## Target Site
-FanSale.it - Italian ticket resale platform for concerts and events
+## Configuration
+- **Environment Variables**: `.env` file with `FANSALE_TARGET_URL`
+- **Bot Configuration**: `bot_config.json` with runtime settings
+- **Browser Profiles**: Persistent Chrome profiles in `browser_profiles/`
+- **Statistics**: `fansale_stats.json` for tracking performance metrics

@@ -23,8 +23,8 @@ import os
 import threading
 import subprocess
 import tempfile
-from datetime import datetime, timedelta
-from typing import Optional, Dict, List, Set
+from datetime import datetime
+from typing import Optional
 from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
 
@@ -33,8 +33,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+# ActionChains and Keys removed - not used
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -49,10 +48,10 @@ class BotConfig:
         self.refresh_interval = 60  # seconds
         self.session_timeout = 900  # 15 minutes
         
-        # Check frequency settings
-        self.checks_per_minute = 120  # Default: 2 checks per second
-        self.min_wait = 0.4  # Minimum wait between checks
-        self.max_wait = 0.6  # Maximum wait between checks
+        # Check frequency settings (start conservative to avoid blocks)
+        self.checks_per_minute = 30  # Default: 1 check every 2 seconds
+        self.min_wait = 1.5  # Minimum wait between checks
+        self.max_wait = 2.5  # Maximum wait between checks
         
         # Logging settings
         self.log_level = "INFO"
@@ -66,13 +65,21 @@ class BotConfig:
         self.ticket_filters = []
     
     def calculate_wait_time(self):
-        """Calculate wait time based on desired checks per minute"""
+        """Calculate wait time based on desired checks per minute with more randomness"""
         # Calculate base wait time for desired rate
         base_wait = 60.0 / self.checks_per_minute
         
-        # Add some randomization within min/max bounds
-        return max(self.min_wait, min(self.max_wait, 
-                   base_wait + random.uniform(-0.1, 0.1)))
+        # Add significant randomization to appear more human
+        # Sometimes take longer breaks
+        if random.random() < 0.1:  # 10% chance of longer break
+            return random.uniform(3.0, 5.0)
+        
+        # Normal wait with more variation
+        variation = random.uniform(-0.5, 0.5)
+        wait = base_wait + variation
+        
+        # Ensure within bounds
+        return max(self.min_wait, min(self.max_wait, wait))
     
     def to_dict(self):
         return {
@@ -178,7 +185,9 @@ class NotificationManager:
                 ])
             elif sys.platform.startswith('linux'):
                 subprocess.run(['notify-send', title, message])
-            # Windows would use win10toast or similar
+            else:
+                # Windows or other platforms - skip notification
+                pass
         except:
             pass  # Fail silently if notifications not available
 
@@ -435,7 +444,7 @@ class FanSaleBot:
         normalized = ' '.join(ticket_text.lower().split())
         return hashlib.md5(normalized.encode()).hexdigest()
     
-    def extract_full_ticket_info(self, driver, ticket_element):
+    def extract_full_ticket_info(self, ticket_element):
         """Extract comprehensive ticket information"""
         try:
             ticket_info = {
@@ -553,7 +562,7 @@ class FanSaleBot:
                 if not hasattr(options, 'headless'):
                     options.headless = False
                 
-                # CRITICAL FLAGS TO PREVENT POPUPS
+                # ENHANCED ANTI-DETECTION FLAGS
                 options.add_argument('--no-sandbox')
                 options.add_argument('--disable-dev-shm-usage')
                 options.add_argument('--disable-blink-features=AutomationControlled')
@@ -564,16 +573,47 @@ class FanSaleBot:
                 options.add_argument('--disable-features=TranslateUI')
                 options.add_argument('--disable-infobars')  # No info bars
                 
-                # Preferences to disable popups
+                # Additional stealth arguments
+                options.add_argument('--disable-web-security')
+                options.add_argument('--disable-features=IsolateOrigins,site-per-process')
+                options.add_argument('--no-first-run')
+                options.add_argument('--disable-default-apps')
+                options.add_argument('--disable-background-timer-throttling')
+                options.add_argument('--disable-renderer-backgrounding')
+                options.add_argument('--disable-features=TranslateUI,BlinkGenPropertyTrees')
+                
+                # More stealth options
+                options.add_argument('--disable-plugins-discovery')
+                options.add_argument('--disable-preconnect')
+                options.add_argument('--dns-prefetch-disable')
+                options.add_argument('--disable-web-resources')
+                options.add_argument('--safebrowsing-disable-auto-update')
+                options.add_argument('--disable-client-side-phishing-detection')
+                
+                # Randomize user agent
+                user_agents = [
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                ]
+                options.add_argument(f'--user-agent={random.choice(user_agents)}')
+                
+                # Enhanced preferences
                 prefs = {
                     'profile.default_content_setting_values.notifications': 2,
                     'profile.default_content_settings.popups': 0,
                     'profile.managed_default_content_settings.popups': 0,
                     'credentials_enable_service': False,
                     'profile.password_manager_enabled': False,
-                    'translate': {'enabled': False}
+                    'translate': {'enabled': False},
+                    'safebrowsing.enabled': False,
+                    'safebrowsing.disable_download_protection': True,
+                    'webrtc.ip_handling_policy': 'disable_non_proxied_udp',
+                    'webrtc.multiple_routes_enabled': False,
+                    'webrtc.nonproxied_udp_enabled': False
                 }
                 options.add_experimental_option('prefs', prefs)
+                # Note: excludeSwitches and useAutomationExtension removed due to compatibility issues
                 
                 # Window positioning
                 if browser_id == 1:
@@ -604,8 +644,12 @@ class FanSaleBot:
                 # Set page load timeout
                 driver.set_page_load_timeout(15)
                 
-                # Quick test
+                # Quick test with stealth
                 driver.get("data:text/html,<h1>Browser Ready</h1>")
+                self.apply_stealth_js(driver)
+                
+                # Add random delays to mimic human behavior
+                driver.implicitly_wait(random.uniform(1, 3))
                 
                 logger.info(f"✅ Browser {browser_id} ready at position ({x}, {y})")
                 return driver
@@ -707,6 +751,77 @@ class FanSaleBot:
         ]
         return random.choice(user_agents)
     
+    def apply_stealth_js(self, driver):
+        """Apply stealth JavaScript to avoid detection"""
+        stealth_js = """
+            // Override navigator properties
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
+            
+            // Override chrome detection
+            window.chrome = {
+                runtime: {},
+                loadTimes: function() {},
+                csi: function() {},
+                app: {}
+            };
+            
+            // Override permissions
+            const originalQuery = window.navigator.permissions.query;
+            window.navigator.permissions.query = (parameters) => (
+                parameters.name === 'notifications' ?
+                    Promise.resolve({ state: Notification.permission }) :
+                    originalQuery(parameters)
+            );
+            
+            // Override plugins to look realistic
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [
+                    {name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer'},
+                    {name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai'},
+                    {name: 'Native Client', filename: 'internal-nacl-plugin'}
+                ]
+            });
+            
+            // Override languages
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en']
+            });
+            
+            // Remove automation indicators
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+            
+            // Override navigator.platform
+            Object.defineProperty(navigator, 'platform', {
+                get: () => 'MacIntel'
+            });
+            
+            // Override navigator.vendor
+            Object.defineProperty(navigator, 'vendor', {
+                get: () => 'Google Inc.'
+            });
+            
+            // Override navigator.hardwareConcurrency
+            Object.defineProperty(navigator, 'hardwareConcurrency', {
+                get: () => 8
+            });
+            
+            // Fix Permissions API
+            const originalQuery = window.navigator.permissions.query;
+            window.navigator.permissions.__proto__.query = function(parameters) {
+                return parameters.name === 'notifications' ?
+                    Promise.resolve({ state: Notification.permission }) :
+                    originalQuery(parameters);
+            };
+        """
+        try:
+            driver.execute_script(stealth_js)
+        except Exception as e:
+            logger.debug(f"Stealth JS application error: {e}")
+    
     def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
         """Main hunting loop with FAST ticket detection and purchasing"""
         logger.info(f"🎯 Hunter {browser_id} starting...")
@@ -715,6 +830,9 @@ class FanSaleBot:
         # Navigate to event page
         logger.info(f"📍 Navigating to: {self.target_url}")
         
+        # Initial delay to appear more human
+        time.sleep(random.uniform(2.0, 4.0))
+        
         for nav_attempt in range(3):
             try:
                 if not self._keep_browser_alive(driver, browser_id):
@@ -722,7 +840,20 @@ class FanSaleBot:
                     return
                 
                 driver.get(self.target_url)
-                time.sleep(random.uniform(1.0, 1.5))  # Give page time to load
+                
+                # Apply stealth JS on every page load
+                self.apply_stealth_js(driver)
+                
+                # Human-like delay
+                time.sleep(random.uniform(2.0, 3.5))
+                
+                # Small random scroll to simulate human behavior
+                try:
+                    driver.execute_script(f"window.scrollBy(0, {random.randint(50, 150)});")
+                    time.sleep(random.uniform(0.2, 0.5))
+                    driver.execute_script("window.scrollTo(0, 0);")
+                except:
+                    pass
                 
                 if "fansale" in driver.current_url.lower():
                     logger.info(f"✅ Browser {browser_id} successfully navigated")
@@ -793,7 +924,7 @@ class FanSaleBot:
                     
                     for ticket in tickets:
                         try:
-                            ticket_info = self.extract_full_ticket_info(driver, ticket)
+                            ticket_info = self.extract_full_ticket_info(ticket)
                             ticket_hash = self.generate_ticket_hash(ticket_info['raw_text'])
                             
                             if ticket_hash not in self.seen_tickets:

@@ -1,42 +1,50 @@
 # Code Style and Conventions
 
-## Python Style
-- **Python 3.x** (3.8+ recommended)
-- **PEP 8** compliant with some flexibility
-- **Type hints**: Optional but used in newer code
-- **Docstrings**: Brief descriptions for classes and main methods
+## Python Style Guidelines
+- **Python Version**: 3.x (compatible with 3.8+)
+- **Style Guide**: Generally follows PEP 8 with some variations
+- **Line Length**: No strict limit, but generally kept reasonable
 
 ## Naming Conventions
-- **Classes**: PascalCase (e.g., `FanSaleBot`, `StealthEnhancements`)
-- **Methods/Functions**: snake_case (e.g., `hunt_and_buy`, `verify_login`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `ENHANCED_MODE`)
-- **Private methods**: Leading underscore (e.g., `_internal_method`)
+- **Classes**: PascalCase (e.g., `FanSaleBot`, `StatsManager`, `NotificationManager`)
+- **Functions/Methods**: snake_case (e.g., `hunt_tickets`, `purchase_ticket`, `create_browser`)
+- **Constants**: UPPER_CASE (e.g., `Colors.HEADER`, `Colors.GREEN`)
+- **Private Methods**: Leading underscore (e.g., `_get_memory_usage`)
+
+## Type Hints
+- Uses type hints extensively for function parameters and returns
+- Common imports: `from typing import Dict, List, Optional, Tuple, Set`
+- Dataclasses used for configuration: `@dataclass`
+
+## Documentation
+- **Module Docstrings**: Triple quotes at file beginning describing purpose
+- **Class Docstrings**: Brief description in triple quotes
+- **Method Docstrings**: Brief description of functionality
+- **Inline Comments**: Used sparingly for complex logic
 
 ## Code Organization
-- Main bot logic in class `FanSaleBot`
-- Configuration in `__init__` method
-- Core hunting loop in `hunt_and_buy` or `hunt_tickets`
-- Helper methods for specific tasks (login, filtering, etc.)
-- Statistics tracking throughout
-
-## Logging Style
-- Emojis for visual clarity: 🚀 (start), ✅ (success), ❌ (error), 🎫 (tickets)
-- Structured format: `timestamp | level | message`
-- Info level for important events, debug for details
+- **Imports**: Grouped by standard library, third-party, local
+- **Class Structure**: 
+  1. Class docstring
+  2. `__init__` method
+  3. Public methods
+  4. Private methods
+- **Threading**: Uses threading.Lock for synchronization
+- **Decorators**: Custom retry decorator for resilient operations
 
 ## Error Handling
-- Try-except blocks around browser operations
+- Try-except blocks for all external operations
+- Specific exception handling where possible
+- Logging errors with context
 - Graceful degradation on failures
-- Retry logic for recoverable errors
-- Clean shutdown with Ctrl+C
 
-## Threading
-- Daemon threads for browser hunters
-- Threading locks for purchase synchronization
-- Event objects for shutdown coordination
+## Logging
+- Custom ColoredFormatter for terminal output
+- Log levels: INFO for important events, WARNING for issues, ERROR for failures
+- Emoji indicators for visual clarity (🎫, 🚀, ✅, ❌, etc.)
 
-## Browser Automation
-- undetected_chromedriver for stealth
-- Explicit waits over implicit waits
-- JavaScript execution for clicking elements
-- Screenshot capture on important events
+## Performance Considerations
+- JavaScript execution preferred over Selenium clicks
+- Minimal waits between actions
+- Thread-safe operations for shared state
+- Early filtering with hash-based duplicate detection

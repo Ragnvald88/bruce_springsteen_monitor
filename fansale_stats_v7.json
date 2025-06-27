@@ -1,0 +1,30 @@
+{
+  "total_checks": 1,
+  "total_tickets_found": 1,
+  "unique_tickets_found": 1,
+  "tickets_by_type": {
+    "prato_a": 0,
+    "prato_b": 0,
+    "settore": 1,
+    "other": 0
+  },
+  "purchases": 0,
+  "purchases_by_type": {
+    "prato_a": 0,
+    "prato_b": 0,
+    "settore": 0,
+    "other": 0
+  },
+  "blocks_encountered": 0,
+  "captchas_encountered": 0,
+  "captchas_solved": 0,
+  "captchas_auto_solved": 0,
+  "popups_dismissed": 0,
+  "all_time_runtime": 1157.9125530719757,
+  "images_verified": 1,
+  "performance_metrics": {
+    "avg_page_load_time": 1.1802480220794678,
+    "avg_ticket_check_time": 0,
+    "avg_popup_dismiss_time": 0
+  }
+}

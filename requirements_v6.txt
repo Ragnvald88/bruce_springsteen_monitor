@@ -1,0 +1,12 @@
+# FanSale Bot V6 Requirements
+
+# Core dependencies
+selenium>=4.0.0
+undetected-chromedriver>=3.5.0
+python-dotenv>=1.0.0
+
+# Optional dependencies
+2captcha-python>=1.2.0  # For automatic CAPTCHA solving
+
+# Utility dependencies
+numpy>=1.24.0  # For bezier curve calculations in mouse simulation

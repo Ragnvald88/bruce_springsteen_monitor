@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
+#/fansale_v7_ultimate.py
 """
-FanSale Bot V7 - ULTIMATE EDITION
-================================
-Combines V5's proven reliability with V6's enhancements
-Fixes all critical issues and adds speed improvements
+adds speed improvements
 """
 
 import os
@@ -18,8 +15,6 @@ import re
 import tempfile
 import shutil
 import requests
-import subprocess
-import platform
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple, Any
 from datetime import datetime
@@ -55,8 +50,8 @@ class BotConfig:
     max_tickets: int = 2
     refresh_interval: int = 30
     session_timeout: int = 900
-    min_wait: float = 0.2  # Ultra-fast: 200-300 checks/min
-    max_wait: float = 0.5  # Ultra-fast: 200-300 checks/min
+    min_wait: float = 0.3  # Ultra-fast
+    max_wait: float = 1.0  # Ultra-fast
     retry_attempts: int = 3
     retry_delay: float = 1.0
     captcha_grace_period: int = 300
@@ -342,7 +337,7 @@ class FanSaleBotV7:
         
         # FIX #1: Use correct environment variable name
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
-                                    "https://www.fansale.it/fansale/tickets/all/bruce-springsteen/458554")
+                                    "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388")
         
         # Configuration
         self.num_browsers = self.config.browsers_count
@@ -355,22 +350,9 @@ class FanSaleBotV7:
         self.purchase_lock = threading.Lock()
         self.tickets_secured = 0
         
-        # Statistics - Initialize early
-        self.stats_file = Path("fansale_stats_v7.json")
-        self.stats_manager = StatsManager(self.stats_file)
-        self.stats = self.stats_manager.stats
-        
         # Ticket tracking
         self.seen_tickets = set()
         self.ticket_details_cache = {}
-        
-        # Load ticket cache from stats if available
-        if isinstance(self.stats, dict):
-            cached_tickets = self.stats.get('ticket_details_cache', {})
-            if cached_tickets:
-                self.ticket_details_cache = cached_tickets
-                # Also update seen tickets
-                self.seen_tickets = set(cached_tickets.keys())
         
         # CAPTCHA tracking
         self.captcha_solved_time = {}
@@ -378,6 +360,11 @@ class FanSaleBotV7:
         
         # Logging
         self.category_logger = CategoryLogger()
+        
+        # Statistics
+        self.stats_file = Path("fansale_stats_v7.json")
+        self.stats_manager = StatsManager(self.stats_file)
+        self.stats = self.stats_manager.stats
         
         # Performance monitoring
         self.session_start_time = time.time()
@@ -403,9 +390,6 @@ class FanSaleBotV7:
             if 'page_load' in self.performance_tracker:
                 avg_load = sum(self.performance_tracker['page_load']) / len(self.performance_tracker['page_load'])
                 self.stats['performance_metrics']['avg_page_load_time'] = avg_load
-            
-            # Save ticket details cache
-            self.stats['ticket_details_cache'] = self.ticket_details_cache
                 
             self.stats_manager.save()
         except Exception as e:
@@ -488,7 +472,7 @@ class FanSaleBotV7:
         return hashlib.md5(clean_text.encode()).hexdigest()
     
     def extract_full_ticket_info(self, driver: uc.Chrome, ticket_element: WebElement) -> Dict:
-        """Extract complete ticket information including seat details and date"""
+        """Extract complete ticket information including seat details"""
         try:
             ticket_info = {
                 'raw_text': '',
@@ -498,9 +482,7 @@ class FanSaleBotV7:
                 'price': '',
                 'category': 'other',
                 'entrance': '',
-                'ring': '',
-                'date': '',
-                'location': ''
+                'ring': ''
             }
             
             full_text = ticket_element.text
@@ -533,15 +515,6 @@ class FanSaleBotV7:
                 price_match = re.search(r'(\d+[,.]?\d*)\s*€', line)
                 if price_match:
                     ticket_info['price'] = price_match.group(0)
-                
-                # Extract date (e.g., "28 giugno", "29 giugno", "28/06", etc.)
-                date_match = re.search(r'(\d{1,2}[\s/\-](?:giugno|luglio|06|07))', line, re.I)
-                if date_match:
-                    ticket_info['date'] = date_match.group(1).strip()
-                
-                # Extract location/venue info
-                if any(x in line_lower for x in ['stadio', 'arena', 'palazzetto', 'teatro']):
-                    ticket_info['location'] = line.strip()
             
             ticket_info['category'] = self.categorize_ticket(full_text)
             
@@ -557,9 +530,7 @@ class FanSaleBotV7:
                 'price': '',
                 'category': 'other',
                 'entrance': '',
-                'ring': '',
-                'date': '',
-                'location': ''
+                'ring': ''
             }
     
     def log_new_ticket(self, ticket_info: Dict, browser_id: int):
@@ -1035,67 +1006,6 @@ class FanSaleBotV7:
         self.category_logger.log_ticket('system', f"❌ CAPTCHA timeout in Browser {browser_id}", 'error')
         return False
     
-    def _detect_chrome_version(self) -> Optional[int]:
-        """Detect installed Chrome version"""
-        import subprocess
-        import platform
-        
-        try:
-            system = platform.system()
-            
-            if system == "Darwin":  # macOS
-                chrome_paths = [
-                    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-                    "/Applications/Chrome.app/Contents/MacOS/Chrome"
-                ]
-                
-                for path in chrome_paths:
-                    try:
-                        result = subprocess.run(
-                            [path, "--version"],
-                            capture_output=True,
-                            text=True,
-                            timeout=5
-                        )
-                        if result.returncode == 0:
-                            version_match = re.search(r'(\d+)\.', result.stdout)
-                            if version_match:
-                                version = int(version_match.group(1))
-                                self.category_logger.log_ticket('system', 
-                                    f"🔍 Detected Chrome version: {version}")
-                                return version
-                    except:
-                        continue
-                        
-            elif system == "Windows":
-                result = subprocess.run(
-                    ["reg", "query", "HKEY_CURRENT_USER\\Software\\Google\\Chrome\\BLBeacon", "/v", "version"],
-                    capture_output=True,
-                    text=True,
-                    shell=True
-                )
-                if result.returncode == 0:
-                    version_match = re.search(r'(\d+)\.', result.stdout)
-                    if version_match:
-                        return int(version_match.group(1))
-                        
-            elif system == "Linux":
-                result = subprocess.run(
-                    ["google-chrome", "--version"],
-                    capture_output=True,
-                    text=True
-                )
-                if result.returncode == 0:
-                    version_match = re.search(r'(\d+)\.', result.stdout)
-                    if version_match:
-                        return int(version_match.group(1))
-                        
-        except Exception as e:
-            self.category_logger.log_ticket('system', 
-                f"Could not detect Chrome version: {e}", 'warning')
-        
-        return None
-
     @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
         """Create stealth browser with VERIFIED image loading"""
@@ -1177,23 +1087,15 @@ class FanSaleBotV7:
             try:
                 # Try multiple approaches to handle version mismatches
                 driver = None
-                attempts = []
-                
-                # Try to detect Chrome version automatically
-                detected_version = self._detect_chrome_version()
-                if detected_version:
-                    attempts.append((detected_version, f"Chrome {detected_version} (detected)"))
-                
-                # Add fallback versions
-                attempts.extend([
-                    (None, "auto-detect"),
-                    (138, "Chrome 138"),
-                    (137, "Chrome 137"),
-                    (136, "Chrome 136"),
-                    (135, "Chrome 135"),
-                    (131, "Chrome 131"),
-                    (130, "Chrome 130"),
-                ])
+                attempts = [
+                    (None, "auto-detect"),  # Try auto-detect first
+                    (137, "Chrome 137"),    # Your version
+                    (138, "Chrome 138"),    # Version from error
+                    (136, "Chrome 136"),    # Fallback
+                    (135, "Chrome 135"),    # Fallback
+                    (131, "Chrome 131"),    # Fallback
+                    (130, "Chrome 130"),    # Fallback
+                ]
                 
                 for version, desc in attempts:
                     try:
@@ -1433,7 +1335,7 @@ class FanSaleBotV7:
         check_count = 0
         # Staggered refresh times for each browser
         last_refresh = time.time() - (browser_id * 5)  # Stagger initial refreshes
-        refresh_interval = 10 + random.randint(-2, 2)  # Faster refresh: 8-12 seconds
+        refresh_interval = 15 + random.randint(-3, 3)  # Faster refresh: 12-18 seconds
         
         last_session_refresh = time.time()
         local_stats = defaultdict(int)
@@ -1574,7 +1476,7 @@ class FanSaleBotV7:
                     driver.refresh()
                     last_refresh = time.time()
                     # Recalculate next refresh interval
-                    refresh_interval = 10 + random.randint(-2, 2)
+                    refresh_interval = 15 + random.randint(-3, 3)
                     # Dismiss popups after refresh
                     time.sleep(1)
                     self.dismiss_popups(driver, browser_id)
@@ -1663,7 +1565,7 @@ class FanSaleBotV7:
                     f"Failed to click ticket element", 'warning')
                 return False
                 
-            time.sleep(random.uniform(0.3, 0.6))
+            time.sleep(random.uniform(0.8, 1.2))
             
             # Dismiss any new popups that might appear
             self.dismiss_popups(driver, browser_id)
@@ -1714,7 +1616,7 @@ class FanSaleBotV7:
                                 buy_button_found = True
                     else:
                         # Try CSS selector with wait
-                        buy_btn = WebDriverWait(driver, 2).until(
+                        buy_btn = WebDriverWait(driver, 3).until(
                             EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
                         )
                         buy_button_found = True
@@ -1998,119 +1900,11 @@ class FanSaleBotV7:
         print(f"{CategoryLogger.COLORS['system']}📢 POPUP HANDLING - Checks every {self.config.popup_check_interval}s{CategoryLogger.COLORS['reset']}")
         print(f"{CategoryLogger.COLORS['prato_a']}📸 IMAGES ENABLED - Verified on startup{CategoryLogger.COLORS['reset']}")
     
-    def show_daily_ticket_summary(self):
-        """Show daily count per date for each category at startup"""
-        print(f"\n{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}📊 DAILY TICKET SUMMARY{CategoryLogger.COLORS['reset']}")
-        print("=" * 60)
-        
-        # Initialize daily counts
-        daily_counts = defaultdict(lambda: defaultdict(int))
-        
-        # Count tickets by date and category
-        for ticket_hash, ticket_info in self.ticket_details_cache.items():
-            date = ticket_info.get('date', 'Unknown')
-            category = ticket_info.get('category', 'other')
-            daily_counts[date][category] += 1
-        
-        # Also check stats file for historical data
-        if os.path.exists(self.stats_file):
-            try:
-                with open(self.stats_file, 'r') as f:
-                    stats_data = json.load(f)
-                    
-                # Process ticket cache from stats
-                ticket_cache = stats_data.get('ticket_details_cache', {})
-                for ticket_hash, ticket_info in ticket_cache.items():
-                    date = ticket_info.get('date', 'Unknown')
-                    category = ticket_info.get('category', 'other')
-                    daily_counts[date][category] += 1
-            except:
-                pass
-        
-        # Sort dates
-        sorted_dates = sorted([d for d in daily_counts.keys() if d != 'Unknown'])
-        if 'Unknown' in daily_counts:
-            sorted_dates.append('Unknown')
-        
-        if not sorted_dates:
-            print("No ticket data available yet.")
-            return
-        
-        # Create table header
-        categories = ['Prato A', 'Prato B', 'Settore', 'Other']
-        header = f"{'Date':<15}"
-        for cat in categories:
-            header += f"{cat:>12}"
-        header += f"{'Total':>12}"
-        print(header)
-        print("-" * 60)
-        
-        # Print data for each date
-        grand_totals = defaultdict(int)
-        for date in sorted_dates:
-            row = f"{date:<15}"
-            date_total = 0
-            
-            for cat in categories:
-                cat_key = cat.lower().replace(' ', '_')
-                count = daily_counts[date].get(cat_key, 0)
-                grand_totals[cat_key] += count
-                date_total += count
-                
-                # Color code based on category
-                if cat == 'Prato A':
-                    color = CategoryLogger.COLORS['prato_a']
-                elif cat == 'Prato B':
-                    color = CategoryLogger.COLORS['prato_b']
-                elif cat == 'Settore':
-                    color = CategoryLogger.COLORS['settore']
-                else:
-                    color = CategoryLogger.COLORS['other']
-                
-                if count > 0:
-                    row += f"{color}{count:>12}{CategoryLogger.COLORS['reset']}"
-                else:
-                    row += f"{count:>12}"
-            
-            row += f"{date_total:>12}"
-            print(row)
-        
-        # Print totals
-        print("-" * 60)
-        totals_row = f"{'TOTAL':<15}"
-        grand_total = 0
-        
-        for cat in categories:
-            cat_key = cat.lower().replace(' ', '_')
-            count = grand_totals[cat_key]
-            grand_total += count
-            
-            if cat == 'Prato A':
-                color = CategoryLogger.COLORS['prato_a']
-            elif cat == 'Prato B':
-                color = CategoryLogger.COLORS['prato_b']
-            elif cat == 'Settore':
-                color = CategoryLogger.COLORS['settore']
-            else:
-                color = CategoryLogger.COLORS['other']
-            
-            if count > 0:
-                totals_row += f"{color}{count:>12}{CategoryLogger.COLORS['reset']}"
-            else:
-                totals_row += f"{count:>12}"
-        
-        totals_row += f"{CategoryLogger.COLORS['bold']}{grand_total:>12}{CategoryLogger.COLORS['reset']}"
-        print(totals_row)
-        print("=" * 60)
-
     def run(self):
         """Main execution with enhanced tracking"""
         try:
             # Configure
             self.configure()
-            
-            # Show daily ticket summary
-            self.show_daily_ticket_summary()
             
             # Create browsers
             print(f"\n{CategoryLogger.COLORS['bold']}🚀 Starting {self.num_browsers} browser(s)...{CategoryLogger.COLORS['reset']}")

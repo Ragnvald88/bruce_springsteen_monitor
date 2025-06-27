@@ -52,15 +52,12 @@ class BotConfig:
     session_timeout: int = 900
     min_wait: float = 0.3  # Ultra-fast
     max_wait: float = 1.0  # Ultra-fast
-    retry_attempts: int = 3
-    retry_delay: float = 1.0
+    # Retry config removed - using decorator directly
     captcha_grace_period: int = 300
     twocaptcha_api_key: str = ""
     auto_solve_captcha: bool = False
-    popup_check_interval: int = 210  # 3.5 minutes
-    enable_image_loading: bool = True
+    popup_check_interval: int = 30  # 30 seconds for more responsive popup handling
     captcha_check_interval: int = 300  # 5 minutes
-    enable_mouse_simulation: bool = True
     
     @classmethod
     def from_file(cls, path: Path) -> 'BotConfig':
@@ -68,7 +65,10 @@ class BotConfig:
         if path.exists():
             with open(path, 'r') as f:
                 data = json.load(f)
-                return cls(**data)
+                # Filter out any unknown parameters from old config files
+                valid_fields = {f.name for f in cls.__dataclass_fields__.values()}
+                filtered_data = {k: v for k, v in data.items() if k in valid_fields}
+                return cls(**filtered_data)
         return cls()
     
     def save(self, path: Path):
@@ -100,9 +100,25 @@ class CategoryLogger:
         self.setup_loggers()
         
     def setup_loggers(self):
-        """Create separate loggers for each category"""
+        """Create logger with console output only (no separate files)"""
         categories = ['prato_a', 'prato_b', 'settore', 'other', 'system']
         
+        # Single file logger for all categories
+        file_logger = logging.getLogger('fansale.all')
+        file_logger.setLevel(logging.INFO)
+        file_logger.handlers.clear()
+        
+        # Single file handler
+        file_handler = logging.FileHandler(
+            'fansale_v7.log',
+            encoding='utf-8'
+        )
+        file_handler.setFormatter(
+            logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        )
+        file_logger.addHandler(file_handler)
+        
+        # Category-specific console loggers
         for category in categories:
             logger = logging.getLogger(f'fansale.{category}')
             logger.setLevel(logging.INFO)
@@ -115,22 +131,16 @@ class CategoryLogger:
             )
             logger.addHandler(console_handler)
             
-            # File handler
-            file_handler = logging.FileHandler(
-                f'fansale_v7_{category}.log',
-                encoding='utf-8'
-            )
-            file_handler.setFormatter(
-                logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-            )
-            logger.addHandler(file_handler)
-            
             self.loggers[category] = logger
     
     def log_ticket(self, category: str, message: str, level='info'):
-        """Log message to appropriate category logger"""
+        """Log message to console and single file"""
         if category in self.loggers:
+            # Console output with color
             getattr(self.loggers[category], level)(message)
+            # File output without color
+            file_logger = logging.getLogger('fansale.all')
+            getattr(file_logger, level)(f"[{category.upper()}] {message}")
         else:
             self.loggers['system'].warning(f"Unknown category: {category}")
     
@@ -203,13 +213,7 @@ class StatsManager:
             'captchas_auto_solved': 0,
             'popups_dismissed': 0,
             'all_time_runtime': 0,
-            'images_verified': 0,
-            'performance_metrics': {
-                'avg_page_load_time': 0,
-                'avg_ticket_check_time': 0,
-                'avg_popup_dismiss_time': 0
-            }
-        }
+                    }
     
     def save(self):
         """Save stats to file with atomic write"""
@@ -368,7 +372,7 @@ class FanSaleBotV7:
         
         # Performance monitoring
         self.session_start_time = time.time()
-        self.performance_tracker = defaultdict(list)
+        # Performance tracking removed - not actionable
         
         # 2Captcha solver
         api_key = self.config.twocaptcha_api_key or os.getenv('TWOCAPTCHA_API_KEY', '')
@@ -387,66 +391,13 @@ class FanSaleBotV7:
             session_time = time.time() - self.session_start_time
             self.stats['all_time_runtime'] = self.stats.get('all_time_runtime', 0) + session_time
             
-            if 'page_load' in self.performance_tracker:
-                avg_load = sum(self.performance_tracker['page_load']) / len(self.performance_tracker['page_load'])
-                self.stats['performance_metrics']['avg_page_load_time'] = avg_load
+            
                 
             self.stats_manager.save()
         except Exception as e:
             self.category_logger.log_ticket('system', f"Failed to save stats: {e}", 'error')
     
-    def verify_image_loading(self, driver: uc.Chrome, browser_id: int) -> bool:
-        """Verify that images are actually loading in the browser"""
-        try:
-            self.category_logger.log_ticket('system', f"🔍 Verifying image loading for Browser {browser_id}...")
-            
-            time.sleep(3)
-            
-            result = driver.execute_script("""
-                var images = document.querySelectorAll('img');
-                var loadedCount = 0;
-                var totalCount = 0;
-                
-                for (var i = 0; i < images.length; i++) {
-                    if (images[i].src && images[i].src !== '' && 
-                        images[i].offsetWidth > 0 && images[i].offsetHeight > 0) {
-                        totalCount++;
-                        if (images[i].complete && images[i].naturalWidth > 0) {
-                            loadedCount++;
-                        }
-                    }
-                }
-                
-                var divsWithBg = document.querySelectorAll('div[style*="background-image"]');
-                var bgLoaded = divsWithBg.length > 0 ? divsWithBg.length : 0;
-                
-                return {
-                    total: totalCount,
-                    loaded: loadedCount,
-                    backgrounds: bgLoaded,
-                    percentage: totalCount > 0 ? (loadedCount / totalCount * 100) : 100
-                };
-            """)
-            
-            if result['total'] == 0 and result['backgrounds'] > 0:
-                self.category_logger.log_ticket('system', 
-                    f"✅ Browser {browser_id}: Background images detected ({result['backgrounds']} found)")
-                self.stats['images_verified'] += 1
-                return True
-            
-            if result['loaded'] > 0 or result['percentage'] > 30:
-                self.category_logger.log_ticket('system', 
-                    f"✅ Browser {browser_id}: Images loading verified ({result['loaded']}/{result['total']} = {result['percentage']:.1f}%)")
-                self.stats['images_verified'] += 1
-                return True
-            else:
-                self.category_logger.log_ticket('system', 
-                    f"⚠️ Browser {browser_id}: Low image count detected ({result['loaded']}/{result['total']} = {result['percentage']:.1f}%)", 'warning')
-                return True
-                
-        except Exception as e:
-            self.category_logger.log_ticket('system', f"Failed to verify image loading: {e}", 'error')
-            return True
+    # Method removed - browsers load images by default
     
     def categorize_ticket(self, ticket_text: str) -> str:
         """Categorize ticket based on text content"""
@@ -472,21 +423,15 @@ class FanSaleBotV7:
         return hashlib.md5(clean_text.encode()).hexdigest()
     
     def extract_full_ticket_info(self, driver: uc.Chrome, ticket_element: WebElement) -> Dict:
-        """Extract complete ticket information including seat details"""
+        """Extract only essential ticket information"""
         try:
             ticket_info = {
-                'raw_text': '',
-                'section': '',
-                'row': '',
-                'seat': '',
-                'price': '',
+                'raw_text': ticket_element.text,
                 'category': 'other',
-                'entrance': '',
-                'ring': '',
                 'offer_id': ''
             }
             
-            # Try to extract offer ID from data attribute
+            # Try to extract offer ID if available
             try:
                 offer_id = ticket_element.get_attribute('data-offer-id')
                 if offer_id:
@@ -494,38 +439,8 @@ class FanSaleBotV7:
             except:
                 pass
             
-            full_text = ticket_element.text
-            ticket_info['raw_text'] = full_text
-            
-            lines = full_text.split('\n')
-            
-            for line in lines:
-                line_lower = line.lower()
-                
-                if any(x in line_lower for x in ['prato', 'settore', 'tribuna', 'parterre']):
-                    ticket_info['section'] = line.strip()
-                
-                fila_match = re.search(r'fila\s*[:\s]*(\w+)', line, re.I)
-                if fila_match:
-                    ticket_info['row'] = fila_match.group(1)
-                
-                posto_match = re.search(r'posto\s*[:\s]*(\d+)', line, re.I)
-                if posto_match:
-                    ticket_info['seat'] = posto_match.group(1)
-                
-                ingresso_match = re.search(r'ingresso\s*[:\s]*(\d+)', line, re.I)
-                if ingresso_match:
-                    ticket_info['entrance'] = ingresso_match.group(1)
-                
-                anello_match = re.search(r'(\d+\s*anello\s*\w+)', line, re.I)
-                if anello_match:
-                    ticket_info['ring'] = anello_match.group(1)
-                
-                price_match = re.search(r'(\d+[,.]?\d*)\s*€', line)
-                if price_match:
-                    ticket_info['price'] = price_match.group(0)
-            
-            ticket_info['category'] = self.categorize_ticket(full_text)
+            # Categorize based on text
+            ticket_info['category'] = self.categorize_ticket(ticket_info['raw_text'])
             
             return ticket_info
             
@@ -533,46 +448,21 @@ class FanSaleBotV7:
             self.category_logger.log_ticket('system', f"Error extracting ticket info: {e}", 'error')
             return {
                 'raw_text': ticket_element.text,
-                'section': '',
-                'row': '',
-                'seat': '',
-                'price': '',
-                'category': 'other',
-                'entrance': '',
-                'ring': ''
+                'category': self.categorize_ticket(ticket_element.text),
+                'offer_id': ''
             }
     
     def log_new_ticket(self, ticket_info: Dict, browser_id: int):
-        """Log newly discovered ticket with full details"""
+        """Log newly discovered ticket"""
         category = ticket_info['category']
-        
         is_hunting = category in self.ticket_types_to_hunt
-        hunt_indicator = " [HUNTING]" if is_hunting else " [TRACKING]"
-        
-        details = []
-        if ticket_info['section']:
-            details.append(f"Section: {ticket_info['section']}")
-        if ticket_info['entrance']:
-            details.append(f"Entrance: {ticket_info['entrance']}")
-        if ticket_info['row']:
-            details.append(f"Row: {ticket_info['row']}")
-        if ticket_info['seat']:
-            details.append(f"Seat: {ticket_info['seat']}")
-        if ticket_info['ring']:
-            details.append(f"Ring: {ticket_info['ring']}")
-        if ticket_info['price']:
-            details.append(f"Price: {ticket_info['price']}")
-        
-        detail_str = " | ".join(details) if details else ticket_info['raw_text'][:100]
         
         if is_hunting:
             self.category_logger.log_alert(category,
                 f"NEW TICKET FOUND by Hunter {browser_id}!")
         
         self.category_logger.log_ticket(category,
-            f"🎫 NEW TICKET{hunt_indicator} - Hunter {browser_id}")
-        self.category_logger.log_ticket(category, f"   └─ {detail_str}")
-        self.category_logger.log_ticket(category, "   " + "─" * 60)
+            f"🎫 NEW {category.upper()} ticket - Hunter {browser_id}")
     
     def check_captcha_status(self, browser_id: int) -> bool:
         """Check if browser is within CAPTCHA grace period"""
@@ -594,189 +484,51 @@ class FanSaleBotV7:
             f"✅ Hunter {browser_id}: CAPTCHA solved! Grace period active for {self.captcha_grace_period}s")
     
     def dismiss_popups(self, driver: uc.Chrome, browser_id: int) -> int:
-        """Enhanced popup detection and dismissal - FROM V5"""
-        start_time = time.time()
+        """Simple popup dismissal - most popups just need a click"""
         dismissed_count = 0
         
         try:
-            # Enhanced popup selectors with more specific patterns
-            popup_strategies = [
-                # Strategy 0: Priority - "Carica Offerte" button (must be first)
-                {
-                    'name': 'carica_offerte',
-                    'selectors': [
-                        "button.js-BotProtectionModalButton1",
-                        "button.js-BotProtectionModalButtonTrigger",
-                        "button.Button-super:contains('Carica Offerte')",
-                        "button[name='_submit'][value='true']"
-                    ],
-                    'action': 'click_directly'
-                },
-                # Strategy 1: Look for visible overlays/modals first
-                {
-                    'name': 'overlay',
-                    'selectors': [
-                        "div[class*='overlay']:not([style*='display: none'])",
-                        "div[class*='modal']:not([style*='display: none'])",
-                        "div[class*='popup']:not([style*='display: none'])",
-                        "div[id*='overlay']:not([style*='display: none'])",
-                        "div[id*='modal']:not([style*='display: none'])",
-                        "div[id*='popup']:not([style*='display: none'])"
-                    ],
-                    'action': 'find_close_button_or_click_overlay'
-                },
-                
-                # Strategy 2: Cookie/GDPR banners
-                {
-                    'name': 'cookie_banner',
-                    'selectors': [
-                        "div[class*='cookie']",
-                        "div[class*='gdpr']",
-                        "div[class*='privacy']",
-                        "div[id*='cookie']",
-                        "div[id*='gdpr']"
-                    ],
-                    'action': 'find_accept_button'
-                },
-                
-                # Strategy 3: Direct button selectors (including Carica Offerte)
-                {
-                    'name': 'direct_buttons',
-                    'selectors': [
-                        "button[class*='close']:visible",
-                        "button[aria-label*='close' i]:visible",
-                        "button[aria-label*='chiudi' i]:visible",
-                        "a[class*='close']:visible",
-                        "span[class*='close']:visible",
-                        "button:contains('Accetta'):visible",
-                        "button:contains('OK'):visible",
-                        "button:contains('Chiudi'):visible",
-                        "button:contains('X'):visible",
-                        "button.js-BotProtectionModalButton1",
-                        "button:contains('Carica Offerte'):visible"
-                    ],
-                    'action': 'click_directly'
-                }
+            # Priority 1: "Carica Offerte" button (most important)
+            try:
+                carica = driver.find_element(By.CSS_SELECTOR, "button.js-BotProtectionModalButton1")
+                if carica.is_displayed():
+                    driver.execute_script("arguments[0].click();", carica)
+                    self.category_logger.log_ticket('system', f"📢 Hunter {browser_id}: Clicked 'Carica Offerte' button")
+                    dismissed_count += 1
+                    time.sleep(0.5)
+            except:
+                pass
+            
+            # Priority 2: Common close buttons
+            close_selectors = [
+                "button[aria-label*='close' i]",
+                "button[aria-label*='chiudi' i]", 
+                "button[class*='close']",
+                "a[class*='close']"
             ]
             
-            for strategy in popup_strategies:
-                for selector in strategy['selectors']:
-                    try:
-                        # Handle jQuery-style :visible pseudo-selector
-                        if ':visible' in selector:
-                            selector = selector.replace(':visible', '')
-                            elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                            elements = [e for e in elements if e.is_displayed()]
-                        elif ':contains' in selector:
-                            # Handle contains selector with XPath
-                            match = re.search(r":contains\('([^']+)'\)", selector)
-                            if match:
-                                text = match.group(1)
-                                tag = selector.split(':')[0]
-                                xpath = f"//{tag}[contains(text(), '{text}')]"
-                                elements = driver.find_elements(By.XPATH, xpath)
-                                elements = [e for e in elements if e.is_displayed()]
-                            else:
-                                continue
-                        else:
-                            elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                        
-                        for element in elements:
-                            if not element.is_displayed():
-                                continue
-                                
-                            try:
-                                if strategy['action'] == 'find_close_button_or_click_overlay':
-                                    # First try to find a close button within the overlay
-                                    close_buttons = element.find_elements(By.CSS_SELECTOR, 
-                                        "button, a, span, div[class*='close'], div[role='button']")
-                                    
-                                    clicked = False
-                                    for btn in close_buttons:
-                                        btn_text = btn.text.lower()
-                                        btn_class = btn.get_attribute('class') or ''
-                                        btn_aria = btn.get_attribute('aria-label') or ''
-                                        
-                                        if any(x in btn_text + btn_class + btn_aria.lower() for x in 
-                                               ['close', 'chiudi', 'x', 'dismiss', 'ok', 'accetta']):
-                                            driver.execute_script("arguments[0].click();", btn)
-                                            self.category_logger.log_ticket('system', 
-                                                f"📢 Hunter {browser_id}: Dismissed {strategy['name']} via close button")
-                                            dismissed_count += 1
-                                            clicked = True
-                                            time.sleep(0.5)
-                                            break
-                                    
-                                    # If no close button found, try clicking the overlay itself
-                                    if not clicked:
-                                        driver.execute_script("arguments[0].click();", element)
-                                        self.category_logger.log_ticket('system', 
-                                            f"📢 Hunter {browser_id}: Dismissed {strategy['name']} by clicking overlay")
-                                        dismissed_count += 1
-                                        time.sleep(0.5)
-                                
-                                elif strategy['action'] == 'find_accept_button':
-                                    # Look for accept/OK buttons in cookie banners
-                                    accept_buttons = element.find_elements(By.CSS_SELECTOR, "button, a")
-                                    for btn in accept_buttons:
-                                        btn_text = btn.text.lower()
-                                        if any(x in btn_text for x in ['accetta', 'accept', 'ok', 'consenti', 'agree']):
-                                            driver.execute_script("arguments[0].click();", btn)
-                                            self.category_logger.log_ticket('system', 
-                                                f"📢 Hunter {browser_id}: Accepted {strategy['name']}")
-                                            dismissed_count += 1
-                                            time.sleep(0.5)
-                                            break
-                                
-                                elif strategy['action'] == 'click_directly':
-                                    driver.execute_script("arguments[0].click();", element)
-                                    self.category_logger.log_ticket('system', 
-                                        f"📢 Hunter {browser_id}: Clicked {strategy['name']} button")
-                                    dismissed_count += 1
-                                    time.sleep(0.5)
-                                    
-                            except Exception as e:
-                                continue
-                                
-                    except Exception as e:
-                        continue
+            for selector in close_selectors:
+                try:
+                    elements = driver.find_elements(By.CSS_SELECTOR, selector)
+                    for elem in elements:
+                        if elem.is_displayed():
+                            driver.execute_script("arguments[0].click();", elem)
+                            dismissed_count += 1
+                            break
+                except:
+                    continue
             
-            # Also try to remove popups via JavaScript
+            # Priority 3: Accept cookies if needed
             if dismissed_count == 0:
-                removed = driver.execute_script("""
-                    var removed = 0;
-                    // Remove common popup elements
-                    var selectors = [
-                        'div[class*="overlay"]',
-                        'div[class*="modal"]',
-                        'div[class*="popup"]',
-                        'div[class*="cookie"]',
-                        'div[class*="gdpr"]'
-                    ];
-                    
-                    selectors.forEach(function(selector) {
-                        var elements = document.querySelectorAll(selector);
-                        elements.forEach(function(el) {
-                            if (el && el.offsetParent !== null) {  // Check if visible
-                                el.remove();
-                                removed++;
-                            }
-                        });
-                    });
-                    
-                    return removed;
-                """)
-                
-                if removed > 0:
-                    self.category_logger.log_ticket('system', 
-                        f"📢 Hunter {browser_id}: Removed {removed} popups via JavaScript")
-                    dismissed_count += removed
-            
-            if dismissed_count > 0:
-                self.stats['popups_dismissed'] += dismissed_count
-                elapsed = time.time() - start_time
-                self.performance_tracker['popup_dismiss'].append(elapsed)
-                self.save_stats()
+                try:
+                    accept_btns = driver.find_elements(By.XPATH, "//button[contains(text(), 'Accetta') or contains(text(), 'OK')]")
+                    for btn in accept_btns:
+                        if btn.is_displayed():
+                            driver.execute_script("arguments[0].click();", btn)
+                            dismissed_count += 1
+                            break
+                except:
+                    pass
                 
         except Exception as e:
             self.category_logger.log_ticket('system', f"Error in dismiss_popups: {e}", 'error')
@@ -784,89 +536,26 @@ class FanSaleBotV7:
         return dismissed_count
     
     def detect_captcha(self, driver: uc.Chrome) -> tuple[bool, Optional[str], Optional[str]]:
-        """Enhanced CAPTCHA detection with multiple strategies"""
+        """Simple CAPTCHA detection"""
         try:
-            # Strategy 1: Check for reCAPTCHA v2
-            recaptcha_v2 = driver.execute_script("""
-                var found = {
-                    hasDiv: false,
-                    sitekey: null,
-                    hasIframe: false,
-                    iframeSrc: null
-                };
-                
-                // Check for g-recaptcha div
-                var divs = document.querySelectorAll('div.g-recaptcha');
-                if (divs.length > 0) {
-                    found.hasDiv = true;
-                    found.sitekey = divs[0].getAttribute('data-sitekey');
-                }
-                
-                // Check for recaptcha iframe
-                var iframes = document.querySelectorAll('iframe[src*="recaptcha"], iframe[title*="recaptcha"]');
-                if (iframes.length > 0) {
-                    found.hasIframe = true;
-                    found.iframeSrc = iframes[0].src;
-                    // Try to extract sitekey from iframe src
-                    var match = iframes[0].src.match(/[?&]k=([^&]+)/);
-                    if (match && !found.sitekey) {
-                        found.sitekey = match[1];
-                    }
-                }
-                
-                return found;
-            """)
-            
-            if recaptcha_v2['hasDiv'] or recaptcha_v2['hasIframe']:
-                self.category_logger.log_ticket('system', 
-                    f"🤖 reCAPTCHA v2 detected! Div: {recaptcha_v2['hasDiv']}, Iframe: {recaptcha_v2['hasIframe']}")
-                return True, recaptcha_v2['sitekey'], driver.current_url
-            
-            # Strategy 2: Check for reCAPTCHA v3
-            recaptcha_v3 = driver.execute_script("""
-                // Check for reCAPTCHA v3 indicators
-                return window.grecaptcha !== undefined || 
-                       document.querySelector('script[src*="recaptcha/api.js"]') !== null;
-            """)
-            
-            if recaptcha_v3:
-                self.category_logger.log_ticket('system', "🤖 reCAPTCHA v3 detected!")
-                # Try to find sitekey in page source
-                page_source = driver.page_source
-                sitekey_match = re.search(r'["\']sitekey["\']\s*:\s*["\']([^"\']+)["\']', page_source)
-                if sitekey_match:
-                    return True, sitekey_match.group(1), driver.current_url
-                return True, None, driver.current_url
-            
-            # Strategy 3: Check for hCaptcha
-            hcaptcha = driver.execute_script("""
-                var hcaptchaDiv = document.querySelector('div.h-captcha');
-                if (hcaptchaDiv) {
-                    return {
-                        found: true,
-                        sitekey: hcaptchaDiv.getAttribute('data-sitekey')
-                    };
-                }
-                return {found: false};
-            """)
-            
-            if hcaptcha['found']:
-                self.category_logger.log_ticket('system', "🤖 hCaptcha detected!")
-                return True, hcaptcha.get('sitekey'), driver.current_url
-            
-            # Strategy 4: Check page source for CAPTCHA keywords
-            page_source_lower = driver.page_source.lower()
-            captcha_indicators = [
-                'g-recaptcha', 'h-captcha', 'cf-turnstile',
-                'captcha', 'verifica che non sei un robot',
-                'verify you are human', 'sono un umano'
+            # Check for common CAPTCHA elements
+            captcha_selectors = [
+                "div.g-recaptcha",
+                "iframe[src*='recaptcha']",
+                "div.h-captcha"
             ]
             
-            for indicator in captcha_indicators:
-                if indicator in page_source_lower:
-                    self.category_logger.log_ticket('system', 
-                        f"🤖 CAPTCHA indicator found in page: '{indicator}'")
-                    return True, None, driver.current_url
+            for selector in captcha_selectors:
+                if driver.find_elements(By.CSS_SELECTOR, selector):
+                    self.category_logger.log_ticket('system', "🤖 CAPTCHA detected!")
+                    
+                    # Try to get sitekey for reCAPTCHA
+                    sitekey = None
+                    if 'recaptcha' in selector:
+                        elem = driver.find_element(By.CSS_SELECTOR, selector)
+                        sitekey = elem.get_attribute('data-sitekey')
+                    
+                    return True, sitekey, driver.current_url
             
             return False, None, None
             
@@ -889,12 +578,12 @@ class FanSaleBotV7:
             return False
             
         try:
-            # Enhanced token injection with multiple strategies
+            # Simple token injection - most sites just need the textarea filled
             injection_success = driver.execute_script(f"""
                 var token = '{token}';
                 var success = false;
                 
-                // Strategy 1: Direct textarea injection
+                // Find and fill the response textarea
                 var textarea = document.getElementById('g-recaptcha-response');
                 if (textarea) {{
                     textarea.innerHTML = token;
@@ -902,40 +591,13 @@ class FanSaleBotV7:
                     success = true;
                 }}
                 
-                // Strategy 2: Find any g-recaptcha-response element
-                if (!success) {{
-                    var responses = document.querySelectorAll('[id*="g-recaptcha-response"], [name*="g-recaptcha-response"]');
-                    responses.forEach(function(el) {{
-                        el.innerHTML = token;
-                        el.value = token;
-                        success = true;
-                    }});
-                }}
-                
-                // Strategy 3: Trigger callbacks
+                // Try to trigger the callback if it exists
                 if (success && window.___grecaptcha_cfg) {{
-                    Object.entries(window.___grecaptcha_cfg.clients).forEach(function([key, client]) {{
+                    Object.values(window.___grecaptcha_cfg.clients).forEach(function(client) {{
                         if (client.callback) {{
                             try {{
                                 client.callback(token);
-                            }} catch(e) {{
-                                console.error('Callback error:', e);
-                            }}
-                        }}
-                    }});
-                }}
-                
-                // Strategy 4: Submit form if exists
-                if (success) {{
-                    var forms = document.querySelectorAll('form');
-                    forms.forEach(function(form) {{
-                        var hasRecaptcha = form.querySelector('.g-recaptcha, [data-sitekey]');
-                        if (hasRecaptcha) {{
-                            try {{
-                                form.submit();
-                            }} catch(e) {{
-                                console.log('Form submit failed:', e);
-                            }}
+                            }} catch(e) {{}}
                         }}
                     }});
                 }}
@@ -1017,210 +679,59 @@ class FanSaleBotV7:
     
     @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
-        """Create stealth browser with VERIFIED image loading"""
+        """Create browser with undetected-chromedriver"""
         self.category_logger.log_ticket('system', f"🚀 Creating Browser {browser_id}...")
         
-        def create_chrome_options():
-            """Create ChromeOptions with IMAGES EXPLICITLY ENABLED"""
+        try:
             options = uc.ChromeOptions()
             
-            options.headless = False
-            
-            # Stealth options
+            # Basic stealth options (undetected-chromedriver handles most of this)
             options.add_argument('--disable-blink-features=AutomationControlled')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-features=TranslateUI')
-            options.add_argument('--disable-infobars')
             
-            # Performance options (but NOT disabling images)
-            options.add_argument('--disable-logging')
-            options.add_argument('--disable-background-timer-throttling')
-            options.add_argument('--disable-renderer-backgrounding')
-            options.add_argument('--disable-features=TranslateUI')
-            options.add_argument('--disable-ipc-flooding-protection')
-            
-            # CRITICAL: Ensure images are loaded
-            prefs = {
-                'profile.default_content_setting_values': {
-                    'images': 1,  # 1 = allow, 2 = block
-                    'plugins': 1,
-                    'popups': 2,  # Block popups
-                    'geolocation': 2,
-                    'notifications': 2,
-                    'media_stream': 2,
-                },
-                'profile.managed_default_content_settings': {
-                    'images': 1  # Ensure images are allowed
-                }
-            }
-            options.add_experimental_option('prefs', prefs)
-            
-            # Multi-monitor window positioning
+            # Window positioning for multi-monitor
             window_width = 450
             window_height = 800
-            monitor_width = 1920  # Adjust based on your monitor resolution
-            
-            # Calculate position for multi-monitor setup
             col = (browser_id - 1) % 4
             row = (browser_id - 1) // 4
-            x = col * (window_width + 10)  # 10px gap between windows
-            y = row * 100  # Vertical offset for rows
-            
-            # If x position exceeds primary monitor, place on next monitor
-            monitor_num = x // monitor_width
-            x = x % monitor_width + (monitor_num * monitor_width)
+            x = col * (window_width + 10)
+            y = row * 100
             
             options.add_argument(f'--window-position={x},{y}')
             options.add_argument(f'--window-size={window_width},{window_height}')
             
-            # Profile persistence for cookies/storage
+            # Profile persistence
             profile_dir = Path("browser_profiles") / f"browser_{browser_id}"
             profile_dir.mkdir(parents=True, exist_ok=True)
             options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
             
-            # Additional arguments to ensure proper rendering
-            options.add_argument('--force-device-scale-factor=1')
-            
-            self.category_logger.log_ticket('system', f"✅ ChromeOptions configured with IMAGES ENABLED")
-            
-            return options, x, y
-        
-        try:
-            # Create fresh options
-            options, x, y = create_chrome_options()
-            
-            # Create driver with proper error handling
-            driver = None
-            
+            # Create driver - let undetected-chromedriver handle version detection
             try:
-                # Try multiple approaches to handle version mismatches
-                driver = None
-                attempts = [
-                    (None, "auto-detect"),  # Try auto-detect first
-                    (137, "Chrome 137"),    # Your version
-                    (138, "Chrome 138"),    # Version from error
-                    (136, "Chrome 136"),    # Fallback
-                    (135, "Chrome 135"),    # Fallback
-                    (131, "Chrome 131"),    # Fallback
-                    (130, "Chrome 130"),    # Fallback
-                ]
-                
-                for version, desc in attempts:
-                    try:
-                        self.category_logger.log_ticket('system', 
-                            f"Attempting to create browser with {desc}...")
-                        
-                        # Create fresh options for each attempt (ChromeOptions cannot be reused)
-                        fresh_options, _, _ = create_chrome_options()
-                        
-                        driver = uc.Chrome(
-                            options=fresh_options,
-                            driver_executable_path=None,
-                            version_main=version,
-                            use_subprocess=True,  # Changed to True for Python 3.13
-                            suppress_welcome=True
-                        )
-                        self.category_logger.log_ticket('system', 
-                            f"✅ Successfully created browser with {desc}")
-                        break
-                    except Exception as e:
-                        error_msg = str(e).lower()
-                        if "version" in error_msg or "chrome" in error_msg:
-                            self.category_logger.log_ticket('system', 
-                                f"Version mismatch with {desc}, trying next...", 'warning')
-                            continue
-                        elif "multiprocessing" in str(e):
-                            self.category_logger.log_ticket('system', 
-                                f"Multiprocessing error with {desc}, trying next...", 'warning')
-                            continue
-                        else:
-                            self.category_logger.log_ticket('system', 
-                                f"Error with {desc}: {e}", 'error')
-                            continue
-                
-                if not driver:
-                    raise Exception("Could not create browser with any Chrome version")
-                
-                # Set timeouts
-                driver.set_page_load_timeout(30)
-                driver.implicitly_wait(10)
-                
-                # Inject stealth JavaScript
-                driver.execute_script("""
-                    // Remove webdriver property
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => undefined
-                    });
-                    
-                    // Mock plugins
-                    Object.defineProperty(navigator, 'plugins', {
-                        get: () => [1, 2, 3, 4, 5].map((i) => ({
-                            name: `Plugin ${i}`,
-                            description: `Description ${i}`,
-                            filename: `plugin${i}.dll`
-                        }))
-                    });
-                    
-                    // Mock languages
-                    Object.defineProperty(navigator, 'languages', {
-                        get: () => ['en-US', 'en', 'it-IT', 'it']
-                    });
-                    
-                    // Mock permissions
-                    const originalQuery = window.navigator.permissions.query;
-                    window.navigator.permissions.query = (parameters) => (
-                        parameters.name === 'notifications' ?
-                            Promise.resolve({ state: Notification.permission }) :
-                            originalQuery(parameters)
-                    );
-                    
-                    // Mock chrome runtime
-                    window.chrome = {
-                        runtime: {},
-                        loadTimes: function() {},
-                        csi: function() {}
-                    };
-                    
-                    // Remove automation indicators
-                    ['webdriver', '__driver_evaluate', '__webdriver_evaluate', '__selenium_evaluate', 
-                     '__fxdriver_evaluate', '__driver_unwrapped', '__webdriver_unwrapped', 
-                     '__selenium_unwrapped', '__fxdriver_unwrapped', '_Selenium_IDE_Recorder', 
-                     '_selenium', 'calledSelenium', 'ChromeDriverw', 'driver-evaluate', 'webdriver-evaluate',
-                     'selenium-evaluate', 'webdriverCommand', 'webdriver-evaluate-response', '__webdriverFunc',
-                     '__webdriver_script_fn', '__$webdriverAsyncExecutor', '__lastWatirAlert', '__lastWatirConfirm',
-                     '__lastWatirPrompt', '$chrome_asyncScriptInfo', '$cdc_asdjflasutopfhvcZLmcfl_'].forEach(prop => {
-                        delete window[prop];
-                        delete document[prop];
-                    });
-                """)
-                
-                # Browser created successfully
-                self.category_logger.log_ticket('system', 
-                    f"✅ Browser {browser_id} created at position ({x}, {y})")
-                
-                return driver
-                
-            except Exception as e:
-                if driver:
-                    try:
-                        driver.quit()
-                    except:
-                        pass
-                raise e
-                
+                driver = uc.Chrome(
+                    options=options,
+                    use_subprocess=True,
+                    suppress_welcome=True
+                )
+            except Exception:
+                # Fallback to version 137 if auto-detect fails
+                driver = uc.Chrome(
+                    options=options,
+                    version_main=137,
+                    use_subprocess=True,
+                    suppress_welcome=True
+                )
+            
+            # Set timeouts
+            driver.set_page_load_timeout(30)
+            driver.implicitly_wait(10)
+            
+            self.category_logger.log_ticket('system', 
+                f"✅ Browser {browser_id} created at position ({x}, {y})")
+            
+            return driver
+            
         except Exception as e:
             self.category_logger.log_ticket('system', 
                 f"❌ Failed to create browser {browser_id}: {e}", 'error')
-            
-            # Provide helpful error messages
-            if "headless" in str(e).lower():
-                self.category_logger.log_ticket('system', 
-                    "Chrome headless issue detected - check undetected-chromedriver version", 'error')
-            elif "version" in str(e).lower():
-                self.category_logger.log_ticket('system', 
-                    "Chrome version mismatch - updating chromedriver...", 'error')
-            
             raise
     
     def is_blocked(self, driver: uc.Chrome) -> bool:
@@ -1258,45 +769,15 @@ class FanSaleBotV7:
             return False
 
     def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
-        """Clear browser data to bypass blocks"""
+        """Clear browser data to bypass blocks - simplified"""
         try:
             self.category_logger.log_ticket('system', 
-                f"🧹 Clearing data for Browser {browser_id} to bypass block...")
+                f"🧹 Clearing data for Browser {browser_id}...")
             
-            # Clear all browser data via JavaScript
-            driver.execute_script("""
-                // Clear cookies
-                document.cookie.split(";").forEach(function(c) { 
-                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-                });
-                
-                // Clear local storage
-                try { localStorage.clear(); } catch(e) {}
-                
-                // Clear session storage
-                try { sessionStorage.clear(); } catch(e) {}
-                
-                // Clear IndexedDB
-                if ('indexedDB' in window) {
-                    indexedDB.databases().then(databases => {
-                        databases.forEach(db => { indexedDB.deleteDatabase(db.name); });
-                    }).catch(e => {});
-                }
-                
-                // Clear cache storage
-                if ('caches' in window) {
-                    caches.keys().then(names => {
-                        names.forEach(name => caches.delete(name));
-                    }).catch(e => {});
-                }
-            """)
-            
-            # Also use Selenium methods
+            # Just clear cookies and navigate to blank
             driver.delete_all_cookies()
-            
-            # Navigate to blank page
             driver.get("about:blank")
-            time.sleep(random.uniform(0.8, 1.5))
+            time.sleep(1)
             
             self.category_logger.log_ticket('system', f"✅ Browser {browser_id} data cleared")
             self.stats['blocks_encountered'] += 1
@@ -1314,7 +795,7 @@ class FanSaleBotV7:
         page_start = time.time()
         driver.get(self.target_url)
         page_load_time = time.time() - page_start
-        self.performance_tracker['page_load'].append(page_load_time)
+        # Removed performance tracking - not actionable
         self.category_logger.log_ticket('system', f"📄 Page loaded in {page_load_time:.2f}s")
         
         # Initial popup dismissal
@@ -1338,8 +819,8 @@ class FanSaleBotV7:
         
         self.category_logger.log_ticket('system', f"📢 Dismissed {initial_popups} initial popups")
         
-        # Verify images are loading
-        self.verify_image_loading(driver, browser_id)
+        # Verify images are loading - REMOVED: Unnecessary check that adds delay
+        # self.verify_image_loading(driver, browser_id)
         
         check_count = 0
         # Staggered refresh times for each browser
@@ -1363,7 +844,8 @@ class FanSaleBotV7:
                 self.stats['total_checks'] += 1
                 
                 # Periodic CAPTCHA check - only browser 1 does this every 5 minutes
-                if browser_id == 1 and time.time() - last_captcha_test > self.config.captcha_check_interval:
+                # Skip this check if we're in the first 30 seconds to allow faster initial checking
+                if browser_id == 1 and time.time() - last_captcha_test > self.config.captcha_check_interval and check_count > 30:
                     self.category_logger.log_ticket('system', 
                         f"🔍 Hunter {browser_id}: Performing periodic CAPTCHA check...")
                     captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
@@ -1406,13 +888,12 @@ class FanSaleBotV7:
                         f"🔄 Hunter {browser_id}: Preventive session refresh...")
                     self.clear_browser_data(driver, browser_id)
                     driver.get(self.target_url)
-                    time.sleep(3)
+                    time.sleep(1)  # Reduced from 3 seconds for faster checking
                     self.dismiss_popups(driver, browser_id)
                     last_session_refresh = time.time()
                     continue
                 
                 # Look for tickets - NO CACHING
-                ticket_start = time.time()
                 # Primary selector
                 tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
                 
@@ -1432,8 +913,7 @@ class FanSaleBotV7:
                                 f"Found tickets with alternative selector: {selector}")
                             break
                 
-                ticket_check_time = time.time() - ticket_start
-                self.performance_tracker['ticket_check'].append(ticket_check_time)
+                # Check time removed - not actionable
                 
                 if tickets:
                     self.stats['total_tickets_found'] += len(tickets)
@@ -1897,10 +1377,7 @@ class FanSaleBotV7:
         if self.stats.get('captchas_solved', 0) > 0:
             print(f"   Solved: {self.stats['captchas_solved']}")
         
-        # Performance
-        if self.performance_tracker.get('page_load'):
-            avg_load = sum(self.performance_tracker['page_load']) / len(self.performance_tracker['page_load'])
-            print(f"\n⚡ Avg Page Load: {avg_load:.2f}s")
+        
         
         print(f"\n{CategoryLogger.COLORS['bold']}{'='*60}{CategoryLogger.COLORS['reset']}")
     
@@ -1984,65 +1461,51 @@ class FanSaleBotV7:
 
     def configure(self):
         """Configure bot settings"""
-        print(f"\n{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}🤖 FANSALE BOT V7 - ULTIMATE EDITION{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['bold']}{'=' * 50}{CategoryLogger.COLORS['reset']}")
-        print("\n✨ V7 Features:")
-        print("  • No login required")
-        print("  • Separated logging for each ticket category")
-        print("  • Ultra-fast checking (60-300 checks/min)")
-        print("  • Enhanced popup dismissal")
-        print("  • Automatic CAPTCHA solving")
-        print("  • Smart ticket filtering")
-        print(f"  • {CategoryLogger.COLORS['prato_a']}IMAGE LOADING ENABLED{CategoryLogger.COLORS['reset']} ✅")
-        print(f"  • {CategoryLogger.COLORS['alert']}ENHANCED CAPTCHA DETECTION{CategoryLogger.COLORS['reset']} ✅")
-        print(f"  • {CategoryLogger.COLORS['settore']}AUTOMATIC CAPTCHA SOLVING (2captcha){CategoryLogger.COLORS['reset']} ✅")
-        print(f"  • {CategoryLogger.COLORS['system']}IMPROVED POPUP HANDLING{CategoryLogger.COLORS['reset']} ✅")
-        print(f"  • {CategoryLogger.COLORS['bold']}PERFORMANCE MONITORING{CategoryLogger.COLORS['reset']} ✅")
+        print(f"\n🤖 FANSALE BOT V7 CONFIGURATION")
+        print("=" * 50)
         
         # Show current stats
         self.show_statistics_dashboard()
         
-        # Check for 2captcha configuration
+        # Check for 2captcha
         if self.captcha_solver and self.captcha_solver.api_key:
-            print(f"\n{CategoryLogger.COLORS['prato_a']}✅ 2Captcha configured - automatic solving enabled{CategoryLogger.COLORS['reset']}")
-            print(f"   API Key: {self.captcha_solver.api_key[:8]}...")
+            print(f"\n✅ 2Captcha configured")
         else:
-            print(f"\n{CategoryLogger.COLORS['settore']}⚠️  No 2Captcha API key - manual CAPTCHA solving only{CategoryLogger.COLORS['reset']}")
-            print(f"   To enable auto-solving, set TWOCAPTCHA_API_KEY in .env")
+            print(f"\n⚠️  No 2Captcha key - manual CAPTCHA only")
         
         # Number of browsers
         while True:
             try:
-                num = input(f"\n{CategoryLogger.COLORS['bold']}🌐 Number of browsers (1-8, default 2):{CategoryLogger.COLORS['reset']} ").strip()
+                num = input(f"\n🌐 Number of browsers (1-8, default 2): ").strip()
                 if not num:
                     self.num_browsers = 2
                     break
                 self.num_browsers = int(num)
                 if 1 <= self.num_browsers <= 8:
                     break
-                print(f"{CategoryLogger.COLORS['alert']}❌ Please enter 1-8{CategoryLogger.COLORS['reset']}")
+                print("Please enter 1-8")
             except ValueError:
-                print(f"{CategoryLogger.COLORS['alert']}❌ Invalid number{CategoryLogger.COLORS['reset']}")
+                print("Invalid number")
         
         # Max tickets
         while True:
             try:
-                max_t = input(f"\n{CategoryLogger.COLORS['bold']}🎫 Max tickets to reserve (1-4, default 2):{CategoryLogger.COLORS['reset']} ").strip()
+                max_t = input(f"\n🎫 Max tickets to reserve (1-4, default 2): ").strip()
                 if not max_t:
                     self.max_tickets = 2
                     break
                 self.max_tickets = int(max_t)
                 if 1 <= self.max_tickets <= 4:
                     break
-                print(f"{CategoryLogger.COLORS['alert']}❌ Please enter 1-4{CategoryLogger.COLORS['reset']}")
+                print("Please enter 1-4")
             except ValueError:
-                print(f"{CategoryLogger.COLORS['alert']}❌ Invalid number{CategoryLogger.COLORS['reset']}")
+                print("Invalid number")
         
         # Configure ticket type filters
         self.configure_ticket_filters()
         
         # Summary
-        print(f"\n{CategoryLogger.COLORS['bold']}📋 Configuration Summary:{CategoryLogger.COLORS['reset']}")
+        print(f"\n📋 Configuration Summary:")
         print(f"   • Browsers: {self.num_browsers}")
         print(f"   • Max tickets: {self.max_tickets}")
         
@@ -2055,16 +1518,7 @@ class FanSaleBotV7:
         }
         selected = [type_display[t] for t in sorted(self.ticket_types_to_hunt)]
         print(f"   • Hunting for: {', '.join(selected)}")
-        
-        print(f"   • Target URL: {self.target_url[:50]}...")
-        print(f"   • Popup check interval: {self.config.popup_check_interval}s ({self.config.popup_check_interval/60:.1f} minutes)")
-        print(f"   • CAPTCHA check interval: {self.config.captcha_check_interval}s (Browser 1 only)")
-        print(f"   • Check frequency: ~60-100 checks/minute per browser (ULTRA FAST)")
-        print(f"\n{CategoryLogger.COLORS['prato_a']}⚡ NO LOGIN REQUIRED - Direct ticket hunting!{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['alert']}🤖 CAPTCHA SUPPORT - Auto-solve or manual alerts{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['system']}📢 POPUP HANDLING - Checks every {self.config.popup_check_interval}s{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['prato_a']}📸 IMAGES ENABLED - Verified on startup{CategoryLogger.COLORS['reset']}")
-    
+        print(f"   • Target URL: {self.target_url[:50]}...")    
     def run(self):
         """Main execution with enhanced tracking"""
         try:
@@ -2154,25 +1608,10 @@ class FanSaleBotV7:
 
 
 def main():
-    """Enhanced entry point with configuration support"""
+    """Entry point"""
     print(f"{CategoryLogger.COLORS['bold']}{'=' * 70}{CategoryLogger.COLORS['reset']}")
-    print(f"{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}🎫 FANSALE BOT V7 - ULTIMATE EDITION{CategoryLogger.COLORS['reset']}")
+    print(f"{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}🎫 FANSALE BOT V7{CategoryLogger.COLORS['reset']}")
     print(f"{CategoryLogger.COLORS['bold']}{'=' * 70}{CategoryLogger.COLORS['reset']}")
-    print(f"\n{CategoryLogger.COLORS['prato_a']}✨ Core Features:{CategoryLogger.COLORS['reset']}")
-    print("  • Ticket type tracking (Prato A, B, Settore)")
-    print("  • Duplicate detection with notifications")
-    print("  • Persistent statistics")
-    print("  • Multi-monitor support")
-    print("  • Category-specific logging")
-    print("  • Advanced retry logic")
-    print(f"\n{CategoryLogger.COLORS['alert']}🚀 V7 Critical Fixes:{CategoryLogger.COLORS['reset']}")
-    print("  • ✅ CORRECT ENVIRONMENT VARIABLE (FANSALE_TARGET_URL)")
-    print("  • ✅ FIXED TICKET SELECTION LOGIC")
-    print("  • ✅ ENHANCED POPUP HANDLING (with :contains support)")
-    print("  • ✅ NO DOM CACHING (avoids stale elements)")
-    print("  • ✅ COMPREHENSIVE PURCHASE BUTTON DETECTION")
-    print("  • ✅ IMAGES VERIFIED ENABLED")
-    print("  • ✅ 2CAPTCHA INTEGRATION")
     
     # Check dependencies
     try:
@@ -2191,40 +1630,38 @@ def main():
     config_path = Path("bot_config_v7.json")
     config = BotConfig.from_file(config_path)
     
-    # Check for 2captcha key in environment
+    # Check for 2captcha key
     twocaptcha_key = os.getenv('TWOCAPTCHA_API_KEY', '')
     if twocaptcha_key:
         config.twocaptcha_api_key = twocaptcha_key
         config.auto_solve_captcha = True
-        print(f"\n{CategoryLogger.COLORS['prato_a']}✅ 2Captcha API key found in .env{CategoryLogger.COLORS['reset']}")
+        print(f"\n✅ 2Captcha API key found")
     
     # Save default config if not exists
     if not config_path.exists():
         config.save(config_path)
-        print(f"\n{CategoryLogger.COLORS['settore']}📝 Created default configuration: {config_path}{CategoryLogger.COLORS['reset']}")
+        print(f"\n📝 Created default configuration: {config_path}")
     
     # Check for target URL
     if not os.getenv('FANSALE_TARGET_URL'):
-        print(f"\n{CategoryLogger.COLORS['settore']}⚠️  No target URL in .env file{CategoryLogger.COLORS['reset']}")
-        print("Using default Bruce Springsteen URL")
-        print("To change, add to .env file:")
+        print(f"\n⚠️  No target URL in .env file")
+        print("Using default URL. To change, add to .env:")
         print("FANSALE_TARGET_URL=https://www.fansale.it/fansale/tickets/...")
-        time.sleep(2)
     else:
-        print(f"\n{CategoryLogger.COLORS['prato_a']}✅ Target URL loaded from .env{CategoryLogger.COLORS['reset']}")
+        print(f"\n✅ Target URL loaded from .env")
     
-    # Run bot with configuration
+    # Run bot
     bot = FanSaleBotV7(config)
     
     try:
         bot.run()
     except KeyboardInterrupt:
-        print(f"\n{CategoryLogger.COLORS['settore']}👋 Graceful shutdown initiated...{CategoryLogger.COLORS['reset']}")
+        print(f"\n👋 Graceful shutdown...")
     except Exception as e:
-        print(f"\n{CategoryLogger.COLORS['alert']}❌ Fatal error: {e}{CategoryLogger.COLORS['reset']}")
+        print(f"\n❌ Fatal error: {e}")
         logging.exception("Fatal error in main")
     finally:
-        print(f"\n{CategoryLogger.COLORS['prato_a']}✅ Thank you for using FanSale Bot V7!{CategoryLogger.COLORS['reset']}")
+        print(f"\n✅ Thank you for using FanSale Bot!")
 
 
 if __name__ == "__main__":

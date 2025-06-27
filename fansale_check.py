@@ -482,8 +482,17 @@ class FanSaleBotV7:
                 'price': '',
                 'category': 'other',
                 'entrance': '',
-                'ring': ''
+                'ring': '',
+                'offer_id': ''
             }
+            
+            # Try to extract offer ID from data attribute
+            try:
+                offer_id = ticket_element.get_attribute('data-offer-id')
+                if offer_id:
+                    ticket_info['offer_id'] = offer_id
+            except:
+                pass
             
             full_text = ticket_element.text
             ticket_info['raw_text'] = full_text
@@ -1404,7 +1413,25 @@ class FanSaleBotV7:
                 
                 # Look for tickets - NO CACHING
                 ticket_start = time.time()
+                # Primary selector
                 tickets = driver.find_elements(By.CSS_SELECTOR, "div[data-qa='ticketToBuy']")
+                
+                # Fallback selectors if no tickets found with primary
+                if not tickets:
+                    # Try alternative selectors
+                    alternative_selectors = [
+                        "div[class*='ticket'][class*='available']",
+                        "div[class*='biglietto'][class*='disponibile']",
+                        "article[class*='ticket']",
+                        "div[data-testid*='ticket']"
+                    ]
+                    for selector in alternative_selectors:
+                        tickets = driver.find_elements(By.CSS_SELECTOR, selector)
+                        if tickets:
+                            self.category_logger.log_ticket('system', 
+                                f"Found tickets with alternative selector: {selector}")
+                            break
+                
                 ticket_check_time = time.time() - ticket_start
                 self.performance_tracker['ticket_check'].append(ticket_check_time)
                 
@@ -1525,6 +1552,76 @@ class FanSaleBotV7:
                 traceback.print_exc()
                 time.sleep(5)
     
+    def wait_for_page_change(self, driver: uc.Chrome, initial_url: str, timeout: int = 5) -> bool:
+        """Wait for page URL to change, indicating navigation occurred"""
+        try:
+            WebDriverWait(driver, timeout).until(
+                lambda d: d.current_url != initial_url
+            )
+            return True
+        except TimeoutException:
+            return False
+
+    def handle_checkout_page(self, driver: uc.Chrome, browser_id: int) -> bool:
+        """Handle the checkout page after clicking buy button"""
+        try:
+            current_url = driver.current_url.lower()
+            
+            # Look for common checkout elements
+            checkout_selectors = [
+                # Quantity selectors
+                "select[name*='quantity']",
+                "input[name*='quantity']",
+                "select[name*='quantita']",
+                
+                # Proceed/Continue buttons
+                "button:contains('Procedi')",
+                "button:contains('Continua')",
+                "button:contains('Conferma')",
+                "button:contains('Continue')",
+                "button:contains('Proceed')",
+                "button[type='submit']"
+            ]
+            
+            # Try to find and click proceed button
+            for selector in checkout_selectors:
+                try:
+                    if ':contains' in selector:
+                        # Convert to XPath
+                        match = re.search(r":contains\('([^']+)'\)", selector)
+                        if match:
+                            text = match.group(1)
+                            xpath = f"//button[contains(text(), '{text}')]"
+                            elements = driver.find_elements(By.XPATH, xpath)
+                            elements = [e for e in elements if e.is_displayed() and e.is_enabled()]
+                            if elements:
+                                driver.execute_script("arguments[0].click();", elements[0])
+                                self.category_logger.log_ticket('system', 
+                                    f"✅ Hunter {browser_id}: Clicked '{text}' on checkout page")
+                                return True
+                    else:
+                        element = driver.find_element(By.CSS_SELECTOR, selector)
+                        if element.is_displayed() and element.is_enabled():
+                            # If it's a quantity selector, ensure it's set to 1
+                            if 'quantity' in selector.lower() or 'quantita' in selector.lower():
+                                driver.execute_script("arguments[0].value = '1';", element)
+                                self.category_logger.log_ticket('system', 
+                                    f"✅ Hunter {browser_id}: Set quantity to 1")
+                            else:
+                                driver.execute_script("arguments[0].click();", element)
+                                self.category_logger.log_ticket('system', 
+                                    f"✅ Hunter {browser_id}: Clicked checkout element")
+                                return True
+                except:
+                    continue
+                    
+            return False
+            
+        except Exception as e:
+            self.category_logger.log_ticket('system', 
+                f"Error handling checkout page: {e}", 'error')
+            return False
+
     @retry(max_attempts=2, delay=0.5, exceptions=(ElementNotInteractableException, StaleElementReferenceException))
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
         """Attempt to purchase a ticket with enhanced interaction"""
@@ -1542,23 +1639,47 @@ class FanSaleBotV7:
             # Try multiple click methods
             click_success = False
             
-            # Method 1: JavaScript click
+            # Method 1: JavaScript click (most reliable)
             try:
                 driver.execute_script("arguments[0].click();", ticket_element)
                 click_success = True
-            except:
-                # Method 2: Action chains
+                self.category_logger.log_ticket('system', 
+                    f"✅ Hunter {browser_id}: Clicked ticket via JavaScript")
+            except Exception as e1:
+                # Method 2: Click on the specific FanSale link/button inside ticket
                 try:
-                    actions = ActionChains(driver)
-                    actions.move_to_element(ticket_element).click().perform()
+                    # Look for the specific FanSale ticket link structure
+                    ticket_link = ticket_element.find_element(By.CSS_SELECTOR, "a.Button-inOfferEntryList, a[id*='detailBShowOfferButton']")
+                    driver.execute_script("arguments[0].click();", ticket_link)
                     click_success = True
+                    self.category_logger.log_ticket('system', 
+                        f"✅ Hunter {browser_id}: Clicked FanSale ticket link")
                 except:
-                    # Method 3: Direct click
+                    # Fallback to any clickable child
                     try:
-                        ticket_element.click()
+                        clickable_child = ticket_element.find_element(By.CSS_SELECTOR, "a, button, [role='button']")
+                        driver.execute_script("arguments[0].click();", clickable_child)
                         click_success = True
+                        self.category_logger.log_ticket('system', 
+                            f"✅ Hunter {browser_id}: Clicked ticket child element")
                     except:
                         pass
+                    # Method 3: Action chains
+                    try:
+                        actions = ActionChains(driver)
+                        actions.move_to_element(ticket_element).click().perform()
+                        click_success = True
+                        self.category_logger.log_ticket('system', 
+                            f"✅ Hunter {browser_id}: Clicked ticket via ActionChains")
+                    except:
+                        # Method 4: Direct click
+                        try:
+                            ticket_element.click()
+                            click_success = True
+                            self.category_logger.log_ticket('system', 
+                                f"✅ Hunter {browser_id}: Clicked ticket directly")
+                        except:
+                            pass
             
             if not click_success:
                 self.category_logger.log_ticket('system', 
@@ -1570,31 +1691,49 @@ class FanSaleBotV7:
             # Dismiss any new popups that might appear
             self.dismiss_popups(driver, browser_id)
             
-            # Enhanced buy button detection - FROM V5
+            # Enhanced buy button detection with Italian-specific selectors
             buy_selectors = [
-                # Data attributes
+                # Priority 1: FanSale-specific data attributes
                 "button[data-qa='buyNowButton']",
+                "button[data-qa='ticketCheckoutButton']",
                 "button[data-testid*='buy']",
+                "button[data-testid*='acquista']",
                 
-                # Class-based selectors
+                # Priority 2: Italian text-based selectors (will convert to XPath)
+                "button:contains('Acquista')",
+                "button:contains('Acquista ora')",
+                "button:contains('Compra')",
+                "button:contains('Compra ora')",
+                "button:contains('Prenota')",
+                "button:contains('Procedi')",
+                "button:contains('Aggiungi al carrello')",
+                "button:contains('Vai al carrello')",
+                
+                # Priority 3: Class-based selectors
                 "button[class*='buy']",
                 "button[class*='acquista']",
                 "button[class*='purchase']",
-                "button[class*='add-to-cart']",
+                "button[class*='checkout']",
+                "button[class*='cart']",
+                "button[class*='carrello']",
                 
-                # Text-based selectors (will convert to XPath)
-                "button:contains('Acquista')",
+                # Priority 4: English text alternatives
                 "button:contains('Buy')",
-                "button:contains('Compra')",
-                "button:contains('Aggiungi')",
+                "button:contains('Buy Now')",
+                "button:contains('Purchase')",
+                "button:contains('Add to Cart')",
+                "button:contains('Checkout')",
                 
-                # Link styled as button
+                # Priority 5: Link styled as button
                 "a[class*='buy'][class*='button']",
                 "a[class*='btn'][href*='cart']",
+                "a[class*='btn'][href*='checkout']",
+                "a[class*='btn'][href*='acquista']",
                 
-                # Generic button with specific attributes
+                # Priority 6: Generic button with specific attributes
                 "button[type='submit']",
-                "input[type='submit'][value*='buy']"
+                "input[type='submit'][value*='buy']",
+                "input[type='submit'][value*='acquista']"
             ]
             
             buy_button_found = False
@@ -1622,6 +1761,15 @@ class FanSaleBotV7:
                         buy_button_found = True
                     
                     if buy_button_found:
+                        self.category_logger.log_ticket('system', 
+                            f"🎯 Hunter {browser_id}: Found buy button with selector: {selector}")
+                        
+                        # Log button details for debugging
+                        btn_text = buy_btn.text.strip() if buy_btn.text else "No text"
+                        btn_class = buy_btn.get_attribute('class') or "No class"
+                        self.category_logger.log_ticket('system', 
+                            f"   Button text: '{btn_text}', Classes: '{btn_class}'")
+                        
                         # Scroll to buy button
                         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", buy_btn)
                         time.sleep(0.3)
@@ -1635,8 +1783,26 @@ class FanSaleBotV7:
                         self.category_logger.log_ticket('system', 
                             f"✅ Hunter {browser_id}: Buy button clicked!")
                         
-                        # Wait for potential CAPTCHA or next page
-                        time.sleep(2)
+                        # Store current URL to detect navigation
+                        initial_url = driver.current_url
+                        
+                        # Wait for page change or CAPTCHA
+                        page_changed = self.wait_for_page_change(driver, initial_url, timeout=3)
+                        
+                        if page_changed:
+                            self.category_logger.log_ticket('system', 
+                                f"🎯 Hunter {browser_id}: Navigated to: {driver.current_url}")
+                            
+                            # Check if we reached checkout/cart page
+                            current_url = driver.current_url.lower()
+                            if any(keyword in current_url for keyword in ['carrello', 'cart', 'checkout', 'conferma', 'payment']):
+                                self.category_logger.log_ticket('system', 
+                                    f"🛒 Hunter {browser_id}: Reached checkout page!")
+                                # Play success sound
+                                print('' * 5)
+                        else:
+                            # Page didn't change, wait a bit more
+                            time.sleep(1)
                         
                         # Check for CAPTCHA
                         captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
@@ -1688,56 +1854,55 @@ class FanSaleBotV7:
             return False
     
     def show_statistics_dashboard(self):
-        """Display beautiful statistics dashboard with V6 enhancements"""
-        total_runtime = self.stats.get('all_time_runtime', 0) + (time.time() - self.session_start_time)
-        hours = int(total_runtime // 3600)
-        minutes = int((total_runtime % 3600) // 60)
+        """Show live statistics dashboard"""
+        elapsed = time.time() - self.session_start_time
+        runtime_str = f"{int(elapsed//3600)}h {int((elapsed%3600)//60)}m {int(elapsed%60)}s"
         
-        print(f"\n{CategoryLogger.COLORS['bold']}{'═' * 70}{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}📊 FANSALE BOT V7 STATISTICS DASHBOARD{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['bold']}{'═' * 70}{CategoryLogger.COLORS['reset']}")
+        # Calculate rates
+        checks_per_min = (self.stats['total_checks'] / elapsed * 60) if elapsed > 0 else 0
         
-        print(f"\n{CategoryLogger.COLORS['bold']}⏱️  Total Runtime:{CategoryLogger.COLORS['reset']} {hours}h {minutes}m")
-        print(f"{CategoryLogger.COLORS['bold']}🔍 Total Checks:{CategoryLogger.COLORS['reset']} {self.stats['total_checks']:,}")
-        print(f"{CategoryLogger.COLORS['bold']}🎫 Unique Tickets Found:{CategoryLogger.COLORS['reset']} {self.stats['unique_tickets_found']:,}")
+        print(f"\n{CategoryLogger.COLORS['bold']}{'='*60}{CategoryLogger.COLORS['reset']}")
+        print(f"{CategoryLogger.COLORS['system']}📊 LIVE STATISTICS DASHBOARD{CategoryLogger.COLORS['reset']}")
+        print(f"{'='*60}")
         
-        print(f"\n{CategoryLogger.COLORS['bold']}📈 Ticket Breakdown:{CategoryLogger.COLORS['reset']}")
-        print(f"   {CategoryLogger.COLORS['prato_a']}● Prato A:{CategoryLogger.COLORS['reset']} {self.stats['tickets_by_type']['prato_a']}")
-        print(f"   {CategoryLogger.COLORS['prato_b']}● Prato B:{CategoryLogger.COLORS['reset']} {self.stats['tickets_by_type']['prato_b']}")
-        print(f"   {CategoryLogger.COLORS['settore']}● Settore:{CategoryLogger.COLORS['reset']} {self.stats['tickets_by_type']['settore']}")
-        print(f"   ○ Other: {self.stats['tickets_by_type']['other']}")
+        # Session info
+        print(f"\n🕐 Session Runtime: {runtime_str}")
+        print(f"🔍 Total Checks This Session: {self.stats['total_checks']:,}")
+        print(f"⚡ Check Rate: {checks_per_min:.1f}/min")
         
-        print(f"\n{CategoryLogger.COLORS['bold']}🛍️  Purchases:{CategoryLogger.COLORS['reset']} {self.stats['purchases']}")
+        # Ticket stats
+        print(f"\n🎫 Tickets Found: {self.stats['total_tickets_found']:,}")
+        print(f"✨ Unique Tickets: {self.stats['unique_tickets_found']:,}")
+        
+        # By category
+        print("\n📊 By Category:")
+        for cat in ['prato_a', 'prato_b', 'settore', 'other']:
+            count = self.stats['tickets_by_type'].get(cat, 0)
+            if count > 0:
+                color = getattr(CategoryLogger.COLORS, cat, CategoryLogger.COLORS['other'])
+                cat_display = cat.replace('_', ' ').title()
+                print(f"   {color}{cat_display}: {count}{CategoryLogger.COLORS['reset']}")
+        
+        # Purchase stats
         if self.stats['purchases'] > 0:
-            print(f"   Prato A: {self.stats['purchases_by_type']['prato_a']}")
-            print(f"   Prato B: {self.stats['purchases_by_type']['prato_b']}")
-            print(f"   Settore: {self.stats['purchases_by_type']['settore']}")
+            print(f"\n🛒 Purchases: {self.stats['purchases']}")
+            for cat, count in self.stats['purchases_by_type'].items():
+                if count > 0:
+                    cat_display = cat.replace('_', ' ').title()
+                    print(f"   {cat_display}: {count}")
         
-        print(f"{CategoryLogger.COLORS['bold']}🚫 Blocks Cleared:{CategoryLogger.COLORS['reset']} {self.stats['blocks_encountered']}")
-        print(f"{CategoryLogger.COLORS['bold']}📢 Popups Dismissed:{CategoryLogger.COLORS['reset']} {self.stats.get('popups_dismissed', 0)}")
-        print(f"{CategoryLogger.COLORS['bold']}📸 Images Verified:{CategoryLogger.COLORS['reset']} {self.stats.get('images_verified', 0)}")
+        # Other stats
+        print(f"\n⚠️  Blocks Encountered: {self.stats.get('blocks_encountered', 0)}")
+        print(f"🤖 CAPTCHAs: {self.stats.get('captchas_encountered', 0)}")
+        if self.stats.get('captchas_solved', 0) > 0:
+            print(f"   Solved: {self.stats['captchas_solved']}")
         
-        # CAPTCHA stats
-        print(f"\n{CategoryLogger.COLORS['bold']}🤖 CAPTCHA Stats:{CategoryLogger.COLORS['reset']}")
-        print(f"   Encountered: {self.stats.get('captchas_encountered', 0)}")
-        print(f"   Solved Manually: {self.stats.get('captchas_solved', 0) - self.stats.get('captchas_auto_solved', 0)}")
-        print(f"   Solved Automatically: {self.stats.get('captchas_auto_solved', 0)}")
+        # Performance
+        if self.performance_tracker.get('page_load'):
+            avg_load = sum(self.performance_tracker['page_load']) / len(self.performance_tracker['page_load'])
+            print(f"\n⚡ Avg Page Load: {avg_load:.2f}s")
         
-        # Performance metrics
-        if self.performance_tracker:
-            print(f"\n{CategoryLogger.COLORS['bold']}⚡ Performance Metrics:{CategoryLogger.COLORS['reset']}")
-            if 'page_load' in self.performance_tracker and self.performance_tracker['page_load']:
-                avg_load = sum(self.performance_tracker['page_load']) / len(self.performance_tracker['page_load'])
-                print(f"   Avg Page Load: {avg_load:.2f}s")
-            if 'popup_dismiss' in self.performance_tracker and self.performance_tracker['popup_dismiss']:
-                avg_popup = sum(self.performance_tracker['popup_dismiss']) / len(self.performance_tracker['popup_dismiss'])
-                print(f"   Avg Popup Dismiss: {avg_popup:.2f}s")
-        
-        if self.stats['total_checks'] > 0:
-            rate = self.stats['total_checks'] / (total_runtime / 60) if total_runtime > 0 else 0
-            print(f"\n{CategoryLogger.COLORS['bold']}⚡ Average Rate:{CategoryLogger.COLORS['reset']} {rate:.1f} checks/min")
-        
-        print(f"\n{CategoryLogger.COLORS['bold']}{'═' * 70}{CategoryLogger.COLORS['reset']}\n")
+        print(f"\n{CategoryLogger.COLORS['bold']}{'='*60}{CategoryLogger.COLORS['reset']}")
     
     def configure_ticket_filters(self):
         """Allow user to select which ticket types to hunt for"""

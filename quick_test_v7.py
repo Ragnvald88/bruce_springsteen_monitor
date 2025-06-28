@@ -67,7 +67,7 @@ def quick_test():
     # 4. Import bot
     print("\n4️⃣ Importing FanSale Bot V7...")
     try:
-        from fansale_v7_ultimate import FanSaleBotV7, BotConfig
+        from fansale_check import FanSaleBotV7, BotConfig
         print("✅ Bot imported successfully")
     except ImportError as e:
         print(f"❌ Failed to import bot: {e}")
@@ -169,7 +169,7 @@ def main():
     if success:
         print("\n🎉 Bot is ready to use!")
         print("\nTo run the full bot:")
-        print("  python3 fansale_v7_ultimate.py")
+        print("  python3 fansale_check.py")
     else:
         print("\n❌ Some tests failed. Please check the errors above.")
 

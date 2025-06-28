@@ -335,17 +335,37 @@ class TwoCaptchaSolver:
 
 # ==================== Helper Functions ====================
 
-def retry(max_attempts: int = 3, delay: float = 1.0):
-    """Simple retry decorator"""
+def retry(max_attempts: int = 3, delay: float = 1.0, exponential_backoff: bool = True, 
+          retry_on: tuple = None):
+    """Enhanced retry decorator with exponential backoff and specific error handling"""
     def decorator(func):
         def wrapper(*args, **kwargs):
+            last_exception = None
+            current_delay = delay
+            
             for attempt in range(max_attempts):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
+                    last_exception = e
+                    
+                    # Check if we should retry this specific error
+                    if retry_on and not any(err_type in str(e) for err_type in retry_on):
+                        raise
+                    
                     if attempt == max_attempts - 1:
                         raise
-                    time.sleep(delay)
+                    
+                    # Log retry attempt
+                    if hasattr(args[0], '__class__'):
+                        Logger.log(f"Retry {attempt + 1}/{max_attempts} after {current_delay}s: {str(e)[:100]}", 'warning')
+                    
+                    time.sleep(current_delay)
+                    
+                    # Exponential backoff
+                    if exponential_backoff:
+                        current_delay = min(current_delay * 2, 60)  # Cap at 60 seconds
+                    
             return None
         return wrapper
     return decorator

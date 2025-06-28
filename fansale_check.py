@@ -48,7 +48,7 @@ class BotConfig:
     """Bot configuration with defaults"""
     browsers_count: int = 2
     max_tickets: int = 2
-    refresh_interval: int = 30
+    refresh_interval: int = 20
     session_timeout: int = 900
     min_wait: float = 0.3  # Ultra-fast
     max_wait: float = 1.0  # Ultra-fast
@@ -75,171 +75,202 @@ class BotConfig:
         """Save config to JSON file"""
         data = self.__dict__.copy()
         if 'twocaptcha_api_key' in data:
-            data['twocaptcha_api_key'] = ""
+            data['twocaptcha_api_key'] = "c58050aca5076a2a26ba2eff1c429d4d"
         with open(path, 'w') as f:
             json.dump(data, f, indent=2)
 
 # ==================== Enhanced Logging ====================
 
-class CategoryLogger:
-    """Separate loggers for each ticket category with visual differentiation"""
+class Logger:
+    """Simple colored logging for better visibility"""
     
-    COLORS = {
-        'prato_a': '\033[92m',      # Green
-        'prato_b': '\033[94m',      # Blue
-        'settore': '\033[93m',      # Yellow
-        'other': '\033[90m',        # Gray
-        'system': '\033[96m',       # Cyan
-        'reset': '\033[0m',
-        'bold': '\033[1m',
-        'alert': '\033[91m',        # Red
+    # ANSI color codes
+    GREEN = '\033[92m'      # Prato A
+    BLUE = '\033[94m'       # Prato B  
+    YELLOW = '\033[93m'     # Settore
+    GRAY = '\033[90m'       # Other
+    CYAN = '\033[96m'       # System
+    RED = '\033[91m'        # Alert/Error
+    BOLD = '\033[1m'
+    RESET = '\033[0m'
+    
+    # Emojis for different message types
+    EMOJI = {
+        'prato_a': '🎫',
+        'prato_b': '🎫', 
+        'settore': '🎫',
+        'other': '🎫',
+        'system': '⚙️',
+        'alert': '🚨',
+        'success': '✅',
+        'error': '❌',
+        'info': '📢'
     }
     
-    def __init__(self):
-        self.loggers = {}
-        self.setup_loggers()
-        
-    def setup_loggers(self):
-        """Create logger with console output only (no separate files)"""
-        categories = ['prato_a', 'prato_b', 'settore', 'other', 'system']
-        
-        # Single file logger for all categories
-        file_logger = logging.getLogger('fansale.all')
-        file_logger.setLevel(logging.INFO)
-        file_logger.handlers.clear()
-        
-        # Single file handler
-        file_handler = logging.FileHandler(
-            'fansale_v7.log',
-            encoding='utf-8'
-        )
-        file_handler.setFormatter(
-            logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        )
-        file_logger.addHandler(file_handler)
-        
-        # Category-specific console loggers
-        for category in categories:
-            logger = logging.getLogger(f'fansale.{category}')
-            logger.setLevel(logging.INFO)
-            logger.handlers.clear()
-            
-            # Console handler with color
-            console_handler = logging.StreamHandler()
-            console_handler.setFormatter(
-                CategoryFormatter(category, self.COLORS)
-            )
-            logger.addHandler(console_handler)
-            
-            self.loggers[category] = logger
+    @staticmethod
+    def get_color(category: str) -> str:
+        """Get color for category"""
+        colors = {
+            'prato_a': Logger.GREEN,
+            'prato_b': Logger.BLUE,
+            'settore': Logger.YELLOW,
+            'other': Logger.GRAY,
+            'system': Logger.CYAN,
+            'error': Logger.RED,
+            'alert': Logger.RED
+        }
+        return colors.get(category, Logger.RESET)
     
-    def log_ticket(self, category: str, message: str, level='info'):
-        """Log message to console and single file"""
-        if category in self.loggers:
-            # Console output with color
-            getattr(self.loggers[category], level)(message)
-            # File output without color
-            file_logger = logging.getLogger('fansale.all')
-            getattr(file_logger, level)(f"[{category.upper()}] {message}")
-        else:
-            self.loggers['system'].warning(f"Unknown category: {category}")
-    
-    def log_alert(self, category: str, message: str):
-        """Log alert message with special formatting"""
-        color = self.COLORS.get(category, self.COLORS['alert'])
-        formatted = f"{self.COLORS['bold']}{color}🚨 ALERT: {message}{self.COLORS['reset']}"
-        print(formatted)
-        self.log_ticket(category, message, 'warning')
-
-class CategoryFormatter(logging.Formatter):
-    """Custom formatter with category-specific colors"""
-    
-    def __init__(self, category: str, colors: Dict[str, str]):
-        super().__init__()
-        self.category = category
-        self.colors = colors
-        
-    def format(self, record):
-        color = self.colors.get(self.category, self.colors['reset'])
-        prefix = {
-            'prato_a': '🎫[PRATO A]',
-            'prato_b': '🎫[PRATO B]',
-            'settore': '🎫[SETTORE]',
-            'other': '🎫[OTHER]',
-            'system': '⚙️[SYSTEM]'
-        }.get(self.category, '📝')
-        
+    @staticmethod
+    def log(message: str, category: str = 'system', emoji: str = None):
+        """Simple colored logging"""
         timestamp = datetime.now().strftime('%H:%M:%S')
-        return f"{color}{timestamp} {prefix} {record.getMessage()}{self.colors['reset']}"
+        color = Logger.get_color(category)
+        emoji = emoji or Logger.EMOJI.get(category, '')
+        print(f"{color}{timestamp} {emoji} {message}{Logger.RESET}")
+    
+    @staticmethod
+    def alert(message: str):
+        """Alert message with emphasis"""
+        Logger.log(f"{Logger.BOLD}{message}", 'alert', '🚨')
+        # Audio alert
+        for _ in range(3):
+            print('\a')
+            time.sleep(0.3)
 
 # ==================== Statistics Manager ====================
 
 class StatsManager:
-    """Thread-safe statistics manager with atomic operations"""
-    def __init__(self, stats_file: Path):
-        self.stats_file = stats_file
+    """Simple statistics manager with persistence"""
+    def __init__(self, stats_file="fansale_stats_v7.json"):
+        self.stats_file = Path(stats_file)
         self.lock = threading.Lock()
-        self.stats = self.load()
-    
-    def load(self) -> Dict:
-        """Load stats from file"""
+        
+        # Always start with clean session stats
+        self.session_start = time.time()
+        self.session_checks = 0
+        
+        # Load or initialize persistent stats
+        self.load_stats()
+        
+    def load_stats(self):
+        """Load stats from file or initialize"""
         if self.stats_file.exists():
             try:
                 with open(self.stats_file, 'r') as f:
-                    return json.load(f)
-            except Exception as e:
-                logging.warning(f"Could not load stats: {e}")
-        
-        return {
-            'total_checks': 0,
-            'total_tickets_found': 0,
-            'unique_tickets_found': 0,
-            'tickets_by_type': {
-                'prato_a': 0,
-                'prato_b': 0,
-                'settore': 0,
-                'other': 0
-            },
-            'purchases': 0,
-            'purchases_by_type': {
-                'prato_a': 0,
-                'prato_b': 0,
-                'settore': 0,
-                'other': 0
-            },
-            'blocks_encountered': 0,
-            'captchas_encountered': 0,
-            'captchas_solved': 0,
-            'captchas_auto_solved': 0,
-            'popups_dismissed': 0,
-            'all_time_runtime': 0,
+                    data = json.load(f)
+                    # Ensure all required fields exist
+                    self.all_time_stats = {
+                        'total_checks': data.get('all_time', {}).get('total_checks', 0),
+                        'tickets_found': {
+                            'prato_a': data.get('all_time', {}).get('tickets_found', {}).get('prato_a', 0),
+                            'prato_b': data.get('all_time', {}).get('tickets_found', {}).get('prato_b', 0),
+                            'settore': data.get('all_time', {}).get('tickets_found', {}).get('settore', 0),
+                            'other': data.get('all_time', {}).get('tickets_found', {}).get('other', 0),
+                            'total': data.get('all_time', {}).get('tickets_found', {}).get('total', 0)
+                        },
+                        'purchases_made': data.get('all_time', {}).get('purchases_made', 0),
+                        'captchas_encountered': data.get('all_time', {}).get('captchas_encountered', 0),
+                        'blocks_encountered': data.get('all_time', {}).get('blocks_encountered', 0)
                     }
-    
-    def save(self):
-        """Save stats to file with atomic write"""
-        with self.lock:
-            temp_file = self.stats_file.with_suffix('.tmp')
-            try:
-                with open(temp_file, 'w') as f:
-                    json.dump(self.stats, f, indent=2)
-                temp_file.replace(self.stats_file)
+                    self.seen_tickets = set(data.get('seen_tickets', []))
             except Exception as e:
-                logging.error(f"Failed to save stats: {e}")
-                if temp_file.exists():
-                    temp_file.unlink()
+                print(f"Error loading stats: {e}")
+                self.initialize_stats()
+        else:
+            self.initialize_stats()
     
-    def increment(self, key: str, value: int = 1):
-        """Thread-safe increment"""
+    def initialize_stats(self):
+        """Initialize fresh stats"""
+        self.all_time_stats = {
+            'total_checks': 0,
+            'tickets_found': {
+                'prato_a': 0,
+                'prato_b': 0,
+                'settore': 0,
+                'other': 0,
+                'total': 0
+            },
+            'purchases_made': 0,
+            'captchas_encountered': 0,
+            'blocks_encountered': 0
+        }
+        self.seen_tickets = set()
+    
+    def save_stats(self):
+        """Save stats to file"""
+        try:
+            with self.lock:
+                data = {
+                    'all_time': self.all_time_stats,
+                    'seen_tickets': list(self.seen_tickets),
+                    'last_updated': datetime.now().isoformat()
+                }
+                with open(self.stats_file, 'w') as f:
+                    json.dump(data, f, indent=2)
+        except Exception as e:
+            print(f"Error saving stats: {e}")
+    
+    def increment_checks(self):
+        """Increment check counter"""
         with self.lock:
-            if key in self.stats:
-                self.stats[key] += value
-            else:
-                # Handle nested keys like 'tickets_by_type.prato_a'
-                keys = key.split('.')
-                current = self.stats
-                for k in keys[:-1]:
-                    current = current.setdefault(k, {})
-                current[keys[-1]] = current.get(keys[-1], 0) + value
+            self.session_checks += 1
+            self.all_time_stats['total_checks'] += 1
+            
+    def found_ticket(self, category: str, ticket_hash: str):
+        """Record a new ticket found - returns True if new"""
+        with self.lock:
+            if ticket_hash not in self.seen_tickets:
+                self.seen_tickets.add(ticket_hash)
+                self.all_time_stats['tickets_found'][category] += 1
+                self.all_time_stats['tickets_found']['total'] += 1
+                # Save immediately for persistence
+                self.save_stats()
+                return True
+            return False
+            
+    def made_purchase(self):
+        """Record a purchase"""
+        with self.lock:
+            self.all_time_stats['purchases_made'] += 1
+            self.save_stats()
+            
+    def encountered_captcha(self):
+        """Record CAPTCHA encounter"""
+        with self.lock:
+            self.all_time_stats['captchas_encountered'] += 1
+            
+    def encountered_block(self):
+        """Record block encounter"""
+        with self.lock:
+            self.all_time_stats['blocks_encountered'] += 1
+    
+    def get_session_runtime(self):
+        """Get current session runtime"""
+        return time.time() - self.session_start
+        
+    def get_session_checks_per_minute(self):
+        """Get session checks per minute"""
+        runtime = self.get_session_runtime()
+        return (self.session_checks / runtime * 60) if runtime > 0 else 0
+    
+    def get_ticket_stats(self):
+        """Get formatted ticket statistics"""
+        return self.all_time_stats['tickets_found']
+    
+    def print_summary(self):
+        """Print simple stats summary"""
+        runtime = self.get_session_runtime()
+        runtime_str = f"{int(runtime//3600)}h {int((runtime%3600)//60)}m {int(runtime%60)}s"
+        checks_per_min = self.get_session_checks_per_minute()
+        tickets = self.get_ticket_stats()
+        
+        print(f"{Logger.CYAN}📊 Session: {runtime_str} | "
+              f"Checks: {self.session_checks} ({checks_per_min:.1f}/min) | "
+              f"Found: {Logger.GREEN}A:{tickets['prato_a']}{Logger.CYAN} "
+              f"{Logger.BLUE}B:{tickets['prato_b']}{Logger.CYAN} "
+              f"{Logger.YELLOW}S:{tickets['settore']}{Logger.CYAN} | "
+              f"Total: {tickets['total']}{Logger.RESET}")
 
 # ==================== 2Captcha Solver ====================
 
@@ -304,28 +335,17 @@ class TwoCaptchaSolver:
 
 # ==================== Helper Functions ====================
 
-def retry(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0, 
-          exceptions: tuple = (Exception,)):
-    """Sophisticated retry decorator with exponential backoff"""
+def retry(max_attempts: int = 3, delay: float = 1.0):
+    """Simple retry decorator"""
     def decorator(func):
         def wrapper(*args, **kwargs):
-            attempt = 0
-            current_delay = delay
-            
-            while attempt < max_attempts:
+            for attempt in range(max_attempts):
                 try:
                     return func(*args, **kwargs)
-                except exceptions as e:
-                    attempt += 1
-                    if attempt >= max_attempts:
-                        logging.error(f"{func.__name__} failed after {max_attempts} attempts: {e}")
+                except Exception as e:
+                    if attempt == max_attempts - 1:
                         raise
-                    
-                    logging.warning(f"{func.__name__} attempt {attempt} failed: {e}, "
-                                  f"retrying in {current_delay:.1f}s...")
-                    time.sleep(current_delay)
-                    current_delay *= backoff
-                    
+                    time.sleep(delay)
             return None
         return wrapper
     return decorator
@@ -339,14 +359,14 @@ class FanSaleBotV7:
         # Load configuration
         self.config = config or BotConfig()
         
-        # FIX #1: Use correct environment variable name
+        # Use correct environment variable name
         self.target_url = os.getenv('FANSALE_TARGET_URL', 
                                     "https://www.fansale.it/tickets/all/bruce-springsteen/458554/17844388")
         
         # Configuration
         self.num_browsers = self.config.browsers_count
         self.max_tickets = self.config.max_tickets
-        self.ticket_types_to_hunt = set()  # FIX #2: Properly initialized
+        self.ticket_types_to_hunt = set()  # Properly initialized
         
         # State management
         self.browsers = []
@@ -354,50 +374,30 @@ class FanSaleBotV7:
         self.purchase_lock = threading.Lock()
         self.tickets_secured = 0
         
-        # Ticket tracking
-        self.seen_tickets = set()
-        self.ticket_details_cache = {}
+        # Ticket tracking is now handled by StatsManager
         
         # CAPTCHA tracking
         self.captcha_solved_time = {}
         self.captcha_grace_period = self.config.captcha_grace_period
         
-        # Logging
-        self.category_logger = CategoryLogger()
+        # Statistics with persistence
+        self.stats = StatsManager()
         
-        # Statistics
-        self.stats_file = Path("fansale_stats_v7.json")
-        self.stats_manager = StatsManager(self.stats_file)
-        self.stats = self.stats_manager.stats
-        
-        # Performance monitoring
+        # Session tracking
         self.session_start_time = time.time()
-        # Performance tracking removed - not actionable
         
         # 2Captcha solver
         api_key = self.config.twocaptcha_api_key or os.getenv('TWOCAPTCHA_API_KEY', '')
         if api_key:
             self.captcha_solver = TwoCaptchaSolver(api_key)
             self.auto_solve = self.config.auto_solve_captcha
-            self.category_logger.log_ticket('system', f"✅ 2Captcha configured with API key: {api_key[:8]}...")
+            Logger.log(f"2Captcha configured with API key: {api_key[:8]}...", 'system', '✅')
         else:
             self.captcha_solver = None
             self.auto_solve = False
-            self.category_logger.log_ticket('system', "⚠️ No 2Captcha API key - manual CAPTCHA solving only", 'warning')
+            Logger.log("No 2Captcha API key - manual CAPTCHA solving only", 'system', '⚠️')
 
-    def save_stats(self):
-        """Save statistics to file"""
-        try:
-            session_time = time.time() - self.session_start_time
-            self.stats['all_time_runtime'] = self.stats.get('all_time_runtime', 0) + session_time
-            
-            
-                
-            self.stats_manager.save()
-        except Exception as e:
-            self.category_logger.log_ticket('system', f"Failed to save stats: {e}", 'error')
-    
-    # Method removed - browsers load images by default
+
     
     def categorize_ticket(self, ticket_text: str) -> str:
         """Categorize ticket based on text content"""
@@ -422,7 +422,7 @@ class FanSaleBotV7:
         clean_text = re.sub(r'\s+', ' ', clean_text).strip()
         return hashlib.md5(clean_text.encode()).hexdigest()
     
-    def extract_full_ticket_info(self, driver: uc.Chrome, ticket_element: WebElement) -> Dict:
+    def extract_full_ticket_info(self, ticket_element: WebElement) -> Dict:
         """Extract only essential ticket information"""
         try:
             ticket_info = {
@@ -445,24 +445,34 @@ class FanSaleBotV7:
             return ticket_info
             
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Error extracting ticket info: {e}", 'error')
+            Logger.log( f"Error extracting ticket info: {e}", 'error')
             return {
-                'raw_text': ticket_element.text,
-                'category': self.categorize_ticket(ticket_element.text),
+                'raw_text': str(ticket_element.text) if hasattr(ticket_element, 'text') else '',
+                'category': 'other',
                 'offer_id': ''
             }
     
     def log_new_ticket(self, ticket_info: Dict, browser_id: int):
-        """Log newly discovered ticket"""
+        """Log newly discovered ticket - simple and effective"""
         category = ticket_info['category']
-        is_hunting = category in self.ticket_types_to_hunt
         
-        if is_hunting:
-            self.category_logger.log_alert(category,
-                f"NEW TICKET FOUND by Hunter {browser_id}!")
+        # Simple category display
+        category_display = {
+            'prato_a': 'PRATO A',
+            'prato_b': 'PRATO B', 
+            'settore': 'SETTORE',
+            'other': 'OTHER'
+        }.get(category, category.upper())
         
-        self.category_logger.log_ticket(category,
-            f"🎫 NEW {category.upper()} ticket - Hunter {browser_id}")
+        # Extract price if available
+        price_match = re.search(r'€\s*([0-9.,]+)', ticket_info['raw_text'])
+        price = price_match.group(1) if price_match else 'N/A'
+        
+        # Log based on whether we're hunting this type
+        if category in self.ticket_types_to_hunt:
+            Logger.alert(f"🎯 NEW {category_display} TICKET! Hunter {browser_id} | €{price}")
+        else:
+            Logger.log(f"Found {category_display} | €{price} | Hunter {browser_id}", category)
     
     def check_captcha_status(self, browser_id: int) -> bool:
         """Check if browser is within CAPTCHA grace period"""
@@ -470,7 +480,7 @@ class FanSaleBotV7:
             time_since_solved = time.time() - self.captcha_solved_time[browser_id]
             if time_since_solved < self.captcha_grace_period:
                 remaining = self.captcha_grace_period - time_since_solved
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"Hunter {browser_id}: CAPTCHA grace period active ({remaining:.0f}s remaining)")
                 return True
         return False
@@ -478,60 +488,67 @@ class FanSaleBotV7:
     def mark_captcha_solved(self, browser_id: int):
         """Mark CAPTCHA as solved for this browser"""
         self.captcha_solved_time[browser_id] = time.time()
-        self.stats['captchas_solved'] += 1
-        self.save_stats()
-        self.category_logger.log_ticket('system', 
+        self.stats.encountered_captcha()
+        Logger.log( 
             f"✅ Hunter {browser_id}: CAPTCHA solved! Grace period active for {self.captcha_grace_period}s")
     
     def dismiss_popups(self, driver: uc.Chrome, browser_id: int) -> int:
-        """Simple popup dismissal - most popups just need a click"""
+        """Enhanced popup dismissal - better handling of FanSale popups"""
         dismissed_count = 0
         
         try:
-            # Priority 1: "Carica Offerte" button (most important)
-            try:
-                carica = driver.find_element(By.CSS_SELECTOR, "button.js-BotProtectionModalButton1")
-                if carica.is_displayed():
-                    driver.execute_script("arguments[0].click();", carica)
-                    self.category_logger.log_ticket('system', f"📢 Hunter {browser_id}: Clicked 'Carica Offerte' button")
-                    dismissed_count += 1
-                    time.sleep(0.5)
-            except:
-                pass
-            
-            # Priority 2: Common close buttons
-            close_selectors = [
-                "button[aria-label*='close' i]",
-                "button[aria-label*='chiudi' i]", 
-                "button[class*='close']",
-                "a[class*='close']"
+            # Priority 1: "Carica Offerte" button - multiple selectors for better detection
+            carica_selectors = [
+                "button.js-BotProtectionModalButton1",
+                "button:contains('Carica')",
+                "button[class*='BotProtection']",
+                "div.BotProtectionModal button",
+                "button[onclick*='carica']"
             ]
             
-            for selector in close_selectors:
+            for selector in carica_selectors:
                 try:
-                    elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                    for elem in elements:
-                        if elem.is_displayed():
-                            driver.execute_script("arguments[0].click();", elem)
+                    if ':contains' in selector:
+                        # Use XPath for text content
+                        elements = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica')]")
+                        for carica in elements:
+                            if carica.is_displayed():
+                                # Try multiple click methods
+                                try:
+                                    driver.execute_script("arguments[0].click();", carica)
+                                except:
+                                    try:
+                                        carica.click()
+                                    except:
+                                        ActionChains(driver).move_to_element(carica).click().perform()
+                                Logger.log(f"Hunter {browser_id}: Clicked 'Carica' button!", 'system', '📢')
+                                dismissed_count += 1
+                                time.sleep(0.5)
+                                break
+                    else:
+                        carica = driver.find_element(By.CSS_SELECTOR, selector)
+                        if carica.is_displayed():
+                            driver.execute_script("arguments[0].click();", carica)
+                            Logger.log(f"Hunter {browser_id}: Clicked 'Carica Offerte' button", 'system', '📢')
                             dismissed_count += 1
+                            time.sleep(0.5)
                             break
                 except:
                     continue
             
-            # Priority 3: Accept cookies if needed
+            # Priority 2: Generic close buttons if no FanSale-specific popup
             if dismissed_count == 0:
                 try:
-                    accept_btns = driver.find_elements(By.XPATH, "//button[contains(text(), 'Accetta') or contains(text(), 'OK')]")
-                    for btn in accept_btns:
-                        if btn.is_displayed():
-                            driver.execute_script("arguments[0].click();", btn)
-                            dismissed_count += 1
-                            break
+                    close_btn = driver.find_element(By.CSS_SELECTOR, 
+                        "button[aria-label*='close' i], button[aria-label*='chiudi' i], button[class*='close']")
+                    if close_btn.is_displayed():
+                        driver.execute_script("arguments[0].click();", close_btn)
+                        dismissed_count += 1
                 except:
                     pass
                 
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Error in dismiss_popups: {e}", 'error')
+            Logger.log(f"Error in dismiss_popups: {e}", 'error')
             
         return dismissed_count
     
@@ -547,7 +564,7 @@ class FanSaleBotV7:
             
             for selector in captcha_selectors:
                 if driver.find_elements(By.CSS_SELECTOR, selector):
-                    self.category_logger.log_ticket('system', "🤖 CAPTCHA detected!")
+                    Logger.log( "🤖 CAPTCHA detected!")
                     
                     # Try to get sitekey for reCAPTCHA
                     sitekey = None
@@ -560,21 +577,21 @@ class FanSaleBotV7:
             return False, None, None
             
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Error detecting CAPTCHA: {e}", 'error')
+            Logger.log( f"Error detecting CAPTCHA: {e}", 'error')
             return False, None, None
     
     def solve_captcha_automatically(self, driver: uc.Chrome, sitekey: str, pageurl: str, browser_id: int) -> bool:
         """Attempt to solve CAPTCHA automatically using 2captcha"""
         if not self.captcha_solver or not sitekey:
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"Cannot auto-solve: solver={bool(self.captcha_solver)}, sitekey={bool(sitekey)}", 'warning')
             return False
             
-        self.category_logger.log_ticket('system', f"🤖 Hunter {browser_id}: Attempting automatic CAPTCHA solve...")
+        Logger.log( f"🤖 Hunter {browser_id}: Attempting automatic CAPTCHA solve...")
         
         token = self.captcha_solver.solve_recaptcha(sitekey, pageurl)
         if not token:
-            self.category_logger.log_ticket('system', "Failed to get token from 2captcha", 'error')
+            Logger.log( "Failed to get token from 2captcha", 'error')
             return False
             
         try:
@@ -606,17 +623,17 @@ class FanSaleBotV7:
             """)
             
             if injection_success:
-                self.stats['captchas_auto_solved'] += 1
+                # Auto-solve successful
                 self.mark_captcha_solved(browser_id)
-                self.category_logger.log_ticket('system', f"✅ CAPTCHA token injected successfully!")
+                Logger.log( f"✅ CAPTCHA token injected successfully!")
                 return True
             else:
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     "Failed to inject CAPTCHA token - no suitable element found", 'error')
                 return False
                 
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Failed to inject CAPTCHA token: {e}", 'error')
+            Logger.log( f"Failed to inject CAPTCHA token: {e}", 'error')
             return False
     
     def wait_for_captcha_solve(self, driver: uc.Chrome, browser_id: int, timeout: int = 120) -> bool:
@@ -627,25 +644,24 @@ class FanSaleBotV7:
             return True
             
         # Increment CAPTCHA counter
-        self.stats['captchas_encountered'] += 1
-        self.save_stats()
+        self.stats.encountered_captcha()
         
         # Try automatic solving first if enabled
         if self.auto_solve and sitekey:
-            self.category_logger.log_ticket('system', f"🤖 Attempting automatic CAPTCHA solve with 2captcha...")
+            Logger.log( f"🤖 Attempting automatic CAPTCHA solve with 2captcha...")
             if self.solve_captcha_automatically(driver, sitekey, pageurl, browser_id):
                 return True
             else:
-                self.category_logger.log_ticket('system', "Automatic solving failed, falling back to manual", 'warning')
+                Logger.log( "Automatic solving failed, falling back to manual", 'warning')
                 
         # Fall back to manual solving
-        self.category_logger.log_ticket('system', f"\n{'='*60}")
-        self.category_logger.log_ticket('system', f"🤖 CAPTCHA DETECTED - Hunter {browser_id}")
-        self.category_logger.log_ticket('system', f"{'='*60}")
-        self.category_logger.log_ticket('system', f"⚠️  MANUAL ACTION REQUIRED!")
-        self.category_logger.log_ticket('system', f"Please solve the CAPTCHA in Browser {browser_id}")
-        self.category_logger.log_ticket('system', f"Waiting up to {timeout} seconds...")
-        self.category_logger.log_ticket('system', f"{'='*60}\n")
+        Logger.log( f"\n{'='*60}")
+        Logger.log( f"🤖 CAPTCHA DETECTED - Hunter {browser_id}")
+        Logger.log( f"{'='*60}")
+        Logger.log( f"⚠️  MANUAL ACTION REQUIRED!")
+        Logger.log( f"Please solve the CAPTCHA in Browser {browser_id}")
+        Logger.log( f"Waiting up to {timeout} seconds...")
+        Logger.log( f"{'='*60}\n")
         
         # Play alert sound
         for _ in range(5):
@@ -658,7 +674,7 @@ class FanSaleBotV7:
         while time.time() - start_time < timeout:
             # Check if CAPTCHA is still present
             if not self.detect_captcha(driver)[0]:
-                self.category_logger.log_ticket('system', f"✅ CAPTCHA solved in Browser {browser_id}!")
+                Logger.log( f"✅ CAPTCHA solved in Browser {browser_id}!")
                 self.mark_captcha_solved(browser_id)
                 return True
                 
@@ -666,7 +682,7 @@ class FanSaleBotV7:
             try:
                 current_url = driver.current_url.lower()
                 if any(x in current_url for x in ['conferma', 'checkout', 'payment', 'cart']):
-                    self.category_logger.log_ticket('system', f"✅ Purchase proceeding in Browser {browser_id}!")
+                    Logger.log( f"✅ Purchase proceeding in Browser {browser_id}!")
                     self.mark_captcha_solved(browser_id)
                     return True
             except:
@@ -674,15 +690,16 @@ class FanSaleBotV7:
                 
             time.sleep(check_interval)
             
-        self.category_logger.log_ticket('system', f"❌ CAPTCHA timeout in Browser {browser_id}", 'error')
+        Logger.log( f"❌ CAPTCHA timeout in Browser {browser_id}", 'error')
         return False
     
-    @retry(max_attempts=3, delay=2.0, exceptions=(WebDriverException,))
+    @retry(max_attempts=3, delay=2.0)
     def create_browser(self, browser_id: int) -> Optional[uc.Chrome]:
         """Create browser with undetected-chromedriver"""
-        self.category_logger.log_ticket('system', f"🚀 Creating Browser {browser_id}...")
+        Logger.log( f"🚀 Creating Browser {browser_id}...")
         
         try:
+            # Create fresh ChromeOptions for each attempt (cannot be reused)
             options = uc.ChromeOptions()
             
             # Basic stealth options (undetected-chromedriver handles most of this)
@@ -704,33 +721,78 @@ class FanSaleBotV7:
             profile_dir.mkdir(parents=True, exist_ok=True)
             options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
             
-            # Create driver - let undetected-chromedriver handle version detection
-            try:
-                driver = uc.Chrome(
-                    options=options,
-                    use_subprocess=True,
-                    suppress_welcome=True
-                )
-            except Exception:
-                # Fallback to version 137 if auto-detect fails
-                driver = uc.Chrome(
-                    options=options,
-                    version_main=137,
-                    use_subprocess=True,
-                    suppress_welcome=True
-                )
+            # Additional options for stability
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--disable-features=VizDisplayCompositor')
+            
+            # Create driver with proper version handling
+            driver = None
+            chrome_version_attempts = [None, 137, 138, 136, 135, 131, 130]
+            last_error = None
+            
+            for version in chrome_version_attempts:
+                try:
+                    # Create new options for each version attempt
+                    if version is not None:
+                        # Need fresh options for each attempt
+                        options = uc.ChromeOptions()
+                        options.add_argument('--disable-blink-features=AutomationControlled')
+                        options.add_argument(f'--window-position={x},{y}')
+                        options.add_argument(f'--window-size={window_width},{window_height}')
+                        options.add_argument(f'--user-data-dir={profile_dir.absolute()}')
+                        options.add_argument('--no-sandbox')
+                        options.add_argument('--disable-dev-shm-usage')
+                        options.add_argument('--disable-gpu')
+                        options.add_argument('--disable-features=VizDisplayCompositor')
+                        
+                        Logger.log( 
+                            f"Trying Chrome version {version}...")
+                        driver = uc.Chrome(
+                            options=options,
+                            version_main=version,
+                            use_subprocess=True,
+                            suppress_welcome=True
+                        )
+                    else:
+                        Logger.log( 
+                            "Trying with auto-detected Chrome version...")
+                        driver = uc.Chrome(
+                            options=options,
+                            use_subprocess=True,
+                            suppress_welcome=True
+                        )
+                    
+                    # If we get here, browser was created successfully
+                    break
+                    
+                except Exception as e:
+                    last_error = e
+                    if "This version of ChromeDriver only supports Chrome version" in str(e):
+                        # Extract the required version from error message
+                        import re
+                        match = re.search(r'Chrome version (\d+)', str(e))
+                        if match:
+                            required_version = int(match.group(1))
+                            if required_version not in chrome_version_attempts:
+                                chrome_version_attempts.insert(1, required_version)
+                    continue
+            
+            if driver is None:
+                raise Exception(f"Failed to create browser after trying versions: {chrome_version_attempts}. Last error: {last_error}")
             
             # Set timeouts
             driver.set_page_load_timeout(30)
             driver.implicitly_wait(10)
             
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"✅ Browser {browser_id} created at position ({x}, {y})")
             
             return driver
             
         except Exception as e:
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"❌ Failed to create browser {browser_id}: {e}", 'error')
             raise
     
@@ -769,55 +831,69 @@ class FanSaleBotV7:
             return False
 
     def clear_browser_data(self, driver: uc.Chrome, browser_id: int):
-        """Clear browser data to bypass blocks - simplified"""
+        """Clear browser data to bypass blocks - with timeout handling"""
         try:
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"🧹 Clearing data for Browser {browser_id}...")
             
-            # Just clear cookies and navigate to blank
-            driver.delete_all_cookies()
-            driver.get("about:blank")
-            time.sleep(1)
+            # Set shorter timeout for cookie operations
+            driver.set_page_load_timeout(10)
             
-            self.category_logger.log_ticket('system', f"✅ Browser {browser_id} data cleared")
-            self.stats['blocks_encountered'] += 1
-            self.save_stats()
+            try:
+                # Try to clear cookies with timeout
+                driver.delete_all_cookies()
+            except:
+                # If cookies fail, continue anyway
+                pass
+            
+            try:
+                # Navigate to blank page
+                driver.get("about:blank")
+                time.sleep(0.5)
+            except:
+                # If navigation fails, try to refresh
+                try:
+                    driver.refresh()
+                except:
+                    pass
+            
+            # Restore normal timeout
+            driver.set_page_load_timeout(30)
+            
+            Logger.log( f"✅ Browser {browser_id} data cleared")
+            self.stats.encountered_block()
             
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Failed to clear browser data: {e}", 'error')
+            Logger.log( f"Failed to clear browser data: {e}", 'error')
+            # Don't let this stop the bot
+            try:
+                driver.set_page_load_timeout(30)
+            except:
+                pass
     
     def hunt_tickets(self, browser_id: int, driver: uc.Chrome):
         """Main hunting loop with all V5 enhancements"""
-        self.category_logger.log_ticket('system', f"🎯 Hunter {browser_id} starting...")
+        Logger.log( f"🎯 Hunter {browser_id} starting...")
         
         # Navigate to event page
-        self.category_logger.log_ticket('system', f"📍 Navigating to: {self.target_url}")
+        Logger.log( f"📍 Navigating to: {self.target_url}")
         page_start = time.time()
         driver.get(self.target_url)
         page_load_time = time.time() - page_start
         # Removed performance tracking - not actionable
-        self.category_logger.log_ticket('system', f"📄 Page loaded in {page_load_time:.2f}s")
+        Logger.log( f"📄 Page loaded in {page_load_time:.2f}s")
         
-        # Initial popup dismissal
+        # Initial popup dismissal - enhanced will handle Carica button
         time.sleep(0.5)
         initial_popups = self.dismiss_popups(driver, browser_id)
         
-        # Special handling for "Carica Offerte" button
-        try:
-            carica_button = driver.find_element(By.CSS_SELECTOR, "button.js-BotProtectionModalButton1")
-            if carica_button and carica_button.is_displayed():
-                driver.execute_script("arguments[0].click();", carica_button)
-                self.category_logger.log_ticket('system', 
-                    f"🎯 Hunter {browser_id}: Clicked 'Carica Offerte' button!")
-                initial_popups += 1
-                time.sleep(0.5)
-                # Check for any new popups after clicking
-                additional = self.dismiss_popups(driver, browser_id)
-                initial_popups += additional
-        except:
-            pass
+        # If we found popups, wait and check again
+        if initial_popups > 0:
+            time.sleep(1)
+            additional = self.dismiss_popups(driver, browser_id)
+            initial_popups += additional
         
-        self.category_logger.log_ticket('system', f"📢 Dismissed {initial_popups} initial popups")
+        Logger.log( f"📢 Dismissed {initial_popups} initial popups")
         
         # Verify images are loading - REMOVED: Unnecessary check that adds delay
         # self.verify_image_loading(driver, browser_id)
@@ -841,40 +917,44 @@ class FanSaleBotV7:
         while not self.shutdown_event.is_set() and self.tickets_secured < self.max_tickets:
             try:
                 check_count += 1
-                self.stats['total_checks'] += 1
+                self.stats.increment_checks()
                 
                 # Periodic CAPTCHA check - only browser 1 does this every 5 minutes
                 # Skip this check if we're in the first 30 seconds to allow faster initial checking
                 if browser_id == 1 and time.time() - last_captcha_test > self.config.captcha_check_interval and check_count > 30:
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"🔍 Hunter {browser_id}: Performing periodic CAPTCHA check...")
                     captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
                     if captcha_detected:
-                        self.category_logger.log_alert('system', f"CAPTCHA detected during periodic check!")
+                        Logger.alert("CAPTCHA detected during periodic check!")
                         if self.auto_solve and self.captcha_solver and sitekey:
-                            self.category_logger.log_ticket('system', "🤖 Attempting automatic CAPTCHA solve...")
+                            Logger.log( "🤖 Attempting automatic CAPTCHA solve...")
                             if self.solve_captcha_automatically(driver, sitekey, pageurl, browser_id):
                                 self.mark_captcha_solved(browser_id)
-                                self.category_logger.log_ticket('system', "✅ CAPTCHA solved automatically!")
+                                Logger.log( "✅ CAPTCHA solved automatically!")
                             else:
-                                self.category_logger.log_ticket('system', "❌ Automatic CAPTCHA solve failed", 'error')
+                                Logger.log( "❌ Automatic CAPTCHA solve failed", 'error')
                                 self.wait_for_captcha_solve(driver, browser_id)
                         else:
                             self.wait_for_captcha_solve(driver, browser_id)
                     else:
-                        self.category_logger.log_ticket('system', f"✅ No CAPTCHA detected - all clear!")
+                        Logger.log( f"✅ No CAPTCHA detected - all clear!")
                     last_captcha_test = time.time()
                 
-                # Popup check - more frequent than V4
-                if time.time() - last_popup_check > self.config.popup_check_interval:
+                # Popup check - more aggressive checking
+                # Check every 10 seconds OR if we haven't found tickets in a while
+                popup_check_interval = 10 if local_stats['found'] == 0 else self.config.popup_check_interval
+                if time.time() - last_popup_check > popup_check_interval:
                     dismissed = self.dismiss_popups(driver, browser_id)
                     if dismissed > 0:
-                        self.category_logger.log_ticket('system', f"Dismissed {dismissed} popups")
+                        Logger.log( f"Dismissed {dismissed} popups")
+                        # After dismissing popups, wait a bit for page to stabilize
+                        time.sleep(0.5)
                     last_popup_check = time.time()
                 
                 # Check for 404 blocks
                 if self.is_blocked(driver):
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"⚠️ Hunter {browser_id}: Block detected!", 'warning')
                     self.clear_browser_data(driver, browser_id)
                     driver.get(self.target_url)
@@ -884,7 +964,7 @@ class FanSaleBotV7:
                 
                 # Session refresh every 15 minutes
                 if time.time() - last_session_refresh > 900:
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"🔄 Hunter {browser_id}: Preventive session refresh...")
                     self.clear_browser_data(driver, browser_id)
                     driver.get(self.target_url)
@@ -909,14 +989,14 @@ class FanSaleBotV7:
                     for selector in alternative_selectors:
                         tickets = driver.find_elements(By.CSS_SELECTOR, selector)
                         if tickets:
-                            self.category_logger.log_ticket('system', 
+                            Logger.log( 
                                 f"Found tickets with alternative selector: {selector}")
                             break
                 
                 # Check time removed - not actionable
                 
                 if tickets:
-                    self.stats['total_tickets_found'] += len(tickets)
+                    self.stats.found_ticket()
                     
                     # Check CAPTCHA grace period
                     in_grace_period = self.check_captcha_status(browser_id)
@@ -924,26 +1004,20 @@ class FanSaleBotV7:
                     for ticket in tickets:
                         try:
                             # Extract full ticket information
-                            ticket_info = self.extract_full_ticket_info(driver, ticket)
+                            ticket_info = self.extract_full_ticket_info(ticket)
                             ticket_hash = self.generate_ticket_hash(ticket_info['raw_text'])
                             
-                            # Check if this is a new ticket (not seen before)
-                            if ticket_hash not in self.seen_tickets:
+                            # Check if this is a new ticket using StatsManager
+                            category = ticket_info['category']
+                            is_new_ticket = self.stats.found_ticket(category, ticket_hash)
+                            
+                            if is_new_ticket:
                                 # New ticket discovered!
-                                self.seen_tickets.add(ticket_hash)
-                                self.ticket_details_cache[ticket_hash] = ticket_info
-                                
-                                # Update statistics
-                                self.stats['unique_tickets_found'] += 1
-                                category = ticket_info['category']
-                                self.stats['tickets_by_type'][category] += 1
                                 local_stats[category] += 1
+                                local_stats['found'] += 1
                                 
                                 # Log the new ticket with full details
                                 self.log_new_ticket(ticket_info, browser_id)
-                                
-                                # Save stats after finding new ticket
-                                self.save_stats()
                                 
                                 # FIX #2: Properly check if we should purchase
                                 if category in self.ticket_types_to_hunt:
@@ -951,17 +1025,15 @@ class FanSaleBotV7:
                                         if self.tickets_secured < self.max_tickets:
                                             # If in grace period, log it
                                             if in_grace_period:
-                                                self.category_logger.log_ticket('system', 
+                                                Logger.log( 
                                                     f"🚀 Hunter {browser_id}: CAPTCHA grace period active - fast purchase!")
                                             
                                             if self.purchase_ticket(driver, ticket, browser_id):
                                                 self.tickets_secured += 1
-                                                self.stats['purchases'] += 1
-                                                self.stats['purchases_by_type'][category] += 1
-                                                self.save_stats()
+                                                self.stats.made_purchase()
                                                 
                                                 if self.tickets_secured >= self.max_tickets:
-                                                    self.category_logger.log_ticket('system', 
+                                                    Logger.log( 
                                                         f"🎉 Max tickets secured!")
                                                     return
                                                     
@@ -970,7 +1042,7 @@ class FanSaleBotV7:
                 
                 # Periodically test CAPTCHA grace period
                 if in_grace_period and check_count - last_captcha_check > 20:  # Every ~minute
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"🔍 Hunter {browser_id}: Testing CAPTCHA grace period...")
                     last_captcha_check = check_count
                 
@@ -1006,11 +1078,11 @@ class FanSaleBotV7:
                     if in_grace_period:
                         status_parts.append("🟢 CAPTCHA OK")
                     
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"📊 Hunter {browser_id}: {' | '.join(status_parts)}")
                     
             except TimeoutException:
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"Hunter {browser_id}: Page timeout, refreshing...", 'warning')
                 driver.refresh()
                 time.sleep(random.uniform(1.5, 2.5))
@@ -1018,15 +1090,15 @@ class FanSaleBotV7:
                 
             except WebDriverException as e:
                 if "invalid session" in str(e).lower():
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"Hunter {browser_id}: Session died", 'error')
                     break
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"Hunter {browser_id}: Browser error, continuing...", 'error')
                 time.sleep(5)
                 
             except Exception as e:
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"Hunter {browser_id} error: {e}", 'error')
                 import traceback
                 traceback.print_exc()
@@ -1076,7 +1148,7 @@ class FanSaleBotV7:
                             elements = [e for e in elements if e.is_displayed() and e.is_enabled()]
                             if elements:
                                 driver.execute_script("arguments[0].click();", elements[0])
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"✅ Hunter {browser_id}: Clicked '{text}' on checkout page")
                                 return True
                     else:
@@ -1085,11 +1157,11 @@ class FanSaleBotV7:
                             # If it's a quantity selector, ensure it's set to 1
                             if 'quantity' in selector.lower() or 'quantita' in selector.lower():
                                 driver.execute_script("arguments[0].value = '1';", element)
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"✅ Hunter {browser_id}: Set quantity to 1")
                             else:
                                 driver.execute_script("arguments[0].click();", element)
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"✅ Hunter {browser_id}: Clicked checkout element")
                                 return True
                 except:
@@ -1098,15 +1170,15 @@ class FanSaleBotV7:
             return False
             
         except Exception as e:
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"Error handling checkout page: {e}", 'error')
             return False
 
-    @retry(max_attempts=2, delay=0.5, exceptions=(ElementNotInteractableException, StaleElementReferenceException))
+    @retry(max_attempts=2, delay=0.5)
     def purchase_ticket(self, driver: uc.Chrome, ticket_element, browser_id: int) -> bool:
         """Attempt to purchase a ticket with enhanced interaction"""
         try:
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"⚡ Hunter {browser_id}: Attempting purchase...")
             
             # Dismiss any popups first
@@ -1123,7 +1195,7 @@ class FanSaleBotV7:
             try:
                 driver.execute_script("arguments[0].click();", ticket_element)
                 click_success = True
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"✅ Hunter {browser_id}: Clicked ticket via JavaScript")
             except Exception as e1:
                 # Method 2: Click on the specific FanSale link/button inside ticket
@@ -1132,7 +1204,7 @@ class FanSaleBotV7:
                     ticket_link = ticket_element.find_element(By.CSS_SELECTOR, "a.Button-inOfferEntryList, a[id*='detailBShowOfferButton']")
                     driver.execute_script("arguments[0].click();", ticket_link)
                     click_success = True
-                    self.category_logger.log_ticket('system', 
+                    Logger.log( 
                         f"✅ Hunter {browser_id}: Clicked FanSale ticket link")
                 except:
                     # Fallback to any clickable child
@@ -1140,7 +1212,7 @@ class FanSaleBotV7:
                         clickable_child = ticket_element.find_element(By.CSS_SELECTOR, "a, button, [role='button']")
                         driver.execute_script("arguments[0].click();", clickable_child)
                         click_success = True
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"✅ Hunter {browser_id}: Clicked ticket child element")
                     except:
                         pass
@@ -1149,20 +1221,20 @@ class FanSaleBotV7:
                         actions = ActionChains(driver)
                         actions.move_to_element(ticket_element).click().perform()
                         click_success = True
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"✅ Hunter {browser_id}: Clicked ticket via ActionChains")
                     except:
                         # Method 4: Direct click
                         try:
                             ticket_element.click()
                             click_success = True
-                            self.category_logger.log_ticket('system', 
+                            Logger.log( 
                                 f"✅ Hunter {browser_id}: Clicked ticket directly")
                         except:
                             pass
             
             if not click_success:
-                self.category_logger.log_ticket('system', 
+                Logger.log( 
                     f"Failed to click ticket element", 'warning')
                 return False
                 
@@ -1171,49 +1243,23 @@ class FanSaleBotV7:
             # Dismiss any new popups that might appear
             self.dismiss_popups(driver, browser_id)
             
-            # Enhanced buy button detection with Italian-specific selectors
+            # Essential buy button selectors based on FanSale HTML
             buy_selectors = [
-                # Priority 1: FanSale-specific data attributes
+                # Priority 1: FanSale-specific (from handlersfansale.md)
                 "button[data-qa='buyNowButton']",
-                "button[data-qa='ticketCheckoutButton']",
-                "button[data-testid*='buy']",
-                "button[data-testid*='acquista']",
                 
-                # Priority 2: Italian text-based selectors (will convert to XPath)
+                # Priority 2: Common Italian buy buttons
                 "button:contains('Acquista')",
-                "button:contains('Acquista ora')",
                 "button:contains('Compra')",
-                "button:contains('Compra ora')",
-                "button:contains('Prenota')",
                 "button:contains('Procedi')",
-                "button:contains('Aggiungi al carrello')",
-                "button:contains('Vai al carrello')",
                 
                 # Priority 3: Class-based selectors
                 "button[class*='buy']",
                 "button[class*='acquista']",
-                "button[class*='purchase']",
-                "button[class*='checkout']",
-                "button[class*='cart']",
-                "button[class*='carrello']",
                 
-                # Priority 4: English text alternatives
-                "button:contains('Buy')",
-                "button:contains('Buy Now')",
-                "button:contains('Purchase')",
-                "button:contains('Add to Cart')",
-                "button:contains('Checkout')",
-                
-                # Priority 5: Link styled as button
-                "a[class*='buy'][class*='button']",
-                "a[class*='btn'][href*='cart']",
-                "a[class*='btn'][href*='checkout']",
-                "a[class*='btn'][href*='acquista']",
-                
-                # Priority 6: Generic button with specific attributes
+                # Priority 4: Generic submit buttons
                 "button[type='submit']",
-                "input[type='submit'][value*='buy']",
-                "input[type='submit'][value*='acquista']"
+                "input[type='submit']"
             ]
             
             buy_button_found = False
@@ -1241,13 +1287,13 @@ class FanSaleBotV7:
                         buy_button_found = True
                     
                     if buy_button_found:
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"🎯 Hunter {browser_id}: Found buy button with selector: {selector}")
                         
                         # Log button details for debugging
                         btn_text = buy_btn.text.strip() if buy_btn.text else "No text"
                         btn_class = buy_btn.get_attribute('class') or "No class"
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"   Button text: '{btn_text}', Classes: '{btn_class}'")
                         
                         # Scroll to buy button
@@ -1260,7 +1306,7 @@ class FanSaleBotV7:
                         except:
                             buy_btn.click()
                             
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"✅ Hunter {browser_id}: Buy button clicked!")
                         
                         # Store current URL to detect navigation
@@ -1270,13 +1316,13 @@ class FanSaleBotV7:
                         page_changed = self.wait_for_page_change(driver, initial_url, timeout=3)
                         
                         if page_changed:
-                            self.category_logger.log_ticket('system', 
+                            Logger.log( 
                                 f"🎯 Hunter {browser_id}: Navigated to: {driver.current_url}")
                             
                             # Check if we reached checkout/cart page
                             current_url = driver.current_url.lower()
                             if any(keyword in current_url for keyword in ['carrello', 'cart', 'checkout', 'conferma', 'payment']):
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"🛒 Hunter {browser_id}: Reached checkout page!")
                                 # Play success sound
                                 print('' * 5)
@@ -1287,18 +1333,17 @@ class FanSaleBotV7:
                         # Check for CAPTCHA
                         captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
                         if captcha_detected:
-                            self.category_logger.log_ticket('system', 
+                            Logger.log( 
                                 f"🤖 Hunter {browser_id}: CAPTCHA detected after buy click!")
-                            self.stats['captchas_encountered'] += 1
-                            self.save_stats()
+                            self.stats.encountered_captcha()
                             
                             # Try to solve
                             if self.wait_for_captcha_solve(driver, browser_id):
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"✅ Hunter {browser_id}: Continuing after CAPTCHA")
                                 time.sleep(1)
                             else:
-                                self.category_logger.log_ticket('system', 
+                                Logger.log( 
                                     f"❌ Hunter {browser_id}: CAPTCHA not solved", 'warning')
                                 return False
                         
@@ -1309,7 +1354,7 @@ class FanSaleBotV7:
                         screenshot_path = f"screenshots/ticket_{browser_id}_{int(time.time())}.png"
                         Path("screenshots").mkdir(exist_ok=True)
                         driver.save_screenshot(screenshot_path)
-                        self.category_logger.log_ticket('system', 
+                        Logger.log( 
                             f"📸 Screenshot saved: {screenshot_path}")
                         
                         return True
@@ -1319,101 +1364,58 @@ class FanSaleBotV7:
                 except Exception as e:
                     continue
                     
-            self.category_logger.log_ticket('system', 
+            Logger.log( 
                 f"Hunter {browser_id}: No buy button found", 'warning')
             
             # Take debug screenshot
             debug_path = f"screenshots/debug_{browser_id}_{int(time.time())}.png"
             driver.save_screenshot(debug_path)
-            self.category_logger.log_ticket('system', f"📸 Debug screenshot: {debug_path}")
+            Logger.log( f"📸 Debug screenshot: {debug_path}")
             
             return False
             
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Purchase failed: {e}", 'error')
+            Logger.log( f"Purchase failed: {e}", 'error')
             return False
     
     def show_statistics_dashboard(self):
-        """Show live statistics dashboard"""
-        elapsed = time.time() - self.session_start_time
-        runtime_str = f"{int(elapsed//3600)}h {int((elapsed%3600)//60)}m {int(elapsed%60)}s"
-        
-        # Calculate rates
-        checks_per_min = (self.stats['total_checks'] / elapsed * 60) if elapsed > 0 else 0
-        
-        print(f"\n{CategoryLogger.COLORS['bold']}{'='*60}{CategoryLogger.COLORS['reset']}")
-        print(f"{CategoryLogger.COLORS['system']}📊 LIVE STATISTICS DASHBOARD{CategoryLogger.COLORS['reset']}")
-        print(f"{'='*60}")
-        
-        # Session info
-        print(f"\n🕐 Session Runtime: {runtime_str}")
-        print(f"🔍 Total Checks This Session: {self.stats['total_checks']:,}")
-        print(f"⚡ Check Rate: {checks_per_min:.1f}/min")
-        
-        # Ticket stats
-        print(f"\n🎫 Tickets Found: {self.stats['total_tickets_found']:,}")
-        print(f"✨ Unique Tickets: {self.stats['unique_tickets_found']:,}")
-        
-        # By category
-        print("\n📊 By Category:")
-        for cat in ['prato_a', 'prato_b', 'settore', 'other']:
-            count = self.stats['tickets_by_type'].get(cat, 0)
-            if count > 0:
-                color = getattr(CategoryLogger.COLORS, cat, CategoryLogger.COLORS['other'])
-                cat_display = cat.replace('_', ' ').title()
-                print(f"   {color}{cat_display}: {count}{CategoryLogger.COLORS['reset']}")
-        
-        # Purchase stats
-        if self.stats['purchases'] > 0:
-            print(f"\n🛒 Purchases: {self.stats['purchases']}")
-            for cat, count in self.stats['purchases_by_type'].items():
-                if count > 0:
-                    cat_display = cat.replace('_', ' ').title()
-                    print(f"   {cat_display}: {count}")
-        
-        # Other stats
-        print(f"\n⚠️  Blocks Encountered: {self.stats.get('blocks_encountered', 0)}")
-        print(f"🤖 CAPTCHAs: {self.stats.get('captchas_encountered', 0)}")
-        if self.stats.get('captchas_solved', 0) > 0:
-            print(f"   Solved: {self.stats['captchas_solved']}")
-        
-        
-        
-        print(f"\n{CategoryLogger.COLORS['bold']}{'='*60}{CategoryLogger.COLORS['reset']}")
+        """Simple live statistics display"""
+        # Just use the simple print_summary method
+        self.stats.print_summary()
     
     def configure_ticket_filters(self):
         """Allow user to select which ticket types to hunt for"""
-        print(f"\n{CategoryLogger.COLORS['bold']}🎯 SELECT TICKET TYPES TO HUNT{CategoryLogger.COLORS['reset']}")
+        print(f"\n{Logger.BOLD}🎯 SELECT TICKET TYPES TO HUNT{Logger.RESET}")
         print("=" * 50)
         
         # Available ticket types
         available_types = {
-            '1': ('prato_a', 'Prato A', CategoryLogger.COLORS['prato_a']),
-            '2': ('prato_b', 'Prato B', CategoryLogger.COLORS['prato_b']),
-            '3': ('prato_all', 'All Prato (A + B)', CategoryLogger.COLORS['system']),
-            '4': ('settore', 'Settore', CategoryLogger.COLORS['settore']),
-            '5': ('other', 'Other/Unknown', CategoryLogger.COLORS['other']),
-            '6': ('all', 'ALL ticket types', CategoryLogger.COLORS['bold'])
+            '1': ('prato_a', 'Prato A', Logger.GREEN),
+            '2': ('prato_b', 'Prato B', Logger.BLUE),
+            '3': ('prato_all', 'All Prato (A + B)', Logger.CYAN),
+            '4': ('settore', 'Settore', Logger.YELLOW),
+            '5': ('other', 'Other/Unknown', Logger.GRAY),
+            '6': ('all', 'ALL ticket types', Logger.BOLD)
         }
         
         print("\nAvailable ticket categories:")
         for key, (_, display, color) in available_types.items():
             if key == '3':
-                print(f"  {color}{key}. {display}{CategoryLogger.COLORS['reset']} ⭐")
+                print(f"  {color}{key}. {display}{Logger.RESET} ⭐")
             elif key == '4':
-                print(f"  {color}{key}. {display}{CategoryLogger.COLORS['reset']} (Seated: Fila/Posto/Anello)")
+                print(f"  {color}{key}. {display}{Logger.RESET} (Seated: Fila/Posto/Anello)")
             elif key == '6':
-                print(f"\n  {color}{key}. {display}{CategoryLogger.COLORS['reset']}")
+                print(f"\n  {color}{key}. {display}{Logger.RESET}")
             else:
-                print(f"  {color}{key}. {display}{CategoryLogger.COLORS['reset']}")
+                print(f"  {color}{key}. {display}{Logger.RESET}")
         
         while True:
-            selection = input(f"\n{CategoryLogger.COLORS['bold']}Enter your choices (e.g., '1,2' or '3' for all Prato):{CategoryLogger.COLORS['reset']} ").strip()
+            selection = input(f"\n{Logger.BOLD}Enter your choices (e.g., '1,2' or '3' for all Prato):{Logger.RESET} ").strip()
             
             if not selection:
                 # Default to all Prato types
                 self.ticket_types_to_hunt = {'prato_a', 'prato_b'}
-                print(f"{CategoryLogger.COLORS['prato_a']}✅ Hunting for all Prato tickets (A + B){CategoryLogger.COLORS['reset']}")
+                print(f"{Logger.GREEN}✅ Hunting for all Prato tickets (A + B){Logger.RESET}")
                 break
                 
             choices = [s.strip() for s in selection.split(',')]
@@ -1421,7 +1423,7 @@ class FanSaleBotV7:
             # Check if user selected "all"
             if '6' in choices:
                 self.ticket_types_to_hunt = {'prato_a', 'prato_b', 'settore', 'other'}
-                print(f"{CategoryLogger.COLORS['prato_a']}✅ Hunting for ALL ticket types{CategoryLogger.COLORS['reset']}")
+                print(f"{Logger.GREEN}✅ Hunting for ALL ticket types{Logger.RESET}")
                 break
             
             # Check if user selected "all prato"
@@ -1438,7 +1440,7 @@ class FanSaleBotV7:
                 if choice in ['1', '2', '4', '5']:
                     valid_choices.append(choice)
                 else:
-                    print(f"{CategoryLogger.COLORS['alert']}❌ Invalid choice: {choice}{CategoryLogger.COLORS['reset']}")
+                    print(f"{Logger.RED}❌ Invalid choice: {choice}{Logger.RESET}")
             
             if valid_choices:
                 # Convert to ticket types
@@ -1452,12 +1454,12 @@ class FanSaleBotV7:
                     if choice in ['1', '2', '4', '5']:  # Skip '3' as it's been expanded
                         type_key, display_name, color = available_types[choice]
                         self.ticket_types_to_hunt.add(type_key)
-                        selected_display.append(f"{color}{display_name}{CategoryLogger.COLORS['reset']}")
+                        selected_display.append(f"{color}{display_name}{Logger.RESET}")
                 
-                print(f"\n{CategoryLogger.COLORS['prato_a']}✅ Selected: {', '.join(selected_display)}{CategoryLogger.COLORS['reset']}")
+                print(f"\n{Logger.GREEN}✅ Selected: {', '.join(selected_display)}{Logger.RESET}")
                 break
             else:
-                print(f"{CategoryLogger.COLORS['alert']}Please enter valid choices (1-6){CategoryLogger.COLORS['reset']}")
+                print(f"{Logger.RED}Please enter valid choices (1-6){Logger.RESET}")
 
     def configure(self):
         """Configure bot settings"""
@@ -1526,7 +1528,7 @@ class FanSaleBotV7:
             self.configure()
             
             # Create browsers
-            print(f"\n{CategoryLogger.COLORS['bold']}🚀 Starting {self.num_browsers} browser(s)...{CategoryLogger.COLORS['reset']}")
+            print(f"\n{Logger.BOLD}🚀 Starting {self.num_browsers} browser(s)...{Logger.RESET}")
             
             for i in range(1, self.num_browsers + 1):
                 driver = self.create_browser(i)
@@ -1537,20 +1539,19 @@ class FanSaleBotV7:
                     time.sleep(random.uniform(3, 7))
             
             if not self.browsers:
-                self.category_logger.log_ticket('system', "❌ No browsers created", 'error')
+                Logger.log( "❌ No browsers created", 'error')
                 return
 
-            self.category_logger.log_ticket('system', f"✅ {len(self.browsers)} browser(s) ready!")
+            Logger.log( f"✅ {len(self.browsers)} browser(s) ready!")
             
-            # Show tip about monitoring
-            print(f"\n{CategoryLogger.COLORS['system']}💡 TIP: Browsers are positioned for multi-monitor setups{CategoryLogger.COLORS['reset']}")
-            print(f"{CategoryLogger.COLORS['system']}   Move them to your preferred monitors if needed{CategoryLogger.COLORS['reset']}")
-            print(f"\n{CategoryLogger.COLORS['alert']}⚠️  CAPTCHA ALERT: If CAPTCHA appears, it will be handled{CategoryLogger.COLORS['reset']}")
-            print(f"{CategoryLogger.COLORS['prato_a']}   Auto-solve if configured, or manual alert{CategoryLogger.COLORS['reset']}")
-            print(f"{CategoryLogger.COLORS['system']}📢 POPUPS: Will be checked every {self.config.popup_check_interval/60:.1f} minutes{CategoryLogger.COLORS['reset']}")
-            print(f"{CategoryLogger.COLORS['prato_a']}📸 IMAGES: Verified loading on all browsers{CategoryLogger.COLORS['reset']}")
+            # Quick startup info
+            print(f"{Logger.CYAN}💡 Browsers positioned for multi-monitor setup{Logger.RESET}")
+            if self.captcha_solver:
+                print(f"{Logger.GREEN}✅ Auto-CAPTCHA solving enabled{Logger.RESET}")
+            else:
+                print(f"{Logger.YELLOW}⚠️  Manual CAPTCHA solving required{Logger.RESET}")
             
-            input(f"\n{CategoryLogger.COLORS['bold']}✋ Press Enter to START HUNTING...{CategoryLogger.COLORS['reset']}")
+            input(f"\n{Logger.BOLD}✋ Press Enter to START HUNTING...{Logger.RESET}")
             
             # Start hunting
             threads = []
@@ -1565,27 +1566,29 @@ class FanSaleBotV7:
                 threads.append(thread)
             
             # Monitor progress
-            print(f"\n{CategoryLogger.COLORS['prato_a']}{CategoryLogger.COLORS['bold']}🎯 HUNTING ACTIVE! Press Ctrl+C to stop.{CategoryLogger.COLORS['reset']}\n")
+            print(f"\n{Logger.GREEN}{Logger.BOLD}🎯 HUNTING ACTIVE! Press Ctrl+C to stop.{Logger.RESET}\n")
             
             try:
                 last_update = time.time()
+                dashboard_interval = 30  # Show dashboard every 30 seconds
+                
                 while self.tickets_secured < self.max_tickets:
                     time.sleep(1)
                     
-                    # Status update every 60 seconds
-                    if time.time() - last_update > 60:
+                    # Status update every 30 seconds
+                    if time.time() - last_update > dashboard_interval:
                         self.show_statistics_dashboard()
                         last_update = time.time()
                     
-                self.category_logger.log_ticket('system', 
-                    f"\n{CategoryLogger.COLORS['prato_a']}{CategoryLogger.COLORS['bold']}🎉 SUCCESS! {self.tickets_secured} tickets secured!{CategoryLogger.COLORS['reset']}")
+                Logger.log( 
+                    f"\n{Logger.GREEN}{Logger.BOLD}🎉 SUCCESS! {self.tickets_secured} tickets secured!{Logger.RESET}")
                 
             except KeyboardInterrupt:
-                self.category_logger.log_ticket('system', 
-                    f"\n{CategoryLogger.COLORS['settore']}🛑 Stopping...{CategoryLogger.COLORS['reset']}")
+                Logger.log( 
+                    f"\n{Logger.YELLOW}🛑 Stopping...{Logger.RESET}")
                 
         except Exception as e:
-            self.category_logger.log_ticket('system', f"Fatal error: {e}", 'error')
+            Logger.log( f"Fatal error: {e}", 'error')
             import traceback
             traceback.print_exc()
             
@@ -1593,8 +1596,7 @@ class FanSaleBotV7:
             # Cleanup
             self.shutdown_event.set()
             
-            # Save final stats
-            self.save_stats()
+
             
             for driver in self.browsers:
                 try:
@@ -1602,16 +1604,28 @@ class FanSaleBotV7:
                 except Exception as e:
                     pass
             
+            # Save final stats
+            if hasattr(self, 'stats'):
+                self.stats.save_stats()
+            
             # Show final statistics
-            print(f"\n{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}📊 FINAL SESSION STATISTICS{CategoryLogger.COLORS['reset']}")
-            self.show_statistics_dashboard()
+            print(f"\n{Logger.BOLD}{Logger.CYAN}📊 FINAL SESSION STATISTICS{Logger.RESET}")
+            self.stats.print_summary()
+            
+            # Show all-time stats
+            tickets = self.stats.get_ticket_stats()
+            print(f"\n{Logger.BOLD}🎯 ALL-TIME TICKETS:{Logger.RESET} "
+                  f"{Logger.GREEN}A:{tickets['prato_a']}{Logger.RESET} | "
+                  f"{Logger.BLUE}B:{tickets['prato_b']}{Logger.RESET} | "
+                  f"{Logger.YELLOW}S:{tickets['settore']}{Logger.RESET} | "
+                  f"Total: {tickets['total']}")
 
 
 def main():
     """Entry point"""
-    print(f"{CategoryLogger.COLORS['bold']}{'=' * 70}{CategoryLogger.COLORS['reset']}")
-    print(f"{CategoryLogger.COLORS['bold']}{CategoryLogger.COLORS['system']}🎫 FANSALE BOT V7{CategoryLogger.COLORS['reset']}")
-    print(f"{CategoryLogger.COLORS['bold']}{'=' * 70}{CategoryLogger.COLORS['reset']}")
+    print(f"{Logger.BOLD}{'=' * 70}{Logger.RESET}")
+    print(f"{Logger.BOLD}{Logger.CYAN}🎫 FANSALE BOT V7{Logger.RESET}")
+    print(f"{Logger.BOLD}{'=' * 70}{Logger.RESET}")
     
     # Check dependencies
     try:
@@ -1619,7 +1633,7 @@ def main():
         from dotenv import load_dotenv
         import requests
     except ImportError as e:
-        print(f"\n{CategoryLogger.COLORS['alert']}❌ Missing dependency: {e}{CategoryLogger.COLORS['reset']}")
+        print(f"\n{Logger.RED}❌ Missing dependency: {e}{Logger.RESET}")
         print("Run: pip install undetected-chromedriver python-dotenv selenium requests")
         sys.exit(1)
     

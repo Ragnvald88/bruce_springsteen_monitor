@@ -18,7 +18,7 @@ import requests
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple, Any
 from datetime import datetime
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
 from contextlib import contextmanager
 
@@ -523,7 +523,6 @@ class FanSaleBotV7:
                                         ActionChains(driver).move_to_element(carica).click().perform()
                                 Logger.log(f"Hunter {browser_id}: Clicked 'Carica' button!", 'system', '📢')
                                 dismissed_count += 1
-                                time.sleep(0.5)
                                 break
                     else:
                         carica = driver.find_element(By.CSS_SELECTOR, selector)
@@ -531,7 +530,7 @@ class FanSaleBotV7:
                             driver.execute_script("arguments[0].click();", carica)
                             Logger.log(f"Hunter {browser_id}: Clicked 'Carica Offerte' button", 'system', '📢')
                             dismissed_count += 1
-                            time.sleep(0.5)
+                            time.sleep(0.3)  # Small delay to let page update
                             break
                 except:
                     continue
@@ -884,7 +883,7 @@ class FanSaleBotV7:
         Logger.log( f"📄 Page loaded in {page_load_time:.2f}s")
         
         # Initial popup dismissal - enhanced will handle Carica button
-        time.sleep(0.5)
+        time.sleep(2)  # Give page time to fully load
         initial_popups = self.dismiss_popups(driver, browser_id)
         
         # If we found popups, wait and check again
@@ -903,7 +902,6 @@ class FanSaleBotV7:
         last_refresh = time.time() - (browser_id * 5)  # Stagger initial refreshes
         refresh_interval = 15 + random.randint(-3, 3)  # Faster refresh: 12-18 seconds
         
-        last_session_refresh = time.time()
         local_stats = defaultdict(int)
         
         # Tracking for various checks
@@ -919,27 +917,6 @@ class FanSaleBotV7:
                 check_count += 1
                 self.stats.increment_checks()
                 
-                # Periodic CAPTCHA check - only browser 1 does this every 5 minutes
-                # Skip this check if we're in the first 30 seconds to allow faster initial checking
-                if browser_id == 1 and time.time() - last_captcha_test > self.config.captcha_check_interval and check_count > 30:
-                    Logger.log( 
-                        f"🔍 Hunter {browser_id}: Performing periodic CAPTCHA check...")
-                    captcha_detected, sitekey, pageurl = self.detect_captcha(driver)
-                    if captcha_detected:
-                        Logger.alert("CAPTCHA detected during periodic check!")
-                        if self.auto_solve and self.captcha_solver and sitekey:
-                            Logger.log( "🤖 Attempting automatic CAPTCHA solve...")
-                            if self.solve_captcha_automatically(driver, sitekey, pageurl, browser_id):
-                                self.mark_captcha_solved(browser_id)
-                                Logger.log( "✅ CAPTCHA solved automatically!")
-                            else:
-                                Logger.log( "❌ Automatic CAPTCHA solve failed", 'error')
-                                self.wait_for_captcha_solve(driver, browser_id)
-                        else:
-                            self.wait_for_captcha_solve(driver, browser_id)
-                    else:
-                        Logger.log( f"✅ No CAPTCHA detected - all clear!")
-                    last_captcha_test = time.time()
                 
                 # Popup check - more aggressive checking
                 # Check every 10 seconds OR if we haven't found tickets in a while
@@ -948,8 +925,6 @@ class FanSaleBotV7:
                     dismissed = self.dismiss_popups(driver, browser_id)
                     if dismissed > 0:
                         Logger.log( f"Dismissed {dismissed} popups")
-                        # After dismissing popups, wait a bit for page to stabilize
-                        time.sleep(0.5)
                     last_popup_check = time.time()
                 
                 # Check for 404 blocks
@@ -962,16 +937,8 @@ class FanSaleBotV7:
                     self.dismiss_popups(driver, browser_id)  # Dismiss any new popups
                     continue
                 
-                # Session refresh every 15 minutes
-                if time.time() - last_session_refresh > 900:
-                    Logger.log( 
-                        f"🔄 Hunter {browser_id}: Preventive session refresh...")
-                    self.clear_browser_data(driver, browser_id)
-                    driver.get(self.target_url)
-                    time.sleep(1)  # Reduced from 3 seconds for faster checking
-                    self.dismiss_popups(driver, browser_id)
-                    last_session_refresh = time.time()
-                    continue
+                # Session refresh every 15 minutes - skip for now to maximize speed
+                # The page refresh every 15 seconds is sufficient
                 
                 # Look for tickets - NO CACHING
                 # Primary selector
@@ -996,8 +963,6 @@ class FanSaleBotV7:
                 # Check time removed - not actionable
                 
                 if tickets:
-                    self.stats.found_ticket()
-                    
                     # Check CAPTCHA grace period
                     in_grace_period = self.check_captcha_status(browser_id)
                     
@@ -1056,12 +1021,11 @@ class FanSaleBotV7:
                     last_refresh = time.time()
                     # Recalculate next refresh interval
                     refresh_interval = 15 + random.randint(-3, 3)
-                    # Dismiss popups after refresh
-                    time.sleep(1)
+                    # Quick popup check after refresh
                     self.dismiss_popups(driver, browser_id)
                 
-                # Progress update every 60 checks (about once per minute at ~60+ checks/min)
-                if check_count % 60 == 0:
+                # Progress update every 10 seconds
+                if check_count % 10 == 0 or (time.time() - self.session_start_time) % 10 < 1:
                     elapsed = time.time() - self.session_start_time
                     rate = (check_count * 60) / elapsed if elapsed > 0 else 0
                     

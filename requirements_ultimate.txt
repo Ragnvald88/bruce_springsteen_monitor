@@ -1,0 +1,6 @@
+# Essential dependencies for FanSale Ultimate Bot
+undetected-chromedriver>=3.5.5
+selenium>=4.15.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+colorama>=0.4.6

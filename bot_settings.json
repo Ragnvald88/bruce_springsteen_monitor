@@ -1,0 +1,19 @@
+{
+  "num_browsers": 2,
+  "max_tickets": 2,
+  "ticket_types": [
+    "all"
+  ],
+  "min_wait": 0.3,
+  "max_wait": 1.0,
+  "refresh_interval": 10,
+  "use_proxy": false,
+  "proxy_host": "",
+  "proxy_port": "",
+  "proxy_user": "",
+  "proxy_pass": "",
+  "log_level": "info",
+  "show_stats": true,
+  "sound_alerts": true,
+  "auto_screenshot": true
+}

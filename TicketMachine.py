@@ -1603,7 +1603,9 @@ class FanSaleUltimate:
             bot_texts = [
                 "sistema ti ha classificato come bot",
                 "classified as automatic bot",
-                "bot automatico"
+                "bot automatico",
+                "visita prima un'altra pagina",
+                "visit another page first"
             ]
             
             for text in bot_texts:
@@ -1620,7 +1622,7 @@ class FanSaleUltimate:
             
             # Check for the specific "Carica Offerte" button
             try:
-                buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica Offerte')]")
+                buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica Offerte') or contains(text(), 'Carica Offerta')]")
                 for btn in buttons:
                     if btn.is_displayed():
                         return True
@@ -1633,63 +1635,139 @@ class FanSaleUltimate:
     
     def handle_persistent_bot_popup(self, driver, browser_id):
         """Handle bot popup that persists after multiple click attempts"""
-        self.log("🤖 Bot detection popup persists - trying alternative solutions", 'warning', browser_id)
+        self.log("🤖 Bot popup persists - trying multiple solutions", 'warning', browser_id)
         
+        current_url = driver.current_url
+        
+        # Solution 1: Follow FanSale's instruction - visit homepage first
         try:
-            # Solution 1: Navigate to homepage and back
-            current_url = driver.current_url
-            self.log("📍 Navigating to homepage and back...", 'info', browser_id)
+            self.log("📍 Solution 1: Visiting FanSale homepage as instructed", 'info', browser_id)
             
-            # Go to FanSale homepage
+            # Navigate to FanSale homepage
             driver.get("https://www.fansale.it")
-            time.sleep(2)
+            time.sleep(3)
             
-            # Click around on homepage to appear human
+            # Click on a few links to appear human
             try:
-                # Find and click a random link
-                links = driver.find_elements(By.CSS_SELECTOR, "a[href*='tickets']")[:5]
-                if links:
-                    random.choice(links).click()
-                    time.sleep(1.5)
+                # Find concert/event links
+                event_links = driver.find_elements(By.CSS_SELECTOR, "a[href*='/tickets/']")[:3]
+                if event_links:
+                    # Click on a random event
+                    random.choice(event_links).click()
+                    time.sleep(2)
+                    
+                    # Go back to homepage
+                    driver.get("https://www.fansale.it")
+                    time.sleep(2)
             except:
                 pass
             
-            # Return to original page
+            # Now return to the original page
+            self.log("🔄 Returning to target page", 'info', browser_id)
             driver.get(current_url)
             time.sleep(3)
             
+            # Clear any initial popups
+            self.dismiss_popups(driver)
+            
             # Check if popup is gone
             if not self.detect_bot_popup(driver):
-                self.log("✅ Bot popup cleared by navigation", 'success', browser_id)
+                self.log("✅ Bot popup cleared by visiting homepage!", 'success', browser_id)
                 return True
-            
-            # Solution 2: Clear data and refresh
-            self.log("🧹 Clearing browser data as last resort...", 'info', browser_id)
-            self.clear_browser_data(driver)
-            
-            # Check again
-            if not self.detect_bot_popup(driver):
-                self.log("✅ Bot popup cleared by data clearing", 'success', browser_id)
-                return True
-            
-            # Solution 3: Add random mouse movements and wait
-            self.log("🖱️ Simulating human behavior...", 'info', browser_id)
-            actions = ActionChains(driver)
-            for _ in range(5):
-                x = random.randint(100, 500)
-                y = random.randint(100, 500)
-                actions.move_by_offset(x, y).perform()
-                time.sleep(0.5)
-                actions.move_by_offset(-x, -y).perform()
-            
-            time.sleep(5)
-            driver.refresh()
-            
-            return not self.detect_bot_popup(driver)
-            
+                
         except Exception as e:
-            self.log(f"❌ Error handling bot popup: {str(e)[:50]}", 'error', browser_id)
-            return False
+            self.log(f"❌ Homepage visit failed: {str(e)[:50]}", 'error', browser_id)
+        
+        # Solution 2: Clear browser data completely
+        try:
+            self.log("🧹 Solution 2: Clearing all browser data", 'info', browser_id)
+            
+            # Execute more comprehensive data clearing
+            driver.execute_script("""
+                // Clear everything possible
+                try {
+                    // Clear cookies
+                    document.cookie.split(";").forEach(function(c) { 
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                    });
+                    
+                    // Clear storages
+                    window.localStorage.clear();
+                    window.sessionStorage.clear();
+                    
+                    // Clear IndexedDB
+                    if ('indexedDB' in window) {
+                        indexedDB.databases().then(dbs => {
+                            dbs.forEach(db => indexedDB.deleteDatabase(db.name));
+                        });
+                    }
+                    
+                    // Clear cache storage
+                    if ('caches' in window) {
+                        caches.keys().then(names => {
+                            names.forEach(name => caches.delete(name));
+                        });
+                    }
+                } catch(e) {}
+            """)
+            
+            # Delete all cookies via Selenium
+            driver.delete_all_cookies()
+            
+            # Navigate to blank page then back
+            driver.get("about:blank")
+            time.sleep(1)
+            driver.get(current_url)
+            time.sleep(3)
+            
+            if not self.detect_bot_popup(driver):
+                self.log("✅ Bot popup cleared by data deletion!", 'success', browser_id)
+                return True
+                
+        except Exception as e:
+            self.log(f"❌ Data clearing failed: {str(e)[:50]}", 'error', browser_id)
+        
+        # Solution 3: Try clicking the "Carica Offerte" button directly
+        try:
+            self.log("🖱️ Solution 3: Trying to click the button directly", 'info', browser_id)
+            
+            # Find and click the Carica Offerte button
+            buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica Offerte') or contains(text(), 'Carica Offerta')]")
+            for btn in buttons:
+                if btn.is_displayed():
+                    try:
+                        # Try JavaScript click
+                        driver.execute_script("arguments[0].click();", btn)
+                        time.sleep(2)
+                        
+                        if not self.detect_bot_popup(driver):
+                            self.log("✅ Bot popup cleared by button click!", 'success', browser_id)
+                            return True
+                    except:
+                        # Try regular click
+                        try:
+                            btn.click()
+                            time.sleep(2)
+                            
+                            if not self.detect_bot_popup(driver):
+                                self.log("✅ Bot popup cleared by button click!", 'success', browser_id)
+                                return True
+                        except:
+                            pass
+                            
+        except Exception as e:
+            self.log(f"❌ Button click failed: {str(e)[:50]}", 'error', browser_id)
+        
+        # Solution 4: Create new browser session
+        self.log("🔄 Solution 4: Popup persists - may need browser restart", 'warning', browser_id)
+        
+        # Try one more navigation cycle
+        driver.get("https://www.fansale.it/fansale/")
+        time.sleep(2)
+        driver.get(current_url)
+        time.sleep(2)
+        
+        return not self.detect_bot_popup(driver)
 
     def clear_browser_data(self, driver):
         """Clear browser data to prevent popup blocking issues"""
@@ -1730,6 +1808,85 @@ class FanSaleUltimate:
         except Exception as e:
             self.log(f"⚠️ Browser clear failed: {str(e)[:30]}", 'warning')
             # Try to continue anyway
+            return False
+
+    def deep_clean_browser(self, driver):
+        """Deep clean browser to remove all traces"""
+        try:
+            self.log("🧽 Performing deep browser clean", 'info')
+            
+            # 1. Navigate away from FanSale completely
+            driver.get("about:blank")
+            time.sleep(1)
+            
+            # 2. Clear all browser data via JavaScript
+            driver.execute_script("""
+                // Clear all cookies for all domains
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/;domain=" + window.location.hostname);
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/;domain=." + window.location.hostname);
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+                });
+                
+                // Clear all storage
+                try { localStorage.clear(); } catch(e) {}
+                try { sessionStorage.clear(); } catch(e) {}
+                
+                // Clear IndexedDB
+                if ('indexedDB' in window && window.indexedDB.databases) {
+                    window.indexedDB.databases().then(databases => {
+                        databases.forEach(db => {
+                            window.indexedDB.deleteDatabase(db.name);
+                        });
+                    });
+                }
+                
+                // Clear cache storage
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+                
+                // Clear service workers
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister();
+                        }
+                    });
+                }
+            """)
+            
+            # 3. Delete all cookies via Selenium
+            driver.delete_all_cookies()
+            
+            # 4. Clear Chrome's internal data
+            try:
+                driver.get("chrome://settings/clearBrowserData")
+                time.sleep(1)
+                # Try to click the clear data button
+                driver.execute_script("""
+                    try {
+                        document.querySelector('* /deep/ #clearBrowsingDataConfirm').click();
+                    } catch(e) {
+                        // Try alternative method
+                        var buttons = document.querySelectorAll('button');
+                        for(var i = 0; i < buttons.length; i++) {
+                            if(buttons[i].textContent.includes('Clear') || buttons[i].textContent.includes('Cancella')) {
+                                buttons[i].click();
+                                break;
+                            }
+                        }
+                    }
+                """)
+                time.sleep(2)
+            except:
+                pass
+            
+            return True
+        except Exception as e:
+            self.log(f"⚠️ Deep clean error: {str(e)[:50]}", 'warning')
             return False
     
     def detect_captcha(self, driver):
@@ -2134,21 +2291,39 @@ class FanSaleUltimate:
                         if browser_id not in self.bot_popup_start_time:
                             self.bot_popup_start_time[browser_id] = time.time()
                             self.log("🤖 Bot detection popup detected", 'warning', browser_id)
+                            
+                            # Try clicking the button immediately
+                            try:
+                                buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica Offerte') or contains(text(), 'Carica Offerta')]")
+                                for btn in buttons:
+                                    if btn.is_displayed():
+                                        driver.execute_script("arguments[0].click();", btn)
+                                        self.log("🖱️ Clicked 'Carica Offerte' button", 'info', browser_id)
+                                        time.sleep(2)
+                                        break
+                            except:
+                                pass
                         else:
                             # Check if popup has persisted for 10 seconds
                             popup_duration = time.time() - self.bot_popup_start_time[browser_id]
                             if popup_duration > 10:
                                 # Try alternative solutions
+                                self.log(f"⏱️ Bot popup persisted for {int(popup_duration)}s - trying solutions", 'warning', browser_id)
                                 if self.handle_persistent_bot_popup(driver, browser_id):
                                     # Reset the timer if successful
                                     del self.bot_popup_start_time[browser_id]
+                                    # Reset refresh timer to prevent immediate refresh
+                                    last_refresh = time.time()
                                 else:
-                                    self.log("❌ Unable to clear bot popup - may need manual intervention", 'error', browser_id)
-                                    # Reset timer to try again later
-                                    self.bot_popup_start_time[browser_id] = time.time()
+                                    self.log("❌ Bot popup persists - browser may need restart", 'error', browser_id)
+                                    # Mark browser for restart by setting negative value
+                                    self.bot_popup_start_time[browser_id] = -1
+                                    return  # Exit this browser's hunting loop
                     else:
                         # Clear the timer if popup is gone
                         if browser_id in self.bot_popup_start_time:
+                            if self.bot_popup_start_time[browser_id] > 0:
+                                self.log("✅ Bot popup cleared!", 'success', browser_id)
                             del self.bot_popup_start_time[browser_id]
                 
                 # Clear browser data every 5 minutes to prevent popup blocking

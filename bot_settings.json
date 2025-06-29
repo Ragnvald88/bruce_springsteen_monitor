@@ -3,11 +3,12 @@
   "num_browsers": 2,
   "max_tickets": 2,
   "ticket_types": [
-    "all"
+    "prato_a",
+    "prato_b"
   ],
-  "min_wait": 0.5,
-  "max_wait": 1.5,
-  "refresh_interval": 10,
+  "min_wait": 0.3,
+  "max_wait": 1.0,
+  "refresh_interval": 15,
   "use_proxy": false,
   "proxy_host": "",
   "proxy_port": "",
@@ -18,7 +19,7 @@
   "sound_alerts": true,
   "auto_screenshot": true,
   "auto_buy": true,
-  "max_price": 0.0,
+  "max_price": 0,
   "preferred_sectors": [],
   "blacklist_sectors": [],
   "notification_webhook": "",

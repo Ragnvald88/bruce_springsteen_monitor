@@ -125,6 +125,10 @@ class SettingsManager:
     def get(self, key, default=None):
         """Get a setting value"""
         return self.settings.get(key, default)
+    
+    def save(self):
+        """Alias for save_settings() for compatibility"""
+        self.save_settings()
 
 class StatsTracker:
     """Advanced statistics tracking with history"""
@@ -1063,50 +1067,49 @@ class FanSaleUltimate:
         ]
     
     def log(self, message, level='info', browser_id=None):
-        """Enhanced logging with analytics integration"""
+        """Clean, minimal logging for better readability"""
         with self.display_lock:
-            timestamp = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-            theme = self.settings.get("theme", "cyberpunk")
-            colors = TerminalUI.THEMES[theme]
+            timestamp = datetime.now().strftime('%H:%M:%S')
             
-            # Enhanced level indicators
+            # Simplified level config with clean formatting
             level_config = {
-                'info': ('💡', colors['primary'], 'INFO'),
-                'success': ('✨', colors['success'], 'SUCCESS'),
-                'warning': ('⚡', colors['warning'], 'WARNING'),
-                'error': ('💥', colors['error'], 'ERROR'),
-                'alert': ('🔥', colors['accent'] + Style.BRIGHT, 'ALERT'),
-                'ticket': ('🎫', colors['success'] + Style.BRIGHT, 'TICKET'),
-                'check': ('🔍', colors['secondary'], 'CHECK'),
-                'browser': ('🌐', colors['primary'], 'BROWSER'),
-                'stealth': ('🥷', colors['secondary'] + Style.DIM, 'STEALTH'),
-                'speed': ('🚀', colors['accent'], 'SPEED'),
-                'money': ('💰', colors['success'], 'PURCHASE'),
-                'captcha': ('🔐', colors['warning'], 'CAPTCHA'),
-                'secure': ('🎯', colors['success'] + Style.BRIGHT, 'SECURED')
+                'info': ('', Fore.CYAN, ''),
+                'success': ('✓', Fore.GREEN, ''),
+                'warning': ('⚠', Fore.YELLOW, ''),
+                'error': ('✗', Fore.RED, ''),
+                'alert': ('🔔', Fore.MAGENTA + Style.BRIGHT, ''),
+                'ticket': ('🎫', Fore.GREEN + Style.BRIGHT, ''),
+                'check': ('', Fore.WHITE + Style.DIM, ''),
+                'browser': ('', Fore.BLUE, ''),
+                'stealth': ('', Fore.WHITE + Style.DIM, ''),
+                'speed': ('📊', Fore.CYAN, ''),
+                'money': ('💰', Fore.GREEN + Style.BRIGHT, ''),
+                'captcha': ('🔐', Fore.YELLOW, ''),
+                'secure': ('🎯', Fore.GREEN + Style.BRIGHT, ''),
+                'debug': ('', Fore.WHITE + Style.DIM, '')
             }
             
-            icon, color, label = level_config.get(level, ('•', colors['secondary'], 'LOG'))
+            icon, color, _ = level_config.get(level, ('', Fore.WHITE, ''))
             
-            # Browser indicator
+            # Clean browser indicator
             if browser_id is not None:
-                browser_str = f"{Fore.CYAN}[B{browser_id}]{Style.RESET_ALL}"
+                browser_str = f"{Fore.BLUE}[{browser_id}]{Style.RESET_ALL}"
             else:
-                browser_str = "    "
+                browser_str = ""
             
-            # Build log line
-            log_parts = [
-                f"{colors['secondary'] + Style.DIM}[{timestamp}]{Style.RESET_ALL}",
-                browser_str,
-                f"{icon}",
-                f"{color}[{label:>7}]{Style.RESET_ALL}",
-                f"{color}{message}{Style.RESET_ALL}"
-            ]
+            # Build clean log line
+            time_str = f"{Fore.WHITE + Style.DIM}{timestamp}{Style.RESET_ALL}"
             
-            log_line = " ".join(log_parts)
+            # Different formatting for ticket discoveries
+            if level == 'ticket':
+                log_line = f"{time_str} {browser_str} {message}"
+            else:
+                # Add icon only if present
+                icon_part = f"{icon} " if icon else ""
+                log_line = f"{time_str} {browser_str} {icon_part}{color}{message}{Style.RESET_ALL}"
             
-            # Clear line and print
-            print(f"\r{' ' * 120}\r{log_line}", flush=True)
+            # Print without clearing entire line to reduce flicker
+            print(log_line)
             
             # Track in analytics if it's a ticket discovery
             if level == 'ticket' and hasattr(self, 'current_ticket_info'):
@@ -1114,59 +1117,49 @@ class FanSaleUltimate:
                     self.analytics.log_ticket_discovery(self.current_ticket_info)
     
     def display_live_stats(self):
-        """Enhanced live statistics display"""
-        theme = self.settings.get("theme", "cyberpunk")
-        colors = TerminalUI.THEMES[theme]
-        
+        """Clean, minimal live statistics display"""
         while not self.shutdown_event.is_set():
             try:
                 stats = self.stats.get_stats()
                 runtime = self.stats.get_runtime()
                 
                 with self.display_lock:
-                    # Save cursor position
-                    print(f"\033[s", end='')
-                    print(f"\033[15;0H", end='')  # Move to line 15
+                    # Save cursor position and clear stats area
+                    print(f"\033[s", end='')  # Save cursor
+                    print(f"\033[10;0H", end='')  # Move to line 10
+                    print(f"\033[J", end='')  # Clear from cursor to end
                     
-                    # Stats dashboard
-                    print(f"\n{colors['primary']}╔{'═'*78}╗")
-                    print(f"║{colors['accent']} {'LIVE STATISTICS'.center(76)} {colors['primary']}║")
-                    print(f"╠{'═'*78}╣")
+                    # Compact stats header
+                    print(f"\n{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
+                    print(f"{Fore.WHITE + Style.BRIGHT}⚡ LIVE STATS{Style.RESET_ALL}")
+                    print(f"{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
                     
-                    # Row 1: Basic stats
-                    print(f"║ {colors['secondary']}Runtime: {colors['accent']}{runtime:<10} "
-                          f"{colors['secondary']}Browsers: {colors['accent']}{stats['active_browsers']:<3} "
-                          f"{colors['secondary']}CPM: {colors['accent']}{stats['checks_per_minute']:<5} "
-                          f"{colors['secondary']}Best CPM: {colors['accent']}{stats['best_cpm']:<5} {colors['primary']}║")
+                    # Key metrics in one line
+                    print(f"⏱  {runtime} | "
+                          f"🌐 {stats['active_browsers']} browsers | "
+                          f"🚀 {stats['checks_per_minute']} CPM | "
+                          f"🎯 {stats['tickets_secured']} secured")
                     
-                    # Row 2: Ticket stats
-                    print(f"║ {colors['secondary']}Checks: {colors['accent']}{stats['total_checks']:<8} "
-                          f"{colors['secondary']}Found: {colors['accent']}{stats['unique_tickets_seen']:<5} "
-                          f"{colors['secondary']}Secured: {colors['success']}{stats['tickets_secured']:<3} "
-                          f"{colors['secondary']}Errors: {colors['error']}{stats['errors_encountered']:<3} {colors['primary']}║")
+                    # Ticket summary if any found
+                    if stats['unique_tickets_seen'] > 0:
+                        tickets_summary = []
+                        for cat, count in stats['tickets_found'].items():
+                            if count > 0:
+                                icon = {'prato_a': '🟡', 'prato_b': '🟠', 'seating': '🪑'}.get(cat, '🎫')
+                                tickets_summary.append(f"{icon} {count}")
+                        
+                        if tickets_summary:
+                            print(f"📊 Found: {' | '.join(tickets_summary)} "
+                                  f"(Total: {stats['unique_tickets_seen']})")
                     
-                    # Ticket breakdown
-                    if stats['tickets_found']:
-                        print(f"╠{'─'*78}╣")
-                        tickets_str = " | ".join([f"{cat.upper()}: {count}" 
-                                                 for cat, count in stats['tickets_found'].items()])
-                        print(f"║ {colors['secondary']}Tickets: {colors['accent']}{tickets_str:<65} {colors['primary']}║")
+                    print(f"{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
                     
-                    # Recent tickets
-                    recent_tickets = self.stats.get_ticket_history()[-3:]
-                    if recent_tickets:
-                        print(f"╠{'─'*78}╣")
-                        print(f"║ {colors['secondary']}Recent: {colors['primary']}║")
-                        for ticket in recent_tickets:
-                            info = f"[{ticket['time']}] {ticket['category'].upper()}"
-                            print(f"║   {colors['accent']}{info:<73} {colors['primary']}║")
-                    
-                    print(f"╚{'═'*78}╝")
-                    print(f"\033[u", end='', flush=True)  # Restore cursor
+                    # Restore cursor
+                    print(f"\033[u", end='', flush=True)
                 
-                time.sleep(1)
+                time.sleep(2)  # Update every 2 seconds instead of 1
             except:
-                time.sleep(1)
+                pass
     
     def configure_advanced_settings(self):
         """Advanced settings configuration"""
@@ -1233,44 +1226,32 @@ class FanSaleUltimate:
                 time.sleep(1)
                 
             elif choice == '4':
-                print(f"\n{colors['primary']}Select ticket types to hunt:")
-                print(f"{colors['secondary']}[1] Prato A (Gold)")
-                print(f"{colors['secondary']}[2] Prato B (Silver)")
-                print(f"{colors['secondary']}[3] Settore (Numbered sectors)")
-                print(f"{colors['secondary']}[4] Tribuna")
-                print(f"{colors['secondary']}[5] VIP/Hospitality")
-                print(f"{colors['secondary']}[6] Pit/Parterre")
-                print(f"{colors['secondary']}[7] Other")
-                print(f"{colors['secondary']}[8] All types")
+                # Clean ticket type selection interface
+                print(f"\n{colors['bright']}┌─ Ticket Type Selection ─┐{colors['reset']}")
+                print(f"{colors['primary']}│ What to hunt for?       │{colors['reset']}")
+                print(f"{colors['primary']}├─────────────────────────┤{colors['reset']}")
+                print(f"{colors['primary']}│ {colors['success']}[1]{colors['reset']} 🎫 Prato A (Gold)  │")
+                print(f"{colors['primary']}│ {colors['warning']}[2]{colors['reset']} 🎫 Prato B (Silver)│")
+                print(f"{colors['primary']}│ {colors['info']}[3]{colors['reset']} 🪑 Seating (All)   │")
+                print(f"{colors['primary']}│ {colors['secondary']}[4]{colors['reset']} 🎯 All Types       │")
+                print(f"{colors['primary']}└─────────────────────────┘{colors['reset']}")
                 
-                selections = input(f"\n{colors['primary']}Enter numbers separated by commas (e.g., 1,2,3): {Fore.WHITE}").strip()
-                if selections:
-                    type_map = {
-                        '1': 'prato_a',
-                        '2': 'prato_b',
-                        '3': 'settore',
-                        '4': 'tribuna',
-                        '5': 'vip',
-                        '6': 'pit',
-                        '7': 'other',
-                        '8': 'all'
-                    }
-                    selected_types = []
-                    for s in selections.split(','):
-                        s = s.strip()
-                        if s in type_map:
-                            if type_map[s] == 'all':
-                                selected_types = ['all']
-                                break
-                            selected_types.append(type_map[s])
-                    
-                    if selected_types:
-                        self.settings.update('ticket_types', selected_types)
-                        self.log(f"Ticket types updated: {', '.join(selected_types)}", 'success')
-                    else:
-                        self.log("No valid types selected", 'error')
+                selection = input(f"\n{colors['prompt']}▶ Your choice (1-4): {colors['reset']}").strip()
+                
+                if selection == '1':
+                    self.settings.update('ticket_types', ['prato_a'])
+                    self.log("🎯 Now hunting for: Prato A tickets only", 'success')
+                elif selection == '2':
+                    self.settings.update('ticket_types', ['prato_b'])
+                    self.log("🎯 Now hunting for: Prato B tickets only", 'success')
+                elif selection == '3':
+                    self.settings.update('ticket_types', ['seating'])
+                    self.log("🎯 Now hunting for: All seating tickets", 'success')
+                elif selection == '4':
+                    self.settings.update('ticket_types', ['all'])
+                    self.log("🎯 Now hunting for: All ticket types", 'success')
                 else:
-                    self.log("No changes made", 'warning')
+                    self.log("❌ Invalid selection", 'error')
                 time.sleep(1)
                 
             elif choice == '5':
@@ -1403,24 +1384,18 @@ class FanSaleUltimate:
         time.sleep(1)
     
     def categorize_ticket(self, text):
-        """Enhanced ticket categorization"""
+        """Simplified ticket categorization - only Prato A, Prato B, or Seating"""
         text_lower = text.lower()
         
-        # Primary categories
+        # Check for Prato A
         if 'prato a' in text_lower or 'prato gold' in text_lower:
             return 'prato_a'
+        # Check for Prato B
         elif 'prato b' in text_lower or 'prato silver' in text_lower:
             return 'prato_b'
-        elif any(f'settore {i}' in text_lower for i in range(1, 30)):
-            return 'settore'
-        elif 'tribuna' in text_lower:
-            return 'tribuna'
-        elif 'vip' in text_lower or 'hospitality' in text_lower:
-            return 'vip'
-        elif 'pit' in text_lower or 'parterre' in text_lower:
-            return 'pit'
+        # Everything else is considered seating
         else:
-            return 'other'
+            return 'seating'
     
     def extract_ticket_price(self, text):
         """Extract price from ticket text"""
@@ -1581,6 +1556,49 @@ class FanSaleUltimate:
             pass
         
         return dismissed
+
+    def clear_browser_data(self, driver):
+        """Clear browser data to prevent popup blocking issues"""
+        try:
+            current_url = driver.current_url
+            
+            # Delete cookies for the current domain
+            driver.delete_all_cookies()
+            
+            # Clear local storage and session storage
+            driver.execute_script("""
+                // Clear storages
+                try {
+                    window.localStorage.clear();
+                    window.sessionStorage.clear();
+                } catch(e) {}
+                
+                // Clear IndexedDB
+                try {
+                    if ('indexedDB' in window && window.indexedDB.databases) {
+                        window.indexedDB.databases().then(databases => {
+                            databases.forEach(db => {
+                                window.indexedDB.deleteDatabase(db.name);
+                            });
+                        });
+                    }
+                } catch(e) {}
+            """)
+            
+            # Refresh the page to apply changes
+            driver.refresh()
+            time.sleep(2)
+            
+            # Re-dismiss any popups that appear after refresh
+            self.dismiss_popups(driver)
+            
+            self.log("🧹 Browser data cleared successfully", 'info')
+            return True
+            
+        except Exception as e:
+            self.log(f"⚠️ Browser clear failed: {str(e)[:30]}", 'warning')
+            # Try to continue anyway
+            return False
     
     def detect_captcha(self, driver):
         """Enhanced CAPTCHA detection"""
@@ -1882,12 +1900,21 @@ class FanSaleUltimate:
     def hunt_tickets(self, browser_id, driver):
         """Enhanced hunting loop with smart features"""
         self.log(f"Hunter starting...", 'browser', browser_id)
+        self.log(f"Browser {browser_id}: Starting hunt_tickets method", 'debug', browser_id)
         
         # Navigate to target
         target_url = self.settings.get('target_url', DEFAULT_TARGET_URL)
+        self.log(f"Browser {browser_id}: Getting target URL: {target_url[:50]}...", 'debug', browser_id)
         try:
+            self.log(f"Browser {browser_id}: About to navigate to URL", 'debug', browser_id)
             driver.get(target_url)
             self.log(f"Page loaded: {target_url[:50]}...", 'info', browser_id)
+            
+            # Verify we're on the right page
+            current_url = driver.current_url
+            self.log(f"Browser {browser_id}: Current URL after navigation: {current_url[:50]}...", 'debug', browser_id)
+            if "fansale" not in current_url.lower():
+                self.log(f"Browser {browser_id}: WARNING - Not on FanSale! Current URL: {current_url}", 'warning', browser_id)
             
             # Wait for page to fully load
             WebDriverWait(driver, 10).until(
@@ -1900,13 +1927,14 @@ class FanSaleUltimate:
         
         # Initial setup
         time.sleep(2)
-        initial_popups = self.dismiss_popups(driver)
-        if initial_popups > 0:
-            self.log(f"Dismissed {initial_popups} initial popups", 'info', browser_id)
+        self.dismiss_popups(driver)  # Clear any initial popups silently
         
         last_refresh = time.time()
         last_popup_check = time.time()
+        last_browser_clear = time.time()  # Track when browser data was last cleared
+        last_summary = time.time()  # Track when we last showed a summary
         consecutive_errors = 0
+        tickets_on_page = 0  # Track number of tickets currently visible
         
         # Main hunting loop
         while not self.shutdown_event.is_set():
@@ -1919,17 +1947,28 @@ class FanSaleUltimate:
                 # Record check
                 self.stats.record_check()
                 
-                # Log speed every 20 checks
-                if self.stats.stats['total_checks'] % 20 == 0:
+                # Log speed every 50 checks instead of 20 to reduce noise
+                if self.stats.stats['total_checks'] % 50 == 0:
                     cpm = self.stats.stats['checks_per_minute']
-                    self.log(f"Current speed: {cpm} CPM", 'speed', browser_id)
+                    # Only log if speed is notable
+                    if cpm > 0:
+                        self.log(f"📊 Speed: {cpm} CPM", 'speed', browser_id)
                 
                 # Periodic popup dismissal
                 if time.time() - last_popup_check > 10:
                     dismissed = self.dismiss_popups(driver)
+                    # Only log if we actually dismissed something
                     if dismissed > 0:
-                        self.log(f"Dismissed {dismissed} popups", 'info', browser_id)
+                        self.log(f"🚫 Dismissed {dismissed} popup{'s' if dismissed > 1 else ''}", 'info', browser_id)
                     last_popup_check = time.time()
+                
+                # Clear browser data every 5 minutes to prevent popup blocking
+                if time.time() - last_browser_clear > 300:  # 5 minutes
+                    self.log("⏰ 5 minutes elapsed - clearing browser data", 'info', browser_id)
+                    if self.clear_browser_data(driver):
+                        last_browser_clear = time.time()
+                        # Wait a bit after clearing
+                        time.sleep(3)
                 
                 # Find tickets with all selectors
                 tickets = []
@@ -1958,11 +1997,24 @@ class FanSaleUltimate:
                                 tickets.extend(found)
                                 ticket_details.extend(found)  # For other selectors, element is the same
                             
-                            if len(tickets) > 0:
-                                self.log(f"Found {len(tickets)} tickets with: {selector}", 'info', browser_id)
+                            # Don't log here - we'll log only NEW tickets below
                             break  # Use first successful selector
                     except:
                         pass
+                
+                # Update ticket count and show summary periodically
+                current_ticket_count = len(tickets)
+                if current_ticket_count != tickets_on_page or (time.time() - last_summary > 30):
+                    if current_ticket_count > 0:
+                        # Only log summary every 30 seconds or when count changes
+                        if current_ticket_count != tickets_on_page:
+                            self.log(f"👀 Monitoring {current_ticket_count} ticket{'s' if current_ticket_count != 1 else ''} on page", 'info', browser_id)
+                        tickets_on_page = current_ticket_count
+                        last_summary = time.time()
+                    elif tickets_on_page > 0:
+                        # Tickets disappeared
+                        self.log("📭 No tickets currently visible", 'info', browser_id)
+                        tickets_on_page = 0
                 
                 # Process tickets
                 for i, ticket in enumerate(tickets):
@@ -1989,13 +2041,37 @@ class FanSaleUltimate:
                         self.current_ticket_info = ticket_info
                         self.current_ticket_info['browser_id'] = browser_id
                         
-                        # Log new ticket with details
-                        price_str = f"€{ticket_info['price']}" if ticket_info['price'] else "Price unknown"
-                        sector_str = f"Sector {ticket_info['sector']}" if ticket_info['sector'] else ""
-                        raw_text = ticket_info['raw_text'][:100] if len(ticket_info['raw_text']) > 100 else ticket_info['raw_text']
+                        # Extract meaningful ticket details
+                        raw_text = ticket_info['raw_text'].strip()
+                        lines = raw_text.split('\n')
                         
-                        self.log(f"🎫 NEW TICKET: {category.upper()} - {price_str} {sector_str}", 'ticket', browser_id)
-                        self.log(f"   Details: {raw_text}", 'info', browser_id)
+                        # Try to extract event/artist name and ticket details
+                        ticket_name = lines[0] if lines else "Unknown Event"
+                        if len(ticket_name) > 50:
+                            ticket_name = ticket_name[:47] + "..."
+                        
+                        # Format ticket category name
+                        category_display = {
+                            'prato_a': '🟡 PRATO A',
+                            'prato_b': '🟠 PRATO B', 
+                            'seating': '🪑 SEATING'
+                        }.get(category, '🎫 ' + category.upper())
+                        
+                        # Build ticket details
+                        price_str = f"€{ticket_info['price']}" if ticket_info['price'] else "N/A"
+                        details = []
+                        if ticket_info['sector']:
+                            details.append(f"Sec {ticket_info['sector']}")
+                        if ticket_info['row']:
+                            details.append(f"Row {ticket_info['row']}")
+                        if ticket_info['seat']:
+                            details.append(f"Seat {ticket_info['seat']}")
+                        
+                        detail_str = " • ".join(details) if details else "General"
+                        
+                        # Clean, formatted logging
+                        self.log(f"✨ FOUND: {category_display} | {ticket_name}", 'ticket', browser_id)
+                        self.log(f"         💰 {price_str} | 📍 {detail_str}", 'info', browser_id)
                         
                         # Check if we should buy
                         ticket_types = self.settings.get('ticket_types')
@@ -2104,6 +2180,10 @@ class FanSaleUltimate:
                     self.browsers.append(driver)
                     self.stats.stats['active_browsers'] += 1
                     
+                    # Small delay to ensure browser is ready
+                    time.sleep(0.5)
+                    
+                    self.log(f"Browser {i}: Submitting to thread pool", 'debug')
                     future = executor.submit(self.hunt_tickets, i, driver)
                     futures.append(future)
                     

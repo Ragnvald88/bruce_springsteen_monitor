@@ -1,0 +1,29 @@
+{
+  "2025-06-29": {
+    "14": {
+      "total_tickets": 6,
+      "by_type": {
+        "other": 6
+      },
+      "avg_price": [],
+      "sectors": []
+    },
+    "16": {
+      "total_tickets": 4,
+      "by_type": {
+        "other": 4
+      },
+      "avg_price": [],
+      "sectors": []
+    },
+    "17": {
+      "total_tickets": 20,
+      "by_type": {
+        "other": 6,
+        "seating": 14
+      },
+      "avg_price": [],
+      "sectors": []
+    }
+  }
+}

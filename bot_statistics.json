@@ -1,0 +1,14 @@
+{
+  "total_runs": 1,
+  "total_runtime": 867.0562138557434,
+  "total_checks": 1829,
+  "total_secured": 0,
+  "tickets_by_type": {
+    "other": 6
+  },
+  "best_session": {
+    "date": null,
+    "tickets": 0,
+    "cpm": 0
+  }
+}

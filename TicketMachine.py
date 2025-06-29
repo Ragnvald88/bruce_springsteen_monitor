@@ -1020,6 +1020,13 @@ class FanSaleUltimate:
         self.display_lock = threading.Lock()
         self.last_log_time = time.time()
         
+        # Ticket monitoring with timestamps
+        self.ticket_monitor = deque(maxlen=100)  # Keep last 100 ticket discoveries
+        self.ticket_monitor_lock = threading.Lock()
+        
+        # Bot popup tracking
+        self.bot_popup_start_time = {}  # Track when popup first detected per browser
+        
         # Enhanced selectors for FanSale.it
         self.ticket_selectors = [
             # Primary selectors based on HTML structure
@@ -1117,7 +1124,9 @@ class FanSaleUltimate:
                     self.analytics.log_ticket_discovery(self.current_ticket_info)
     
     def display_live_stats(self):
-        """Clean, minimal live statistics display"""
+        """Clean, minimal live statistics display with ticket monitor"""
+        display_counter = 0
+        
         while not self.shutdown_event.is_set():
             try:
                 stats = self.stats.get_stats()
@@ -1130,9 +1139,9 @@ class FanSaleUltimate:
                     print(f"\033[J", end='')  # Clear from cursor to end
                     
                     # Compact stats header
-                    print(f"\n{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
+                    print(f"\n{Fore.CYAN}{'─' * 80}{Style.RESET_ALL}")
                     print(f"{Fore.WHITE + Style.BRIGHT}⚡ LIVE STATS{Style.RESET_ALL}")
-                    print(f"{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
+                    print(f"{Fore.CYAN}{'─' * 80}{Style.RESET_ALL}")
                     
                     # Key metrics in one line
                     print(f"⏱  {runtime} | "
@@ -1152,14 +1161,44 @@ class FanSaleUltimate:
                             print(f"📊 Found: {' | '.join(tickets_summary)} "
                                   f"(Total: {stats['unique_tickets_seen']})")
                     
-                    print(f"{Fore.CYAN}{'─' * 60}{Style.RESET_ALL}")
+                    print(f"{Fore.CYAN}{'─' * 80}{Style.RESET_ALL}")
+                    
+                    # Show ticket monitor
+                    with self.ticket_monitor_lock:
+                        if self.ticket_monitor:
+                            print(f"\n{Fore.YELLOW}📋 All Tickets Found This Session:{Style.RESET_ALL}")
+                            print(f"{Fore.WHITE + Style.DIM}{'─' * 80}{Style.RESET_ALL}")
+                            # Show all tickets
+                            for ticket in list(self.ticket_monitor)[-10:]:  # Last 10 tickets
+                                print(f"{Fore.BLUE}[{ticket['browser_id']}]{Style.RESET_ALL} "
+                                      f"{Fore.WHITE}🎫 {ticket['log_line']}{Style.RESET_ALL}")
+                            if len(self.ticket_monitor) > 10:
+                                print(f"{Fore.WHITE + Style.DIM}... and {len(self.ticket_monitor) - 10} more tickets{Style.RESET_ALL}")
                     
                     # Restore cursor
                     print(f"\033[u", end='', flush=True)
                 
-                time.sleep(2)  # Update every 2 seconds instead of 1
+                time.sleep(2)  # Update every 2 seconds
             except:
                 pass
+
+    def display_ticket_monitor(self):
+        """Display all found tickets with timestamps"""
+        with self.ticket_monitor_lock:
+            if not self.ticket_monitor:
+                return
+            
+            print(f"\n{Fore.YELLOW}{'─' * 80}{Style.RESET_ALL}")
+            print(f"{Fore.WHITE + Style.BRIGHT}📋 TICKET MONITOR - All Found Tickets{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}{'─' * 80}{Style.RESET_ALL}")
+            
+            # Display all tickets
+            for ticket in self.ticket_monitor:
+                print(f"{Fore.BLUE}[{ticket['browser_id']}]{Style.RESET_ALL} "
+                      f"{Fore.WHITE}🎫 {ticket['log_line']}{Style.RESET_ALL}")
+            
+            print(f"\nTotal tickets found: {len(self.ticket_monitor)}")
+            print(f"{Fore.YELLOW}{'─' * 80}{Style.RESET_ALL}")
     
     def configure_advanced_settings(self):
         """Advanced settings configuration"""
@@ -1557,11 +1596,104 @@ class FanSaleUltimate:
         
         return dismissed
 
+    def detect_bot_popup(self, driver):
+        """Detect the specific bot detection popup"""
+        try:
+            # Check for the bot detection text
+            bot_texts = [
+                "sistema ti ha classificato come bot",
+                "classified as automatic bot",
+                "bot automatico"
+            ]
+            
+            for text in bot_texts:
+                try:
+                    # Check in page source
+                    if text in driver.page_source.lower():
+                        # Verify it's visible
+                        elements = driver.find_elements(By.XPATH, f"//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{text}')]")
+                        for elem in elements:
+                            if elem.is_displayed():
+                                return True
+                except:
+                    pass
+            
+            # Check for the specific "Carica Offerte" button
+            try:
+                buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Carica Offerte')]")
+                for btn in buttons:
+                    if btn.is_displayed():
+                        return True
+            except:
+                pass
+                
+            return False
+        except:
+            return False
+    
+    def handle_persistent_bot_popup(self, driver, browser_id):
+        """Handle bot popup that persists after multiple click attempts"""
+        self.log("🤖 Bot detection popup persists - trying alternative solutions", 'warning', browser_id)
+        
+        try:
+            # Solution 1: Navigate to homepage and back
+            current_url = driver.current_url
+            self.log("📍 Navigating to homepage and back...", 'info', browser_id)
+            
+            # Go to FanSale homepage
+            driver.get("https://www.fansale.it")
+            time.sleep(2)
+            
+            # Click around on homepage to appear human
+            try:
+                # Find and click a random link
+                links = driver.find_elements(By.CSS_SELECTOR, "a[href*='tickets']")[:5]
+                if links:
+                    random.choice(links).click()
+                    time.sleep(1.5)
+            except:
+                pass
+            
+            # Return to original page
+            driver.get(current_url)
+            time.sleep(3)
+            
+            # Check if popup is gone
+            if not self.detect_bot_popup(driver):
+                self.log("✅ Bot popup cleared by navigation", 'success', browser_id)
+                return True
+            
+            # Solution 2: Clear data and refresh
+            self.log("🧹 Clearing browser data as last resort...", 'info', browser_id)
+            self.clear_browser_data(driver)
+            
+            # Check again
+            if not self.detect_bot_popup(driver):
+                self.log("✅ Bot popup cleared by data clearing", 'success', browser_id)
+                return True
+            
+            # Solution 3: Add random mouse movements and wait
+            self.log("🖱️ Simulating human behavior...", 'info', browser_id)
+            actions = ActionChains(driver)
+            for _ in range(5):
+                x = random.randint(100, 500)
+                y = random.randint(100, 500)
+                actions.move_by_offset(x, y).perform()
+                time.sleep(0.5)
+                actions.move_by_offset(-x, -y).perform()
+            
+            time.sleep(5)
+            driver.refresh()
+            
+            return not self.detect_bot_popup(driver)
+            
+        except Exception as e:
+            self.log(f"❌ Error handling bot popup: {str(e)[:50]}", 'error', browser_id)
+            return False
+
     def clear_browser_data(self, driver):
         """Clear browser data to prevent popup blocking issues"""
         try:
-            current_url = driver.current_url
-            
             # Delete cookies for the current domain
             driver.delete_all_cookies()
             
@@ -1732,31 +1864,66 @@ class FanSaleUltimate:
                 'price': self.extract_ticket_price(text),
                 'sector': None,
                 'row': None,
-                'seat': None
+                'seat': None,
+                'entrance': None,
+                'ring': None,
+                'details': []
             }
             
-            # Extract sector
             import re
+            
+            # Extract entrance/ingresso
+            entrance_match = re.search(r'ingresso\s+(\d+)', text.lower())
+            if entrance_match:
+                info['entrance'] = entrance_match.group(1)
+                info['details'].append(f"INGRESSO {entrance_match.group(1)}")
+            
+            # Extract sector/settore
             sector_match = re.search(r'settore\s+(\d+)', text.lower())
             if sector_match:
                 info['sector'] = sector_match.group(1)
+                info['details'].append(f"Settore {sector_match.group(1)}")
             
-            # Extract row
+            # Extract row/fila
             row_match = re.search(r'fila\s+(\d+)|row\s+(\d+)', text.lower())
             if row_match:
                 info['row'] = row_match.group(1) or row_match.group(2)
+                info['details'].append(f"Fila {info['row']}")
             
-            # Extract seat
+            # Extract seat/posto
             seat_match = re.search(r'posto\s+(\d+)|seat\s+(\d+)', text.lower())
             if seat_match:
                 info['seat'] = seat_match.group(1) or seat_match.group(2)
+                info['details'].append(f"Posto {info['seat']}")
+            
+            # Extract ring/anello
+            ring_match = re.search(r'(\d+)\s*anello\s*(\w+)', text.lower())
+            if ring_match:
+                info['ring'] = f"{ring_match.group(1)} Anello {ring_match.group(2).title()}"
+                info['details'].append(info['ring'])
+            
+            # Extract any additional location info
+            if 'tribuna' in text.lower():
+                info['details'].append('Tribuna')
+            if 'parterre' in text.lower():
+                info['details'].append('Parterre')
+            
+            # Build complete details string from text if details are empty
+            if not info['details']:
+                # Try to extract meaningful parts from the text
+                lines = text.split('\n')
+                for line in lines:
+                    line = line.strip()
+                    if line and not any(skip in line.lower() for skip in ['€', 'euro', 'prezzo']):
+                        info['details'].append(line)
             
             return info
-        except:
+        except Exception as e:
             return {
-                'raw_text': 'Unknown',
-                'category': 'other',
-                'price': None
+                'raw_text': text if 'text' in locals() else 'Unknown',
+                'category': 'seating',
+                'price': None,
+                'details': []
             }
     
     def attempt_purchase(self, driver, ticket_element, browser_id):
@@ -1961,6 +2128,28 @@ class FanSaleUltimate:
                     if dismissed > 0:
                         self.log(f"🚫 Dismissed {dismissed} popup{'s' if dismissed > 1 else ''}", 'info', browser_id)
                     last_popup_check = time.time()
+                    
+                    # Check for persistent bot popup
+                    if self.detect_bot_popup(driver):
+                        if browser_id not in self.bot_popup_start_time:
+                            self.bot_popup_start_time[browser_id] = time.time()
+                            self.log("🤖 Bot detection popup detected", 'warning', browser_id)
+                        else:
+                            # Check if popup has persisted for 10 seconds
+                            popup_duration = time.time() - self.bot_popup_start_time[browser_id]
+                            if popup_duration > 10:
+                                # Try alternative solutions
+                                if self.handle_persistent_bot_popup(driver, browser_id):
+                                    # Reset the timer if successful
+                                    del self.bot_popup_start_time[browser_id]
+                                else:
+                                    self.log("❌ Unable to clear bot popup - may need manual intervention", 'error', browser_id)
+                                    # Reset timer to try again later
+                                    self.bot_popup_start_time[browser_id] = time.time()
+                    else:
+                        # Clear the timer if popup is gone
+                        if browser_id in self.bot_popup_start_time:
+                            del self.bot_popup_start_time[browser_id]
                 
                 # Clear browser data every 5 minutes to prevent popup blocking
                 if time.time() - last_browser_clear > 300:  # 5 minutes
@@ -2041,37 +2230,66 @@ class FanSaleUltimate:
                         self.current_ticket_info = ticket_info
                         self.current_ticket_info['browser_id'] = browser_id
                         
-                        # Extract meaningful ticket details
-                        raw_text = ticket_info['raw_text'].strip()
-                        lines = raw_text.split('\n')
+                        # Format ticket details like user wants
+                        timestamp = datetime.now().strftime('%H:%M')
                         
-                        # Try to extract event/artist name and ticket details
-                        ticket_name = lines[0] if lines else "Unknown Event"
-                        if len(ticket_name) > 50:
-                            ticket_name = ticket_name[:47] + "..."
+                        # Get ticket details
+                        detail_parts = ticket_info.get('details', [])
+                        if detail_parts:
+                            # Join details with | separator
+                            ticket_details_str = " | ".join(detail_parts[:4])  # Limit to first 4 details
+                        else:
+                            # Fallback to basic info
+                            ticket_details_str = ""
+                            if ticket_info.get('sector'):
+                                ticket_details_str += f"Settore {ticket_info['sector']} | "
+                            if ticket_info.get('row'):
+                                ticket_details_str += f"Fila {ticket_info['row']} | "
+                            if ticket_info.get('seat'):
+                                ticket_details_str += f"Posto {ticket_info['seat']} | "
+                            ticket_details_str = ticket_details_str.rstrip(' | ')
                         
-                        # Format ticket category name
+                        # Extract price more clearly
+                        price_str = f"€ {ticket_info['price']}" if ticket_info['price'] else ""
+                        if not price_str:
+                            # Try to find price in raw text
+                            import re
+                            price_match = re.search(r'€\s*(\d+)', ticket_info['raw_text'])
+                            if price_match:
+                                price_str = f"€ {price_match.group(1)}"
+                        
+                        # Format ticket category
                         category_display = {
-                            'prato_a': '🟡 PRATO A',
-                            'prato_b': '🟠 PRATO B', 
-                            'seating': '🪑 SEATING'
-                        }.get(category, '🎫 ' + category.upper())
+                            'prato_a': 'PRATO A',
+                            'prato_b': 'PRATO B', 
+                            'seating': ''
+                        }.get(category, '')
                         
-                        # Build ticket details
-                        price_str = f"€{ticket_info['price']}" if ticket_info['price'] else "N/A"
-                        details = []
-                        if ticket_info['sector']:
-                            details.append(f"Sec {ticket_info['sector']}")
-                        if ticket_info['row']:
-                            details.append(f"Row {ticket_info['row']}")
-                        if ticket_info['seat']:
-                            details.append(f"Seat {ticket_info['seat']}")
+                        # Build complete log line with actual ticket info
+                        if ticket_details_str:
+                            if price_str:
+                                log_line = f"{timestamp} - {ticket_details_str} {price_str}"
+                            else:
+                                log_line = f"{timestamp} - {ticket_details_str}"
+                        else:
+                            # Fallback: show some of the raw text
+                            raw_clean = ticket_info['raw_text'].replace('\n', ' | ')[:100]
+                            log_line = f"{timestamp} - {raw_clean}"
                         
-                        detail_str = " • ".join(details) if details else "General"
+                        # Log the ticket with proper formatting
+                        self.log(f"🎫 {log_line}", 'ticket', browser_id)
                         
-                        # Clean, formatted logging
-                        self.log(f"✨ FOUND: {category_display} | {ticket_name}", 'ticket', browser_id)
-                        self.log(f"         💰 {price_str} | 📍 {detail_str}", 'info', browser_id)
+                        # Add to ticket monitor with timestamp
+                        with self.ticket_monitor_lock:
+                            self.ticket_monitor.append({
+                                'timestamp': timestamp,
+                                'browser_id': browser_id,
+                                'category': category_display,
+                                'log_line': log_line,
+                                'price': price_str,
+                                'details': ticket_details_str,
+                                'raw_text': ticket_info['raw_text'][:100]
+                            })
                         
                         # Check if we should buy
                         ticket_types = self.settings.get('ticket_types')

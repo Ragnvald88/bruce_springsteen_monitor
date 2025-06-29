@@ -13,8 +13,9 @@ import hashlib
 import threading
 import subprocess
 from pathlib import Path
-from datetime import datetime
-from collections import defaultdict, deque
+from datetime import datetime, timedelta
+from collections import defaultdict, deque, Counter
+import statistics
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import undetected_chromedriver as uc
@@ -261,6 +262,515 @@ class StatsTracker:
         with self.lock:
             return list(self.ticket_history)
 
+class EnhancedAnalytics:
+    """Advanced analytics system for ticket hunting patterns"""
+    
+    def __init__(self):
+        self.data_dir = Path("hunting_data")
+        self.data_dir.mkdir(exist_ok=True)
+        
+        # File paths for different data types
+        self.ticket_log_file = self.data_dir / "ticket_discoveries.json"
+        self.session_log_file = self.data_dir / "hunting_sessions.json"
+        self.hourly_stats_file = self.data_dir / "hourly_patterns.json"
+        self.daily_stats_file = self.data_dir / "daily_summary.json"
+        
+        # Load existing data
+        self.ticket_discoveries = self.load_json(self.ticket_log_file, default=[])
+        self.hunting_sessions = self.load_json(self.session_log_file, default=[])
+        self.hourly_patterns = self.load_json(self.hourly_stats_file, default={})
+        self.daily_summary = self.load_json(self.daily_stats_file, default={})
+        
+        # Current session data
+        self.current_session = {
+            "start_time": datetime.now().isoformat(),
+            "tickets_found": [],
+            "tickets_secured": [],
+            "checks_performed": 0,
+            "errors_encountered": 0,
+            "browser_performance": {}
+        }
+        self.current_session['start_unix'] = time.time()
+    
+    def load_json(self, filepath, default=None):
+        """Load JSON data from file"""
+        if filepath.exists():
+            try:
+                with open(filepath, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return default if default is not None else {}
+    
+    def save_json(self, data, filepath):
+        """Save JSON data to file"""
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=2, default=str)
+    
+    def log_ticket_discovery(self, ticket_info):
+        """Log detailed ticket discovery with all metadata"""
+        discovery = {
+            "timestamp": datetime.now().isoformat(),
+            "unix_time": time.time(),
+            "hour": datetime.now().hour,
+            "day_of_week": datetime.now().strftime("%A"),
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "ticket_type": ticket_info.get('category', 'unknown'),
+            "price": ticket_info.get('price'),
+            "sector": ticket_info.get('sector'),
+            "row": ticket_info.get('row'),
+            "seat": ticket_info.get('seat'),
+            "raw_text": ticket_info.get('raw_text', ''),
+            "browser_id": ticket_info.get('browser_id'),
+            "page_refresh_count": ticket_info.get('refresh_count', 0),
+            "time_since_start": time.time() - self.current_session.get('start_unix', time.time())
+        }
+        
+        # Add to current session
+        self.current_session["tickets_found"].append(discovery)
+        
+        # Add to persistent log
+        self.ticket_discoveries.append(discovery)
+        self.save_json(self.ticket_discoveries, self.ticket_log_file)
+        
+        # Update hourly patterns
+        self.update_hourly_patterns(discovery)
+        
+        return discovery
+    
+    def update_hourly_patterns(self, discovery):
+        """Update hourly pattern analysis"""
+        hour = str(discovery["hour"])
+        date = discovery["date"]
+        ticket_type = discovery["ticket_type"]
+        
+        if date not in self.hourly_patterns:
+            self.hourly_patterns[date] = {}
+        
+        if hour not in self.hourly_patterns[date]:
+            self.hourly_patterns[date][hour] = {
+                "total_tickets": 0,
+                "by_type": {},
+                "avg_price": [],
+                "sectors": []
+            }
+        
+        # Update statistics
+        hour_data = self.hourly_patterns[date][hour]
+        hour_data["total_tickets"] += 1
+        
+        if ticket_type not in hour_data["by_type"]:
+            hour_data["by_type"][ticket_type] = 0
+        hour_data["by_type"][ticket_type] += 1
+        
+        if discovery["price"]:
+            hour_data["avg_price"].append(discovery["price"])
+        
+        if discovery["sector"]:
+            hour_data["sectors"].append(discovery["sector"])
+        
+        self.save_json(self.hourly_patterns, self.hourly_stats_file)
+    
+    def get_hourly_analysis(self, date=None):
+        """Get detailed hourly analysis for a specific date"""
+        if date is None:
+            date = datetime.now().strftime("%Y-%m-%d")
+        
+        if date not in self.hourly_patterns:
+            return None
+        
+        analysis = {
+            "date": date,
+            "hours": {},
+            "peak_hours": [],
+            "ticket_distribution": {},
+            "best_times_by_type": {}
+        }
+        
+        # Analyze each hour
+        total_tickets = 0
+        for hour, data in self.hourly_patterns[date].items():
+            ticket_count = data["total_tickets"]
+            total_tickets += ticket_count
+            
+            analysis["hours"][hour] = {
+                "tickets_found": ticket_count,
+                "types": data["by_type"],
+                "avg_price": statistics.mean(data["avg_price"]) if data["avg_price"] else None,
+                "popular_sectors": Counter(data["sectors"]).most_common(3) if data["sectors"] else []
+            }
+        
+        # Find peak hours (top 3)
+        sorted_hours = sorted(analysis["hours"].items(), 
+                            key=lambda x: x[1]["tickets_found"], 
+                            reverse=True)
+        analysis["peak_hours"] = [(h, d["tickets_found"]) for h, d in sorted_hours[:3]]
+        
+        # Calculate ticket type distribution
+        all_types = defaultdict(int)
+        for hour_data in analysis["hours"].values():
+            for ticket_type, count in hour_data["types"].items():
+                all_types[ticket_type] += count
+        
+        analysis["ticket_distribution"] = dict(all_types)
+        
+        # Find best times for each ticket type
+        for ticket_type in all_types.keys():
+            best_hours = []
+            for hour, data in analysis["hours"].items():
+                if ticket_type in data["types"]:
+                    best_hours.append((hour, data["types"][ticket_type]))
+            
+            best_hours.sort(key=lambda x: x[1], reverse=True)
+            analysis["best_times_by_type"][ticket_type] = best_hours[:3]
+        
+        return analysis
+    
+    def get_pattern_insights(self, days=7):
+        """Analyze patterns over multiple days"""
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+        
+        insights = {
+            "period": f"{start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}",
+            "hourly_averages": defaultdict(lambda: {"tickets": [], "types": defaultdict(int)}),
+            "daily_totals": {},
+            "ticket_type_trends": defaultdict(list),
+            "best_hunting_times": [],
+            "recommendations": []
+        }
+        
+        # Analyze each day
+        for single_date in (start_date + timedelta(n) for n in range(days)):
+            date_str = single_date.strftime("%Y-%m-%d")
+            
+            if date_str in self.hourly_patterns:
+                daily_total = 0
+                for hour, data in self.hourly_patterns[date_str].items():
+                    hour_int = int(hour)
+                    daily_total += data["total_tickets"]
+                    
+                    # Add to hourly averages
+                    insights["hourly_averages"][hour_int]["tickets"].append(data["total_tickets"])
+                    for ticket_type, count in data["by_type"].items():
+                        insights["hourly_averages"][hour_int]["types"][ticket_type] += count
+                
+                insights["daily_totals"][date_str] = daily_total
+        
+        # Calculate average tickets per hour
+        hourly_stats = []
+        for hour, data in insights["hourly_averages"].items():
+            if data["tickets"]:
+                avg_tickets = statistics.mean(data["tickets"])
+                hourly_stats.append((hour, avg_tickets, dict(data["types"])))
+        
+        # Sort by average tickets found
+        hourly_stats.sort(key=lambda x: x[1], reverse=True)
+        
+        # Best hunting times (top 5 hours)
+        insights["best_hunting_times"] = [
+            {
+                "hour": f"{h:02d}:00-{h:02d}:59",
+                "avg_tickets": round(avg, 2),
+                "dominant_types": sorted(types.items(), key=lambda x: x[1], reverse=True)[:3]
+            }
+            for h, avg, types in hourly_stats[:5]
+        ]
+        
+        # Generate recommendations
+        if hourly_stats:
+            peak_hours = [h for h, _, _ in hourly_stats[:3]]
+            insights["recommendations"].append(
+                f"Focus hunting efforts between {min(peak_hours):02d}:00 and {max(peak_hours):02d}:59"
+            )
+            
+            # Check for type-specific patterns
+            type_patterns = defaultdict(list)
+            for hour, _, types in hourly_stats:
+                for ticket_type, count in types.items():
+                    if count > 0:
+                        type_patterns[ticket_type].append(hour)
+            
+            for ticket_type, hours in type_patterns.items():
+                if hours:
+                    most_common_hour = statistics.mode(hours) if len(hours) >= 2 else hours[0]
+                    insights["recommendations"].append(
+                        f"{ticket_type.upper()} tickets most common at {most_common_hour:02d}:00"
+                    )
+        
+        return insights
+    
+    def get_success_metrics(self):
+        """Calculate success rate metrics"""
+        if not self.hunting_sessions:
+            return None
+        
+        metrics = {
+            "total_sessions": len(self.hunting_sessions),
+            "total_runtime_hours": 0,
+            "total_tickets_found": 0,
+            "total_tickets_secured": 0,
+            "success_rate": 0,
+            "avg_tickets_per_session": 0,
+            "avg_time_to_first_ticket": [],
+            "best_session": None,
+            "category_success_rates": defaultdict(lambda: {"found": 0, "secured": 0})
+        }
+        
+        for session in self.hunting_sessions:
+            runtime = session.get("runtime_seconds", 0) / 3600
+            metrics["total_runtime_hours"] += runtime
+            
+            tickets_found = len(session.get("tickets_found", []))
+            tickets_secured = len(session.get("tickets_secured", []))
+            
+            metrics["total_tickets_found"] += tickets_found
+            metrics["total_tickets_secured"] += tickets_secured
+            
+            # Time to first ticket
+            if session.get("tickets_found"):
+                first_ticket_time = session["tickets_found"][0].get("time_since_start", 0)
+                metrics["avg_time_to_first_ticket"].append(first_ticket_time)
+            
+            # Category breakdown
+            for ticket in session.get("tickets_found", []):
+                category = ticket.get("ticket_type", "unknown")
+                metrics["category_success_rates"][category]["found"] += 1
+            
+            for ticket in session.get("tickets_secured", []):
+                category = ticket.get("ticket_type", "unknown")
+                metrics["category_success_rates"][category]["secured"] += 1
+            
+            # Track best session
+            if not metrics["best_session"] or tickets_secured > metrics["best_session"]["tickets_secured"]:
+                metrics["best_session"] = {
+                    "date": session.get("start_time", ""),
+                    "tickets_secured": tickets_secured,
+                    "runtime_minutes": int(runtime * 60)
+                }
+        
+        # Calculate averages
+        if metrics["total_sessions"] > 0:
+            metrics["avg_tickets_per_session"] = round(
+                metrics["total_tickets_found"] / metrics["total_sessions"], 2
+            )
+            
+            if metrics["total_tickets_found"] > 0:
+                metrics["success_rate"] = round(
+                    (metrics["total_tickets_secured"] / metrics["total_tickets_found"]) * 100, 2
+                )
+        
+        if metrics["avg_time_to_first_ticket"]:
+            metrics["avg_time_to_first_ticket"] = round(
+                statistics.mean(metrics["avg_time_to_first_ticket"]) / 60, 2
+            )  # Convert to minutes
+        else:
+            metrics["avg_time_to_first_ticket"] = None
+        
+        # Calculate category success rates
+        for category, data in metrics["category_success_rates"].items():
+            if data["found"] > 0:
+                data["success_rate"] = round((data["secured"] / data["found"]) * 100, 2)
+            else:
+                data["success_rate"] = 0
+        
+        return metrics
+    
+    def get_quick_stats(self):
+        """Get quick stats for menu display"""
+        today = datetime.now().strftime("%Y-%m-%d")
+        stats = {
+            "sessions_today": 0,
+            "tickets_today": 0,
+            "secured_today": 0,
+            "success_rate": 0
+        }
+        
+        if today in self.daily_summary:
+            summary = self.daily_summary[today]
+            stats["sessions_today"] = summary.get("sessions", 0)
+            stats["tickets_today"] = summary.get("tickets_found", 0)
+            stats["secured_today"] = summary.get("tickets_secured", 0)
+            
+            if stats["tickets_today"] > 0:
+                stats["success_rate"] = (stats["secured_today"] / stats["tickets_today"]) * 100
+        
+        return stats
+    
+    def save_session(self):
+        """Save current session data"""
+        self.current_session["end_time"] = datetime.now().isoformat()
+        self.current_session["runtime_seconds"] = time.time() - self.current_session.get("start_unix", time.time())
+        
+        self.hunting_sessions.append(self.current_session)
+        self.save_json(self.hunting_sessions, self.session_log_file)
+        
+        # Update daily summary
+        self.update_daily_summary()
+    
+    def update_daily_summary(self):
+        """Update daily summary statistics"""
+        today = datetime.now().strftime("%Y-%m-%d")
+        
+        if today not in self.daily_summary:
+            self.daily_summary[today] = {
+                "sessions": 0,
+                "total_runtime_seconds": 0,
+                "tickets_found": 0,
+                "tickets_secured": 0,
+                "checks_performed": 0,
+                "errors": 0,
+                "ticket_types": defaultdict(int)
+            }
+        
+        summary = self.daily_summary[today]
+        summary["sessions"] += 1
+        summary["total_runtime_seconds"] += self.current_session.get("runtime_seconds", 0)
+        summary["tickets_found"] += len(self.current_session.get("tickets_found", []))
+        summary["tickets_secured"] += len(self.current_session.get("tickets_secured", []))
+        summary["checks_performed"] += self.current_session.get("checks_performed", 0)
+        summary["errors"] += self.current_session.get("errors_encountered", 0)
+        
+        for ticket in self.current_session.get("tickets_found", []):
+            ticket_type = ticket.get("ticket_type", "unknown")
+            summary["ticket_types"][ticket_type] += 1
+        
+        # Convert defaultdict to regular dict for JSON serialization
+        summary["ticket_types"] = dict(summary["ticket_types"])
+        
+        self.save_json(self.daily_summary, self.daily_stats_file)
+    
+    def get_live_stats(self):
+        """Get live statistics for monitoring"""
+        now = time.time()
+        hour_ago = now - 3600
+        
+        # Count tickets in last hour
+        hourly_count = sum(1 for t in self.ticket_discoveries 
+                          if t.get('unix_time', 0) > hour_ago)
+        
+        # Get recent tickets
+        recent = sorted(self.ticket_discoveries, 
+                       key=lambda x: x.get('unix_time', 0), 
+                       reverse=True)[:10]
+        
+        return {
+            'hourly_rate': hourly_count,
+            'active_browsers': len(self.current_session.get('browser_performance', {})),
+            'recent_tickets': [
+                {
+                    'time': datetime.fromtimestamp(t.get('unix_time', 0)).strftime('%H:%M:%S'),
+                    'type': t.get('ticket_type', 'Unknown'),
+                    'price': t.get('price', 'N/A')
+                } for t in recent
+            ]
+        }
+    
+    def get_hourly_patterns(self):
+        """Get hourly pattern analysis"""
+        patterns = {}
+        
+        # Aggregate all hourly data
+        for date_data in self.hourly_patterns.values():
+            for hour, data in date_data.items():
+                hour_int = int(hour)
+                if hour_int not in patterns:
+                    patterns[hour_int] = {'count': 0, 'types': {}}
+                
+                patterns[hour_int]['count'] += data['total_tickets']
+                for ticket_type, count in data.get('by_type', {}).items():
+                    if ticket_type not in patterns[hour_int]['types']:
+                        patterns[hour_int]['types'][ticket_type] = 0
+                    patterns[hour_int]['types'][ticket_type] += count
+        
+        return patterns
+    
+    def get_ticket_analysis(self):
+        """Get ticket type analysis"""
+        analysis = defaultdict(int)
+        
+        for ticket in self.ticket_discoveries:
+            ticket_type = ticket.get('ticket_type', 'Unknown')
+            analysis[ticket_type] += 1
+        
+        return dict(analysis)
+    
+    def get_daily_reports(self):
+        """Get daily performance reports"""
+        reports = {}
+        
+        for date, data in self.daily_summary.items():
+            success_rate = 0
+            if data['tickets_found'] > 0:
+                success_rate = (data['tickets_secured'] / data['tickets_found']) * 100
+            
+            reports[date] = {
+                'sessions': data['sessions'],
+                'tickets_found': data['tickets_found'],
+                'tickets_secured': data['tickets_secured'],
+                'success_rate': success_rate,
+                'runtime_hours': data['total_runtime_seconds'] / 3600
+            }
+        
+        return reports
+    
+    def get_success_metrics(self):
+        """Get overall success metrics"""
+        if not self.hunting_sessions:
+            return None
+        
+        total_sessions = len(self.hunting_sessions)
+        total_runtime = sum(s.get('runtime_seconds', 0) for s in self.hunting_sessions)
+        total_found = sum(len(s.get('tickets_found', [])) for s in self.hunting_sessions)
+        total_secured = sum(len(s.get('tickets_secured', [])) for s in self.hunting_sessions)
+        
+        # Best performance
+        best_hour = 0
+        best_day = 0
+        longest_session = 0
+        
+        if self.hourly_patterns:
+            for date_data in self.hourly_patterns.values():
+                for hour_data in date_data.values():
+                    if hour_data['total_tickets'] > best_hour:
+                        best_hour = hour_data['total_tickets']
+        
+        if self.daily_summary:
+            for day_data in self.daily_summary.values():
+                if day_data['tickets_found'] > best_day:
+                    best_day = day_data['tickets_found']
+        
+        if self.hunting_sessions:
+            longest_session = max(s.get('runtime_seconds', 0) for s in self.hunting_sessions)
+        
+        return {
+            'total_sessions': total_sessions,
+            'total_runtime_hours': total_runtime / 3600,
+            'total_tickets_found': total_found,
+            'total_tickets_secured': total_secured,
+            'success_rate': (total_secured / total_found * 100) if total_found > 0 else 0,
+            'best_hour_tickets': best_hour,
+            'best_day_tickets': best_day,
+            'longest_session_hours': longest_session / 3600
+        }
+    
+    def get_recent_discoveries(self, limit=20):
+        """Get recent ticket discoveries"""
+        recent = sorted(self.ticket_discoveries, 
+                       key=lambda x: x.get('unix_time', 0), 
+                       reverse=True)[:limit]
+        
+        return [
+            {
+                'timestamp': datetime.fromtimestamp(t.get('unix_time', 0)).strftime('%Y-%m-%d %H:%M:%S'),
+                'type': t.get('ticket_type', 'Unknown'),
+                'price': t.get('price', 'N/A'),
+                'sector': t.get('sector', 'N/A'),
+                'row': t.get('row', 'N/A'),
+                'seat': t.get('seat', 'N/A')
+            } for t in recent
+        ]
+
 class TerminalUI:
     """Enhanced terminal UI with themes and animations"""
     
@@ -325,51 +835,56 @@ class TerminalUI:
         print(colors["primary"] + "    ══════════════════════════════════════════════════════\n")
     
     @staticmethod
-    def main_menu(settings):
-        """Enhanced main menu with more options"""
+    def main_menu(settings, analytics=None):
+        """Enhanced main menu with analytics focus"""
         theme = settings.get("theme", "cyberpunk")
         colors = TerminalUI.THEMES[theme]
         TerminalUI.print_header(theme)
         
-        # Show current event
+        # Quick status bar with key metrics
+        if analytics and hasattr(analytics, 'get_quick_stats'):
+            stats = analytics.get_quick_stats()
+            print(colors["accent"] + "┌─ TODAY'S PERFORMANCE " + "─" * 56 + "┐")
+            print(f"│ Sessions: {colors['success']}{stats['sessions_today']:<3} "
+                  f"{colors['secondary']}│ Tickets Found: {colors['warning']}{stats['tickets_today']:<4} "
+                  f"{colors['secondary']}│ Secured: {colors['success']}{stats['secured_today']:<3} "
+                  f"{colors['secondary']}│ Success Rate: {colors['accent']}{stats['success_rate']:.1f}%{' '*6} │")
+            print(colors["accent"] + "└" + "─" * 77 + "┘\n")
+        
+        # Current configuration
         url = settings.get("target_url", DEFAULT_TARGET_URL)
-        if "bruce-springsteen" in url:
-            event_name = "🎸 Bruce Springsteen"
-        else:
-            event_name = "🎫 Custom Event"
+        event_name = "🎸 Bruce Springsteen" if "bruce-springsteen" in url else "🎫 Custom Event"
         
-        print(colors["accent"] + f"    Current Event: {event_name}")
-        print(colors["primary"] + "    ──────────────────────────────────────────────────────\n")
+        print(f"{colors['secondary']}Event: {colors['success']}{event_name}")
+        print(f"{colors['secondary']}Setup: {colors['accent']}{settings.get('num_browsers', 2)} browsers, "
+              f"{', '.join(settings.get('ticket_types', ['all']))} tickets, "
+              f"{'Auto-buy' if settings.get('auto_buy') else 'Manual'}\n")
         
-        # Main menu options
-        print(colors["primary"] + "    🚀 QUICK ACTIONS")
-        print(colors["secondary"] + f"    [1] {Fore.WHITE}Start Hunting")
-        print(colors["secondary"] + f"    [2] {Fore.WHITE}Quick Settings")
-        print()
+        # Streamlined menu options
+        print(colors["primary"] + "╔══ HUNTING " + "═" * 66 + "╗")
+        print(f"║ {colors['accent']}[1] {Fore.WHITE}🎯 START HUNTING      {colors['secondary']}Begin ticket hunt with current config{' '*20} ║")
+        print(f"║ {colors['accent']}[2] {Fore.WHITE}⚡ QUICK CONFIG       {colors['secondary']}Fast setup (browsers, types, speed){' '*22} ║")
+        print(f"║ {colors['accent']}[3] {Fore.WHITE}🔧 ADVANCED SETTINGS  {colors['secondary']}Detailed configuration options{' '*27} ║")
         
-        print(colors["primary"] + "    ⚙️  CONFIGURATION")
-        print(colors["secondary"] + f"    [3] {Fore.WHITE}Advanced Settings")
-        print(colors["secondary"] + f"    [4] {Fore.WHITE}Profile Manager")
-        print(colors["secondary"] + f"    [5] {Fore.WHITE}Auto-Buy Rules")
-        print()
+        print(colors["primary"] + "╠══ ANALYTICS " + "═" * 64 + "╣")
+        print(f"║ {colors['accent']}[4] {Fore.WHITE}📊 LIVE MONITOR       {colors['secondary']}Real-time hunting statistics{' '*29} ║")
+        print(f"║ {colors['accent']}[5] {Fore.WHITE}⏰ HOURLY PATTERNS    {colors['secondary']}Best times to hunt by hour{' '*31} ║")
+        print(f"║ {colors['accent']}[6] {Fore.WHITE}📈 TICKET ANALYSIS    {colors['secondary']}Detailed ticket type breakdown{' '*27} ║")
+        print(f"║ {colors['accent']}[7] {Fore.WHITE}📅 DAILY REPORTS      {colors['secondary']}Performance by day{' '*39} ║")
+        print(f"║ {colors['accent']}[8] {Fore.WHITE}🎯 SUCCESS METRICS    {colors['secondary']}Overall performance statistics{' '*27} ║")
         
-        print(colors["primary"] + "    📊 ANALYTICS")
-        print(colors["secondary"] + f"    [6] {Fore.WHITE}Live Dashboard")
-        print(colors["secondary"] + f"    [7] {Fore.WHITE}Statistics & History")
-        print(colors["secondary"] + f"    [8] {Fore.WHITE}Performance Report")
-        print()
+        print(colors["primary"] + "╠══ TOOLS " + "═" * 68 + "╣")
+        print(f"║ {colors['accent']}[9] {Fore.WHITE}🌐 TEST BROWSER       {colors['secondary']}Check if detection is working{' '*28} ║")
+        print(f"║ {colors['accent']}[P] {Fore.WHITE}🔒 PROXY SETUP        {colors['secondary']}Configure proxy settings{' '*33} ║")
+        print(f"║ {colors['accent']}[S] {Fore.WHITE}💾 PROFILES           {colors['secondary']}Save/load hunting profiles{' '*31} ║")
         
-        print(colors["primary"] + "    🎨 CUSTOMIZATION")
-        print(colors["secondary"] + f"    [9] {Fore.WHITE}Change Theme")
-        print(colors["secondary"] + f"    [0] {Fore.WHITE}Notification Settings")
-        print()
+        print(colors["primary"] + "╠══ SYSTEM " + "═" * 67 + "╣")
+        print(f"║ {colors['accent']}[L] {Fore.WHITE}📜 VIEW LOGS          {colors['secondary']}Show recent ticket discoveries{' '*27} ║")
+        print(f"║ {colors['accent']}[H] {Fore.WHITE}❓ HELP               {colors['secondary']}Usage guide and tips{' '*37} ║")
+        print(f"║ {colors['accent']}[X] {Fore.WHITE}🚪 EXIT               {colors['secondary']}Save and close{' '*43} ║")
+        print(colors["primary"] + "╚" + "═" * 77 + "╝\n")
         
-        print(colors["primary"] + "    💡 HELP & INFO")
-        print(colors["secondary"] + f"    [H] {Fore.WHITE}Help & Guide")
-        print(colors["secondary"] + f"    [A] {Fore.WHITE}About")
-        print(colors["secondary"] + f"    [X] {Fore.WHITE}Exit\n")
-        
-        return input(colors["accent"] + "    Select option: " + Fore.WHITE).strip().upper()
+        return input(colors["accent"] + "➤ Select option: " + Fore.WHITE).strip().upper()
     
     @staticmethod
     def quick_settings_menu(settings):
@@ -482,6 +997,7 @@ class FanSaleUltimate:
         # Managers
         self.settings = SettingsManager()
         self.stats = StatsTracker()
+        self.analytics = EnhancedAnalytics()
         self.notifications = NotificationManager(self.settings)
         
         # Runtime state
@@ -547,52 +1063,55 @@ class FanSaleUltimate:
         ]
     
     def log(self, message, level='info', browser_id=None):
-        """Enhanced logging with better visual design"""
-        timestamp = datetime.now().strftime('%H:%M:%S')
-        theme = self.settings.get("theme", "cyberpunk")
-        colors = TerminalUI.THEMES[theme]
-        
-        # Enhanced icons for different log levels
-        icons = {
-            'info': '📌',
-            'success': '✅',
-            'warning': '⚠️ ',
-            'error': '❌',
-            'alert': '🚨',
-            'ticket': '🎫',
-            'check': '🔍',
-            'browser': '🌐',
-            'stealth': '🥷',
-            'speed': '⚡'
-        }
-        
-        color_map = {
-            'info': colors["primary"],
-            'success': colors["success"],
-            'warning': colors["warning"],
-            'error': colors["error"],
-            'alert': colors["accent"],
-            'ticket': Style.BRIGHT + colors["success"],
-            'check': colors["secondary"],
-            'browser': colors["primary"],
-            'stealth': Fore.CYAN,
-            'speed': Fore.YELLOW
-        }
-        
-        icon = icons.get(level, '•')
-        color = color_map.get(level, Fore.WHITE)
-        
+        """Enhanced logging with analytics integration"""
         with self.display_lock:
-            # Format browser ID with color
-            browser_str = ""
-            if browser_id is not None:
-                browser_str = f"{Fore.CYAN}[B{browser_id}]{Style.RESET_ALL} "
+            timestamp = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+            theme = self.settings.get("theme", "cyberpunk")
+            colors = TerminalUI.THEMES[theme]
             
-            # Enhanced message formatting
-            formatted_msg = f"{Fore.BLACK + Style.BRIGHT}[{timestamp}]{Style.RESET_ALL} {browser_str}{icon} {color}{message}{Style.RESET_ALL}"
+            # Enhanced level indicators
+            level_config = {
+                'info': ('💡', colors['primary'], 'INFO'),
+                'success': ('✨', colors['success'], 'SUCCESS'),
+                'warning': ('⚡', colors['warning'], 'WARNING'),
+                'error': ('💥', colors['error'], 'ERROR'),
+                'alert': ('🔥', colors['accent'] + Style.BRIGHT, 'ALERT'),
+                'ticket': ('🎫', colors['success'] + Style.BRIGHT, 'TICKET'),
+                'check': ('🔍', colors['secondary'], 'CHECK'),
+                'browser': ('🌐', colors['primary'], 'BROWSER'),
+                'stealth': ('🥷', colors['secondary'] + Style.DIM, 'STEALTH'),
+                'speed': ('🚀', colors['accent'], 'SPEED'),
+                'money': ('💰', colors['success'], 'PURCHASE'),
+                'captcha': ('🔐', colors['warning'], 'CAPTCHA'),
+                'secure': ('🎯', colors['success'] + Style.BRIGHT, 'SECURED')
+            }
+            
+            icon, color, label = level_config.get(level, ('•', colors['secondary'], 'LOG'))
+            
+            # Browser indicator
+            if browser_id is not None:
+                browser_str = f"{Fore.CYAN}[B{browser_id}]{Style.RESET_ALL}"
+            else:
+                browser_str = "    "
+            
+            # Build log line
+            log_parts = [
+                f"{colors['secondary'] + Style.DIM}[{timestamp}]{Style.RESET_ALL}",
+                browser_str,
+                f"{icon}",
+                f"{color}[{label:>7}]{Style.RESET_ALL}",
+                f"{color}{message}{Style.RESET_ALL}"
+            ]
+            
+            log_line = " ".join(log_parts)
             
             # Clear line and print
-            print(f"\r{' '*120}\r{formatted_msg}")
+            print(f"\r{' ' * 120}\r{log_line}", flush=True)
+            
+            # Track in analytics if it's a ticket discovery
+            if level == 'ticket' and hasattr(self, 'current_ticket_info'):
+                if hasattr(self, 'analytics'):
+                    self.analytics.log_ticket_discovery(self.current_ticket_info)
     
     def display_live_stats(self):
         """Enhanced live statistics display"""
@@ -1466,6 +1985,10 @@ class FanSaleUltimate:
                         category = ticket_info['category']
                         self.stats.found_ticket(category, ticket_info)
                         
+                        # Set current ticket info for analytics
+                        self.current_ticket_info = ticket_info
+                        self.current_ticket_info['browser_id'] = browser_id
+                        
                         # Log new ticket with details
                         price_str = f"€{ticket_info['price']}" if ticket_info['price'] else "Price unknown"
                         sector_str = f"Sector {ticket_info['sector']}" if ticket_info['sector'] else ""
@@ -1772,70 +2295,92 @@ class FanSaleUltimate:
         input(f"\n{colors['secondary']}    Press Enter to return to menu...{Fore.WHITE}")
     
     def main(self):
-        """Enhanced main application loop"""
+        """Enhanced main application loop with analytics focus"""
         while True:
-            choice = TerminalUI.main_menu(self.settings)
+            choice = TerminalUI.main_menu(self.settings, self.analytics)
             
             if choice == '1':
                 # Start hunting
                 self.run_bot()
+                # Save session analytics
+                self.analytics.save_session()
                 # Reset for next run
                 self.shutdown_event.clear()
                 self.tickets_secured = 0
                 self.seen_tickets.clear()
                 self.browsers.clear()
                 self.stats = StatsTracker()
+                # Start new session
+                self.analytics = EnhancedAnalytics()
                 
             elif choice == '2':
-                # Quick settings
-                self.quick_settings()
+                # Quick config
+                self.quick_config()
                 
             elif choice == '3':
-                # Advanced settings
+                # Advanced settings (keep existing)
                 self.configure_advanced_settings()
                 
             elif choice == '4':
+                # Live monitor
+                self.show_live_monitor()
+                
+            elif choice == '5':
+                # Hourly patterns
+                self.show_hourly_patterns()
+                
+            elif choice == '6':
+                # Ticket analysis
+                self.show_ticket_analysis()
+                
+            elif choice == '7':
+                # Daily reports
+                self.show_daily_reports()
+                
+            elif choice == '8':
+                # Success metrics
+                self.show_success_metrics()
+                
+            elif choice == '9':
+                # Test browser
+                self.test_browser_detection()
+                
+            elif choice == 'P':
+                # Proxy setup
+                self.configure_proxy()
+                
+            elif choice == 'S':
                 # Profile manager
                 self.profile_manager()
                 
-            elif choice == '5':
-                # Auto-buy rules
-                self.configure_auto_buy_rules()
-                
-            elif choice == '6':
-                # Live dashboard (demo)
-                self.show_live_dashboard_demo()
-                
-            elif choice == '7':
-                # Statistics
-                self.show_statistics()
-                
-            elif choice == '8':
-                # Performance report
-                self.show_performance_report()
-                
-            elif choice == '9':
-                # Change theme
-                self.change_theme()
-                
-            elif choice == '0':
-                # Notification settings
-                self.configure_notifications()
+            elif choice == 'L':
+                # View recent logs
+                self.show_recent_logs()
                 
             elif choice == 'H':
                 # Help
                 self.show_help()
                 
-            elif choice == 'A':
-                # About
-                self.show_about()
-                
             elif choice == 'X':
                 # Exit
                 theme = self.settings.get("theme", "cyberpunk")
                 colors = TerminalUI.THEMES[theme]
-                print(f"\n{colors['accent']}    👋 Thanks for using FanSale Ultimate Bot!")
-                print(f"{colors['secondary']}    Happy hunting!\n")
+                
+                # Save analytics before exit
+                if hasattr(self, 'analytics'):
+                    self.analytics.save_session()
+                    
+                print(f"\n{colors['accent']}👋 Thanks for using FanSale Ultimate Bot!")
+                
+                # Show quick summary
+                if hasattr(self, 'analytics'):
+                    metrics = self.analytics.get_success_metrics()
+                    if metrics:
+                        print(f"{colors['secondary']}Total tickets found: {colors['success']}{metrics['total_tickets_found']}")
+                        print(f"{colors['secondary']}Total tickets secured: {colors['success']}{metrics['total_tickets_secured']}")
+                        print(f"{colors['secondary']}Success rate: {colors['accent']}{metrics['success_rate']}%")
+                
+                print(f"\n{colors['secondary']}Happy hunting!\n")
                 break
             
             else:
@@ -2035,6 +2580,317 @@ class FanSaleUltimate:
         if choice != 'B':
             time.sleep(1)
             self.configure_notifications()
+    
+    def quick_config(self):
+        """Quick configuration for common settings"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    ⚡ QUICK CONFIGURATION\n")
+        
+        print(colors["secondary"] + "    [1] Low (1 browser, relaxed timing)")
+        print(colors["secondary"] + "    [2] Medium (2 browsers, balanced)")
+        print(colors["secondary"] + "    [3] High (4 browsers, aggressive)")
+        print(colors["secondary"] + "    [4] Ultra (8 browsers, maximum speed)")
+        print(colors["secondary"] + "    [B] Back to Menu\n")
+        
+        choice = input(colors["accent"] + "    Select preset: " + Fore.WHITE).strip()
+        
+        if choice == '1':
+            self.settings.update('num_browsers', 1)
+            self.settings.update('min_wait', 0.5)
+            self.settings.update('max_wait', 1.5)
+            self.log("Applied LOW preset", 'success')
+        elif choice == '2':
+            self.settings.update('num_browsers', 2)
+            self.settings.update('min_wait', 0.3)
+            self.settings.update('max_wait', 1.0)
+            self.log("Applied MEDIUM preset", 'success')
+        elif choice == '3':
+            self.settings.update('num_browsers', 4)
+            self.settings.update('min_wait', 0.2)
+            self.settings.update('max_wait', 0.7)
+            self.log("Applied HIGH preset", 'success')
+        elif choice == '4':
+            self.settings.update('num_browsers', 8)
+            self.settings.update('min_wait', 0.1)
+            self.settings.update('max_wait', 0.5)
+            self.log("Applied ULTRA preset", 'success')
+        
+        if choice in '1234':
+            self.settings.save()
+            time.sleep(2)
+    
+    def show_live_monitor(self):
+        """Display live monitoring dashboard"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        
+        print(colors["accent"] + "\n    📊 LIVE MONITOR - Press Ctrl+C to stop\n")
+        
+        try:
+            while True:
+                # Get current stats
+                stats = self.analytics.get_live_stats()
+                
+                # Clear screen and show stats
+                print('\033[2J\033[H')  # Clear screen
+                TerminalUI.print_header(theme)
+                
+                print(colors["accent"] + "    📊 LIVE MONITOR\n")
+                
+                # Show hourly rate
+                print(colors["secondary"] + f"    Last Hour: {colors['success']}{stats.get('hourly_rate', 0)} tickets/hour")
+                print(colors["secondary"] + f"    Active Now: {colors['accent']}{stats.get('active_browsers', 0)} browsers")
+                
+                # Show recent discoveries
+                recent = stats.get('recent_tickets', [])
+                if recent:
+                    print(f"\n{colors['secondary']}    Recent Discoveries:")
+                    for ticket in recent[-5:]:
+                        print(f"      {colors['success']}• {ticket['time']} - {ticket['type']} ({ticket['price']})")
+                
+                time.sleep(1)
+                
+        except KeyboardInterrupt:
+            print(f"\n{colors['secondary']}    Monitor stopped")
+            time.sleep(1)
+    
+    def show_hourly_patterns(self):
+        """Display hourly ticket patterns"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    📈 HOURLY PATTERNS\n")
+        
+        patterns = self.analytics.get_hourly_patterns()
+        
+        if not patterns:
+            print(colors["warning"] + "    No data available yet")
+        else:
+            # Show best hours
+            sorted_hours = sorted(patterns.items(), key=lambda x: x[1]['count'], reverse=True)[:5]
+            
+            print(colors["secondary"] + "    Best hunting hours:")
+            for hour, data in sorted_hours:
+                bar = "█" * int(data['count'] / max(1, max(p['count'] for p in patterns.values())) * 20)
+                print(f"      {colors['accent']}{hour:02d}:00 {colors['success']}{bar} {data['count']} tickets")
+            
+            # Show recommendations
+            print(f"\n{colors['secondary']}    💡 Recommendations:")
+            best_hour = sorted_hours[0][0] if sorted_hours else 0
+            print(f"      {colors['success']}• Best time to hunt: {best_hour:02d}:00 - {(best_hour+1)%24:02d}:00")
+            print(f"      {colors['success']}• Average tickets/hour: {sum(p['count'] for p in patterns.values()) / len(patterns):.1f}")
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
+    
+    def show_ticket_analysis(self):
+        """Display ticket type analysis"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    🎫 TICKET ANALYSIS\n")
+        
+        analysis = self.analytics.get_ticket_analysis()
+        
+        if not analysis:
+            print(colors["warning"] + "    No ticket data available")
+        else:
+            # Show ticket type distribution
+            total = sum(analysis.values())
+            print(colors["secondary"] + "    Ticket Distribution:")
+            for ticket_type, count in sorted(analysis.items(), key=lambda x: x[1], reverse=True):
+                percentage = (count / total) * 100
+                bar = "█" * int(percentage / 5)
+                print(f"      {colors['accent']}{ticket_type:12} {colors['success']}{bar} {percentage:.1f}% ({count})")
+            
+            # Show insights
+            print(f"\n{colors['secondary']}    💡 Insights:")
+            most_common = max(analysis.items(), key=lambda x: x[1])[0]
+            print(f"      {colors['success']}• Most common: {most_common}")
+            print(f"      {colors['success']}• Total types: {len(analysis)}")
+            print(f"      {colors['success']}• Total tickets: {total}")
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
+    
+    def show_daily_reports(self):
+        """Display daily performance reports"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    📅 DAILY REPORTS\n")
+        
+        reports = self.analytics.get_daily_reports()
+        
+        if not reports:
+            print(colors["warning"] + "    No daily data available")
+        else:
+            # Show last 7 days
+            for date, data in sorted(reports.items(), reverse=True)[:7]:
+                print(f"    {colors['secondary']}{date}:")
+                print(f"      {colors['success']}Sessions: {data['sessions']}")
+                print(f"      {colors['success']}Tickets Found: {data['tickets_found']}")
+                print(f"      {colors['success']}Tickets Secured: {data['tickets_secured']}")
+                print(f"      {colors['accent']}Success Rate: {data['success_rate']:.1f}%")
+                print()
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
+    
+    def show_success_metrics(self):
+        """Display success metrics and statistics"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    🏆 SUCCESS METRICS\n")
+        
+        metrics = self.analytics.get_success_metrics()
+        
+        if metrics:
+            # Overall stats
+            print(colors["secondary"] + "    Overall Performance:")
+            print(f"      {colors['success']}Total Sessions: {metrics['total_sessions']}")
+            print(f"      {colors['success']}Total Runtime: {metrics['total_runtime_hours']:.1f} hours")
+            print(f"      {colors['success']}Tickets Found: {metrics['total_tickets_found']}")
+            print(f"      {colors['success']}Tickets Secured: {metrics['total_tickets_secured']}")
+            print(f"      {colors['accent']}Success Rate: {metrics['success_rate']:.1f}%")
+            
+            # Best performance
+            print(f"\n{colors['secondary']}    Records:")
+            print(f"      {colors['success']}Best Hour: {metrics.get('best_hour_tickets', 0)} tickets")
+            print(f"      {colors['success']}Best Day: {metrics.get('best_day_tickets', 0)} tickets")
+            print(f"      {colors['success']}Longest Session: {metrics.get('longest_session_hours', 0):.1f} hours")
+        else:
+            print(colors["warning"] + "    No metrics available yet")
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
+    
+    def test_browser_detection(self):
+        """Test browser for detection issues"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    🧪 BROWSER DETECTION TEST\n")
+        
+        print(colors["secondary"] + "    Starting test browser...")
+        
+        try:
+            driver = self.create_browser(1)
+            
+            # Test 1: Bot detection services
+            print(f"\n{colors['secondary']}    Testing bot detection...")
+            driver.get("https://bot.sannysoft.com/")
+            time.sleep(3)
+            
+            # Check results
+            try:
+                result = driver.find_element(By.TAG_NAME, "body").text
+                if "passed" in result.lower():
+                    print(f"      {colors['success']}✓ Basic detection: PASSED")
+                else:
+                    print(f"      {colors['error']}✗ Basic detection: FAILED")
+            except:
+                print(f"      {colors['warning']}? Could not determine result")
+            
+            # Test 2: Navigate to FanSale
+            print(f"\n{colors['secondary']}    Testing FanSale access...")
+            driver.get(self.settings.get('target_url'))
+            time.sleep(5)
+            
+            # Check for blocking
+            if "access denied" in driver.page_source.lower():
+                print(f"      {colors['error']}✗ FanSale: BLOCKED")
+            else:
+                print(f"      {colors['success']}✓ FanSale: ACCESSIBLE")
+            
+            driver.quit()
+            
+        except Exception as e:
+            print(f"      {colors['error']}Error: {e}")
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
+    
+    def configure_proxy(self):
+        """Configure proxy settings"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    🌐 PROXY CONFIGURATION\n")
+        
+        current = self.settings.get('use_proxy', False)
+        print(colors["secondary"] + f"    Proxy: {colors['accent']}{'ENABLED' if current else 'DISABLED'}")
+        
+        if current:
+            print(colors["secondary"] + f"    Host: {self.settings.get('proxy_host', 'Not set')}")
+            print(colors["secondary"] + f"    Port: {self.settings.get('proxy_port', 'Not set')}")
+        
+        print(f"\n{colors['secondary']}    [1] Toggle Proxy")
+        print(colors["secondary"] + "    [2] Set Proxy Details")
+        print(colors["secondary"] + "    [3] Test Proxy")
+        print(colors["secondary"] + "    [B] Back\n")
+        
+        choice = input(colors["accent"] + "    Select option: " + Fore.WHITE).strip()
+        
+        if choice == '1':
+            self.settings.update('use_proxy', not current)
+            self.settings.save()
+            self.log(f"Proxy {'enabled' if not current else 'disabled'}", 'success')
+            time.sleep(1)
+            self.configure_proxy()
+            
+        elif choice == '2':
+            host = input(f"\n{colors['primary']}Proxy host: {Fore.WHITE}").strip()
+            port = input(f"{colors['primary']}Proxy port: {Fore.WHITE}").strip()
+            user = input(f"{colors['primary']}Username (optional): {Fore.WHITE}").strip()
+            pass_ = input(f"{colors['primary']}Password (optional): {Fore.WHITE}").strip()
+            
+            self.settings.update('proxy_host', host)
+            self.settings.update('proxy_port', port)
+            self.settings.update('proxy_user', user)
+            self.settings.update('proxy_pass', pass_)
+            self.settings.save()
+            
+            self.log("Proxy settings updated", 'success')
+            time.sleep(1)
+            self.configure_proxy()
+            
+        elif choice == '3':
+            self.log("Testing proxy connection...", 'info')
+            # Proxy test implementation would go here
+            time.sleep(2)
+    
+    def show_recent_logs(self):
+        """Show recent ticket discoveries"""
+        theme = self.settings.get("theme", "cyberpunk")
+        colors = TerminalUI.THEMES[theme]
+        TerminalUI.print_header(theme)
+        
+        print(colors["accent"] + "    📜 RECENT DISCOVERIES\n")
+        
+        recent = self.analytics.get_recent_discoveries(20)
+        
+        if not recent:
+            print(colors["warning"] + "    No recent discoveries")
+        else:
+            for entry in recent:
+                timestamp = entry.get('timestamp', 'Unknown')
+                ticket_type = entry.get('type', 'Unknown')
+                price = entry.get('price', 'N/A')
+                sector = entry.get('sector', 'N/A')
+                
+                print(f"    {colors['secondary']}{timestamp}")
+                print(f"      {colors['success']}Type: {ticket_type}")
+                print(f"      {colors['success']}Price: {price}")
+                print(f"      {colors['success']}Sector: {sector}")
+                print()
+        
+        input(f"\n{colors['secondary']}    Press Enter to continue...{Fore.WHITE}")
 
 
 if __name__ == "__main__":
